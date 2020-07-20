@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CacheCleaner"
-    android:background="@drawable/cahchetemp">
+    android:background="@drawable/cachecleaner">
 
 </androidx.constraintlayout.widget.ConstraintLayout>
