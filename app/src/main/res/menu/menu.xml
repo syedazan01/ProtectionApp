@@ -5,6 +5,7 @@
         android:id="@+id/gourp1">
 
         <item
+            android:visible="false"
             android:id="@+id/findmydevice"
             android:title="Find My Device">
         </item>
