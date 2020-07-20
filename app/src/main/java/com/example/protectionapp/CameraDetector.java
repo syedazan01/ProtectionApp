@@ -34,6 +34,6 @@ TextView tvToolbarTitle;
         toolbar=findViewById(R.id.toolbar);
         ivBack=findViewById(R.id.ivBack);
         tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
-        tvToolbarTitle.setText("Hidden Camera Finder");
+        tvToolbarTitle.setText("Hidden Camera Detector");
     }
 }
