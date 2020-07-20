@@ -7,4 +7,5 @@
     tools:context=".CallRecorder"
     android:background="@drawable/recordertemp">
 
+    <include layout="@layout/custum_toolbar"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
