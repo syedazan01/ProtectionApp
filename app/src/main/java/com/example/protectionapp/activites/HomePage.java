@@ -129,4 +129,9 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
+    }
 }
