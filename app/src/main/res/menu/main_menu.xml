@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/night_mode"
+        android:icon="@drawable/nightmode"
+        android:title="Night Mode"
+        app:showAsAction="ifRoom">
+
+    </item>
+    <item
+        android:id="@+id/Call_recorder"
+        android:title="Call Recorder"
+        app:showAsAction="never">
+
+    </item>
+    <item
+        android:id="@+id/cache_cleaner"
+        android:title="Cache Cleaner"
+        app:showAsAction="never">
+
+    </item>
+    <item
+        android:id="@+id/file_share"
+        android:title="File Share"
+        app:showAsAction="never">
+
+    </item>
+    <item
+        android:id="@+id/camera_detector"
+        android:title="Camera Detector"
+        app:showAsAction="never">
+
+    </item>
+
+</menu>

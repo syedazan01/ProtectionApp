@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ProtectionApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="home_fragment">Home fragment</string>
+    <string name="applock_fragment">App Lock fragment</string>
+    <string name="personal_record_fragment">Personal Records fragment</string>
+    <string name="account_fragment">Account fragment</string>
+</resources>
