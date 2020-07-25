@@ -17,7 +17,7 @@ TextView tvToolbarTitle;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_detector);
         setSupportActionBar(toolbar);
-        addViews();
+        addsViews();
         initActions();
     }
 
@@ -30,7 +30,7 @@ TextView tvToolbarTitle;
     });
     }
 
-    private void addViews() {
+    private void addsViews() {
         toolbar=findViewById(R.id.toolbar);
         ivBack=findViewById(R.id.ivBack);
         tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
