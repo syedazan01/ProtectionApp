@@ -19,6 +19,10 @@ public class RecordingFileAdapter extends RecyclerView.Adapter<RecordingFileAdap
     public RecordingFileAdapter(List<RecordingFileData> recordingFileDataList) {
         this.recordingFileDataList = recordingFileDataList;
     }
+    public void updateList(List<RecordingFileData> recordingFileDataList)
+    {
+        this.recordingFileDataList=recordingFileDataList;
+    }
 
     @NonNull
     @Override
@@ -34,7 +38,7 @@ public class RecordingFileAdapter extends RecyclerView.Adapter<RecordingFileAdap
 
     @Override
     public int getItemCount() {
-        return 0;
+        return recordingFileDataList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

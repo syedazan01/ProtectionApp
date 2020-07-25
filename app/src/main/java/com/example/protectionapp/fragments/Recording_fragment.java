@@ -21,11 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.interfacecallbacks.onRecordFileSave;
 import com.example.protectionapp.services.RecordingService;
 
 import java.io.File;
 
 public class Recording_fragment extends Fragment {
+   public static onRecordFileSave onRecordFileSave=null;
     Chronometer mChronometer;
     ImageView mRecordButton;
     CardView cardRecord;
@@ -120,6 +122,7 @@ public class Recording_fragment extends Fragment {
             getActivity().stopService(intent);
             //allow the screen to turn off again once recording is finished
             getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         }
     }
 

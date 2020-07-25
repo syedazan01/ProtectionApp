@@ -31,6 +31,8 @@ import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import static com.example.protectionapp.fragments.Recording_fragment.onRecordFileSave;
+
 /**
  * Created by Daniel on 12/28/2014.
  */
@@ -164,6 +166,10 @@ public class RecordingService extends Service {
                     recordingFileData.setFileName(mFileName);
                     recordingFileData.setFileName(mFileName);
                     AppDatabase.getAppDataBase(RecordingService.this).getRecordFileDao().insertRecordFile(recordingFileData);
+                    if(onRecordFileSave!=null)
+                    {
+                        onRecordFileSave.onSave();
+                    }
                 }
             });
         } catch (Exception e){
