@@ -31,6 +31,7 @@ import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import static com.example.protectionapp.fragments.Recording_fragment.mRecorder;
 import static com.example.protectionapp.fragments.Recording_fragment.onRecordFileSave;
 
 /**
@@ -43,7 +44,7 @@ public class RecordingService extends Service {
     private String mFileName = null;
     private String mFilePath = null;
 
-    private MediaRecorder mRecorder = null;
+
 
 
     private long mStartingTimeMillis = 0;
@@ -90,9 +91,11 @@ public class RecordingService extends Service {
 
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+
+// After set output format
         mRecorder.setOutputFile(mFilePath);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         mRecorder.setAudioChannels(1);
             mRecorder.setAudioSamplingRate(44100);
             mRecorder.setAudioEncodingBitRate(192000);
@@ -127,7 +130,7 @@ public class RecordingService extends Service {
                         mFileName = getString(R.string.default_file_name)
                                 + "_" + (mCount+count) + ".mp4";
                         mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-                        mFilePath += "/SoundRecorder/" + mFileName;
+                        mFilePath += "/"+getResources().getString(R.string.app_name)+"SoundRecorder/" + mFileName;
 
                         f = new File(mFilePath);
                     }
