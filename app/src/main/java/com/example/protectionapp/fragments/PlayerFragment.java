@@ -18,6 +18,7 @@ import com.example.protectionapp.adapters.RecordingFileAdapter;
 import com.example.protectionapp.interfacecallbacks.onRecordFileSave;
 import com.example.protectionapp.model.RecordingFileData;
 import com.example.protectionapp.room.AppDatabase;
+import com.example.protectionapp.utils.RecyclerTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,19 @@ RecordingFileAdapter recordingFileAdapter;
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Recording_fragment.onRecordFileSave=this;
-        recordingFileAdapter =new RecordingFileAdapter(recordingFileData);
+        recordingFileAdapter =new RecordingFileAdapter(recordingFileData,getActivity());
+       /* rvRecordFiles.addOnItemTouchListener(new RecyclerTouchListener(getContext(), rvRecordFiles, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onLongClick(View view, int position)
+            {
+
+            }
+        }));*/
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {

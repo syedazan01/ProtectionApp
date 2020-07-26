@@ -36,6 +36,7 @@ public class Recording_fragment extends Fragment {
     public static MediaRecorder mRecorder = null;
    public static onRecordFileSave onRecordFileSave=null;
     public  Handler handler =new Handler();
+    Toast toast;
     Chronometer mChronometer;
     ImageView mRecordButton;
     CardView cardRecord;
@@ -59,7 +60,6 @@ public class Recording_fragment extends Fragment {
                     @Override
                     public void run() {
                         if (mRecorder!=null) {
-                            Log.e("fdbdfbdfb", mRecorder.getMaxAmplitude()+"");
                             int x = new Random().nextInt(10000);
                             visualizer.addAmplitude(x); // update the VisualizeView
                             visualizer.invalidate(); // refresh the VisualizerView
@@ -109,7 +109,10 @@ public class Recording_fragment extends Fragment {
             handler.post(updateVisualizer);
             mRecordButton.setImageResource(R.drawable.ic_baseline_stop_24);
             //mPauseButton.setVisibility(View.VISIBLE);
-            Toast.makeText(getActivity(), R.string.toast_recording_start, Toast.LENGTH_SHORT).show();
+            if(toast!=null)
+                toast.cancel();
+            toast=Toast.makeText(getActivity(), R.string.toast_recording_start, Toast.LENGTH_SHORT);
+            toast.show();
             File folder = new File(Environment.getExternalStorageDirectory() + "/SoundRecorder");
             if (!folder.exists()) {
                 //folder /SoundRecorder doesn't exist, create the folder

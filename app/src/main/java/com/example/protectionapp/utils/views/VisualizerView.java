@@ -4,8 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +25,13 @@ public class VisualizerView extends View {
     private Paint linePaint; // specifies line drawing characteristics
 
     // constructor
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public VisualizerView(Context context, AttributeSet attrs) {
         super(context, attrs); // call superclass constructor
         linePaint = new Paint(); // create Paint for lines
 
 
-        linePaint.setColor(rndColor[new Random().nextInt(2)]); // set color to green
+        linePaint.setColor(rndColor[1]); // set color to green
         linePaint.setStrokeWidth(LINE_WIDTH); // set stroke width
     }
 
@@ -71,5 +76,4 @@ public class VisualizerView extends View {
         }
       super.onDraw(canvas);
     }
-
 }
