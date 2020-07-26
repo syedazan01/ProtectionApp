@@ -3,6 +3,7 @@ package com.example.protectionapp.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +30,7 @@ public class PersonalRecordAdapter extends RecyclerView.Adapter<PersonalRecordAd
 
     @Override
     public void onBindViewHolder(@NonNull PersonalRecordHolder holder, int position) {
-
+holder.tvRecordName.setText(recordList.get(position).getRecordsName());
     }
 
     @Override
@@ -38,8 +39,10 @@ public class PersonalRecordAdapter extends RecyclerView.Adapter<PersonalRecordAd
     }
 
     public class PersonalRecordHolder extends RecyclerView.ViewHolder{
+        TextView tvRecordName;
         public PersonalRecordHolder(@NonNull View itemView) {
             super(itemView);
+            tvRecordName=itemView.findViewById(R.id.tvRecordName);
         }
     }
 }

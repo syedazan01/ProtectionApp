@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AppLockFragment">
+    tools:context=".fragments.AppLockFragment"
+    android:background="?attr/primaryBackgroundColor"
+    >
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -11,6 +13,8 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:layout_gravity="center"
-        android:text="@string/applock_fragment" />
+        android:text="@string/applock_fragment"
+        android:textColor="?attr/primaryTitleColor"
+        />
 
 </FrameLayout>

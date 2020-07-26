@@ -14,17 +14,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.protectionapp.CacheCleaner;
-import com.example.protectionapp.CallRecorder;
-import com.example.protectionapp.CameraDetector;
-import com.example.protectionapp.FileShare;
 import com.example.protectionapp.R;
 import com.example.protectionapp.fragments.AccountFragment;
 import com.example.protectionapp.fragments.AppLockFragment;
 import com.example.protectionapp.fragments.HomeFragment;
 import com.example.protectionapp.fragments.PersonalRecordFragment;
+import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class HomePage extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -38,6 +37,10 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(PrefManager.getBoolean(ISNIGHTMODE))
+            setTheme(R.style.AppTheme_Base_Night);
+        else
+            setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_home_page);
         setUpToolBar();
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -71,6 +74,20 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
+            case R.id.theme_mode:
+                if(PrefManager.getBoolean(ISNIGHTMODE))
+                {
+                    setTheme(R.style.AppTheme_Base_Light);
+                    PrefManager.putBoolean(ISNIGHTMODE,false);
+                }
+                else
+                {
+                    PrefManager.putBoolean(ISNIGHTMODE,true);
+                    setTheme(R.style.AppTheme_Base_Night);
+                }
+                recreate();
+
+                break;
             case R.id.Call_recorder:
                 Intent intent = new Intent(HomePage.this, CallRecorder.class);
                 startActivity(intent);

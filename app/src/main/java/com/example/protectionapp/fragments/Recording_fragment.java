@@ -26,10 +26,13 @@ import android.widget.Toast;
 import com.example.protectionapp.R;
 import com.example.protectionapp.interfacecallbacks.onRecordFileSave;
 import com.example.protectionapp.services.RecordingService;
+import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.views.VisualizerView;
 
 import java.io.File;
 import java.util.Random;
+
+import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 
 public class Recording_fragment extends Fragment {
@@ -88,6 +91,10 @@ public class Recording_fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(PrefManager.getBoolean(ISNIGHTMODE))
+            getActivity().setTheme(R.style.AppTheme_Base_Night);
+        else
+            getActivity().setTheme(R.style.AppTheme_Base_Light);
         cardRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

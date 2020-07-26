@@ -2,6 +2,8 @@ package com.example.protectionapp.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,16 +15,15 @@ import android.view.ViewGroup;
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.PersonalRecordAdapter;
 import com.example.protectionapp.model.PersonalRecord;
+import com.example.protectionapp.utils.PrefManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+
 
 public class PersonalRecordFragment extends Fragment {
-
-    public PersonalRecordFragment() {
-        // Required empty public constructor
-    }
 
     RecyclerView rvpersonalRecords;
     List<PersonalRecord> recordList;
@@ -40,6 +41,15 @@ public class PersonalRecordFragment extends Fragment {
         return view;
 
 
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if(PrefManager.getBoolean(ISNIGHTMODE))
+            getActivity().setTheme(R.style.AppTheme_Base_Night);
+        else
+            getActivity().setTheme(R.style.AppTheme_Base_Light);
     }
 
     private void initData() {

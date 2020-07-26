@@ -1,7 +1,6 @@
 package com.example.protectionapp.adapters;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.protectionapp.CallRecorder;
 import com.example.protectionapp.R;
-import com.example.protectionapp.interfacecallbacks.onPlay;
 import com.example.protectionapp.model.RecordingFileData;
 import com.example.protectionapp.room.AppDatabase;
 
 import java.io.File;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class RecordingFileAdapter extends RecyclerView.Adapter<RecordingFileAdapter.ViewHolder> {
