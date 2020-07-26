@@ -133,7 +133,6 @@ private void initActions()
         else
            mMediaPlayer=new MediaPlayer();
         try {
-            Log.e("sfvdfbgvfd",new File(recordingFileData.getFilePath()).getAbsolutePath());
             mMediaPlayer.setDataSource(this, Uri.fromFile(new File(recordingFileData.getFilePath())));
             mMediaPlayer.prepare();
             sbPlayer.setMax(mMediaPlayer.getDuration());
