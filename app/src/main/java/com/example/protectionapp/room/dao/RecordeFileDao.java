@@ -18,4 +18,7 @@ public interface RecordeFileDao {
 
     @Query("select * from RecordingFileData")
     List<RecordingFileData> getRecordingFiles();
+
+    @Query("delete  from RecordingFileData where id=:id")
+    void deleteRecord(int id);
 }

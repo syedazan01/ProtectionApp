@@ -1,5 +1,6 @@
 package com.example.protectionapp.services;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -25,11 +26,15 @@ import com.example.protectionapp.room.dao.RecordeFileDao;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import static com.example.protectionapp.fragments.Recording_fragment.mRecorder;
+import static com.example.protectionapp.fragments.Recording_fragment.onRecordFileSave;
 
 /**
  * Created by Daniel on 12/28/2014.
@@ -40,10 +45,10 @@ public class RecordingService extends Service {
 
     private String mFileName = null;
     private String mFilePath = null;
+    Toast toast;
 
-    private MediaRecorder mRecorder = null;
 
-
+    NotificationManager mgr;
     private long mStartingTimeMillis = 0;
     private long mElapsedMillis = 0;
     private int mElapsedSeconds = 0;
@@ -89,6 +94,8 @@ public class RecordingService extends Service {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+
+// After set output format
         mRecorder.setOutputFile(mFilePath);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mRecorder.setAudioChannels(1);
@@ -105,7 +112,7 @@ public class RecordingService extends Service {
             //startForeground(1, createNotification());
 
         } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
+            Log.e(LOG_TAG, e.getMessage());
         }
     }
 
@@ -144,8 +151,11 @@ public class RecordingService extends Service {
         }
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
         mRecorder.release();
-        Toast.makeText(this, getString(R.string.toast_recording_finish) + " " + mFilePath, Toast.LENGTH_LONG).show();
-
+        mgr.cancel(1);
+        if(toast!=null)
+            toast.cancel();
+        toast= Toast.makeText(this, getString(R.string.toast_recording_finish) + " " + mFilePath, Toast.LENGTH_LONG);
+        toast.show();
         //remove notification
         if (mIncrementTimerTask != null) {
             mIncrementTimerTask.cancel();
@@ -161,9 +171,14 @@ public class RecordingService extends Service {
                 public void run() {
                     RecordingFileData recordingFileData=new RecordingFileData();
                     recordingFileData.setFileName(mFileName);
-                    recordingFileData.setFileName(mFileName);
-                    recordingFileData.setFileName(mFileName);
+                    recordingFileData.setFilePath(mFilePath);
+                    recordingFileData.setCreated_date(new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(new Date()));
+                    recordingFileData.setEllipseMillis(mElapsedMillis);
                     AppDatabase.getAppDataBase(RecordingService.this).getRecordFileDao().insertRecordFile(recordingFileData);
+                    if(onRecordFileSave!=null)
+                    {
+                        onRecordFileSave.onSave();
+                    }
                 }
             });
         } catch (Exception e){
@@ -173,14 +188,22 @@ public class RecordingService extends Service {
 
     private void startTimer() {
         mTimer = new Timer();
+        // The id of the channel.
+        final String CHANNEL_ID = "default";
+        final String CHANNEL_NAME = "Default";
         mIncrementTimerTask = new TimerTask() {
             @Override
             public void run() {
                 mElapsedSeconds++;
                 if (onTimerChangedListener != null)
                     onTimerChangedListener.onTimerChanged(mElapsedSeconds);
-                NotificationManager mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    NotificationChannel defaultChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+                    mgr.createNotificationChannel(defaultChannel);
+                }
                 mgr.notify(1, createNotification());
+
             }
         };
         mTimer.scheduleAtFixedRate(mIncrementTimerTask, 1000, 1000);
@@ -189,10 +212,10 @@ public class RecordingService extends Service {
     //TODO:
     private Notification createNotification() {
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(getApplicationContext())
+                (NotificationCompat.Builder)  new NotificationCompat.Builder(getApplicationContext(),"default")
                         .setSmallIcon(R.drawable.recording_button_icon)
                         .setContentTitle(getString(R.string.notification_recording))
-                        .setContentText(mTimerFormat.format(mElapsedSeconds * 1000))
+                        .setContentText(mTimerFormat.format(0))
                         .setOngoing(true);
 
         mBuilder.setContentIntent(PendingIntent.getActivities(getApplicationContext(), 0,

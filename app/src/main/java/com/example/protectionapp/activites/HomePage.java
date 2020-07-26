@@ -74,7 +74,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
             case R.id.Call_recorder:
                 Intent intent = new Intent(HomePage.this, CallRecorder.class);
                 startActivity(intent);
-                Toast.makeText(this, "Call Recorder under progress", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Call Recorder under progress", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cache_cleaner:
                 Intent intent2 = new Intent(HomePage.this, CacheCleaner.class);

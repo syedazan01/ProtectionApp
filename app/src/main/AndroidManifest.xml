@@ -3,12 +3,15 @@
     package="com.example.protectionapp">
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
+        android:name=".Protection"
         android:allowBackup="true"
         android:icon="@mipmap/protectionapp"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/protectionapp_round"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
         <activity
             android:theme="@style/AppTheme.NoActionBar"
@@ -29,7 +32,7 @@
             android:label="LogIn" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities=".fileprovider"
+            android:authorities="${applicationId}.fileprovider"
             android:grantUriPermissions="true"
             android:exported="false">
             <meta-data
