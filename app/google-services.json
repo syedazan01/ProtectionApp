@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "759112294713",
+    "firebase_url": "https://protectionapp-b37ab.firebaseio.com",
+    "project_id": "protectionapp-b37ab",
+    "storage_bucket": "protectionapp-b37ab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:759112294713:android:1886008b1d44443ebfc8e8",
+        "android_client_info": {
+          "package_name": "com.example.protectionapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "759112294713-amt4pv16vi1ah903b4f4k61e6bh813ao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzA8jxHF4yQZbhfNTOC0Y8629hXjvP9pY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "759112294713-amt4pv16vi1ah903b4f4k61e6bh813ao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
