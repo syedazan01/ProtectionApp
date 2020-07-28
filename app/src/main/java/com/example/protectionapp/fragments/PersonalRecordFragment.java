@@ -1,5 +1,6 @@
 package com.example.protectionapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.RecordsActivites.ATM;
+import com.example.protectionapp.RecordsActivites.Adhaar;
+import com.example.protectionapp.RecordsActivites.Bank;
+import com.example.protectionapp.RecordsActivites.DrivingLicence;
+import com.example.protectionapp.RecordsActivites.PAN;
+import com.example.protectionapp.RecordsActivites.VoterID;
 import com.example.protectionapp.adapters.PersonalRecordAdapter;
 import com.example.protectionapp.model.PersonalRecord;
 import com.example.protectionapp.utils.PrefManager;
@@ -27,6 +34,7 @@ public class PersonalRecordFragment extends Fragment {
 
     RecyclerView rvpersonalRecords;
     List<PersonalRecord> recordList;
+    private PersonalRecordAdapter.RecyclerViewClickListener recyclerViewClickListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,10 +45,36 @@ public class PersonalRecordFragment extends Fragment {
         rvpersonalRecords.setHasFixedSize(true);
         rvpersonalRecords.setLayoutManager(new LinearLayoutManager(getContext()));
         initData();
-        rvpersonalRecords.setAdapter(new PersonalRecordAdapter(recordList));
+        setOnClickListiner();
+        rvpersonalRecords.setAdapter(new PersonalRecordAdapter(recordList,recyclerViewClickListener));
+
         return view;
 
 
+    }
+
+    private void setOnClickListiner() {
+        recyclerViewClickListener = new PersonalRecordAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = null;
+                if (position==0) {
+                    intent = new Intent(getActivity(), Adhaar.class);
+                }
+                else if(position==1)
+                    intent = new Intent(getActivity(), PAN.class);
+                else if(position==2)
+                    intent = new Intent(getActivity(), DrivingLicence.class);
+                else if(position==3)
+                    intent = new Intent(getActivity(), Bank.class);
+                else if(position==4)
+                    intent = new Intent(getActivity(), ATM.class);
+                else if(position==5)
+                    intent = new Intent(getActivity(), VoterID.class);
+
+                startActivity(intent);
+            }
+        };
     }
 
     @Override
@@ -54,7 +88,7 @@ public class PersonalRecordFragment extends Fragment {
 
     private void initData() {
         recordList = new ArrayList<>();
-        recordList.add(new PersonalRecord("Aadhar"));
+        recordList.add(new PersonalRecord("AADHAR"));
         recordList.add(new PersonalRecord("PAN"));
         recordList.add(new PersonalRecord("Driving License"));
         recordList.add(new PersonalRecord("Bank"));
