@@ -18,11 +18,14 @@ import com.example.protectionapp.adapters.RecordingFileAdapter;
 import com.example.protectionapp.interfacecallbacks.onRecordFileSave;
 import com.example.protectionapp.model.RecordingFileData;
 import com.example.protectionapp.room.AppDatabase;
+import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.RecyclerTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+
+import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 
 public class PlayerFragment extends Fragment implements onRecordFileSave {
@@ -46,6 +49,10 @@ RecordingFileAdapter recordingFileAdapter;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(PrefManager.getBoolean(ISNIGHTMODE))
+            getActivity().setTheme(R.style.AppTheme_Base_Night);
+        else
+            getActivity().setTheme(R.style.AppTheme_Base_Light);
         Recording_fragment.onRecordFileSave=this;
         recordingFileAdapter =new RecordingFileAdapter(recordingFileData,getActivity());
        /* rvRecordFiles.addOnItemTouchListener(new RecyclerTouchListener(getContext(), rvRecordFiles, new RecyclerTouchListener.ClickListener() {

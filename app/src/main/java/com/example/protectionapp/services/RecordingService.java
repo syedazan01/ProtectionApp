@@ -215,7 +215,7 @@ public class RecordingService extends Service {
                 (NotificationCompat.Builder)  new NotificationCompat.Builder(getApplicationContext(),"default")
                         .setSmallIcon(R.drawable.recording_button_icon)
                         .setContentTitle(getString(R.string.notification_recording))
-                        .setContentText(mTimerFormat.format(0))
+                        .setContentText(mTimerFormat.format(mElapsedSeconds*1000))
                         .setOngoing(true);
 
         mBuilder.setContentIntent(PendingIntent.getActivities(getApplicationContext(), 0,

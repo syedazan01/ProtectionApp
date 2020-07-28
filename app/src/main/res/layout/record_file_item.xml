@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:text="Recycler View app"
         android:textSize="24sp"
+        android:textColor="?attr/primaryTitleColor"
         android:layout_gravity="center"
         />
     <ImageView

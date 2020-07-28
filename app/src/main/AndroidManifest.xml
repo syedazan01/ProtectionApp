@@ -12,13 +12,12 @@
         android:roundIcon="@mipmap/protectionapp_round"
         android:supportsRtl="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.Base.Light">
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
-            android:name=".CameraDetector"></activity>
-        <activity android:name=".FileShare" />
-        <activity android:name=".CacheCleaner" />
-        <activity android:name=".CallRecorder" />
+            android:name=".activites.CameraDetector"></activity>
+        <activity android:name=".activites.FileShare" />
+        <activity android:name=".activites.CacheCleaner" />
+        <activity android:name=".activites.CallRecorder" />
         <activity android:name=".activites.HomePage" />
         <activity android:name=".activites.SplashScreen">
             <intent-filter>

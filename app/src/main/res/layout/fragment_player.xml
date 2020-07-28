@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PlayerFragment">
+    tools:context=".fragments.PlayerFragment"
+    android:background="?attr/primaryBackgroundColor"
+    >
 
 
   <androidx.recyclerview.widget.RecyclerView

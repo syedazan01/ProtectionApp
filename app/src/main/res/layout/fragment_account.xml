@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AccountFragment">
+    tools:context=".fragments.AccountFragment"
+    android:background="?attr/primaryBackgroundColor"
+    >
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -12,6 +14,7 @@
         android:textSize="24sp"
         android:layout_gravity="center"
         android:text="@string/account_fragment"
+        android:textColor="?attr/primaryTitleColor"
        />
 
 </FrameLayout>

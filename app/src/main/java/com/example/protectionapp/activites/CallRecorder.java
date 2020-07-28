@@ -1,4 +1,4 @@
-package com.example.protectionapp;
+package com.example.protectionapp.activites;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,16 +20,21 @@ import android.widget.SeekBar;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.example.protectionapp.R;
+import com.example.protectionapp.ViewPageAdapter;
 import com.example.protectionapp.adapters.RecordingFileAdapter;
 import com.example.protectionapp.fragments.PlayerFragment;
 import com.example.protectionapp.fragments.Recording_fragment;
 import com.example.protectionapp.fragments.SettingFragment;
 import com.example.protectionapp.interfacecallbacks.onPlay;
 import com.example.protectionapp.model.RecordingFileData;
+import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.io.IOException;
+
+import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.OnSeekBarChangeListener {
 
@@ -46,6 +51,10 @@ public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(PrefManager.getBoolean(ISNIGHTMODE))
+            setTheme(R.style.AppTheme_Base_Night);
+        else
+            setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_call_recorder);
         initViews();
         initActions();
@@ -133,6 +142,7 @@ private void initActions()
         else
            mMediaPlayer=new MediaPlayer();
         try {
+            Log.e("sdvcfsbvrwe",recordingFileData.getFilePath());
             mMediaPlayer.setDataSource(this, Uri.fromFile(new File(recordingFileData.getFilePath())));
             mMediaPlayer.prepare();
             sbPlayer.setMax(mMediaPlayer.getDuration());
