@@ -31,7 +31,7 @@ public class LogIn extends AppCompatActivity {
         OtpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LogIn.this,HomePage.class);
+                Intent intent = new Intent(LogIn.this,Otp.class);
                 startActivity(intent);
             }
         });

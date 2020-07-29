@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activites.Otp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter OTP"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="25dp"/>
+
+    <EditText
+        android:layout_width="277dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:hint="Enter 6 digit OTP"
+        android:inputType="phone"/>
+
+    <Button
+        android:id="@+id/otpsubmitbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:ems="15"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="45dp"/>
+
+
+
+</RelativeLayout>
