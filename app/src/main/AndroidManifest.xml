@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".Protection"
@@ -15,6 +16,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/protectionapp_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme.Base.Light">
         <activity android:name=".activites.Otp"></activity>
         <activity android:name=".RecordsActivites.VoterID" />
