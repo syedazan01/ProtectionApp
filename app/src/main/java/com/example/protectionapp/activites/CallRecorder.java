@@ -4,30 +4,40 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import android.media.AudioManager;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.aykuttasil.callrecord.CallRecord;
 import com.example.protectionapp.R;
 import com.example.protectionapp.ViewPageAdapter;
 import com.example.protectionapp.adapters.RecordingFileAdapter;
 import com.example.protectionapp.fragments.PlayerFragment;
 import com.example.protectionapp.fragments.Recording_fragment;
-import com.example.protectionapp.fragments.SettingFragment;
 import com.example.protectionapp.interfacecallbacks.onPlay;
 import com.example.protectionapp.model.RecordingFileData;
+import com.example.protectionapp.services.ForgroundService;
+import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.tabs.TabLayout;
 
@@ -47,7 +57,9 @@ public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.On
     private ImageView ivPlayPause;
     private MediaPlayer mMediaPlayer;
     private Handler handler;
-
+    private ToggleButton callToggle;
+    private RelativeLayout rltCallRecording;
+    private CallRecord callRecord;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +74,31 @@ public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setUpViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
-
-
     }
 private void initActions()
 {
+    callToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            Intent intent = new Intent(CallRecorder.this, ForgroundService.class);
+            if(b)
+            {
+                PrefManager.putBoolean(AppConstant.IS_CALL_RECORDING_ON,true);
+               intent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
+                startService(intent);
+                callRecord.startCallRecordService();
+                Toast.makeText(getApplicationContext(), "Call Recording is set ON", Toast.LENGTH_SHORT).show();
+            }
+                else
+            {
+                intent.setAction(ForgroundService.ACTION_STOP_FOREGROUND_SERVICE);
+                startService(intent);
+                callRecord.stopCallReceiver();
+                Toast.makeText(getApplicationContext(), "Call Recording is set OFF", Toast.LENGTH_SHORT).show();
+                PrefManager.putBoolean(AppConstant.IS_CALL_RECORDING_ON,false);
+            }
+                }
+    });
     ivPlayPause.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -91,6 +123,54 @@ private void initActions()
         }
     });
 }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Runtime permission
+        try {
+
+            boolean permissionGranted_OutgoingCalls = ActivityCompat.checkSelfPermission(this, Manifest.permission.PROCESS_OUTGOING_CALLS) == PackageManager.PERMISSION_GRANTED;
+            boolean permissionGranted_phoneState = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+            boolean permissionGranted_recordAudio = ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
+            boolean permissionGranted_WriteExternal = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            boolean permissionGranted_ReadExternal = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+
+
+            if (permissionGranted_OutgoingCalls) {
+                if (permissionGranted_phoneState) {
+                    if (permissionGranted_recordAudio) {
+                        if (permissionGranted_WriteExternal) {
+                            if (permissionGranted_ReadExternal) {
+                                try {
+                                    rltCallRecording.setVisibility(View.VISIBLE);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 200);
+                            }
+                        } else {
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 300);
+                        }
+                    } else {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 400);
+                    }
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 500);
+                }
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.PROCESS_OUTGOING_CALLS}, 600);
+            }
+
+        } catch (
+                Exception e)
+
+        {
+            e.printStackTrace();
+        }
+    }
+
     private void initViews() {
         toolbar_recorder = findViewById(R.id.toolbar_recorder);
         tabLayout = findViewById(R.id.tablayout_recorder);
@@ -99,11 +179,28 @@ private void initActions()
         tvMusicName = findViewById(R.id.tvMusicName);
         ivPlayPause = findViewById(R.id.ivPlayPause);
         sbPlayer = findViewById(R.id.sbPlayer);
+        rltCallRecording = findViewById(R.id.rltCallRecording);
+        callToggle = findViewById(R.id.callToggle);
         sbPlayer.setOnSeekBarChangeListener(this);
         handler=new Handler();
         RecordingFileAdapter.onPlay=this;
+        if(PrefManager.getBoolean(AppConstant.IS_CALL_RECORDING_ON))
+          callToggle.setChecked(true);
+        else
+            callToggle.setChecked(false);
+        callRecord = new CallRecord.Builder(this)
+                .setLogEnable(true)
+                .setRecordFileName("call_"+System.currentTimeMillis())
+                .setRecordDirName("Protection Call Records")
+                .setRecordDirPath(Environment.getExternalStorageDirectory().getPath()) // optional & default value
+                .setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // optional & default value
+                .setOutputFormat(MediaRecorder.OutputFormat.MPEG_4) // optional & default value
+                .setAudioSource(MediaRecorder.AudioSource.VOICE_COMMUNICATION) // optional & default value
+                .setShowSeed(true) // optional & default value ->Ex: RecordFileName_incoming.amr || RecordFileName_outgoing.amr
+//                .setLogEnable(true)
+//                .setShowPhoneNumber(true)
+                .build();
     }
-
     private void setUpViewPager(ViewPager viewPager){
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(),2);
         viewPageAdapter.addFragment(new Recording_fragment(),"Recording");
@@ -189,6 +286,19 @@ private void initActions()
     public void seekUpdation() {
         sbPlayer.setProgress(mMediaPlayer.getCurrentPosition());
         handler.postDelayed(run, 1000);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 200 || requestCode == 300 || requestCode == 400 || requestCode == 500 || requestCode == 600) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    rltCallRecording.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }

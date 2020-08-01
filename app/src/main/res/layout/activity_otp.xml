@@ -7,26 +7,32 @@
     tools:context=".activites.Otp">
 
     <TextView
+        android:id="@+id/tvSentMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter OTP"
         android:textStyle="bold"
         android:textSize="24sp"
         android:gravity="center_horizontal"
         android:layout_marginTop="25dp"/>
 
-    <EditText
-        android:layout_width="277dp"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:hint="Enter 6 digit OTP"
-        android:inputType="phone"/>
+   <com.goodiebag.pinview.Pinview
+       android:id="@+id/otp_View"
+       android:layout_centerInParent="true"
+       app:pinLength="6"
+       app:pinWidth="40dp"
+       app:pinHeight="40dp"
+       app:cursorVisible="true"
+       app:inputType="number"
+       android:layout_marginHorizontal="20dp"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/otpsubmitbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
+        android:textColor="@color/white"
         android:ems="15"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"

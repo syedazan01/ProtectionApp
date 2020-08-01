@@ -15,7 +15,7 @@
     </ImageView>
 
     <EditText
-        android:id="@+id/phone_number"
+        android:id="@+id/et_phone_number"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -29,7 +29,7 @@
         android:text="Generate OTP"
         android:textColor="@color/white"
         android:background="@color/colorAccent"
-        android:layout_below="@+id/phone_number"
+        android:layout_below="@+id/et_phone_number"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
        android:ems="10"

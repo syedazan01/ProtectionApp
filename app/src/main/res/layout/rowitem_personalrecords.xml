@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llPersonal"
+    android:background="?attr/primaryBackgroundColor"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp">
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardPersonal"
-        app:cardBackgroundColor="?attr/primaryBackgroundColor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -24,15 +16,5 @@
                 android:layout_marginTop="2dp"
                 android:textStyle="bold"
                 android:textColor="?attr/primaryTitleColor"
-                android:textSize="22sp"/>
+                android:textSize="18sp"/>
         </LinearLayout>
-        
-    </androidx.cardview.widget.CardView>
-    <View
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/cardPersonal"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?attr/primaryBackgroundColor"/>
-
-</RelativeLayout>
