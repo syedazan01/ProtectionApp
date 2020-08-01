@@ -1,5 +1,6 @@
 package com.example.protectionapp.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,10 +10,17 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.protectionapp.UserHelperClass;
 import com.example.protectionapp.utils.views.RoundView;
+import com.firebase.client.Firebase;
+import com.google.gson.Gson;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class Utils {
     public static void setShader(int startColor,int endColor,TextView tv)
@@ -68,5 +76,35 @@ public class Utils {
 
     public static float[] getRadius(float value) {
         return new float[]{value, value, value, value, value, value, value, value};
+    }
+
+    public  static <T>void storeInRTD(Context context, String child, String modelString)
+    {
+        Firebase reference;
+        Firebase.setAndroidContext(context);
+        try {
+
+            reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ URLEncoder.encode("Personal Document","UTF-8")+"/"+child+"/");
+            if (child.equals(AppConstant.ADHAAR)) {
+                UserHelperClass userHelperClass=fromJson(modelString,UserHelperClass.class);
+                Log.e("sfbdfbfsabn",modelString);
+                Log.e("sfbdfbfsabn",userHelperClass.getAddress());
+                reference.setValue(userHelperClass);
+            }
+            /*else if(child.equals(AppConstant.ADHAAR))
+            {
+            }*/
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+    public static <T>String toJson(T value,Class<T> model)
+    {
+        return new Gson().toJson(value,model);
+    }
+
+    public static <T>T fromJson(String json,Class<T> model)
+    {
+        return new Gson().fromJson(json,model);
     }
 }
