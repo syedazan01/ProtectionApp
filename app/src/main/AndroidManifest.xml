@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.protectionapp">
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA"/>
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <application
         android:name=".Protection"
         android:allowBackup="true"
@@ -15,8 +19,12 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/protectionapp_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.Base.Light">
-        <activity android:name=".activites.Otp"></activity>
+        android:theme="@style/AppTheme.Base.Light"
+        tools:replace="android:allowBackup"
+        >
+        <activity
+            android:name=".activites.Otp"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".RecordsActivites.VoterID" />
         <activity android:name=".RecordsActivites.ATM" />
         <activity android:name=".RecordsActivites.Bank" />
@@ -51,6 +59,12 @@
         </provider>
 
         <service android:name=".services.RecordingService" />
+        <service android:name=".hoverwindow.HoverService" />
+        <service
+            android:name=".services.ForgroundService"
+            android:enabled="true"
+            android:exported="true" />
+<!--        <service android:name=".services.CallRecordingService" />-->
     </application>
 
 </manifest>
