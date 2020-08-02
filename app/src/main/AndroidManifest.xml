@@ -25,8 +25,7 @@
         tools:replace="android:allowBackup"
         >
         <activity
-            android:name=".activites.Otp"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:name=".activites.Otp"/>
         <activity android:name=".RecordsActivites.VoterID" />
         <activity android:name=".RecordsActivites.ATM" />
         <activity android:name=".RecordsActivites.Bank" />
@@ -41,9 +40,13 @@
         <activity android:name=".activites.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="protectionapp.com"
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
         <activity

@@ -11,6 +11,7 @@
         <item name="primaryBackgroundColor">@color/primaryBackgroundColor</item>
         <item name="primaryCardBackgroundColor">@color/primaryCardBackgroundColor</item>
         <item name="themeMode">@drawable/nightmode</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
         <item name="bottomNavColor">@color/colorPrimary</item>
     </style>
 
@@ -26,7 +27,23 @@
         <item name="primaryBackgroundColor">@color/primaryBackgroundColorNight</item>
         <item name="primaryCardBackgroundColor">@color/primaryCardBackgroundColorNight</item>
         <item name="themeMode">@drawable/daymode</item>
+        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
         <item name="bottomNavColor">@color/white</item>
+    </style>
+
+
+    <style name="DialogFragmentTheme" parent="AppTheme.Base.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:layout_width">match_parent</item>
     </style>
 
 </resources>

@@ -43,6 +43,6 @@ EditText et_phone_number;
                 startActivity(intent);
             }
         });
-        Utils.makeButton(OtpButton,getResources().getColor(R.color.colorAccent));
+        Utils.makeButton(OtpButton,getResources().getColor(R.color.colorAccent),50F);
     }
 }

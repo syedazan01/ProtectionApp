@@ -1,5 +1,6 @@
 package com.example.protectionapp.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,12 +12,19 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.protectionapp.UserHelperClass;
 import com.example.protectionapp.utils.views.RoundView;
 import com.firebase.client.Firebase;
+import com.google.android.gms.appinvite.AppInvite;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
@@ -30,8 +38,8 @@ public class Utils {
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
         tv.getPaint().setShader(textShader);
     }
-    public static void makeButton(Button button, int color){
-        button.setBackground(new RoundView(color, Utils.getRadius(100f)));
+    public static void makeButton(Button button, int color,float radius){
+        button.setBackground(new RoundView(color, Utils.getRadius(radius)));
     }
     public static GradientDrawable getColoredDrawable(int startColor,int endColor){
         int[] colors = {startColor,endColor};
@@ -106,5 +114,18 @@ public class Utils {
     public static <T>T fromJson(String json,Class<T> model)
     {
         return new Gson().fromJson(json,model);
+    }
+    public static GoogleApiClient createGoogleClient(FragmentActivity activity, GoogleApiClient.OnConnectionFailedListener connectionFailedListener)
+    {
+
+            return new GoogleApiClient.Builder(activity)
+                    .enableAutoManage(activity, connectionFailedListener)
+                    .addApi(AppInvite.API)
+                    .build();
+    }
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        assert imm != null;
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

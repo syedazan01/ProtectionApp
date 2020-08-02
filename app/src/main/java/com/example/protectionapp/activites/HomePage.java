@@ -60,7 +60,8 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                 return false;
             }
         });
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+        bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
     }
 
 
