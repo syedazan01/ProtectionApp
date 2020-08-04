@@ -8,6 +8,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+<!--    Notification Strings-->
+    <string name="snackbar_not_allowed_title">You must allow Notification Blocker to read your notifications</string>
+    <string name="snackbar_not_allowed_action">Allow</string>
+    <string name="menu_enable_title">Enable</string>
     <!-- Recording Activity Strings -->
     <string name="default_file_name">protection_rec</string>
     <string name="toast_recording_finish">Finish Recording</string>

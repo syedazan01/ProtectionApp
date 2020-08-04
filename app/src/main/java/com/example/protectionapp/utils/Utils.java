@@ -2,15 +2,16 @@ package com.example.protectionapp.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,25 +22,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.UserHelperClass;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.views.RoundView;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 public class Utils {
     public static void setShader(int startColor,int endColor,TextView tv)
@@ -175,6 +169,10 @@ public class Utils {
     {
         FirebaseStorage storage=FirebaseStorage.getInstance();
         return storage.getReferenceFromUrl(AppConstant.FIREBASE_STORAGE_DATABASE_URL);
+    }
+    public static SharedPreferences getDefaultManager(Context context)
+    {
+        return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 }

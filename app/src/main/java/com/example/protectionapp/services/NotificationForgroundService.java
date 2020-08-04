@@ -13,9 +13,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -24,16 +22,13 @@ import androidx.core.app.TaskStackBuilder;
 import com.example.protectionapp.R;
 import com.example.protectionapp.activites.SplashScreen;
 
-public class ForgroundService extends Service {
-    private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
+public class NotificationForgroundService extends Service {
+    private static final String TAG_NOTIFICATION_FOREGROUND_SERVICE = "NOTIFICATION_SERVICE";
 
-    public static final String ACTION_START_FOREGROUND_SERVICE = "ACTION_START_FOREGROUND_SERVICE";
+    public static final String ACTION_NOTIFICATION_START_FOREGROUND_SERVICE = "ACTION_NOTIFICATION_START_FOREGROUND_SERVICE";
 
-    public static final String ACTION_STOP_FOREGROUND_SERVICE = "ACTION_STOP_FOREGROUND_SERVICE";
+    public static final String ACTION_NOTIFICATION_STOP_FOREGROUND_SERVICE = "ACTION_NOTIFICATION_STOP_FOREGROUND_SERVICE";
 
-    public static final String ACTION_PAUSE = "ACTION_PAUSE";
-
-    public static final String ACTION_PLAY = "ACTION_PLAY";
 
 
     @Override
@@ -45,7 +40,7 @@ public class ForgroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG_FOREGROUND_SERVICE, "My foreground service onCreate().");
+        Log.d(TAG_NOTIFICATION_FOREGROUND_SERVICE, "My foreground service onCreate().");
     }
 
     @Override
@@ -55,19 +50,13 @@ public class ForgroundService extends Service {
             if(action!=null)
 
                 switch (action) {
-                    case ACTION_START_FOREGROUND_SERVICE:
+                    case ACTION_NOTIFICATION_START_FOREGROUND_SERVICE:
                         startForegroundService();
 //                        Toast.makeText(getApplicationContext(), "Foreground service is started.", Toast.LENGTH_LONG).show();
                         break;
-                    case ACTION_STOP_FOREGROUND_SERVICE:
+                    case ACTION_NOTIFICATION_STOP_FOREGROUND_SERVICE:
                         stopForegroundService();
 //                        Toast.makeText(getApplicationContext(), "Foreground service is stopped.", Toast.LENGTH_LONG).show();
-                        break;
-                    case ACTION_PLAY:
-//                        Toast.makeText(getApplicationContext(), "You click Play button.", Toast.LENGTH_LONG).show();
-                        break;
-                    case ACTION_PAUSE:
-//                        Toast.makeText(getApplicationContext(), "You click Pause button.", Toast.LENGTH_LONG).show();
                         break;
                 }
         }
@@ -76,9 +65,9 @@ public class ForgroundService extends Service {
 
     /* Used to build and start foreground service. */
     private void startForegroundService() {
-        Log.d(TAG_FOREGROUND_SERVICE, "Start foreground service.");
+        Log.d(TAG_NOTIFICATION_FOREGROUND_SERVICE, "Start foreground service.");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel("my_service", "My Background Service");
+            createNotificationChannel("mynoti_service", "My Notification Service");
         } else {
 
             // Create notification default intent.
@@ -90,7 +79,7 @@ public class ForgroundService extends Service {
 
             // Make notification show big text.
             NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-            bigTextStyle.setBigContentTitle("Call Recording implemented by foreground service.");
+            bigTextStyle.setBigContentTitle("Notification Block by foreground service.");
             bigTextStyle.bigText("Android foreground service is a android service which can run in foreground always, it can be controlled by user via notification.");
             // Set big text style.
             builder.setStyle(bigTextStyle);
@@ -151,13 +140,13 @@ public class ForgroundService extends Service {
                 .setContentIntent(resultPendingIntent) //intent
                 .build();
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(1, notificationBuilder.build());
-        startForeground(1, notification);
+        notificationManager.notify(2, notificationBuilder.build());
+        startForeground(2, notification);
     }
 
 
     private void stopForegroundService() {
-        Log.d(TAG_FOREGROUND_SERVICE, "Stop foreground service.");
+        Log.d(TAG_NOTIFICATION_FOREGROUND_SERVICE, "Stop foreground service.");
 
         // Stop foreground service and remove the notification.
         stopForeground(true);

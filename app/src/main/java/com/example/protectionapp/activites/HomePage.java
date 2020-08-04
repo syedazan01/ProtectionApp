@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,19 +56,25 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                drawerLayout.closeDrawer(GravityCompat.START);
                 switch (menuItem.getItemId()){
                     case R.id.kill_notification:
-                        startActivity(new Intent(HomePage.this,KillNotification.class));
-                        break;
+                       new Handler().postDelayed(new Runnable() {
+                           @Override
+                           public void run() {
+                               startActivity(new Intent(HomePage.this,KillNotification.class));
+                           }
+                       },200);
+                        return true;
                     case R.id.about_us:
                         Toast.makeText(HomePage.this, "work is not complete yet, App is in progress", Toast.LENGTH_SHORT).show();
-                        break;
+                        return true;
                     case R.id.setting:
                         Toast.makeText(HomePage.this, "Work is not complete yet, App is in progress", Toast.LENGTH_SHORT).show();
-                        break;
+                        return true;
                 }
-                drawerLayout.closeDrawer(GravityCompat.START);
-                return true;
+
+                return false;
             }
         });
         bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
