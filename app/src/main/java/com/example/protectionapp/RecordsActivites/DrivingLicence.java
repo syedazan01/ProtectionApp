@@ -38,10 +38,10 @@ public class DrivingLicence extends AppCompatActivity {
 
     private void initViews() {
 
-        textInputEmail = findViewById(R.id.text_input_email);
-        textInputUsername = findViewById(R.id.text_input_username);
-        textInputPassword = findViewById(R.id.text_input_password);
-        btnLicenseSave = findViewById(R.id.btnLicenseSave);
+//        textInputEmail = findViewById(R.id.text_input_email);
+//        textInputUsername = findViewById(R.id.text_input_username);
+//        textInputPassword = findViewById(R.id.text_input_password);
+//        btnLicenseSave = findViewById(R.id.btnLicenseSave);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Driving License Form");
