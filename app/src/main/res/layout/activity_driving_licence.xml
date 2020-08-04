@@ -5,17 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".RecordsActivites.DrivingLicence">
+    <include
+        android:id="@+id/toolbarLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/custum_toolbar"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        app:hintEnabled="false"
+        >
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
+            android:background="@drawable/round_border"
+            android:padding="10dp"
+            android:textSize="14sp"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -25,11 +39,15 @@
         android:layout_height="wrap_content"
         app:counterEnabled="true"
         app:counterMaxLength="15"
+        app:hintEnabled="false"
         app:errorEnabled="true">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Username"
+            android:background="@drawable/round_border"
+            android:padding="10dp"
+            android:textSize="14sp"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
@@ -37,16 +55,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
+        app:hintEnabled="false"
         app:passwordToggleEnabled="true">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:background="@drawable/round_border"
+            android:padding="10dp"
+            android:textSize="14sp"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
     <Button
+        android:id="@+id/btnLicenseSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="confirmInput"
         android:text="SAVE" />
+    </LinearLayout>
 </LinearLayout>

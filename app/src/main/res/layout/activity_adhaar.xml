@@ -5,13 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RecordsActivites.Adhaar">
-
-
+    <include
+        android:id="@+id/toolbarLay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/custum_toolbar"/>
     <ImageView
+        android:layout_below="@+id/toolbarLay"
         android:id="@+id/aadharlogo"
         android:layout_width="match_parent"
         android:layout_height="78dp"
-        android:layout_alignParentTop="true"
         android:layout_marginTop="7dp"
         android:gravity="center"
         android:src="@drawable/aadharlogo"
@@ -28,9 +31,13 @@
             android:id="@+id/adhhar_fullname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:hintEnabled="false"
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@drawable/round_border"
+                android:padding="10dp"
+                android:textSize="14sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Full Name"
@@ -41,10 +48,16 @@
             android:id="@+id/dob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:errorEnabled="true">
+            app:errorEnabled="true"
+            app:hintEnabled="false"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dob_calender"
+                android:background="@drawable/round_border"
+                android:padding="10dp"
+                android:textSize="14sp"
+                android:focusable="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Date Of Birth"
@@ -100,11 +113,15 @@
             app:counterEnabled="true"
             app:counterMaxLength="16"
             app:errorEnabled="true"
+            app:hintEnabled="false"
             >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/round_border"
+                android:padding="10dp"
+                android:textSize="14sp"
                 android:hint="Aadhar Number"
                 android:inputType="text"
 
@@ -115,11 +132,15 @@
             android:id="@+id/adhar_addres"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:hintEnabled="false"
             app:errorEnabled="true">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Address"
+                android:background="@drawable/round_border"
+                android:padding="10dp"
+                android:textSize="14sp"
                 android:inputType="textPostalAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,13 +150,17 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
         <Button
+            android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/cam_openbt"
-            android:text="Scan Adhhar QR"
+            android:text="Scan Adhaar"
+            android:ems="10"
             android:layout_marginTop="10dp"/>
 
         <Button
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
             android:id="@+id/addhr_savebt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

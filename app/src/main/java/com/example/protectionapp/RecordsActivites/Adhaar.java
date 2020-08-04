@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.protectionapp.R;
@@ -51,24 +53,29 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Adhaar extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
+public class Adhaar extends AppCompatActivity {
     private TextInputEditText dobinput;
     public URL imgaeurl;
     TextInputLayout adhharfullname, adharnumber, adharaddres, dob;
     Button addharsavebt;
     int yearofdob, monthofdob, dayofdob;
     RadioGroup radioGender;
-    RadioButton radioMale,radioFemale,radioOther;
+    RadioButton radioMale, radioFemale, radioOther;
     ImageView imageView;
     Button opencam;
     String Gender;
     //firebase realtime database
     FirebaseDatabase rootNode;
-//    DatabaseReference reference;
+    //    DatabaseReference reference;
     //firebase Storage
     FirebaseStorage storage;
     StorageReference storageReference;
     Firebase reference;
+    ImageView ivBack;
+    TextView tvToolbarTitle;
+    Activity activity = this;
+    private Uri fileUri;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -79,11 +86,11 @@ public class Adhaar extends AppCompatActivity implements RadioGroup.OnCheckedCha
         }*/
         if (resultCode == Activity.RESULT_OK) {
             //Image Uri will not be null for RESULT_OK
-            Uri fileUri = data.getData();
+            fileUri = data.getData();
             imageView.setImageURI(fileUri);
 
             //You can get File object from intent
-            File file= ImagePicker.Companion.getFile(data);
+            File file = ImagePicker.Companion.getFile(data);
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
@@ -97,29 +104,13 @@ public class Adhaar extends AppCompatActivity implements RadioGroup.OnCheckedCha
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adhaar);
-        radioGender = findViewById(R.id.Gradio);
-        radioMale = findViewById(R.id.Gen_male);
-        radioFemale = findViewById(R.id.Gen_female);
-        radioOther = findViewById(R.id.Gen_other);
-        imageView = findViewById(R.id.adhar_imageView);
-        opencam = findViewById(R.id.cam_openbt);
-//        radioGroup.setOnCheckedChangeListener(this);
-        Firebase.setAndroidContext(this);
-        try {
-            reference = new Firebase("https://protectionapp-3baf6.firebaseio.com/"+ URLEncoder.encode("Personal Document","UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        //set the id of all fields
-        adhharfullname = findViewById(R.id.adhhar_fullname);
-        adharnumber = findViewById(R.id.adhar_number);
-        adharaddres = findViewById(R.id.adhar_addres);
-        addharsavebt = findViewById(R.id.addhr_savebt);
-        dob = findViewById(R.id.dob);
-        imageView = findViewById(R.id.adhar_imageView);
+        initViews();
+        initActions();
         //firebase storgae
         storageReference = FirebaseStorage.getInstance().getReference();
+    }
 
+    private void initActions() {
 
 
         //save data on SAVE button click firebase
@@ -127,23 +118,48 @@ public class Adhaar extends AppCompatActivity implements RadioGroup.OnCheckedCha
             @Override
             public void onClick(View view) {
                 // get all the values
+                if (TextUtils.isEmpty(adhharfullname.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    adhharfullname.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(adhharfullname.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    adhharfullname.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(dob.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    return;
+                }
+                if (adharnumber.getEditText().getText().toString().length() < 16) {
+                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                    adharnumber.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(adharaddres.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    adharaddres.getEditText().requestFocus();
+                    return;
+                }
+                if (fileUri == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.adhaar_scan_error), AppConstant.errorColor);
+                    return;
+                }
                 String Fullname = adhharfullname.getEditText().getText().toString();
                 String aadharNumber = adharnumber.getEditText().getText().toString();
                 String Address = adharaddres.getEditText().getText().toString();
                 String dateofbirth = dob.getEditText().getText().toString();
 
                 String gender;
-                if(radioMale.isChecked())
-                   gender= "Male";
-                else if(radioFemale.isChecked())
-                    gender="Female";
-                else gender="Other";
+                if (radioMale.isChecked())
+                    gender = "Male";
+                else if (radioFemale.isChecked())
+                    gender = "Female";
+                else gender = "Other";
 
-                UserHelperClass userHelperClass = new UserHelperClass(Fullname, dateofbirth,gender,aadharNumber,Address);
-                rootNode=FirebaseDatabase.getInstance();
-//                reference=rootNode.getReference();
-//                reference.child("user").push().setValue(userHelperClass);
-                Utils.storeInRTD(Adhaar.this, AppConstant.ADHAAR,Utils.toJson(userHelperClass,UserHelperClass.class));
+                UserHelperClass userHelperClass = new UserHelperClass(Fullname, dateofbirth, gender, aadharNumber, Address);
+                Utils.storeDocumentsInRTD(Adhaar.this, AppConstant.ADHAAR, Utils.toJson(userHelperClass, UserHelperClass.class));
             }
         });
 
@@ -163,15 +179,14 @@ public class Adhaar extends AppCompatActivity implements RadioGroup.OnCheckedCha
                 startActivityForResult(intent, 100);*/
 
                 ImagePicker.Companion.with(Adhaar.this)
-                        .crop()	    			//Crop image(Optional), Check Customization for more option
-                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .crop()                    //Crop image(Optional), Check Customization for more option
+                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .start();
             }
         });
 
 
-        dobinput = findViewById(R.id.dob_calender);
         final Calendar calendar = Calendar.getInstance();
         dobinput.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,23 +204,32 @@ public class Adhaar extends AppCompatActivity implements RadioGroup.OnCheckedCha
                 datePickerDialog.show();
             }
         });
-
-
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        switch (i) {
-            case R.id.Gen_female:
-                Gender = "female";
-                break;
-            case R.id.Gen_male:
-                Gender = "Male";
-                break;
-            case R.id.Gen_other:
-                Gender = "other";
-                break;
-        }
-
+    private void initViews() {
+        adhharfullname = findViewById(R.id.adhhar_fullname);
+        adharnumber = findViewById(R.id.adhar_number);
+        adharaddres = findViewById(R.id.adhar_addres);
+        addharsavebt = findViewById(R.id.addhr_savebt);
+        dob = findViewById(R.id.dob);
+        imageView = findViewById(R.id.adhar_imageView);
+        radioGender = findViewById(R.id.Gradio);
+        radioMale = findViewById(R.id.Gen_male);
+        radioFemale = findViewById(R.id.Gen_female);
+        radioOther = findViewById(R.id.Gen_other);
+        imageView = findViewById(R.id.adhar_imageView);
+        opencam = findViewById(R.id.cam_openbt);
+        dobinput = findViewById(R.id.dob_calender);
+        ivBack = findViewById(R.id.ivBack);
+        tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
+        tvToolbarTitle.setText("Adhaar Form");
+        Utils.makeButton(opencam, getResources().getColor(R.color.colorAccent), 40F);
+        Utils.makeButton(addharsavebt, getResources().getColor(R.color.colorPrimary), 40F);
     }
 }

@@ -67,11 +67,16 @@ TextView tvSplashTitle;
             @Override
             public void run() {
                 animation.clearAnimation();
-                Intent intent = new Intent(SplashScreen.this,LogIn.class);
-                startActivity(intent);
                 finish();
-
-
+                if (PrefManager.getBoolean(AppConstant.ISLOGGEDIN)) {
+                    Intent intent = new Intent(SplashScreen.this,HomePage.class);
+                    startActivity(intent);
+                }
+                else
+                {
+                    Intent intent = new Intent(SplashScreen.this,LogIn.class);
+                    startActivity(intent);
+                }
             }
 
         },2500);

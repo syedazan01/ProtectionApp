@@ -12,19 +12,30 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.protectionapp.R;
 import com.example.protectionapp.UserHelperClass;
+import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.views.RoundView;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
@@ -86,25 +97,20 @@ public class Utils {
         return new float[]{value, value, value, value, value, value, value, value};
     }
 
-    public  static <T>void storeInRTD(Context context, String child, String modelString)
+    public  static void storeDocumentsInRTD(Context context, String child, String modelString)
     {
         Firebase reference;
         Firebase.setAndroidContext(context);
-        try {
-
-            reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ URLEncoder.encode("Personal Document","UTF-8")+"/"+child+"/");
+            reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ AppConstant.PERSONAL_DOCUMENT+"/"+child+"/");
             if (child.equals(AppConstant.ADHAAR)) {
                 UserHelperClass userHelperClass=fromJson(modelString,UserHelperClass.class);
                 Log.e("sfbdfbfsabn",modelString);
                 Log.e("sfbdfbfsabn",userHelperClass.getAddress());
-                reference.setValue(userHelperClass);
+                reference.child(AppConstant.USER_MOBILE).setValue(userHelperClass);
             }
             /*else if(child.equals(AppConstant.ADHAAR))
             {
             }*/
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
     }
     public static <T>String toJson(T value,Class<T> model)
     {
@@ -123,9 +129,52 @@ public class Utils {
                     .addApi(AppInvite.API)
                     .build();
     }
-    public static void hideKeyboardFrom(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        assert imm != null;
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    public static void showToast(Activity activity, String mes, int  color) {
+        String msg = "Something gone wrong.";
+        if (mes == null) {
+            mes = msg;
+        } else if (mes.equalsIgnoreCase("")) {
+            mes = msg;
+        }
+        hideKeyboard(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View layout = inflater.inflate(R.layout.custom_toast_layout, (ViewGroup) activity.findViewById(R.id.toast_layout_root));
+        LinearLayout root = layout.findViewById(R.id.toast_layout_root);
+        root.setBackground(new RoundView(color, Utils.getRadius(100f)));
+        TextView toastTextView = layout.findViewById(R.id.toastTextView);
+        toastTextView.setText(mes);
+        Toast toast = new Toast(activity);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
+    public static void hideKeyboard(Activity _activity) {
+        View view = _activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) _activity
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    public static void storeUserDetailsToRTD(Context context,UserBean userBean) {
+        Firebase reference;
+        Firebase.setAndroidContext(context);
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ AppConstant.USER_DETAIL+"/");
+        reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userBean);
+    }
+    public static Firebase getUserReference(Context context)
+    {
+        Firebase reference;
+        Firebase.setAndroidContext(context);
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ AppConstant.USER_DETAIL+"/");
+      return reference;
+    }
+    public static StorageReference getStorageReference()
+    {
+        FirebaseStorage storage=FirebaseStorage.getInstance();
+        return storage.getReferenceFromUrl(AppConstant.FIREBASE_STORAGE_DATABASE_URL);
+    }
+
 }

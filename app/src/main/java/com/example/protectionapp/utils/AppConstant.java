@@ -1,5 +1,7 @@
 package com.example.protectionapp.utils;
 
+import android.graphics.Color;
+
 public interface AppConstant {
 
     //DB Constant
@@ -8,9 +10,14 @@ public interface AppConstant {
     //Pref Constant
     String ISNIGHTMODE="nightMode";
     String IS_CALL_RECORDING_ON="call_recording_is_on";
+    String ISLOGGEDIN="is_loggedIn";
+    String USER_MOBILE="user_mobile";
 
     //Real time database constants
     String FIREBASE_DATABASE_URL="https://protectionapp-3baf6.firebaseio.com/";
+    String FIREBASE_STORAGE_DATABASE_URL="gs://protectionapp-3baf6.appspot.com";
+    String PERSONAL_DOCUMENT="Personal Document";
+    String USER_DETAIL="User Details";
     String ADHAAR="adhaar";
     String PAN="pan";
     String DRIVING_LICENSE="driving license";
@@ -23,4 +30,8 @@ public interface AppConstant {
 
     //Login intent Constant
     String LOGIN_MOBILE="login_mobile";
+
+    //Toast Color Code
+    int errorColor= Color.parseColor("#e81224");
+    int succeedColor= Color.parseColor("#41B400");
 }

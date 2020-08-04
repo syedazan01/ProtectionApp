@@ -15,12 +15,16 @@
     </ImageView>
 
     <EditText
+        android:padding="10dp"
+        android:background="@drawable/round_border"
         android:id="@+id/et_phone_number"
         android:layout_width="wrap_content"
         android:ems="14"
-        android:textColorHint="?attr/primaryTitleColor"
+        android:maxLength="10"
+        android:textColorHint="?attr/primaryDateColor"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:textSize="14sp"
         android:hint="Enter Phone Number"
         ></EditText>
 
