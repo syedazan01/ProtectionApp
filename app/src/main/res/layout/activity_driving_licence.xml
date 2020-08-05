@@ -124,7 +124,7 @@
             app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dob_calender"
+                android:id="@+id/dofissue_calender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_border"
@@ -160,16 +160,16 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/cam_openbt"
+            android:id="@+id/btdl_scan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:text="Scan Passbook"
+            android:text="Scan Licence"
             android:textColor="@color/white" />
 
         <Button
-            android:id="@+id/bank_savebt"
+            android:id="@+id/DL_savebt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

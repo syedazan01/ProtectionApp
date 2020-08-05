@@ -44,7 +44,7 @@
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/Account_number"
+        android:id="@+id/account_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hintEnabled="false"
@@ -76,7 +76,7 @@
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/Branch_name"
+        android:id="@+id/branch_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hintEnabled="false"
@@ -118,7 +118,7 @@
             android:textColor="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/cam_openbt"
+            android:id="@+id/bank_scanbt"
             android:text="Scan Passbook"
             android:ems="10"
             android:layout_marginTop="10dp"/>

@@ -5,32 +5,42 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.UserHelperClass;
 import com.example.protectionapp.utils.AppConstant;
+import com.example.protectionapp.utils.AtmHelperClass;
 import com.example.protectionapp.utils.Utils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class ATM extends AppCompatActivity {
-    private Button btnAtmScan,btnAtmSave;
+    private Button btnAtmScan, btnAtmSave;
     private ImageView ivATM;
     private TextView tvToolbarTitle;
-    TextInputLayout bankname,atmnumber,nameoncard,cardVailidity,cvvcode;
+    TextInputEditText cardvaliET;
+    TextInputLayout bankname, atmnumber, nameoncard, cardVailidity, cvvcode;
+    int yearofdob, monthofdob, dayofdob;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_a_t_m);
-    initViews();
-    initActions();
+        initViews();
+        initActions();
 
 
         //Request for camera permission
@@ -56,10 +66,6 @@ public class ATM extends AppCompatActivity {
         });
 
 
-
-
-
-
     }
 
     private void initActions() {
@@ -73,61 +79,46 @@ public class ATM extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // get all the values
-                if (TextUtils.isEmpty(bankname.getEditText().getText().toString())) {
-                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
-                    bankname.getEditText().requestFocus();
-                    return;
-                }
-                if (TextUtils.isEmpty(atmnumber.getEditText().getText().toString())) {
-                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
-                    atmnumber.getEditText().requestFocus();
-                    return;
-                }
-                if (TextUtils.isEmpty(nameoncard.getEditText().getText().toString())) {
-                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
-                    return;
-                }
+                String banknames = bankname.getEditText().getText().toString();
+                String atmnumbers = atmnumber.getEditText().getText().toString();
+                String nameoncards = nameoncard.getEditText().getText().toString();
+                String cardVailiditys = cardVailidity.getEditText().getText().toString();
+                String cvvcodes = cvvcode.getEditText().getText().toString();
 
 
-                if (TextUtils.isEmpty(cardVailidity.getEditText().getText().toString())) {
-                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
-                    adharaddres.getEditText().requestFocus();
-                    return;
-                }
-                if (TextUtils.isEmpty(cvvcode.getEditText().getText().toString())) {
-                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
-                    adharaddres.getEditText().requestFocus();
-                    return;
-                }
-                if (fileUri == null) {
-                    Utils.showToast(activity, getResources().getString(R.string.adhaar_scan_error), AppConstant.errorColor);
-                    return;
-                }
-                String Fullname = adhharfullname.getEditText().getText().toString();
-                String aadharNumber = adharnumber.getEditText().getText().toString();
-                String Address = adharaddres.getEditText().getText().toString();
-                String dateofbirth = dob.getEditText().getText().toString();
-
-                String gender;
-                if (radioMale.isChecked())
-                    gender = "Male";
-                else if (radioFemale.isChecked())
-                    gender = "Female";
-                else gender = "Other";
-
-                UserHelperClass userHelperClass = new UserHelperClass(Fullname, dateofbirth, gender, aadharNumber, Address);
-                Utils.storeDocumentsInRTD(Adhaar.this, AppConstant.ADHAAR, Utils.toJson(userHelperClass, UserHelperClass.class));
+                AtmHelperClass atmHelperClass = new AtmHelperClass(banknames,atmnumbers,nameoncards,cardVailiditys,cvvcodes);
+                Utils.storeDocumentsInRTD(ATM.this, AppConstant.ATM, Utils.toJson(atmHelperClass, AtmHelperClass.class));
             }
         });
+        final Calendar calendar = Calendar.getInstance();
+        cardvaliET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                yearofdob = calendar.get(Calendar.YEAR);
+                monthofdob = calendar.get(Calendar.MONTH);
+                dayofdob = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ATM.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        cardvaliET.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
+
+                    }
+                }, yearofdob, monthofdob, dayofdob);
+                datePickerDialog.show();
+
             }
         });
+
+
     }
 
-    private void initViews() {
+
+    private void initViews(){
         bankname=findViewById(R.id.Bank_name);
         atmnumber=findViewById(R.id.atmnumberET);
         nameoncard=findViewById(R.id.cardnameET);
-        cardVailidity=findViewById(R.id.cardvaliET);
+        cardVailidity=findViewById(R.id.cardvaliTxtIL);
+        cardvaliET=findViewById(R.id.cardvaliET);
         cvvcode=findViewById(R.id.cvvET);
         btnAtmScan=findViewById(R.id.btnAtmScan);
         btnAtmSave=findViewById(R.id.btnAtmSave);
@@ -137,4 +128,9 @@ public class ATM extends AppCompatActivity {
         Utils.makeButton(btnAtmScan,getResources().getColor(R.color.colorAccent),40F);
         Utils.makeButton(btnAtmSave,getResources().getColor(R.color.colorPrimary),40F);
     }
-}
+
+};
+
+
+
+

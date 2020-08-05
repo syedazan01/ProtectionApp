@@ -162,12 +162,12 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/cam_openbt"
+            android:id="@+id/voterscanbt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:text="SCAN PAN CARD"
+            android:text="SCAN Voter id CARD"
             android:textColor="@color/white" />
 
         <Button

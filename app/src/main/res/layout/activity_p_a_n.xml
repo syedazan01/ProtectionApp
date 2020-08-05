@@ -106,7 +106,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/cam_openbt"
+            android:id="@+id/panscanbt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -115,7 +115,7 @@
             android:textColor="@color/white" />
 
         <Button
-            android:id="@+id/bank_savebt"
+            android:id="@+id/pansavebt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
