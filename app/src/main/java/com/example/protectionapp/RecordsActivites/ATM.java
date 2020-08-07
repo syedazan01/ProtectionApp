@@ -5,8 +5,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -34,6 +36,8 @@ public class ATM extends AppCompatActivity {
     TextInputEditText cardvaliET;
     TextInputLayout bankname, atmnumber, nameoncard, cardVailidity, cvvcode;
     int yearofdob, monthofdob, dayofdob;
+    Activity activity = this;
+    private Uri fileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,32 @@ public class ATM extends AppCompatActivity {
         btnAtmSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //validations
+                if (TextUtils.isEmpty(bankname.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    bankname.getEditText().requestFocus();
+                    return;
+                }
+                if (atmnumber.getEditText().getText().toString().length() < 16) {
+                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                    atmnumber.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(nameoncard.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    nameoncard.getEditText().requestFocus();
+                    return;
+                }
+                if (fileUri == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.adhaar_scan_error), AppConstant.errorColor);
+                    return;
+                }
+                if (cvvcode.getEditText().getText().toString().length() < 16) {
+                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                    cvvcode.getEditText().requestFocus();
+                    return;
+                }
+
                 // get all the values
                 String banknames = bankname.getEditText().getText().toString();
                 String atmnumbers = atmnumber.getEditText().getText().toString();

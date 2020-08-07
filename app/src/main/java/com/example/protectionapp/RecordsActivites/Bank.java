@@ -5,8 +5,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +29,8 @@ public class Bank extends AppCompatActivity {
     private ImageView ivBank;
     private TextView tvToolbarTitle;
     TextInputLayout accountHolderName, accountNumber, ifscCode, branchName, bankName;
+    Activity activity = this;
+    private Uri fileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,33 @@ public class Bank extends AppCompatActivity {
         btnBankSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //validations
+                if (TextUtils.isEmpty(accountHolderName.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    accountHolderName.getEditText().requestFocus();
+                    return;
+                }
+
+                if (accountNumber.getEditText().getText().toString().length() < 16) {
+                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                    accountNumber.getEditText().requestFocus();
+                    return;
+                }
+                if (ifscCode.getEditText().getText().toString().length() < 11) {
+                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                    ifscCode.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(branchName.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    branchName.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(bankName.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    bankName.getEditText().requestFocus();
+                    return;
+                }
                 // get all the values
                 String accountHoldernames = accountHolderName.getEditText().getText().toString();
                 String accountNumbers = accountNumber.getEditText().getText().toString();

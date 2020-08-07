@@ -5,9 +5,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,6 +36,8 @@ public class PAN extends AppCompatActivity {
     TextInputLayout FullName, FatherName, dob, PermanentAccountNumber;
     TextInputEditText dobET;
     int yearofdob, monthofdob, dayofdob;
+    Activity activity = this;
+    private Uri fileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,23 @@ public class PAN extends AppCompatActivity {
         btnPANsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //validations
+                if (TextUtils.isEmpty(FullName.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    FullName.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(FatherName.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    FatherName.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(PermanentAccountNumber.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    PermanentAccountNumber.getEditText().requestFocus();
+                    return;
+                }
+                //get all the values
                 String FullNames = FullName.getEditText().getText().toString();
                 String fathersname = FatherName.getEditText().getText().toString();
                 String pandob = dob.getEditText().getText().toString();

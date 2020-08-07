@@ -5,9 +5,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,6 +36,8 @@ public class DrivingLicence extends AppCompatActivity {
     TextInputLayout FullName, sonOf, LicenceNumber, BloodGroup, dob, dateofissue, validity;
     TextInputEditText dobET, dateOfIssueET, ValidityET;
     int yearofdob, monthofdob, dayofdob;
+    Activity activity = this;
+    private Uri fileUri;
 
 
     @Override
@@ -74,6 +79,27 @@ public class DrivingLicence extends AppCompatActivity {
         btnDLsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //validations
+                if (TextUtils.isEmpty(FullName.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    FullName.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(sonOf.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    sonOf.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(LicenceNumber.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    LicenceNumber.getEditText().requestFocus();
+                    return;
+                }
+                if (TextUtils.isEmpty(BloodGroup.getEditText().getText().toString())) {
+                    Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
+                    BloodGroup.getEditText().requestFocus();
+                    return;
+                }
                 // get all the values
                 String FullNames = FullName.getEditText().getText().toString();
                 String sonOfName = sonOf.getEditText().getText().toString();

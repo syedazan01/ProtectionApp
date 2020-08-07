@@ -132,7 +132,7 @@ public class Adhaar extends AppCompatActivity {
                     Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
                     return;
                 }
-                if (adharnumber.getEditText().getText().toString().length() < 16) {
+                if (adharnumber.getEditText().getText().toString().length() < 12) {
                     Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
                     adharnumber.getEditText().requestFocus();
                     return;
