@@ -29,12 +29,5 @@
 
         </item>
     </group>
-    <group
-        android:id="@+id/group3"
-        android:checkableBehavior="all"
-        >
-        <item android:id="@+id/version"
-            android:title="Version 1.0"
-            />
-    </group>
+
 </menu>

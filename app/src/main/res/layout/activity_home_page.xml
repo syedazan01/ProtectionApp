@@ -10,7 +10,9 @@
 
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/gradiant_background"
+    >
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar1"
         android:layout_width="match_parent"
@@ -18,7 +20,34 @@
         android:background="@color/colorPrimaryDark"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></androidx.appcompat.widget.Toolbar>
+
+    //spacenavigation bar
+    <com.luseen.spacenavigation.SpaceNavigationView
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        app:active_item_color="@color/colorAccent"
+        app:centre_button_color="@color/colorPrimary"
+        app:centre_button_icon="@drawable/ic_baseline_home_24"
+        app:active_centre_button_background_color="#E82E2E"
+        app:inactive_centre_button_icon_color="@color/white"
+        app:inactive_item_color="@color/black"
+        app:space_background_color="?attr/primaryBackgroundColor"
+        app:space_item_icon_only_size="@dimen/space_item_icon_only_size"
+        app:space_item_icon_size="30dp"
+        app:space_item_text_size="@dimen/space_item_text_default_size" />
     <FrameLayout
+        android:layout_below="@+id/toolbar1"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/space"
+        />
+
+
+   <!-- <FrameLayout
         android:layout_below="@+id/toolbar1"
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
@@ -37,7 +66,7 @@
             app:menu="@menu/bottom_navigation"
             android:background="?attr/primaryBackgroundColor">
 
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
+        </com.google.android.material.bottomnavigation.BottomNavigationView>-->
 </RelativeLayout>
 
 
