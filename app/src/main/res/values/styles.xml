@@ -12,6 +12,8 @@
         <item name="primaryCardBackgroundColor">@color/primaryCardBackgroundColor</item>
         <item name="themeMode">@drawable/nightmode</item>
         <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="bottomNavColor">@color/colorPrimary</item>
     </style>
 

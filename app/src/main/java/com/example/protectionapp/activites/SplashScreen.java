@@ -6,9 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,20 +23,23 @@ import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
-import com.example.protectionapp.hoverwindow.HoverService;
-import com.example.protectionapp.hoverwindow.MyHoverMenu;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
-import io.mattcarroll.hover.HoverView;
-import io.mattcarroll.hover.window.WindowViewController;
+import io.hamed.floatinglayout.CallBack;
+import io.hamed.floatinglayout.FloatingLayout;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class SplashScreen extends AppCompatActivity {
 LottieAnimationView animation;
 TextView tvSplashTitle;
+//HoverView hoverView;
+Context mContext=this;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,27 +49,50 @@ TextView tvSplashTitle;
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.splash_screen_layout);
         animation=findViewById(R.id.animation);
+//        hoverView=findViewById(R.id.hoverView);
         tvSplashTitle=findViewById(R.id.tvSplashTitle);
         animation.playAnimation();
         Utils.setShader(Color.BLUE,Color.GREEN,tvSplashTitle);
         if (ActivityCompat.checkSelfPermission(this,Manifest.permission.SYSTEM_ALERT_WINDOW)!=PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, AppConstant.SYSTEM_ALERT_CODE);
         }
-        else
-         startService(new Intent(this, HoverService.class));
-      /*  // Create a HoverView to display in a Window:
-        HoverView hoverView = HoverView.createForWindow(
-                this,
-                new WindowViewController(
-                        (WindowManager) getSystemService(Context.WINDOW_SERVICE)
-                )
-        );
-//        hoverView.setOnExitListener(onExitListener);
-        hoverView.addToWindow();
-        hoverView.setMenu(new MyHoverMenu(this));
-        hoverView.collapse();*/
 //        getSupportActionBar().hide();
+//        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+//
+//
+//        View overlay = inflater.inflate(R.layout.floating_layout, null);
+// in Activity Context
+        ImageView icon = new ImageView(this); // Create an icon
+        icon.setImageResource(R.drawable.login_logo);
 
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setContentView(icon)
+                .build();
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+// repeat many times:
+        ImageView itemIcon = new ImageView(this);
+        itemIcon.setImageResource(R.drawable.login_logo);
+        SubActionButton button1 = itemBuilder.setContentView(itemIcon).build();
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(button1)
+                // ...
+                .attachTo(actionButton)
+                .build();
+     /*   final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSLUCENT);
+
+
+        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        if (overlay.isShown()){
+            wm.updateViewLayout(overlay, params);
+        }*/
+
+actionMenu.open(true);
+            // add overlay
+//            wm.addView(actionMenu, params);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -90,8 +121,8 @@ TextView tvSplashTitle;
         {
             if(grantResults[0]== PackageManager.PERMISSION_GRANTED)
             {
-                startService(new Intent(this, HoverService.class));
             }
         }
     }
+
 }
