@@ -12,9 +12,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false"/>
+        android:required="false" />
+
     <application
         android:name="org.mazhuang.cleanexpert.Protection"
         android:allowBackup="true"
@@ -26,7 +28,8 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme">
-        <activity android:name=".activites.KillNotification"></activity>
+        <activity android:name=".activites.Payment_premiumUser"></activity>
+        <activity android:name=".activites.KillNotification" />
         <activity android:name=".activites.Otp" />
         <activity android:name=".RecordsActivites.VoterID" />
         <activity android:name=".RecordsActivites.ATM" />
@@ -71,8 +74,7 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <service android:name=".services.RecordingService" />
-<!--        <service android:name=".hoverwindow.HoverService" />-->
+        <service android:name=".services.RecordingService" /> <!-- <service android:name=".hoverwindow.HoverService" /> -->
         <service
             android:name=".services.ForgroundService"
             android:enabled="true"
@@ -85,7 +87,7 @@
             android:name=".services.BlockListener"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService"/>
+                <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
         <service android:name="io.hamed.floatinglayout.FloatingLayoutService" />
