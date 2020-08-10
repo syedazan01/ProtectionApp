@@ -27,17 +27,22 @@ import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.luseen.spacenavigation.SpaceItem;
+import com.luseen.spacenavigation.SpaceNavigationView;
+import com.luseen.spacenavigation.SpaceOnClickListener;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
-public class HomePage extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class HomePage extends AppCompatActivity  {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
-    BottomNavigationView bottomNavigationView;
+   // BottomNavigationView bottomNavigationView;
     long backLong;
     Toast backToast;
+    //spacenavigation
+    SpaceNavigationView spaceNavigationView;
 
 
 
@@ -49,9 +54,18 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         else
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_home_page);
+
+
+        //set up id of spacenavigaton
+        spaceNavigationView = findViewById(R.id.space);
+        spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
+        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_library_books_24));
+        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_screen_lock_portrait_24 ));
+        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_sms_failed_24 ));
+        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_account_circle_24));
         setUpToolBar();
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+      //  bottomNavigationView = findViewById(R.id.bottom_navigation);
+      //  bottomNavigationView.setOnNavigationItemSelectedListener(this);
         navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -77,8 +91,46 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                 return false;
             }
         });
-        bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+       // bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
+
+
+        //code of spaceNavigation bar
+        spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
+
+            @Override
+            public void onCentreButtonClick() {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+
+            }
+
+            @Override
+            public void onItemClick(int itemIndex, String itemName) {
+                Fragment selectedFragment = null;
+                switch (itemIndex){
+                    case 0:
+                        selectedFragment = new  PersonalRecordFragment();
+                        break;
+                    case 1:
+                        selectedFragment = new  AppLockFragment();
+                        break;
+                    case 2:
+                        selectedFragment = new AppLockFragment();
+                        break;
+                    case 3:
+                        selectedFragment = new AccountFragment();
+                        break;
+                    default:
+                        //return false;
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
+                //return true;
+            }
+
+            @Override
+            public void onItemReselected(int itemIndex, String itemName) {
+
+            }
+        });
     }
 
 
@@ -142,7 +194,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
 
     }
 
-    @Override
+    /*@Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Fragment selectedFragment = null;
         switch (menuItem.getItemId()){
@@ -163,7 +215,8 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
         return true;
-    }
+    }*/
+
 
     @Override
     public void onBackPressed() {

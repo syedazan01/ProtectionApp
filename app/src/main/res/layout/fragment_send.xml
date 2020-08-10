@@ -3,18 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AppLockFragment"
-    android:background="@drawable/gradiant_background"
-    >
+    tools:context=".fragments.SendFragment"
+    android:background="@drawable/gradiant_background">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Send Fragment"
         android:textSize="24sp"
-        android:layout_gravity="center"
-        android:text="@string/applock_fragment"
-        android:textColor="?attr/primaryTitleColor"
         />
 
 </FrameLayout>
