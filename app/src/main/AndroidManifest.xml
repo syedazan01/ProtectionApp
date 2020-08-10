@@ -28,7 +28,13 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme">
-        <activity android:name=".activites.Payment_premiumUser"></activity>
+        <activity android:name=".activites.OutsideTips"></activity>
+        <activity android:name=".activites.Changingroom" />
+        <activity android:name=".activites.BathroomTips" />
+        <activity android:name=".activites.BedroomTips" />
+        <activity android:name=".activites.CamDetector_tips" />
+        <activity android:name=".activites.CameraDectectorByRM" />
+        <activity android:name=".activites.Payment_premiumUser" />
         <activity android:name=".activites.KillNotification" />
         <activity android:name=".activites.Otp" />
         <activity android:name=".RecordsActivites.VoterID" />

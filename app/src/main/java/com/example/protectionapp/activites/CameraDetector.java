@@ -3,12 +3,14 @@ package com.example.protectionapp.activites;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,72 +21,51 @@ import com.example.protectionapp.utils.PrefManager;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
-public class CameraDetector extends AppCompatActivity implements SensorEventListener {
-Toolbar toolbar;
-ImageView ivBack;
-TextView tvToolbarTitle;
-SensorManager sensorManager;
-Sensor magnetometerSensor;
-ProgressBar meterView;
+public class CameraDetector extends AppCompatActivity  {
+    Toolbar toolbar;
+    Button camDetect,tipsBt;
+    ImageView ivBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
-            setTheme(R.style.AppTheme_Base_Night);
-        else
-            setTheme(R.style.AppTheme_Base_Light);
-        setContentView(R.layout.activity_camera_detector);
-       sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
-       magnetometerSensor=sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-       if(magnetometerSensor==null)
-           Toast.makeText(this, "No Magnetometer sensor detector", Toast.LENGTH_SHORT).show();
-    setSupportActionBar(toolbar);
-        addViews();
+        setSupportActionBar(toolbar);
+        findview();
         initActions();
+
+
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sensorManager.registerListener(this,magnetometerSensor,SensorManager.SENSOR_DELAY_NORMAL);
+    private void findview() {
+        camDetect = findViewById(R.id.btnCameraByRM);
+        tipsBt =findViewById(R.id.tips_camBT);
     }
+
 
     private void initActions() {
-    ivBack.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            onBackPressed();
-        }
-    });
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        tipsBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent= new Intent(CameraDetector.this,CamDetector_tips.class);
+                startActivity(intent);
+
+            }
+        });
+        camDetect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CameraDetector.this, CameraDectectorByRM.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
-    private void addViews() {
-        toolbar=findViewById(R.id.toolbar);
-        ivBack=findViewById(R.id.ivBack);
-        tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
-        meterView=findViewById(R.id.meterView);
-        meterView.setMax(500);
-        tvToolbarTitle.setText("Hidden Camera Detector");
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        sensorManager.unregisterListener(this);
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-if(sensorEvent.sensor.getType() ==Sensor.TYPE_MAGNETIC_FIELD)
-{
-    String sensorValue=sensorEvent.values[0]+" "+ sensorEvent.values[1]+ " "+sensorEvent.values[2];
-    meterView.setProgress((int)sensorEvent.values[0]);
-}
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
-}
+};
