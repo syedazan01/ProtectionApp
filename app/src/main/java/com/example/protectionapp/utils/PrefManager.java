@@ -3,7 +3,7 @@ package com.example.protectionapp.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.protectionapp.Protection;
+import org.mazhuang.cleanexpert.Protection;
 
 public class PrefManager {
     private static SharedPreferences sharedPreferences;

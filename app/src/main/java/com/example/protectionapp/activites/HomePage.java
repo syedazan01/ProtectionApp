@@ -31,6 +31,8 @@ import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
 
+import org.mazhuang.cleanexpert.ui.JunkCleanActivity;
+
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class HomePage extends AppCompatActivity  {
@@ -87,7 +89,6 @@ public class HomePage extends AppCompatActivity  {
                         Toast.makeText(HomePage.this, "Work is not complete yet, App is in progress", Toast.LENGTH_SHORT).show();
                         return true;
                 }
-
                 return false;
             }
         });
@@ -164,9 +165,11 @@ public class HomePage extends AppCompatActivity  {
 //                Toast.makeText(this, "Call Recorder under progress", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cache_cleaner:
-                Intent intent2 = new Intent(HomePage.this, CacheCleaner.class);
+                Intent intent2 = new Intent(HomePage.this, JunkCleanActivity.class);
                 startActivity(intent2);
-                Toast.makeText(this, "Cache Cleaner under progress", Toast.LENGTH_SHORT).show();
+               /* Intent intent2 = new Intent(HomePage.this, CacheCleaner.class);
+                startActivity(intent2);
+                Toast.makeText(this, "Cache Cleaner under progress", Toast.LENGTH_SHORT).show();*/
                 break;
             case R.id.file_share:
                 Intent intent3 = new Intent(HomePage.this, FileShare.class);

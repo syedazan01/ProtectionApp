@@ -83,7 +83,7 @@ dependencies {
     //Glide Image Loader
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-
+    implementation project(":cleanmaster")
     //Circular Floating
     implementation 'com.ramotion.circlemenu:circle-menu:0.3.2'
     implementation 'com.oguzdev:CircularFloatingActionMenu:1.0.2'

@@ -1,2 +1,3 @@
+include ':cleanmaster'
 include ':app'
 rootProject.name = "ProtectionApp"

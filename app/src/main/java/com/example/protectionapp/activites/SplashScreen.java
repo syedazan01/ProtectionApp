@@ -90,7 +90,7 @@ Context mContext=this;
             wm.updateViewLayout(overlay, params);
         }*/
 
-actionMenu.open(true);
+//actionMenu.open(true);
             // add overlay
 //            wm.addView(actionMenu, params);
         Handler handler = new Handler();

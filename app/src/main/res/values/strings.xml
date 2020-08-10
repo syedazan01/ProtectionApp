@@ -7,6 +7,10 @@
     <string name="account_fragment">Account fragment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="intoTitle1">Top Class Tutors</string>
+    <string name="introTitle3">Individualised Learning</string>
+    <string name="introTitle2">"Learning in Local\nLanguages"</string>
+    <string name="introTitle4">"Comprehensive\nInformation"</string>
 
 <!--    Notification Strings-->
     <string name="snackbar_not_allowed_title">You must allow Notification Blocker to read your notifications</string>
