@@ -39,6 +39,7 @@ Context mContext=this;
         animation = findViewById(R.id.animation);
 //        hoverView=findViewById(R.id.hoverView);
         tvSplashTitle = findViewById(R.id.tvSplashTitle);
+
         animation.playAnimation();
         Utils.setShader(Color.BLUE, Color.GREEN, tvSplashTitle);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED) {

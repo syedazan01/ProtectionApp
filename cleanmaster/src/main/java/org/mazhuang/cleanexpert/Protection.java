@@ -3,6 +3,9 @@ package org.mazhuang.cleanexpert;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
+import com.google.firebase.FirebaseApp;
+
 public class Protection extends Application {
     private static Protection sInstance;
 
@@ -13,9 +16,9 @@ public class Protection extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance=this;
+        instance = this;
         sInstance = this;
-//        Stetho.initializeWithDefaults(this);
-//        FirebaseApp.initializeApp(this);
+        Stetho.initializeWithDefaults(this);
+        FirebaseApp.initializeApp(this);
     }
 }

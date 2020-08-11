@@ -18,9 +18,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'androidx.appcompat:appcompat:1.0.0'
-    compile 'com.google.android.material:material:1.0.0'
-    compile 'com.jaredrummler:android-processes:1.0.3'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.jaredrummler:android-processes:1.0.3'
+
+    //Debug Database
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+
+    implementation 'com.google.firebase:firebase-core:17.4.4'
+    implementation 'com.firebase:firebase-client-android:2.4.0'
 }

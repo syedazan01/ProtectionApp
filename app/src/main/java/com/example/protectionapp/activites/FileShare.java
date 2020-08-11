@@ -1,20 +1,17 @@
 package com.example.protectionapp.activites;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TextView;
-
 import com.example.protectionapp.R;
 import com.example.protectionapp.ViewPageAdapter;
-import com.example.protectionapp.fragments.PlayerFragment;
 import com.example.protectionapp.fragments.ReceivedFragment;
-import com.example.protectionapp.fragments.Recording_fragment;
 import com.example.protectionapp.fragments.SendFragment;
 import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.tabs.TabLayout;
@@ -35,7 +32,7 @@ public class FileShare extends AppCompatActivity {
             setTheme(R.style.AppTheme_Base_Night);
         else
             setTheme(R.style.AppTheme_Base_Light);
-        setContentView(R.layout.activity_cache_cleaner);
+        setContentView(R.layout.activity_file_share);
         addViews();
         initActions();
         setUpViewPager(viewPager);
