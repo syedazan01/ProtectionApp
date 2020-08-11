@@ -33,7 +33,7 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme">
-<!--        Changes-->
+        <activity android:name=".activites.Payment_premiumUser"/>
         <activity android:name=".activites.KillNotification"></activity>
         <activity android:name=".activites.Otp" />
         <activity android:name=".RecordsActivites.VoterID" />
@@ -96,7 +96,7 @@
                 <action android:name="android.service.notification.NotificationListenerService"/>
             </intent-filter>
         </service>
-        <service android:name="io.hamed.floatinglayout.FloatingLayoutService" />
+        <service android:name=".services.FloatingWindowService" />
     </application>
 
 </manifest>

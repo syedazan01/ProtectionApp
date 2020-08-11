@@ -69,11 +69,11 @@ import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
  */
 public class AccountFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     UploadTask mUploadTask;
-    private CardView cardInvite, cardLogout, cardSos;
+    private CardView cardSubscription,cardInvite, cardLogout, cardSos;
     String deepLink = "";
     private TextView tvMobile;
     UserBean userBean;
-    ImageView ivEdit, ivProfile, ivPremiumUser;
+    ImageView ivEdit, ivProfile;
     TextView tvPremiumUser;
 
     public AccountFragment() {
@@ -111,7 +111,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         tvMobile = view.findViewById(R.id.tvMobile);
         ivEdit = view.findViewById(R.id.ivEdit);
         ivProfile = view.findViewById(R.id.ivProfile);
-        ivPremiumUser = view.findViewById(R.id.paymentIV);
+        cardSubscription = view.findViewById(R.id.cardSubscription);
         tvPremiumUser = view.findViewById(R.id.paymentTV);
         getUser();
     }
@@ -145,7 +145,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                         .start();
             }
         });
-        ivPremiumUser.setOnClickListener(new View.OnClickListener() {
+        cardSubscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Payment_premiumUser.class);

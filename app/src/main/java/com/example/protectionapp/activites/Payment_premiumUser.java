@@ -40,6 +40,7 @@ public class Payment_premiumUser extends AppCompatActivity {
         paybt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                amount.getEditText().setText("1");
                 //Getting the values from the EditTexts
                 if (TextUtils.isEmpty(name.getEditText().getText().toString())) {
                     Toast.makeText(Payment_premiumUser.this, " Name is invalid", Toast.LENGTH_SHORT).show();
@@ -75,16 +76,16 @@ public class Payment_premiumUser extends AppCompatActivity {
                 //.appendQueryParameter("refUrl", "blueapp")         // optional
                 .build();
         //for only google pay
-        /*String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
+        String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
         int GOOGLE_PAY_REQUEST_CODE = 123;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
         intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
-        activity.startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);*/
+        startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
 
 
-        // for all payment app accept google
+        /*// for all payment app accept google
         Intent upiPayIntent = new Intent(Intent.ACTION_VIEW);
         upiPayIntent.setData(uri);
 
@@ -96,7 +97,7 @@ public class Payment_premiumUser extends AppCompatActivity {
             startActivityForResult(chooser, UPI_PAYMENT);
         } else {
             Toast.makeText(Payment_premiumUser.this,"No UPI app found, please install one to continue",Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
     }
 

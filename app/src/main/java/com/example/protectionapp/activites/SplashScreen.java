@@ -1,14 +1,18 @@
 package com.example.protectionapp.activites;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
+import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -62,7 +67,7 @@ Context mContext=this;
 //
 //        View overlay = inflater.inflate(R.layout.floating_layout, null);
 // in Activity Context
-        ImageView icon = new ImageView(this); // Create an icon
+     /*   ImageView icon = new ImageView(this); // Create an icon
         icon.setImageResource(R.drawable.login_logo);
 
         FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
@@ -77,7 +82,8 @@ Context mContext=this;
                 .addSubActionView(button1)
                 // ...
                 .attachTo(actionButton)
-                .build();
+                .build();*/
+     startService(new Intent(this, FloatingWindowService.class));
      /*   final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
@@ -124,5 +130,54 @@ Context mContext=this;
             }
         }
     }
+   /* @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+            if (Settings.canDrawOverlays(this)) {
+                showWindowManager();
+            }
+        }
+    }
+    public void showWindowManager() {
+        if (requestPermission()) {
+            return;
+        }
 
+        WindowManager.LayoutParams p =
+                new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT,
+                        Build.VERSION.SDK_INT > Build.VERSION_CODES.O
+                                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                                : WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        PixelFormat.TRANSLUCENT);
+
+
+        final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        LayoutInflater layoutInflater =
+                (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View popupView = layoutInflater.inflate(R.layout.window_manager_layout, null);
+        windowManager.addView(popupView, p);
+
+        // dismiss windowManager after 3s
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                windowManager.removeView(popupView);
+            }
+        }, 3000);
+    }
+    public boolean requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+                return true;
+            }
+        }
+        return false;
+    }*/
 }

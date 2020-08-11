@@ -19,7 +19,7 @@ import com.example.protectionapp.utils.PrefManager;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
-public class CameraDectectorByRM extends AppCompatActivity {
+public class CameraDectectorByRM extends AppCompatActivity implements SensorEventListener {
     Toolbar toolbar;
     ImageView ivBack;
     TextView tvToolbarTitle;
@@ -43,8 +43,6 @@ public class CameraDectectorByRM extends AppCompatActivity {
         setSupportActionBar(toolbar);
         addViews();
         initActions();
-        onSensorChanged();
-        onAccuracyChanged();
     }
 
     private void initActions() {

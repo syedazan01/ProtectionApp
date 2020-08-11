@@ -18,9 +18,9 @@ public class BathroomTips extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bathroom_tips);
-        setSupportActionBar(toolbar);
-        textView = findViewById(R.id.bathroom_tipsTV);
+//        setContentView(R.layout.activity_bathroom_tips);
+//        setSupportActionBar(toolbar);
+//        textView = findViewById(R.id.bathroom_tipsTV);
         textView.setText("Scan for below devices (For manual scan, scan for lens looking part over below devices)\n" +
                 "\n" +
                 "1. Water heater - Precaution : Turn off heater and then bath \n" +
