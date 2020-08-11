@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mazhuang.cleanexpert.Protection.instance;
+
 /**
  * Created by mazhuang on 1/20.
  */
@@ -50,8 +52,8 @@ public class ProcessScanTask extends AsyncTask<Void, Void, Void> {
             }
 
             try {
-                PackageManager pm = Protection.getInstance().getPackageManager();
-                PackageInfo packageInfo = process.getPackageInfo(Protection.getInstance(), 0);
+                PackageManager pm = instance.getPackageManager();
+                PackageInfo packageInfo = process.getPackageInfo(instance, 0);
                 info.name = packageInfo.applicationInfo.loadLabel(pm).toString();
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();

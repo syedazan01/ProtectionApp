@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mazhuang.cleanexpert.Protection.instance;
+
 /**
  * Created by mazhuang on 16/1/14.
  */
@@ -69,7 +71,7 @@ public class CleanUtil {
 
     public static void freeAllAppsCache(final Handler handler) {
 
-        Context context = Protection.getInstance();
+        Context context = instance;
 
         File externalDir = context.getExternalCacheDir();
         if (externalDir == null) {
@@ -136,7 +138,7 @@ public class CleanUtil {
             return;
         }
 
-        ActivityManager am = (ActivityManager) Protection.getInstance()
+        ActivityManager am = (ActivityManager) instance
                 .getSystemService(Context.ACTIVITY_SERVICE);
         am.killBackgroundProcesses(packageName);
     }

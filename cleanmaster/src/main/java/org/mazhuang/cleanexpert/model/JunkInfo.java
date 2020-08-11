@@ -5,6 +5,8 @@ import org.mazhuang.cleanexpert.R;
 
 import java.util.ArrayList;
 
+import static org.mazhuang.cleanexpert.Protection.instance;
+
 /**
  * Created by mazhuang on 16/1/14.
  */
@@ -19,7 +21,7 @@ public class JunkInfo implements Comparable<JunkInfo> {
 
     @Override
     public int compareTo(JunkInfo another) {
-        String top = Protection.getInstance().getString(R.string.system_cache);
+        String top = instance.getString(R.string.system_cache);
 
         if (this.name != null && this.name.equals(top)) {
             return 1;

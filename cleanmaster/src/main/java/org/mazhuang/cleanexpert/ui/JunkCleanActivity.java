@@ -332,7 +332,7 @@ public class JunkCleanActivity extends BaseActivity {
 
         mJunkGroups = new HashMap<>();
 
-        mCleanButton.setEnabled(false);
+//        mCleanButton.setEnabled(false);
 
         JunkGroup cacheGroup = new JunkGroup();
         cacheGroup.mName = getString(R.string.cache_clean);
@@ -381,7 +381,7 @@ public class JunkCleanActivity extends BaseActivity {
             long size = getTotalSize();
             String totalSize = CleanUtil.formatShortFileSize(this, size);
             mHeaderView.mSize.setText(totalSize);
-            mHeaderView.mProgress.setText("共发现:" + totalSize);
+            mHeaderView.mProgress.setText("Scanning:" + totalSize);
             mHeaderView.mProgress.setGravity(Gravity.CENTER);
 
             mCleanButton.setEnabled(true);
@@ -390,7 +390,7 @@ public class JunkCleanActivity extends BaseActivity {
 
     private void checkCleanFinish() {
         if (mIsProcessCleanFinish && mIsSysCacheCleanFinish && mIsOverallCleanFinish) {
-            mHeaderView.mProgress.setText("清理完成");
+            mHeaderView.mProgress.setText("Clean up");
             mHeaderView.mSize.setText(CleanUtil.formatShortFileSize(this, 0L));
 
             for (JunkGroup group : mJunkGroups.values()) {
