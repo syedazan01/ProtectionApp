@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/primaryBackgroundColor"
     tools:context=".activites.Payment_premiumUser">
+
     <include
         android:id="@+id/toolbarLay"
         layout="@layout/custum_toolbar"
@@ -12,6 +14,7 @@
         android:layout_height="wrap_content" />
 
     <ImageView
+        android:background="?attr/primaryBackgroundColor"
         android:id="@+id/preimiumicon"
         android:layout_width="match_parent"
         android:layout_height="78dp"
@@ -31,75 +34,83 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/payment_nameTL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true"
-        app:hintEnabled="false">
+        <com.google.android.material.textfield.TextInputLayout
 
-        <com.google.android.material.textfield.TextInputEditText
+            android:layout_marginTop="10dp"
+            android:id="@+id/payment_nameTL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_border"
-            android:hint=" Name"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/payment_upiID_TL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true"
-        app:hintEnabled="false">
+            app:hintEnabled="false">
 
-        <com.google.android.material.textfield.TextInputEditText
+            <EditText
+                android:id="@+id/payment_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_border"
+                android:hint=" Name"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/payment_upiID_TL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_border"
-            android:hint="UPI ID"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/paymentAmount_TL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true"
-        app:hintEnabled="false">
+            android:layout_marginTop="10dp"
+            app:hintEnabled="false">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/pandob_calender"
+            <EditText
+                android:id="@+id/payment_upiID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_border"
+                android:hint="UPI ID"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/paymentAmount_TL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_border"
-            android:focusable="false"
-            android:hint="Amount"
-            android:inputType="numberDecimal"
-            android:padding="10dp"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/payment_note_TL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true"
-        app:hintEnabled="false">
+            android:layout_marginTop="10dp"
+            app:hintEnabled="false">
 
-        <com.google.android.material.textfield.TextInputEditText
+            <EditText
+                android:id="@+id/paymentAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_border"
+                android:focusable="false"
+                android:hint="Amount"
+                android:inputType="numberDecimal"
+                android:padding="10dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/payment_note_TL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_border"
-            android:hint="NOTE"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+
+            android:layout_marginTop="10dp"
+            app:hintEnabled="false">
+
+            <EditText
+                android:id="@+id/payment_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_border"
+                android:hint="NOTE"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
 

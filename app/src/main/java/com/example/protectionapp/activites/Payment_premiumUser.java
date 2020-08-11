@@ -1,8 +1,5 @@
 package com.example.protectionapp.activites;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -14,49 +11,59 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.protectionapp.R;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
 public class Payment_premiumUser extends AppCompatActivity {
-    TextInputLayout amount, note, name, upivirtualid;
+    EditText amount, note, name, upivirtualid;
     Button paybt;
-    String TAG ="main";
+    String TAG = "main";
     final int UPI_PAYMENT = 0;
+    ImageView ivBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_premium_user);
-        paybt = (Button) findViewById(R.id.paynowBT);
-        amount = findViewById(R.id.paymentAmount_TL);
-        note = findViewById(R.id.payment_note_TL);
-        name =  findViewById(R.id.payment_nameTL);
-        upivirtualid = findViewById(R.id.payment_upiID_TL);
-
+        paybt = findViewById(R.id.paynowBT);
+        amount = findViewById(R.id.paymentAmount);
+        note = findViewById(R.id.payment_note);
+        name = findViewById(R.id.payment_name);
+        ivBack = findViewById(R.id.ivBack);
+        upivirtualid = findViewById(R.id.payment_upiID);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         paybt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                amount.getEditText().setText("1");
+                amount.setText("1");
                 //Getting the values from the EditTexts
-                if (TextUtils.isEmpty(name.getEditText().getText().toString())) {
+                if (TextUtils.isEmpty(name.getText().toString())) {
                     Toast.makeText(Payment_premiumUser.this, " Name is invalid", Toast.LENGTH_SHORT).show();
 
-                } else if (TextUtils.isEmpty(upivirtualid.getEditText().getText().toString().trim())) {
+                } else if (TextUtils.isEmpty(upivirtualid.getText().toString().trim())) {
                     Toast.makeText(Payment_premiumUser.this, " UPI ID is invalid", Toast.LENGTH_SHORT).show();
 
-                } else if (TextUtils.isEmpty(note.getEditText().getText().toString().trim())) {
+                } else if (TextUtils.isEmpty(note.getText().toString().trim())) {
                     Toast.makeText(Payment_premiumUser.this, " Note is invalid", Toast.LENGTH_SHORT).show();
 
-                } else if (TextUtils.isEmpty(amount.getEditText().getText().toString().trim())) {
+                } else if (TextUtils.isEmpty(amount.getText().toString().trim())) {
                     Toast.makeText(Payment_premiumUser.this, " Amount is invalid", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    payUsingUpi(name.getEditText().getText().toString(), upivirtualid.getEditText().getText().toString(),
-                            note.getEditText().getText().toString(), amount.getEditText().getText().toString());
+                    payUsingUpi(name.getText().toString(), upivirtualid.getText().toString(),
+                            note.getText().toString(), amount.getText().toString());
                 }
             }
         });
@@ -75,17 +82,17 @@ public class Payment_premiumUser extends AppCompatActivity {
                 .appendQueryParameter("cu", "INR")          // currency
                 //.appendQueryParameter("refUrl", "blueapp")         // optional
                 .build();
-        //for only google pay
+        /*//for only google pay
         String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
         int GOOGLE_PAY_REQUEST_CODE = 123;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
         intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
-        startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
+        startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);*/
 
 
-        /*// for all payment app accept google
+        // for all payment app accept google
         Intent upiPayIntent = new Intent(Intent.ACTION_VIEW);
         upiPayIntent.setData(uri);
 
@@ -97,7 +104,7 @@ public class Payment_premiumUser extends AppCompatActivity {
             startActivityForResult(chooser, UPI_PAYMENT);
         } else {
             Toast.makeText(Payment_premiumUser.this,"No UPI app found, please install one to continue",Toast.LENGTH_SHORT).show();
-        }*/
+        }
 
     }
 
@@ -140,9 +147,9 @@ public class Payment_premiumUser extends AppCompatActivity {
             if (str == null) str = "discard";
             String status = "";
             String approvalRefNo = "";
-            String response[] = str.split("&");
+            String[] response = str.split("&");
             for (int i = 0; i < response.length; i++) {
-                String equalStr[] = response[i].split("=");
+                String[] equalStr = response[i].split("=");
                 if (equalStr.length >= 2) {
                     if (equalStr[0].toLowerCase().equals("Status".toLowerCase())) {
                         status = equalStr[1].toLowerCase();
@@ -179,11 +186,9 @@ public class Payment_premiumUser extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) payment_premiumUser.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
             NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()
+            return netInfo != null && netInfo.isConnected()
                     && netInfo.isConnectedOrConnecting()
-                    && netInfo.isAvailable()) {
-                return true;
-            }
+                    && netInfo.isAvailable();
         }
         return false;
     }

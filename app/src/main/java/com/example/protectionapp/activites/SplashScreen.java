@@ -1,23 +1,12 @@
 package com.example.protectionapp.activites;
 
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,16 +16,9 @@ import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
-import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
-import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
-import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
-
-import io.hamed.floatinglayout.CallBack;
-import io.hamed.floatinglayout.FloatingLayout;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
@@ -47,19 +29,20 @@ TextView tvSplashTitle;
 Context mContext=this;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+        if (PrefManager.getBoolean(ISNIGHTMODE))
             setTheme(R.style.AppTheme_Base_Night);
         else
             setTheme(R.style.AppTheme_Base_Light);
+        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.splash_screen_layout);
-        animation=findViewById(R.id.animation);
+        animation = findViewById(R.id.animation);
 //        hoverView=findViewById(R.id.hoverView);
-        tvSplashTitle=findViewById(R.id.tvSplashTitle);
+        tvSplashTitle = findViewById(R.id.tvSplashTitle);
         animation.playAnimation();
-        Utils.setShader(Color.BLUE,Color.GREEN,tvSplashTitle);
-        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.SYSTEM_ALERT_WINDOW)!=PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, AppConstant.SYSTEM_ALERT_CODE);
+        Utils.setShader(Color.BLUE, Color.GREEN, tvSplashTitle);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, AppConstant.SYSTEM_ALERT_CODE);
         }
 //        getSupportActionBar().hide();
 //        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -83,7 +66,7 @@ Context mContext=this;
                 // ...
                 .attachTo(actionButton)
                 .build();*/
-     startService(new Intent(this, FloatingWindowService.class));
+//     startService(new Intent(this, FloatingWindowService.class));
      /*   final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,

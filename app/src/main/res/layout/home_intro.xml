@@ -51,7 +51,7 @@
         android:layout_width="0dp"
         style="@style/TextViewBold"
         android:layout_height="wrap_content"
-        android:text="Top Class Tutors"
+        android:text="Demo Text"
         android:textSize="18sp"
         android:textColor="@android:color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +66,7 @@
         android:id="@+id/tvSubTitle"
         style="@style/TextViewRegular"
         android:layout_width="0dp"
-        android:text="High quality engaging videos from\nforemost teachers."
+        android:text="Lorem Ipsum."
         android:layout_margin="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,6 +109,7 @@
     </LinearLayout>
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/tvSkip"
         style="@style/TextViewMedium"
         android:text="@string/skip"

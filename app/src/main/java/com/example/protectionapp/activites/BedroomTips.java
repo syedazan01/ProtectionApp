@@ -1,12 +1,12 @@
 package com.example.protectionapp.activites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.protectionapp.R;
 
@@ -41,7 +41,7 @@ public class BedroomTips extends AppCompatActivity {
                 "More info\n" +
                 "\n" +
                 "Some easy steps can save you from uneasy situations");
-
+        ivBack = findViewById(R.id.ivBack);
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

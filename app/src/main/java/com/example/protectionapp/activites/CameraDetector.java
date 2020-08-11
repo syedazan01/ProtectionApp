@@ -1,25 +1,15 @@
 package com.example.protectionapp.activites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.protectionapp.R;
-import com.example.protectionapp.utils.PrefManager;
-
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class CameraDetector extends AppCompatActivity  {
     Toolbar toolbar;
@@ -29,6 +19,7 @@ public class CameraDetector extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera_detector);
         setSupportActionBar(toolbar);
         findview();
         initActions();
@@ -38,7 +29,8 @@ public class CameraDetector extends AppCompatActivity  {
 
     private void findview() {
         camDetect = findViewById(R.id.btnCameraByRM);
-        tipsBt =findViewById(R.id.tips_camBT);
+        tipsBt = findViewById(R.id.tips_camBT);
+        ivBack = findViewById(R.id.ivBack);
     }
 
 
@@ -68,4 +60,4 @@ public class CameraDetector extends AppCompatActivity  {
     }
 
 
-};
+}

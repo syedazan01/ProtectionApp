@@ -1,5 +1,13 @@
 package com.example.protectionapp.activites;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,23 +17,11 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.Toast;
-
 import com.example.protectionapp.R;
 import com.example.protectionapp.fragments.AccountFragment;
-import com.example.protectionapp.fragments.AppLockFragment;
 import com.example.protectionapp.fragments.HomeFragment;
 import com.example.protectionapp.fragments.PersonalRecordFragment;
 import com.example.protectionapp.utils.PrefManager;
-import com.example.protectionapp.utils.Utils;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
@@ -46,8 +42,6 @@ public class HomePage extends AppCompatActivity  {
     //spacenavigation
     SpaceNavigationView spaceNavigationView;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +56,8 @@ public class HomePage extends AppCompatActivity  {
         spaceNavigationView = findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_library_books_24));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_screen_lock_portrait_24 ));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_sms_failed_24 ));
+        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_sms_failed_24));
+        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_sms_failed_24));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_account_circle_24));
         setUpToolBar();
       //  bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -112,19 +106,21 @@ public class HomePage extends AppCompatActivity  {
                     case 0:
                         selectedFragment = new  PersonalRecordFragment();
                         break;
-                    case 1:
+                   /* case 1:
                         selectedFragment = new  AppLockFragment();
                         break;
                     case 2:
                         selectedFragment = new AppLockFragment();
-                        break;
+                        break;*/
                     case 3:
                         selectedFragment = new AccountFragment();
                         break;
                     default:
                         //return false;
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
+                if (selectedFragment != null) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                }
                 //return true;
             }
 
@@ -180,7 +176,7 @@ public class HomePage extends AppCompatActivity  {
             case R.id.camera_detector:
                 Intent intent4 = new Intent(HomePage.this, CameraDetector.class);
                 startActivity(intent4);
-                Toast.makeText(this, "Camera Detector under progress", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Camera Detector under progress", Toast.LENGTH_SHORT).show();
                 break;
 
         }

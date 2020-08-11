@@ -1,17 +1,16 @@
 package com.example.protectionapp.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.IntroPagerAdapter;
@@ -82,7 +81,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 switch (position) {
-                    case 0:{
+              /*      case 0:{
                         tvTitle.setText(getActivity().getResources().getString(R.string.intoTitle1));
                         tvNext.setText("Next");
                         tvSkip.setVisibility(View.VISIBLE);
@@ -101,7 +100,7 @@ public class HomeFragment extends Fragment {
                         tvTitle.setText(getString(R.string.introTitle4));
                         tvNext.setText("Get Started");
                         tvSkip.setVisibility(View.GONE);
-                    }
+                    }*/
                 }
 
                 setIndicator(position);
@@ -116,7 +115,7 @@ public class HomeFragment extends Fragment {
     }
     private void setIndicator(int position) {
         for(int i=0;i< indicators.getChildCount();i++){
-            View view = (View) indicators.getChildAt(i);
+            View view = indicators.getChildAt(i);
             if (i==position){
                 view.setBackgroundResource(R.drawable.capsule_primary);
             }else{

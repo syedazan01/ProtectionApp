@@ -1,8 +1,5 @@
 package com.example.protectionapp.activites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.utils.PrefManager;
@@ -30,13 +30,12 @@ public class CameraDectectorByRM extends AppCompatActivity implements SensorEven
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera_dectector_by_r_m);
         if(PrefManager.getBoolean(ISNIGHTMODE))
             setTheme(R.style.AppTheme_Base_Night);
         else
             setTheme(R.style.AppTheme_Base_Light);
-        setContentView(R.layout.activity_camera_detector);
-        sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
+        setContentView(R.layout.activity_camera_dectector_by_r_m);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         magnetometerSensor=sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         if(magnetometerSensor==null)
             Toast.makeText(this, "No Magnetometer sensor detector", Toast.LENGTH_SHORT).show();
@@ -58,7 +57,7 @@ public class CameraDectectorByRM extends AppCompatActivity implements SensorEven
     @Override
     protected void onResume() {
         super.onResume();
-        sensorManager.registerListener((SensorEventListener) this,magnetometerSensor,SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
     private void addViews() {
         toolbar=findViewById(R.id.toolbar);
@@ -74,7 +73,7 @@ public class CameraDectectorByRM extends AppCompatActivity implements SensorEven
     @Override
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener((SensorEventListener) this);
+        sensorManager.unregisterListener(this);
     }
 
     @Override
