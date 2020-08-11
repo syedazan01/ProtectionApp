@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activites.CamDetector_tips">
+
+    <include layout="@layout/custum_toolbar" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradiant_background"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="Where are you now ?"
+        android:textSize="20sp" />
+
+    <RadioGroup
+        android:id="@+id/Rgroup_rooms"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/bedroom_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Bedroom" />
+
+        <RadioButton
+            android:id="@+id/bathroom_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Bathroom" />
+
+        <RadioButton
+            android:id="@+id/changingroom_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Changing room" />
+
+        <RadioButton
+            android:id="@+id/outside_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Outside" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/next_tipsBT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="next"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        />
+
+</RelativeLayout>

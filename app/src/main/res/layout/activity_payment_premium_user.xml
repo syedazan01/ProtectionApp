@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activites.Payment_premiumUser">
+    <include
+        android:id="@+id/toolbarLay"
+        layout="@layout/custum_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/preimiumicon"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_below="@+id/toolbarLay"
+        android:layout_marginTop="7dp"
+        android:gravity="center"
+        android:src="@drawable/premium_logo"
+        android:textSize="24sp" />
+
+
+
+    <LinearLayout
+        android:layout_below="@+id/preimiumicon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/payment_nameTL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_border"
+            android:hint=" Name"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/payment_upiID_TL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_border"
+            android:hint="UPI ID"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/paymentAmount_TL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pandob_calender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_border"
+            android:focusable="false"
+            android:hint="Amount"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/payment_note_TL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:hintEnabled="false">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_border"
+            android:hint="NOTE"
+            android:inputType="textPersonName"
+            android:padding="10dp"
+            android:textSize="14sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    </LinearLayout>
+    <Button
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="100dp"
+        android:id="@+id/paynowBT"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="20"
+        android:layout_marginTop="10dp"
+        android:background="@color/blue_light"
+        android:text="Pay Now"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

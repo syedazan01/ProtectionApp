@@ -31,6 +31,7 @@ import com.example.protectionapp.BuildConfig;
 import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.Adhaar;
 import com.example.protectionapp.activites.LogIn;
+import com.example.protectionapp.activites.Payment_premiumUser;
 import com.example.protectionapp.model.PInfo;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.AppConstant;
@@ -72,7 +73,8 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     String deepLink = "";
     private TextView tvMobile;
     UserBean userBean;
-    ImageView ivEdit, ivProfile;
+    ImageView ivEdit, ivProfile, ivPremiumUser;
+    TextView tvPremiumUser;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -86,6 +88,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         initViews(view);
         return view;
+
     }
 
     @Override
@@ -108,6 +111,8 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         tvMobile = view.findViewById(R.id.tvMobile);
         ivEdit = view.findViewById(R.id.ivEdit);
         ivProfile = view.findViewById(R.id.ivProfile);
+        ivPremiumUser = view.findViewById(R.id.paymentIV);
+        tvPremiumUser = view.findViewById(R.id.paymentTV);
         getUser();
     }
 
@@ -138,6 +143,21 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                         .compress(1024)            //Final image size will be less than 1 MB(Optional)
                         .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .start();
+            }
+        });
+        ivPremiumUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Payment_premiumUser.class);
+                startActivity(intent);
+
+            }
+        });
+        tvPremiumUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Payment_premiumUser.class);
+                startActivity(intent);
             }
         });
     }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activites.CameraDectectorByRM">
+    <include layout="@layout/custum_toolbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Move Phone Close To The Suspect"
+        android:textSize="16sp"
+        android:layout_above="@+id/meterView"
+        android:layout_centerHorizontal="true"
+        />
+
+
+     <ProgressBar
+         android:layout_centerInParent="true"
+       android:progressDrawable="@drawable/circular_progress"
+       style="?android:progressBarStyleHorizontal"
+       android:background="@drawable/circle_shape"
+       android:id="@+id/meterView"
+       android:indeterminate="false"
+       app:layout_constraintTop_toTopOf="@id/glTop20"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:layout_width="200dp"
+       android:layout_height="200dp"
+       />
+    <ImageView
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/meterView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_audiotrack_24"/>
+
+</RelativeLayout>

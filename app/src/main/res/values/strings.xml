@@ -12,7 +12,7 @@
     <string name="introTitle2">"Learning in Local\nLanguages"</string>
     <string name="introTitle4">"Comprehensive\nInformation"</string>
 
-<!--    Notification Strings-->
+    <!--    Notification Strings-->
     <string name="snackbar_not_allowed_title">You must allow Notification Blocker to read your notifications</string>
     <string name="snackbar_not_allowed_action">Allow</string>
     <string name="menu_enable_title">Enable</string>
