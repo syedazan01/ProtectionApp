@@ -11,6 +11,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.protectionapp.R;
 
+import cameraDetector.CamDetector_tips;
+import cameraDetector.CameraDectectorByRM;
+
 public class CameraDetector extends AppCompatActivity  {
     Toolbar toolbar;
     Button camDetect,tipsBt;
@@ -44,7 +47,7 @@ public class CameraDetector extends AppCompatActivity  {
         tipsBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(CameraDetector.this,CamDetector_tips.class);
+                Intent intent= new Intent(CameraDetector.this, CamDetector_tips.class);
                 startActivity(intent);
 
             }

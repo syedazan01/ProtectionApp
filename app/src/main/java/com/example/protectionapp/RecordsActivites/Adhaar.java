@@ -1,6 +1,5 @@
 package com.example.protectionapp.RecordsActivites;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -11,12 +10,9 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,28 +28,18 @@ import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.Utils;
 import com.firebase.client.Firebase;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Adhaar extends AppCompatActivity {
+public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogListener {
     private TextInputEditText dobinput;
     public URL imgaeurl;
     TextInputLayout adhharfullname, adharnumber, adharaddres, dob;
@@ -62,7 +48,7 @@ public class Adhaar extends AppCompatActivity {
     RadioGroup radioGender;
     RadioButton radioMale, radioFemale, radioOther;
     ImageView imageView;
-    Button opencam;
+    Button opencam,sendBT;
     String Gender;
     //firebase realtime database
     FirebaseDatabase rootNode;
@@ -111,6 +97,14 @@ public class Adhaar extends AppCompatActivity {
     }
 
     private void initActions() {
+
+        //open dialog for send file
+        sendBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
 
 
         //save data on SAVE button click firebase
@@ -212,6 +206,11 @@ public class Adhaar extends AppCompatActivity {
         });
     }
 
+    private void openDialog() {
+        SendDailog sendDailog = new SendDailog();
+        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+    }
+
     private void initViews() {
         adhharfullname = findViewById(R.id.adhhar_fullname);
         adharnumber = findViewById(R.id.adhar_number);
@@ -225,11 +224,18 @@ public class Adhaar extends AppCompatActivity {
         radioOther = findViewById(R.id.Gen_other);
         imageView = findViewById(R.id.adhar_imageView);
         opencam = findViewById(R.id.cam_openbt);
+        sendBT = findViewById(R.id.adhaar_sendBT);
         dobinput = findViewById(R.id.dob_calender);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Adhaar Form");
         Utils.makeButton(opencam, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(addharsavebt, getResources().getColor(R.color.colorPrimary), 40F);
+    }
+
+    @Override
+    public void applyTexts(String message, String password) {
+        //where to send and set the password and message
+
     }
 }
