@@ -1,10 +1,8 @@
 package com.example.protectionapp.activites;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.wifi.hotspot2.pps.Credential;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -14,11 +12,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.protectionapp.R;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.goodiebag.pinview.Pinview;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,7 +30,6 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
@@ -41,6 +44,7 @@ public class Otp extends AppCompatActivity {
     String verficationId;
     PhoneAuthProvider.ForceResendingToken resendToken;
     FirebaseAuth mAuth;
+    Activity activity = Otp.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +64,7 @@ public class Otp extends AppCompatActivity {
         tvResend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PhoneAuthProvider.getInstance().verifyPhoneNumber(verficationId,30L,TimeUnit.SECONDS,Otp.this,callbacks,resendToken);
+                PhoneAuthProvider.getInstance().verifyPhoneNumber(verficationId, 30L, TimeUnit.SECONDS, activity, callbacks, resendToken);
                 tvResend.setEnabled(false);
                 otpSendTimer();
             }
@@ -75,7 +79,7 @@ public class Otp extends AppCompatActivity {
                 }
                 else
                 {
-                    Utils.showToast(Otp.this,"Invalid Otp",AppConstant.errorColor);
+                    Utils.showToast(activity, "Invalid Otp", AppConstant.errorColor);
                 }
             }
         });
@@ -108,7 +112,7 @@ public class Otp extends AppCompatActivity {
                 super.onCodeSent(s, forceResendingToken);
                 verficationId = s;
                 resendToken = forceResendingToken;
-                Utils.showToast(Otp.this, getResources().getString(R.string.sent_msg) + " " + getIntent().getStringExtra(AppConstant.LOGIN_MOBILE), AppConstant.succeedColor);
+                Utils.showToast(activity, getResources().getString(R.string.sent_msg) + " " + getIntent().getStringExtra(AppConstant.LOGIN_MOBILE), AppConstant.succeedColor);
 
             }
         }
@@ -122,17 +126,35 @@ public class Otp extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            final ProgressDialog pd = Utils.getProgressDialog(activity);
+                            pd.show();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Otp Screen>>>", "signInWithCredential:success");
-                            PrefManager.putString(AppConstant.USER_MOBILE,"+91"+getIntent().getStringExtra(AppConstant.LOGIN_MOBILE));
-                            PrefManager.putBoolean(AppConstant.ISLOGGEDIN,true);
-                            UserBean userBean=new UserBean();
-                            userBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
-                            userBean.setProfilePic("");
-                            Utils.storeUserDetailsToRTD(Otp.this,userBean);
-                            finishAffinity();
-                            Intent intent = new Intent(Otp.this, HomePage.class);
-                            startActivity(intent);
+                            PrefManager.putString(AppConstant.USER_MOBILE, "+91" + getIntent().getStringExtra(AppConstant.LOGIN_MOBILE));
+                            PrefManager.putBoolean(AppConstant.ISLOGGEDIN, true);
+                            Utils.getUserReference(activity).child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    pd.dismiss();
+                                    UserBean userBean = dataSnapshot.getValue(UserBean.class);
+                                    userBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                                    if (userBean.getProfilePic().isEmpty())
+                                        userBean.setProfilePic("");
+                                    else
+                                        userBean.setProfilePic(userBean.getProfilePic());
+                                    userBean.setFcmToken(PrefManager.getString(AppConstant.FCMTOKEN));
+                                    Utils.storeUserDetailsToRTD(activity, userBean);
+                                    finishAffinity();
+                                    Intent intent = new Intent(activity, HomePage.class);
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+
+                                }
+                            });
+
 //                            FirebaseUser user = task.getResult().getUser();
                             // ...
                         } else {
@@ -140,7 +162,7 @@ public class Otp extends AppCompatActivity {
                             Log.w("Otp Screen>>>", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
-                                Utils.showToast(Otp.this, "The verification code entered was invalid", AppConstant.errorColor);
+                                Utils.showToast(activity, "The verification code entered was invalid", AppConstant.errorColor);
                             }
                         }
                     }

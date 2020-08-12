@@ -1,6 +1,5 @@
 package com.example.protectionapp.activites;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,11 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
-import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -37,15 +34,16 @@ LottieAnimationView animation;
         super.onCreate(savedInstanceState);
         mContext = this;
         setContentView(R.layout.splash_screen_layout);
+
         animation = findViewById(R.id.animation);
 //        hoverView=findViewById(R.id.hoverView);
         tvSplashTitle = findViewById(R.id.tvSplashTitle);
 
         animation.playAnimation();
         Utils.setShader(Color.BLUE, Color.GREEN, tvSplashTitle);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED) {
+        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW}, AppConstant.SYSTEM_ALERT_CODE);
-        }
+        }*/
 //        getSupportActionBar().hide();
 //        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 //

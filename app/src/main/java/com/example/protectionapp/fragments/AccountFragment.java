@@ -2,20 +2,10 @@ package com.example.protectionapp.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.icu.text.DateIntervalInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +14,22 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.protectionapp.BuildConfig;
 import com.example.protectionapp.R;
-import com.example.protectionapp.RecordsActivites.Adhaar;
 import com.example.protectionapp.activites.LogIn;
 import com.example.protectionapp.activites.Payment_premiumUser;
-import com.example.protectionapp.model.PInfo;
+import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
@@ -48,19 +45,20 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.appinvite.FirebaseAppInvite;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.UploadTask;
+import com.pusher.pushnotifications.PushNotificationReceivedListener;
+import com.pusher.pushnotifications.PushNotifications;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
@@ -69,12 +67,25 @@ import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
  */
 public class AccountFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     UploadTask mUploadTask;
-    private CardView cardSubscription,cardInvite, cardLogout, cardSos;
+    private CardView cardSubscription, cardInvite, cardLogout, cardSos;
     String deepLink = "";
     private TextView tvMobile;
     UserBean userBean;
     ImageView ivEdit, ivProfile;
-    TextView tvPremiumUser;
+    Activity mActivity;
+    boolean isImageUpload;
+
+    @Override
+    public void onAttach(@NonNull Activity activity) {
+        super.onAttach(activity);
+        mActivity = activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity = null;
+    }
 
     public AccountFragment() {
         // Required empty public constructor
@@ -95,10 +106,17 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (PrefManager.getBoolean(ISNIGHTMODE))
-            getActivity().setTheme(R.style.AppTheme_Base_Night);
+            mActivity.setTheme(R.style.AppTheme_Base_Night);
         else
-            getActivity().setTheme(R.style.AppTheme_Base_Light);
+            mActivity.setTheme(R.style.AppTheme_Base_Light);
+        PushNotifications.start(mActivity.getApplicationContext(), "cc226824-b739-410a-b939-bc96b199eac9");
+        PushNotifications.addDeviceInterest("hello");
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(mActivity, new PushNotificationReceivedListener() {
+            @Override
+            public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
 
+            }
+        });
         deepLink = generateContentLink().toString();
         tvMobile.setText(PrefManager.getString(AppConstant.USER_MOBILE));
         initActions();
@@ -112,7 +130,6 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         ivEdit = view.findViewById(R.id.ivEdit);
         ivProfile = view.findViewById(R.id.ivProfile);
         cardSubscription = view.findViewById(R.id.cardSubscription);
-        tvPremiumUser = view.findViewById(R.id.paymentTV);
         getUser();
     }
 
@@ -132,6 +149,42 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         cardSos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final ProgressDialog pd = Utils.getProgressDialog(mActivity);
+                pd.show();
+                final Dialog dialog = Utils.getRegisteredUserList(mActivity);
+                Button btnSend = dialog.findViewById(R.id.btnSend);
+                Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+                final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
+                rvUser.setLayoutManager(new LinearLayoutManager(mActivity));
+                rvUser.addItemDecoration(new DividerItemDecoration(mActivity, RecyclerView.VERTICAL));
+                Utils.getUserReference(getContext()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (isImageUpload) {
+                            isImageUpload = false;
+                            return;
+                        }
+                        pd.dismiss();
+                        List<UserBean> userBeans = new ArrayList<>();
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                            UserBean userBean = postSnapshot.getValue(UserBean.class);
+                            if (userBean.getMobile() != null) {
+                                if (!userBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                                    userBeans.add(userBean);
+                                }
+                            }
+                        }
+
+                        rvUser.setAdapter(new AdapterUsers(mActivity, userBeans));
+                        dialog.show();
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
 
             }
         });
@@ -148,16 +201,9 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         cardSubscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Payment_premiumUser.class);
+                Intent intent = new Intent(mActivity, Payment_premiumUser.class);
                 startActivity(intent);
 
-            }
-        });
-        tvPremiumUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Payment_premiumUser.class);
-                startActivity(intent);
             }
         });
     }
@@ -177,8 +223,8 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     }
 
     private void generateDeepLink() {
-        GoogleApiClient googleApiClient = Utils.createGoogleClient(getActivity(), this);
-        AppInvite.AppInviteApi.getInvitation(googleApiClient, getActivity(), true)
+        GoogleApiClient googleApiClient = Utils.createGoogleClient((FragmentActivity) mActivity, this);
+        AppInvite.AppInviteApi.getInvitation(googleApiClient, mActivity, true)
                 .setResultCallback(
                         new ResultCallback<AppInviteInvitationResult>() {
                             @Override
@@ -200,7 +246,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
 
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
-//            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getActivity().getResources().getString(R.string.app_name));
+//            shareIntent.putExtra(Intent.EXTRA_SUBJECT, mActivity.getResources().getString(R.string.app_name));
             String shareMessage = "\nRefer & Earn Link\n\n";
             shareMessage = shareMessage + deepLink;
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
@@ -216,7 +262,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     }
 
     private void buildSignoutDialog() {
-        final Dialog dialog = new Dialog(getActivity(), R.style.DialogFragmentTheme);
+        final Dialog dialog = new Dialog(mActivity, R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.logout_dialog);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -229,8 +275,8 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 PrefManager.putBoolean(AppConstant.ISLOGGEDIN, false);
-                getActivity().finishAffinity();
-                startActivity(new Intent(getActivity(), LogIn.class));
+                mActivity.finishAffinity();
+                startActivity(new Intent(mActivity, LogIn.class));
                 dialog.dismiss();
             }
         });
@@ -244,6 +290,8 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     }
 
     private void getUser() {
+        final ProgressDialog pd = Utils.getProgressDialog(mActivity);
+        pd.show();
         Utils.getUserReference(getContext()).child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -251,16 +299,20 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                     userBean = dataSnapshot.getValue(UserBean.class);
                     if (userBean != null) {
                         Utils.getStorageReference()
-                                .child(AppConstant.USER_DETAIL+"/"+userBean.getProfilePic())
+                                .child(AppConstant.USER_DETAIL + "/" + userBean.getProfilePic())
                                 .getDownloadUrl()
-                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                .addOnCompleteListener(new OnCompleteListener<Uri>() {
                                     @Override
-                                    public void onSuccess(Uri uri) {
-                                        Log.e("dvsvsfbrwrb",uri.getLastPathSegment());
-                                        Glide.with(getActivity()).load(uri)
-                                                .error(R.drawable.login_logo)
-                                                .placeholder(R.drawable.login_logo)
-                                                .into(ivProfile);
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        if (task.isSuccessful()) {
+                                            if (mActivity != null) {
+                                                Glide.with(mActivity).load(task.getResult())
+                                                        .error(R.drawable.login_logo)
+                                                        .placeholder(R.drawable.login_logo)
+                                                        .into(ivProfile);
+                                            }
+                                        }
+                                        pd.dismiss();
                                     }
                                 });
                     }
@@ -286,23 +338,29 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
 
             //You can get File object from intent
             final File file = ImagePicker.Companion.getFile(data);
-            mUploadTask = Utils.getStorageReference().child(AppConstant.USER_DETAIL+"/"+fileUri.getLastPathSegment()).putFile(fileUri);
-            mUploadTask.addOnCompleteListener(getActivity(), new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            mUploadTask = Utils.getStorageReference().child(AppConstant.USER_DETAIL + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+            final ProgressDialog pd = Utils.getProgressDialog(mActivity);
+            pd.show();
+            mUploadTask.addOnCompleteListener(mActivity, new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    pd.dismiss();
+                    isImageUpload = true;
                     if (task.isSuccessful()) {
                         UserBean userBean = new UserBean();
+                        userBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
                         userBean.setProfilePic(fileUri.getLastPathSegment());
-                        Utils.storeUserDetailsToRTD(getActivity(), userBean);
+                        userBean.setFcmToken(PrefManager.getString(AppConstant.FCMTOKEN));
+                        Utils.storeUserDetailsToRTD(mActivity, userBean);
                     } else {
 
                     }
                 }
             });
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
-            Utils.showToast(getActivity(), ImagePicker.Companion.getError(data), AppConstant.errorColor);
+            Utils.showToast(mActivity, ImagePicker.Companion.getError(data), AppConstant.errorColor);
         } else {
-            Utils.showToast(getActivity(), "Task Cancelled", AppConstant.errorColor);
+            Utils.showToast(mActivity, "Task Cancelled", AppConstant.errorColor);
         }
     }
 }

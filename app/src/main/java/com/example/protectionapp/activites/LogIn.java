@@ -1,14 +1,8 @@
 package com.example.protectionapp.activites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -17,10 +11,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.example.protectionapp.R;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
@@ -31,11 +33,18 @@ EditText et_phone_number;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+        if (PrefManager.getBoolean(ISNIGHTMODE))
             setTheme(R.style.AppTheme_Base_Night);
         else
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.login_page);
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (task.isSuccessful())
+                    PrefManager.putString(AppConstant.FCMTOKEN, task.getResult().getToken());
+            }
+        });
         initViews();
         initActions();
     }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cameraDetector.CameraDectectorByRM">
+    tools:context="com.example.protectionapp.cameraDetector.CameraDectectorByRM">
+
     <include layout="@layout/custum_toolbar" />
 
     <TextView
@@ -13,8 +14,7 @@
         android:text="Move Phone Close To The Suspect"
         android:textSize="16sp"
         android:layout_above="@+id/meterView"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_centerHorizontal="true" />
 
 
      <ProgressBar

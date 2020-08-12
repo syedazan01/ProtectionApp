@@ -14,10 +14,11 @@ public interface AppConstant {
     String USER_MOBILE = "user_mobile";
     String NOTIFICATION_ENABLE = "notifcation_enable";
     String PREF_PACKAGES_BLOCKED = "pref_packages_blocked";
+    String FCMTOKEN = "fcm_token";
 
     //Real time database constants
     String FIREBASE_DATABASE_URL = "https://protectionapp-3baf6.firebaseio.com/";
-    String FIREBASE_STORAGE_DATABASE_URL = "gs://protectionapp-3baf6.appspot.com";
+    String FIREBASE_STORAGE_DATABASE_URL = "gs://protectionapp-3baf6.appspot.com/";
     String PERSONAL_DOCUMENT = "Personal Document";
     String USER_DETAIL = "User Details";
     String ADHAAR = "adhaar";

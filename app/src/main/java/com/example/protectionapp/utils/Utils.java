@@ -1,6 +1,8 @@
 package com.example.protectionapp.utils;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,7 +16,6 @@ import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.protectionapp.R;
@@ -127,9 +129,7 @@ public class Utils {
             reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ AppConstant.PERSONAL_DOCUMENT+"/"+child+"/");
             if (child.equals(AppConstant.ADHAAR)) {
                 UserHelperClass userHelperClass=fromJson(modelString,UserHelperClass.class);
-                Log.e("sfbdfbfsabn",modelString);
-                Log.e("sfbdfbfsabn",userHelperClass.getAddress());
-                reference.child(AppConstant.USER_MOBILE).setValue(userHelperClass);
+                reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userHelperClass);
             }
             /*else if(child.equals(AppConstant.ADHAAR))
             {
@@ -190,18 +190,34 @@ public class Utils {
     public static Firebase getUserReference(Context context)
     {
         Firebase reference;
-        Firebase.setAndroidContext(context);
+
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ AppConstant.USER_DETAIL+"/");
       return reference;
     }
-    public static StorageReference getStorageReference()
-    {
-        FirebaseStorage storage=FirebaseStorage.getInstance();
+
+    public static StorageReference getStorageReference() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         return storage.getReferenceFromUrl(AppConstant.FIREBASE_STORAGE_DATABASE_URL);
     }
-    public static SharedPreferences getDefaultManager(Context context)
-    {
+
+    public static SharedPreferences getDefaultManager(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public static Dialog getRegisteredUserList(Activity activity) {
+        Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.user_list_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+        return dialog;
+    }
+
+    public static ProgressDialog getProgressDialog(Activity activity) {
+        ProgressDialog pd = new ProgressDialog(activity);
+        pd.setTitle("Loading...");
+        pd.setCancelable(false);
+        return pd;
     }
 
 }

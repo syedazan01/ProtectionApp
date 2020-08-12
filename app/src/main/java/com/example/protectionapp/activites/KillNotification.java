@@ -121,7 +121,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         tvToolbarTitle.setText("Kill Notifications");
         rvInstalledApps.setLayoutManager(new LinearLayoutManager(this));
 
-        final ProgressDialog dialog = new ProgressDialog(activity);
+        final ProgressDialog dialog = Utils.getProgressDialog(activity);
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.stetho.Stetho;
+import com.firebase.client.Firebase;
 import com.google.firebase.FirebaseApp;
 
 public class Protection extends Application {
@@ -19,6 +20,7 @@ public class Protection extends Application {
         instance = this;
         sInstance = this;
         Stetho.initializeWithDefaults(this);
+        Firebase.setAndroidContext(this);
         FirebaseApp.initializeApp(this);
     }
 }

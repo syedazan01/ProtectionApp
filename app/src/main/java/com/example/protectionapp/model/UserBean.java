@@ -1,7 +1,15 @@
 package com.example.protectionapp.model;
 
 public class UserBean {
-    String mobile,profilePic;
+    String mobile, profilePic, fcmToken;
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
 
     public String getMobile() {
         return mobile;

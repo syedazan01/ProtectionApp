@@ -10,9 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.protectionapp.R;
-
-import cameraDetector.CamDetector_tips;
-import cameraDetector.CameraDectectorByRM;
+import com.example.protectionapp.cameraDetector.CamDetector_tips;
+import com.example.protectionapp.cameraDetector.CameraDectectorByRM;
 
 public class CameraDetector extends AppCompatActivity  {
     Toolbar toolbar;
