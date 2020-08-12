@@ -1,4 +1,4 @@
-package com.example.protectionapp.activites;
+package cameraDetector;
 
 import android.content.Intent;
 import android.os.Bundle;
