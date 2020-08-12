@@ -2,6 +2,7 @@ package com.example.protectionapp.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
@@ -14,7 +15,10 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class FloatingWindowService extends Service {
     private WindowManager windowManager;
@@ -42,26 +46,32 @@ public class FloatingWindowService extends Service {
 // linearLayout.setBackgroundColor(Color.argb(66, 255, 0, 0));
         textView.setLayoutParams(layoutParamsText);
 */
-        /*ImageView icon = new ImageView(this); // Create an icon
+  /*      ImageView icon = new ImageView(this); // Create an icon
         icon.setImageResource(R.drawable.login_logo);
 
-        FloatingActionButton actionButton = new FloatingActionButton.Builder(Protection.instance)
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(mContext)
                 .setContentView(icon)
                 .build();
-        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(mContext);
 // repeat many times:
         ImageView itemIcon = new ImageView(this);
         itemIcon.setImageResource(R.drawable.login_logo);
         SubActionButton button1 = itemBuilder.setContentView(itemIcon).build();
-        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(mContext)
                 .addSubActionView(button1)
-                // ...
+//                // ...
                 .attachTo(actionButton)
                 .build();*/
+        if (PrefManager.getBoolean(ISNIGHTMODE))
+            setTheme(R.style.AppTheme_Base_Night);
+        else
+            setTheme(R.style.AppTheme_Base_Light);
         FloatingActionButton floatingActionButton = new FloatingActionButton(this);
         floatingActionButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        floatingActionButton.setBackgroundColor(Color.WHITE);
         floatingActionButton.setImageResource(R.drawable.login_logo);
         linearLayout.addView(floatingActionButton);
+//        actionMenu.open(true);
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(400, 150, Build.VERSION.SDK_INT > Build.VERSION_CODES.O
                 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
@@ -69,7 +79,7 @@ public class FloatingWindowService extends Service {
                 PixelFormat.TRANSLUCENT);
         params.x = 0;
         params.y = 0;
-        params.gravity = Gravity.CENTER | Gravity.CENTER;
+        params.gravity = Gravity.END;
         windowManager.addView(linearLayout, params);
 
         linearLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -78,21 +88,22 @@ public class FloatingWindowService extends Service {
             float touchX,touchY;
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()){
+                switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x= updatedParams.x;
-                        y=updatedParams.y;
+                        x = updatedParams.x;
+                        y = updatedParams.y;
                         touchX = motionEvent.getRawX();
                         touchY = motionEvent.getRawY();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        updatedParams.x = (int)(x+(motionEvent.getRawX() - touchX));
-                        updatedParams.y = (int)(y+(motionEvent.getRawY() - touchY));
-                        windowManager.updateViewLayout(linearLayout,updatedParams);
-                    default:break;
+                        updatedParams.x = (int) (x + (touchX - motionEvent.getRawX()));
+                        updatedParams.y = (int) (y + (touchY - motionEvent.getRawY()));
+                        windowManager.updateViewLayout(linearLayout, updatedParams);
+                    default:
+                        break;
                 }
 
-                return false;
+                return true;
             }
         })
         ;

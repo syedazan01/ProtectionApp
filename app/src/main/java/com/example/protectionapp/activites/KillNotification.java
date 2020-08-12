@@ -1,10 +1,5 @@
 package com.example.protectionapp.activites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -13,7 +8,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.service.notification.NotificationListenerService;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -21,14 +15,17 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.InstalledApps;
 import com.example.protectionapp.interfacecallbacks.OnNotificationChecked;
 import com.example.protectionapp.model.PInfo;
-import com.example.protectionapp.services.ForgroundService;
 import com.example.protectionapp.services.NotificationForgroundService;
 import com.example.protectionapp.utils.AppConstant;
-import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -36,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class KillNotification extends AppCompatActivity implements OnNotificationChecked {
@@ -125,14 +121,30 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         tvToolbarTitle.setText("Kill Notifications");
         rvInstalledApps.setLayoutManager(new LinearLayoutManager(this));
 
-        ProgressDialog dialog = new ProgressDialog(activity);
-        dialog.setTitle("Loading...");
-        dialog.show();
+        final ProgressDialog dialog = new ProgressDialog(activity);
 
-        pInfos = new PInfo(activity).getInstalledApps(false);
-        dialog.dismiss();
-        installedAppAdapter = new InstalledApps(activity, pInfos, KillNotification.this);
-        rvInstalledApps.setAdapter(installedAppAdapter);
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.setTitle("Loading...");
+                        dialog.show();
+                    }
+                });
+                pInfos = new PInfo(activity).getInstalledApps(false);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        installedAppAdapter = new InstalledApps(activity, pInfos, KillNotification.this);
+                        rvInstalledApps.setAdapter(installedAppAdapter);
+                    }
+                });
+
+            }
+        });
 
 
         swAll.setChecked(pref.getBoolean(AppConstant.NOTIFICATION_ENABLE, false));
@@ -153,6 +165,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
             pref.edit().putString(AppConstant.PREF_PACKAGES_BLOCKED, pkg).apply();
         }
     }
+
     private Boolean hasAccessGranted() {
         ContentResolver contentResolver = this.getContentResolver();
         String enabledNotificationListeners = Settings.Secure.getString(contentResolver, AppConstant.SETTING_NOTIFICATION_LISTENER);
@@ -160,6 +173,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         // check to see if the enabledNotificationListeners String contains our package name
         return !(enabledNotificationListeners == null || !enabledNotificationListeners.contains(packageName));
     }
+
     @Override
     public void onBackPressed() {
         if (!searchApp.isIconified()) {
@@ -191,8 +205,9 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     }
 
     private void refreshState() {
-                showApps();
-        }
+        showApps();
+    }
+
     private void showApps() {
         rvInstalledApps.setVisibility(View.VISIBLE);
         searchApp.setVisibility(View.VISIBLE);
@@ -202,6 +217,6 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     private void hideApps() {
         rvInstalledApps.setVisibility(View.GONE);
         searchApp.setVisibility(View.GONE);
-        Utils.showToast(activity,"No App Found",AppConstant.errorColor);
+        Utils.showToast(activity, "No App Found", AppConstant.errorColor);
     }
 }

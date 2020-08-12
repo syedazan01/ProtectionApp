@@ -1,7 +1,7 @@
 package com.example.protectionapp.activites;
 
 import android.Manifest;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
+import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -24,9 +25,9 @@ import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class SplashScreen extends AppCompatActivity {
 LottieAnimationView animation;
-TextView tvSplashTitle;
-//HoverView hoverView;
-Context mContext=this;
+    TextView tvSplashTitle;
+    //HoverView hoverView;
+    public static Activity mContext;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (PrefManager.getBoolean(ISNIGHTMODE))
@@ -34,7 +35,7 @@ Context mContext=this;
         else
             setTheme(R.style.AppTheme_Base_Light);
         super.onCreate(savedInstanceState);
-
+        mContext = this;
         setContentView(R.layout.splash_screen_layout);
         animation = findViewById(R.id.animation);
 //        hoverView=findViewById(R.id.hoverView);
@@ -67,7 +68,7 @@ Context mContext=this;
                 // ...
                 .attachTo(actionButton)
                 .build();*/
-//     startService(new Intent(this, FloatingWindowService.class));
+        startService(new Intent(this, FloatingWindowService.class));
      /*   final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
