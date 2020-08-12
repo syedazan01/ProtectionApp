@@ -233,7 +233,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     }*/
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog();
+        SendDailog sendDailog = new SendDailog(this);
         sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 

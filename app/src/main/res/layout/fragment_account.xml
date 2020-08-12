@@ -122,17 +122,19 @@
                 app:cardElevation="0dp"
                 app:cardCornerRadius="10dp"
                 >
+
                 <RelativeLayout
-                    android:padding="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
                     <TextView
-                        android:textSize="14sp"
-                        android:layout_centerVertical="true"
-                        android:textColor="@color/black"
-                        android:text="SOS Alert"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="SOS Alert"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
 
                     <ImageView
                         android:layout_width="wrap_content"

@@ -166,7 +166,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog();
+        SendDailog sendDailog = new SendDailog(this);
         sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 

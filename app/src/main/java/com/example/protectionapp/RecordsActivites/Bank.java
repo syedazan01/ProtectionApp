@@ -135,7 +135,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog();
+        SendDailog sendDailog = new SendDailog(this);
         sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 

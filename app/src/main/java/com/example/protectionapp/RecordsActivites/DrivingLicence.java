@@ -197,7 +197,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog();
+        SendDailog sendDailog = new SendDailog(this);
         sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 
