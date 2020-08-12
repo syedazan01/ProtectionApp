@@ -3,10 +3,12 @@ package com.example.protectionapp.RecordsActivites;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +51,8 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     RadioButton radioMale, radioFemale, radioOther;
     ImageView imageView;
     Button opencam,sendBT;
+    //initilizing progress dialog
+    UploadingDialog uploadingDialog = new UploadingDialog(Adhaar.this);
     String Gender;
     //firebase realtime database
     FirebaseDatabase rootNode;
@@ -94,6 +98,8 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         initActions();
         //firebase storgae
         storageReference = FirebaseStorage.getInstance().getReference();
+        //progress dialog
+
     }
 
     private void initActions() {
@@ -111,7 +117,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         addharsavebt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // get all the values
+                // validation
                 if (TextUtils.isEmpty(adhharfullname.getEditText().getText().toString())) {
                     Utils.showToast(activity, getResources().getString(R.string.empty_error), AppConstant.errorColor);
                     adhharfullname.getEditText().requestFocus();
@@ -152,8 +158,22 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                     gender = "Female";
                 else gender = "Other";
 
+                //progress dialog
+                uploadingDialog.startloadingDialog();
+
                 UserHelperClass userHelperClass = new UserHelperClass(Fullname, dateofbirth, gender, aadharNumber, Address);
                 Utils.storeDocumentsInRTD(Adhaar.this, AppConstant.ADHAAR, Utils.toJson(userHelperClass, UserHelperClass.class));
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        uploadingDialog.dismissdialog();
+
+                    }
+                },4000);
+
+
             }
         });
 
@@ -205,6 +225,12 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
             }
         });
     }
+/*
+    @Override
+    public void onBackPressed() {
+        //dismiss progress dialog
+        progressDialog.dismiss();
+    }*/
 
     private void openDialog() {
         SendDailog sendDailog = new SendDailog();
