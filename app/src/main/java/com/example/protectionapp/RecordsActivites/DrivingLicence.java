@@ -29,8 +29,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class DrivingLicence extends AppCompatActivity {
-    private Button btnDLscan, btnDLsave;
+public class DrivingLicence extends AppCompatActivity implements SendDailog.SendDialogListener {
+    private Button btnDLscan, btnDLsave, btnDLSend;
     private ImageView ivDL;
     private TextView tvToolbarTitle;
     TextInputLayout FullName, sonOf, LicenceNumber, BloodGroup, dob, dateofissue, validity;
@@ -70,6 +70,14 @@ public class DrivingLicence extends AppCompatActivity {
     }
 
     private void initActions() {
+        //open dialog for send file
+        btnDLSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
         ivDL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,9 +182,15 @@ public class DrivingLicence extends AppCompatActivity {
 
     }
 
+    private void openDialog() {
+        SendDailog sendDailog = new SendDailog();
+        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+    }
+
     private void initViews() {
         btnDLscan = findViewById(R.id.btdl_scan);
         btnDLsave = findViewById(R.id.DL_savebt);
+        btnDLSend = findViewById(R.id.driving_sendBT);
         FullName = findViewById(R.id.drivingFullname);
         sonOf = findViewById(R.id.drivingFathersname);
         LicenceNumber = findViewById(R.id.LicenceNumber);
@@ -196,6 +210,11 @@ public class DrivingLicence extends AppCompatActivity {
         ivDL = findViewById(R.id.ivBack);
         Utils.makeButton(btnDLscan, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(btnDLsave, getResources().getColor(R.color.colorPrimary), 40F);
+
+    }
+
+    @Override
+    public void applyTexts(String message, String password) {
 
     }
 }

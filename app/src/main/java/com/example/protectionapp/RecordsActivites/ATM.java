@@ -29,8 +29,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class ATM extends AppCompatActivity {
-    private Button btnAtmScan, btnAtmSave;
+public class ATM extends AppCompatActivity implements SendDailog.SendDialogListener {
+    private Button btnAtmScan, btnAtmSave ,btnatmsend;
     private ImageView ivATM;
     private TextView tvToolbarTitle;
     TextInputEditText cardvaliET;
@@ -73,6 +73,15 @@ public class ATM extends AppCompatActivity {
     }
 
     private void initActions() {
+
+        //open dialog for send file
+        btnatmsend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
         ivATM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,6 +151,11 @@ public class ATM extends AppCompatActivity {
 
     }
 
+    private void openDialog() {
+        SendDailog sendDailog = new SendDailog();
+        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+    }
+
 
     private void initViews(){
         bankname=findViewById(R.id.Bank_name);
@@ -152,6 +166,7 @@ public class ATM extends AppCompatActivity {
         cvvcode=findViewById(R.id.cvvET);
         btnAtmScan=findViewById(R.id.btnAtmScan);
         btnAtmSave=findViewById(R.id.btnAtmSave);
+        btnatmsend = findViewById(R.id.atm_sendBT);
         ivATM=findViewById(R.id.ivBack);
         tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("ATM Detail Form");
@@ -159,6 +174,10 @@ public class ATM extends AppCompatActivity {
         Utils.makeButton(btnAtmSave,getResources().getColor(R.color.colorPrimary),40F);
     }
 
+    @Override
+    public void applyTexts(String message, String password) {
+
+    }
 };
 
 

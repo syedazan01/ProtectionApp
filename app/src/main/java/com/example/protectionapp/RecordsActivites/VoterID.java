@@ -31,8 +31,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class VoterID extends AppCompatActivity {
-    private Button btnVoteridscan, btnVoteridsave;
+public class VoterID extends AppCompatActivity  implements SendDailog.SendDialogListener{
+    private Button btnVoteridscan, btnVoteridsave, btnVoteridsend;
     private ImageView ivVid;
     private TextView tvToolbarTitle;
     TextInputLayout FullName, FatherName,dob,Address, AssemblyName;
@@ -71,6 +71,15 @@ public class VoterID extends AppCompatActivity {
     }
 
     private void initActions() {
+
+        //open dialog for send file
+        btnVoteridsend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
         ivVid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,9 +148,15 @@ public class VoterID extends AppCompatActivity {
         });
     }
 
+    private void openDialog() {
+        SendDailog sendDailog = new SendDailog();
+        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+    }
+
     private void initViews() {
         btnVoteridscan=findViewById(R.id.voterscanbt);
         btnVoteridsave=findViewById(R.id.voterid_savebt);
+        btnVoteridsend = findViewById(R.id.voter_sendBT);
         FullName=findViewById(R.id.voteridFullname);
         FatherName=findViewById(R.id.voteridFathername);
         dob=findViewById(R.id.voterid_dob);
@@ -159,5 +174,10 @@ public class VoterID extends AppCompatActivity {
         ivVid = findViewById(R.id.ivBack);
         Utils.makeButton(btnVoteridscan, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(btnVoteridsave, getResources().getColor(R.color.colorPrimary), 40F);
+    }
+
+    @Override
+    public void applyTexts(String message, String password) {
+
     }
 }

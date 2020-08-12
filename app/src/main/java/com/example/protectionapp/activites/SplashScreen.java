@@ -68,7 +68,7 @@ LottieAnimationView animation;
                 // ...
                 .attachTo(actionButton)
                 .build();*/
-        startService(new Intent(this, FloatingWindowService.class));
+      //  startService(new Intent(this, FloatingWindowService.class));
      /*   final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,

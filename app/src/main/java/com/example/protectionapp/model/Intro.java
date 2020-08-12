@@ -5,10 +5,10 @@ import com.example.protectionapp.R;
 
 
 public enum Intro {
-    ONE(R.drawable.dummy),
-    TWO(R.drawable.ic_intro_two),
-    THREE(R.drawable.ic_intro_three),
-    FOUR(R.drawable.ic_intro_four);
+    ONE(R.drawable.hiddencam_slide),
+    TWO(R.drawable.recording_slide),
+    THREE(R.drawable.chache_slide),
+    FOUR(R.drawable.filesshare_slide);
 
     private int mLayoutResId;
 

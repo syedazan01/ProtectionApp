@@ -24,8 +24,8 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class Bank extends AppCompatActivity {
-    private Button btnBankScan, btnBankSave;
+public class Bank extends AppCompatActivity implements SendDailog.SendDialogListener {
+    private Button btnBankScan, btnBankSave, btnbankSend;
     private ImageView ivBank;
     private TextView tvToolbarTitle;
     TextInputLayout accountHolderName, accountNumber, ifscCode, branchName, bankName;
@@ -62,6 +62,15 @@ public class Bank extends AppCompatActivity {
     }
 
     private void initActions() {
+
+        //open dialog for send file
+        btnbankSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
         ivBank.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,9 +121,15 @@ public class Bank extends AppCompatActivity {
         });
     }
 
+    private void openDialog() {
+        SendDailog sendDailog = new SendDailog();
+        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+    }
+
     private void initViews() {
         btnBankScan = findViewById(R.id.bank_scanbt);
         btnBankSave = findViewById(R.id.bank_savebt);
+        btnbankSend = findViewById(R.id.bank_sendBT);
         accountHolderName = findViewById(R.id.accHolderName);
         accountNumber = findViewById(R.id.account_number);
         ifscCode = findViewById(R.id.ifsc_code);
@@ -126,5 +141,10 @@ public class Bank extends AppCompatActivity {
         ivBank = findViewById(R.id.ivBack);
         Utils.makeButton(btnBankScan, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(btnBankSave, getResources().getColor(R.color.colorPrimary), 40F);
+    }
+
+    @Override
+    public void applyTexts(String message, String password) {
+
     }
 }

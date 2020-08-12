@@ -29,8 +29,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class PAN extends AppCompatActivity {
-    private Button btnPANscan, btnPANsave;
+public class PAN extends AppCompatActivity implements SendDailog.SendDialogListener {
+    private Button btnPANscan, btnPANsave, btnPANsend;
     private ImageView ivPAN;
     private TextView tvToolbarTitle;
     TextInputLayout FullName, FatherName, dob, PermanentAccountNumber;
@@ -70,6 +70,7 @@ public class PAN extends AppCompatActivity {
     private void initViews() {
         btnPANscan = findViewById(R.id.panscanbt);
         btnPANsave = findViewById(R.id.pansavebt);
+        btnPANsend= findViewById(R.id.pan_sendBT);
         FullName = findViewById(R.id.panFullname);
         FatherName = findViewById(R.id.panFathersname);
         dob = findViewById(R.id.pan_dob);
@@ -85,6 +86,15 @@ public class PAN extends AppCompatActivity {
     }
 
     private void initActions() {
+
+        //open dialog for send file
+        btnPANsend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDialog();
+            }
+        });
+
         ivPAN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,5 +149,15 @@ public class PAN extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void openDialog() {
+        SendDailog sendDailog = new SendDailog();
+        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+    }
+
+    @Override
+    public void applyTexts(String message, String password) {
+
     }
 }

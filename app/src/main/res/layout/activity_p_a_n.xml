@@ -121,6 +121,12 @@
             android:layout_marginTop="10dp"
             android:text="SAVE"
             android:textColor="@color/white" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pan_sendBT"
+            android:text="send"
+            android:textColor="@color/white"/>
 
 
     </LinearLayout>
