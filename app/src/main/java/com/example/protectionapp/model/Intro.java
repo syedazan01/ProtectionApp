@@ -5,7 +5,7 @@ import com.example.protectionapp.R;
 
 
 public enum Intro {
-    ONE(R.drawable.ic_intro_one),
+    ONE(R.drawable.dummy),
     TWO(R.drawable.ic_intro_two),
     THREE(R.drawable.ic_intro_three),
     FOUR(R.drawable.ic_intro_four);
