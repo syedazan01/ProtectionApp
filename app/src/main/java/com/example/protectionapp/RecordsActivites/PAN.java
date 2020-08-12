@@ -10,6 +10,7 @@ import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
     int yearofdob, monthofdob, dayofdob;
     Activity activity = this;
     private Uri fileUri;
+    //initilizing progress dialog
+    UploadingDialog uploadingDialog = new UploadingDialog(PAN.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,9 +129,20 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
                 String pandob = dob.getEditText().getText().toString();
                 String pannumber = PermanentAccountNumber.getEditText().getText().toString();
 
+                //progress dialog
+                uploadingDialog.startloadingDialog();
 
                 PanHelperClass panHelperClass = new PanHelperClass(FullNames, fathersname, pandob, pannumber);
                 Utils.storeDocumentsInRTD(PAN.this, AppConstant.DRIVING_LICENSE, Utils.toJson(panHelperClass, PanHelperClass.class));
+                //progress dialog
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        uploadingDialog.dismissdialog();
+
+                    }
+                },4000);
             }
         });
         final Calendar calendar = Calendar.getInstance();

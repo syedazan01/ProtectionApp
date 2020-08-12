@@ -10,6 +10,7 @@ import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +43,8 @@ public class VoterID extends AppCompatActivity  implements SendDailog.SendDialog
     int yearofdob, monthofdob, dayofdob;
     Activity activity = this;
     private Uri fileUri;
+    //initilizing progress dialog
+    UploadingDialog uploadingDialog = new UploadingDialog(VoterID.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,9 +126,20 @@ public class VoterID extends AppCompatActivity  implements SendDailog.SendDialog
                     gender = "Female";
                 else gender = "Other";
 
+                //progress dialog
+                uploadingDialog.startloadingDialog();
 
                 VoteridHelperClass voteridHelperClass = new VoteridHelperClass(FullNames,fathersname,gender,Voterdob,address,assemblyNames);
                 Utils.storeDocumentsInRTD(VoterID.this, AppConstant.DRIVING_LICENSE, Utils.toJson(voteridHelperClass, VoteridHelperClass.class));
+                //progress dialog
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        uploadingDialog.dismissdialog();
+
+                    }
+                },4000);
             }
         });
         final Calendar calendar = Calendar.getInstance();

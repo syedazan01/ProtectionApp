@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
-    tools:context="cameraDetector.BedroomTips">
+    tools:context="com.example.protectionapp.cameraDetector.BedroomTips">
 
     <include layout="@layout/custum_toolbar" />
     <TextView

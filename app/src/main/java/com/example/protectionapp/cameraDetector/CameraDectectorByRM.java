@@ -1,4 +1,4 @@
-package cameraDetector;
+package com.example.protectionapp.cameraDetector;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

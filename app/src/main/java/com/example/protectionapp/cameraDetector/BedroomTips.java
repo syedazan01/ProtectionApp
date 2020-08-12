@@ -1,4 +1,4 @@
-package cameraDetector;
+package com.example.protectionapp.cameraDetector;
 
 import android.os.Bundle;
 import android.view.View;

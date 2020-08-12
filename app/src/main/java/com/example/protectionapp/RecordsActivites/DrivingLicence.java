@@ -10,6 +10,7 @@ import android.app.DatePickerDialog;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     int yearofdob, monthofdob, dayofdob;
     Activity activity = this;
     private Uri fileUri;
+    //initilizing progress dialog
+    UploadingDialog uploadingDialog = new UploadingDialog(DrivingLicence.this);
 
 
     @Override
@@ -117,9 +120,20 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 String dateofIssue = dateofissue.getEditText().getText().toString();
                 String DLvaliditys = validity.getEditText().getText().toString();
 
+                //progress dialog
+                uploadingDialog.startloadingDialog();
 
                 DlicenceHelperClass dlicenceHelperClass = new DlicenceHelperClass(FullNames, sonOfName, licenceNumber, bloddgroups, DLdob,dateofIssue,DLvaliditys);
                 Utils.storeDocumentsInRTD(DrivingLicence.this, AppConstant.DRIVING_LICENSE, Utils.toJson(dlicenceHelperClass, DlicenceHelperClass.class));
+                //progress dialog
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        uploadingDialog.dismissdialog();
+
+                    }
+                },4000);
             }
         });
 

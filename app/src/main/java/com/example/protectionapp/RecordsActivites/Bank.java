@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,8 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     TextInputLayout accountHolderName, accountNumber, ifscCode, branchName, bankName;
     Activity activity = this;
     private Uri fileUri;
+    //initilizing progress dialog
+    UploadingDialog uploadingDialog = new UploadingDialog(Bank.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +116,20 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                 String ifscCodes = ifscCode.getEditText().getText().toString();
                 String branchNames = branchName.getEditText().getText().toString();
                 String banknames = bankName.getEditText().getText().toString();
-
+                //progress dialog
+                uploadingDialog.startloadingDialog();
 
                 BankHelperClass bankHelperClass = new BankHelperClass(accountHoldernames, accountNumbers, ifscCodes, branchNames, banknames);
                 Utils.storeDocumentsInRTD(Bank.this, AppConstant.BANK, Utils.toJson(bankHelperClass, BankHelperClass.class));
+                //progress dialog
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        uploadingDialog.dismissdialog();
+
+                    }
+                },4000);
             }
         });
     }
