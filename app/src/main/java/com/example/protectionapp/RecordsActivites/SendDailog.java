@@ -26,7 +26,7 @@ public class SendDailog extends AppCompatDialogFragment {
         View view = layoutInflater.inflate(R.layout.layout_send_dailog,null);
 
         builder.setView(view)
-                .setTitle("File Share")
+                .setTitle("Assign a Password and Text message to secure file")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
