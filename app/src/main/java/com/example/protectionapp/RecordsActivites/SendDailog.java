@@ -53,8 +53,6 @@ public class SendDailog extends AppCompatDialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
-
                     }
                 })
                 .setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
@@ -82,7 +80,7 @@ public class SendDailog extends AppCompatDialogFragment {
                                     }
                                 }
 
-                                rvUser.setAdapter(new AdapterUsers(umActivity, userBeans));
+                                rvUser.setAdapter(new AdapterUsers(umActivity, userBeans, null));
                                 dialog.show();
                             }
 

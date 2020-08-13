@@ -7,16 +7,16 @@ import org.mazhuang.cleanexpert.Protection;
 
 public class PrefManager {
     private static SharedPreferences sharedPreferences;
-    private static final String PREF_NAME="protectionApp";
-    private final String ISLOGGEDIN="isloggedin";
+    public static final String PREF_NAME = "protectionApp";
+    private final String ISLOGGEDIN = "isloggedin";
 
-    static{
-        sharedPreferences= Protection.instance.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    static {
+        sharedPreferences = Protection.instance.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
-    public static void putString(String key,String value)
-    {
-        SharedPreferences.Editor editor=sharedPreferences.edit();
-        editor.putString(key,value);
+
+    public static void putString(String key, String value) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
         editor.apply();
     }
 

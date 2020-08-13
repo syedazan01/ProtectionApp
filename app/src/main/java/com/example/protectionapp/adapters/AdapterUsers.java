@@ -19,10 +19,12 @@ import java.util.List;
 public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.UserHolder> {
     private Activity activity;
     private List<UserBean> userBeans = new ArrayList<>();
+    private RecyclerViewListener recyclerViewListener;
 
-    public AdapterUsers(Activity activity, List<UserBean> userBeans) {
+    public AdapterUsers(Activity activity, List<UserBean> userBeans, RecyclerViewListener recyclerViewListener) {
         this.activity = activity;
         this.userBeans = userBeans;
+        this.recyclerViewListener = recyclerViewListener;
     }
 
     @NonNull
@@ -38,7 +40,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.UserHolder> 
         holder.cbUser.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
+                recyclerViewListener.onCheck(position, userBeans.get(position), b);
             }
         });
     }
@@ -55,5 +57,9 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.UserHolder> 
             super(itemView);
             cbUser = itemView.findViewById(R.id.cbUser);
         }
+    }
+
+    public interface RecyclerViewListener {
+        void onCheck(int position, UserBean userBean, boolean isChecked);
     }
 }

@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +32,10 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.activites.LogIn;
 import com.example.protectionapp.activites.Payment_premiumUser;
 import com.example.protectionapp.adapters.AdapterUsers;
+import com.example.protectionapp.model.FetchNotification;
+import com.example.protectionapp.model.NotificationBean;
 import com.example.protectionapp.model.UserBean;
+import com.example.protectionapp.network.ApiResonse;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -49,24 +54,30 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.UploadTask;
-import com.pusher.pushnotifications.PushNotificationReceivedListener;
-import com.pusher.pushnotifications.PushNotifications;
-
-import org.jetbrains.annotations.NotNull;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class AccountFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, AdapterUsers.RecyclerViewListener {
     UploadTask mUploadTask;
+    List<FetchNotification> fetchNotifications = new ArrayList<>();
     private CardView cardSubscription, cardInvite, cardLogout, cardSos;
     String deepLink = "";
     private TextView tvMobile;
@@ -74,6 +85,9 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     ImageView ivEdit, ivProfile;
     Activity mActivity;
     boolean isImageUpload;
+    List<String> tokenList = new ArrayList<>();
+    Dialog msgDialog;
+    EditText etMsg;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
@@ -99,7 +113,6 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         View view = inflater.inflate(R.layout.fragment_account, container, false);
         initViews(view);
         return view;
-
     }
 
     @Override
@@ -109,16 +122,10 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
             mActivity.setTheme(R.style.AppTheme_Base_Night);
         else
             mActivity.setTheme(R.style.AppTheme_Base_Light);
-        PushNotifications.start(mActivity.getApplicationContext(), "cc226824-b739-410a-b939-bc96b199eac9");
-        PushNotifications.addDeviceInterest("hello");
-        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(mActivity, new PushNotificationReceivedListener() {
-            @Override
-            public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
-
-            }
-        });
         deepLink = generateContentLink().toString();
         tvMobile.setText(PrefManager.getString(AppConstant.USER_MOBILE));
+        msgDialog = Utils.getMsgDialog(mActivity);
+        etMsg = msgDialog.findViewById(R.id.etMsg);
         initActions();
     }
 
@@ -149,39 +156,86 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         cardSos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ProgressDialog pd = Utils.getProgressDialog(mActivity);
-                pd.show();
-                final Dialog dialog = Utils.getRegisteredUserList(mActivity);
-                Button btnSend = dialog.findViewById(R.id.btnSend);
-                Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
-                final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
-                rvUser.setLayoutManager(new LinearLayoutManager(mActivity));
-                rvUser.addItemDecoration(new DividerItemDecoration(mActivity, RecyclerView.VERTICAL));
-                Utils.getUserReference(getContext()).addValueEventListener(new ValueEventListener() {
+                msgDialog.show();
+                Button btnProceed = msgDialog.findViewById(R.id.btnProceed);
+                Utils.makeButton(btnProceed, getResources().getColor(R.color.colorAccent), 40F);
+                btnProceed.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (isImageUpload) {
-                            isImageUpload = false;
-                            return;
-                        }
-                        pd.dismiss();
-                        List<UserBean> userBeans = new ArrayList<>();
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            UserBean userBean = postSnapshot.getValue(UserBean.class);
-                            if (userBean.getMobile() != null) {
-                                if (!userBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
-                                    userBeans.add(userBean);
+                    public void onClick(View view) {
+                        if (TextUtils.isEmpty(etMsg.getText())) {
+                            Utils.showToast(mActivity, "Type Message", AppConstant.errorColor);
+                        } else {
+                            msgDialog.dismiss();
+
+                            final ProgressDialog pd = Utils.getProgressDialog(mActivity);
+                            pd.show();
+                            final Dialog dialog = Utils.getRegisteredUserList(mActivity);
+                            Button btnSend = dialog.findViewById(R.id.btnSend);
+                            Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+                            final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
+                            rvUser.setLayoutManager(new LinearLayoutManager(mActivity));
+                            rvUser.addItemDecoration(new DividerItemDecoration(mActivity, RecyclerView.VERTICAL));
+                            Utils.getUserReference(getContext()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (isImageUpload) {
+                                        isImageUpload = false;
+                                        return;
+                                    }
+                                    pd.dismiss();
+                                    List<UserBean> userBeans = new ArrayList<>();
+                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                        UserBean userBean = postSnapshot.getValue(UserBean.class);
+                                        if (userBean.getMobile() != null) {
+                                            if (!userBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                                                userBeans.add(userBean);
+
+                                            }
+                                        }
+                                    }
+
+                                    rvUser.setAdapter(new AdapterUsers(mActivity, userBeans, AccountFragment.this));
+                                    dialog.show();
                                 }
-                            }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+
+                                }
+                            });
+                            btnSend.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    for (FetchNotification fetchNotification : fetchNotifications) {
+                                        Utils.storeNotificationInRTD(mActivity, fetchNotification);
+                                    }
+                                    dialog.dismiss();
+                                    Gson gson = new GsonBuilder()
+                                            .setLenient()
+                                            .create();
+                                    Retrofit retrofit = new Retrofit.Builder().baseUrl("https://a2zcreation.000webhostapp.com/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+                                    ApiResonse apiResonse = retrofit.create(ApiResonse.class);
+                                    String tokens = tokenList.toString();
+                                    tokens = tokens.replaceAll("[\\[\\](){}]", "");
+                                    tokens = tokens.replace("\"", "");
+                                    tokens = tokens.replaceAll(" ", "");
+                                    Log.e("dvdfbtrghtbe", tokens + etMsg.getText().toString());
+                                    Call<NotificationBean> call = apiResonse.sendMsg(tokens, etMsg.getText().toString());
+                                    tokenList.clear();
+                                    call.enqueue(new Callback<NotificationBean>() {
+                                        @Override
+                                        public void onResponse(Call<NotificationBean> call, Response<NotificationBean> response) {
+                                            Log.e("vdfbdbedtbher", String.valueOf(response.body().getSuccess()));
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<NotificationBean> call, Throwable t) {
+                                            Log.e("vdfbdbedtbher", t.getMessage());
+                                        }
+                                    });
+                                }
+                            });
                         }
-
-                        rvUser.setAdapter(new AdapterUsers(mActivity, userBeans));
-                        dialog.show();
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
                     }
                 });
 
@@ -362,5 +416,24 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         } else {
             Utils.showToast(mActivity, "Task Cancelled", AppConstant.errorColor);
         }
+    }
+
+    @Override
+    public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        if (isChecked) {
+            tokenList.add(userBean.getFcmToken());
+            FetchNotification fetchNotification = new FetchNotification();
+            fetchNotification.setMsg(etMsg.getText().toString());
+            fetchNotification.setTo_mobile(PrefManager.getString(AppConstant.USER_MOBILE));
+            fetchNotification.setFrom_mobile(userBean.getMobile());
+            fetchNotification.setProfile_Pic(userBean.getProfilePic());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            fetchNotification.setCreated_date(dateFormat.format(new Date()));
+            fetchNotifications.add(fetchNotification);
+        } else {
+            tokenList.remove(position);
+            fetchNotifications.remove(position);
+        }
+
     }
 }

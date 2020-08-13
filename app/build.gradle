@@ -25,7 +25,10 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE-FIREBASE.txt'
         exclude 'META-INF/NOTICE'
-
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -87,7 +90,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'
     implementation 'com.google.firebase:firebase-invites:17.0.0'
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
-    implementation 'com.pusher:push-notifications-android:1.6.2'
 
     //Image Picker new
     implementation 'com.github.dhaval2404:imagepicker-support:1.7.1'
@@ -103,4 +105,8 @@ dependencies {
     implementation 'com.ramotion.circlemenu:circle-menu:0.3.2'
     implementation 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
     implementation 'com.github.HamedTaherpour:floating-layout-android:1.1.0'
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 }

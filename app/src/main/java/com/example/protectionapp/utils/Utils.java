@@ -16,9 +16,9 @@ import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.UserHelperClass;
+import com.example.protectionapp.model.FetchNotification;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.views.RoundView;
 import com.firebase.client.Firebase;
@@ -40,6 +41,11 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Utils {
     public static void transparentStatusBar(Activity activity) {
@@ -57,6 +63,7 @@ public class Utils {
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
+
     private static void setWindowFlag(Activity activity, final int bits, boolean on) {
         Window win = activity.getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
@@ -67,36 +74,38 @@ public class Utils {
         }
         win.setAttributes(winParams);
     }
-    public static void setShader(int startColor,int endColor,TextView tv)
-    {
-        Shader textShader=new LinearGradient(7, 2, 4, 10,
+
+    public static void setShader(int startColor, int endColor, TextView tv) {
+        Shader textShader = new LinearGradient(7, 2, 4, 10,
                 new int[]{startColor, endColor},
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
         tv.getPaint().setShader(textShader);
     }
-    public static void makeButton(Button button, int color,float radius){
+
+    public static void makeButton(Button button, int color, float radius) {
         button.setBackground(new RoundView(color, Utils.getRadius(radius)));
     }
-    public static GradientDrawable getColoredDrawable(int startColor,int endColor){
-        int[] colors = {startColor,endColor};
-        return new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,colors);
+
+    public static GradientDrawable getColoredDrawable(int startColor, int endColor) {
+        int[] colors = {startColor, endColor};
+        return new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
     }
 
-    public static GradientDrawable getColoredDrawable(int startColor,int endColor,int shape,float cornerRadius){
-        int[] colors = {startColor,endColor};
-        GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,colors);
+    public static GradientDrawable getColoredDrawable(int startColor, int endColor, int shape, float cornerRadius) {
+        int[] colors = {startColor, endColor};
+        GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
         gradientDrawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
         gradientDrawable.setShape(shape);
         gradientDrawable.setCornerRadius(cornerRadius);
         return gradientDrawable;
     }
 
-    public static GradientDrawable getColoredDrawable(int startColor, int endColor, int shape, float cornerRadius, int strokeWidth, int strokeColor){
-        int[] colors = {startColor,endColor};
-        GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,colors);
+    public static GradientDrawable getColoredDrawable(int startColor, int endColor, int shape, float cornerRadius, int strokeWidth, int strokeColor) {
+        int[] colors = {startColor, endColor};
+        GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
         gradientDrawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
         gradientDrawable.setShape(shape);
-        gradientDrawable.setStroke(strokeWidth,strokeColor);
+        gradientDrawable.setStroke(strokeWidth, strokeColor);
         gradientDrawable.setCornerRadius(cornerRadius);
         return gradientDrawable;
     }
@@ -122,37 +131,44 @@ public class Utils {
         return new float[]{value, value, value, value, value, value, value, value};
     }
 
-    public  static void storeDocumentsInRTD(Context context, String child, String modelString)
-    {
+    public static void storeDocumentsInRTD(Context context, String child, String modelString) {
         Firebase reference;
         Firebase.setAndroidContext(context);
-            reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ AppConstant.PERSONAL_DOCUMENT+"/"+child+"/");
-            if (child.equals(AppConstant.ADHAAR)) {
-                UserHelperClass userHelperClass=fromJson(modelString,UserHelperClass.class);
-                reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userHelperClass);
-            }
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.PERSONAL_DOCUMENT + "/" + child + "/");
+        if (child.equals(AppConstant.ADHAAR)) {
+            UserHelperClass userHelperClass = fromJson(modelString, UserHelperClass.class);
+            reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userHelperClass);
+        }
             /*else if(child.equals(AppConstant.ADHAAR))
             {
             }*/
     }
-    public static <T>String toJson(T value,Class<T> model)
-    {
-        return new Gson().toJson(value,model);
+
+    public static void storeNotificationInRTD(Context context, FetchNotification fetchNotification) {
+        Firebase reference;
+        Firebase.setAndroidContext(context);
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.NOTIFICATION + "/");
+        fetchNotification.setPush_key(reference.push().getKey());
+        reference.child(fetchNotification.getPush_key()).setValue(fetchNotification);
     }
 
-    public static <T>T fromJson(String json,Class<T> model)
-    {
-        return new Gson().fromJson(json,model);
+    public static <T> String toJson(T value, Class<T> model) {
+        return new Gson().toJson(value, model);
     }
-    public static GoogleApiClient createGoogleClient(FragmentActivity activity, GoogleApiClient.OnConnectionFailedListener connectionFailedListener)
-    {
 
-            return new GoogleApiClient.Builder(activity)
-                    .enableAutoManage(activity, connectionFailedListener)
-                    .addApi(AppInvite.API)
-                    .build();
+    public static <T> T fromJson(String json, Class<T> model) {
+        return new Gson().fromJson(json, model);
     }
-    public static void showToast(Activity activity, String mes, int  color) {
+
+    public static GoogleApiClient createGoogleClient(FragmentActivity activity, GoogleApiClient.OnConnectionFailedListener connectionFailedListener) {
+
+        return new GoogleApiClient.Builder(activity)
+                .enableAutoManage(activity, connectionFailedListener)
+                .addApi(AppInvite.API)
+                .build();
+    }
+
+    public static void showToast(Activity activity, String mes, int color) {
         String msg = "Something gone wrong.";
         if (mes == null) {
             mes = msg;
@@ -161,7 +177,7 @@ public class Utils {
         }
         hideKeyboard(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast_layout, (ViewGroup) activity.findViewById(R.id.toast_layout_root));
+        View layout = inflater.inflate(R.layout.custom_toast_layout, activity.findViewById(R.id.toast_layout_root));
         LinearLayout root = layout.findViewById(R.id.toast_layout_root);
         root.setBackground(new RoundView(color, Utils.getRadius(100f)));
         TextView toastTextView = layout.findViewById(R.id.toastTextView);
@@ -171,6 +187,7 @@ public class Utils {
         toast.setView(layout);
         toast.show();
     }
+
     public static void hideKeyboard(Activity _activity) {
         View view = _activity.getCurrentFocus();
         if (view != null) {
@@ -181,18 +198,25 @@ public class Utils {
         }
     }
 
-    public static void storeUserDetailsToRTD(Context context,UserBean userBean) {
+    public static void storeUserDetailsToRTD(Context context, UserBean userBean) {
         Firebase reference;
         Firebase.setAndroidContext(context);
-        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ AppConstant.USER_DETAIL+"/");
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.USER_DETAIL + "/");
         reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userBean);
     }
-    public static Firebase getUserReference(Context context)
-    {
+
+    public static Firebase getUserReference(Context context) {
         Firebase reference;
 
-        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL+ AppConstant.USER_DETAIL+"/");
-      return reference;
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.USER_DETAIL + "/");
+        return reference;
+    }
+
+    public static Firebase getNotificationReference(Context context) {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.NOTIFICATION + "/");
+        return reference;
     }
 
     public static StorageReference getStorageReference() {
@@ -213,6 +237,15 @@ public class Utils {
         return dialog;
     }
 
+    public static Dialog getMsgDialog(Activity activity) {
+        Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.msg_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+        return dialog;
+    }
+
     public static ProgressDialog getProgressDialog(Activity activity) {
         ProgressDialog pd = new ProgressDialog(activity);
         pd.setTitle("Loading...");
@@ -220,4 +253,48 @@ public class Utils {
         return pd;
     }
 
+    public static String getTimeAgo(String dataDate) {
+        String convTime = null;
+
+        String prefix = "";
+        String suffix = "Ago";
+
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            Date pasTime = dateFormat.parse(dataDate);
+
+            Date nowTime = new Date();
+
+            long dateDiff = nowTime.getTime() - pasTime.getTime();
+
+            long second = TimeUnit.MILLISECONDS.toSeconds(dateDiff);
+            long minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff);
+            long hour = TimeUnit.MILLISECONDS.toHours(dateDiff);
+            long day = TimeUnit.MILLISECONDS.toDays(dateDiff);
+
+            if (second < 60) {
+                convTime = second + " Seconds " + suffix;
+            } else if (minute < 60) {
+                convTime = minute + " Minutes " + suffix;
+            } else if (hour < 24) {
+                convTime = hour + " Hours " + suffix;
+            } else if (day >= 7) {
+                if (day > 360) {
+                    convTime = (day / 360) + " Years " + suffix;
+                } else if (day > 30) {
+                    convTime = (day / 30) + " Months " + suffix;
+                } else {
+                    convTime = (day / 7) + " Week " + suffix;
+                }
+            } else if (day < 7) {
+                convTime = day + " Days " + suffix;
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("ConvTimeE", e.getMessage());
+        }
+
+        return convTime;
+    }
 }

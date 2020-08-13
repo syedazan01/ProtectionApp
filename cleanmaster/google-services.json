@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:764918150522:android:e08772e7327d12ca9512c3",
         "android_client_info": {
-          "package_name": "org.mazhuang.cleanexpert"
+          "package_name": "com.example.protectionapp"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "764918150522-f0sf11uf3lglpjcrc5ku6lecdd2dat9h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "org.mazhuang.cleanexpert",
+            "package_name": "com.example.protectionapp",
             "certificate_hash": "1a484e82e2c2599aaec6331dc35dc1ed93cfa0f6"
           }
         },
@@ -26,8 +26,45 @@
           "client_id": "764918150522-4nhmkmvq2bdo1e9m5s5ut147vlcp00od.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "org.mazhuang.cleanexpert",
+            "package_name": "com.example.protectionapp",
             "certificate_hash": "a525514506749b63ece1d6e39886c06b00450ca4"
+          }
+        },
+        {
+          "client_id": "764918150522-cddkqp3fi69nb033gldhlm31euv77hqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRdSeW2ZL_1W-Dv3Q9gSiCfyG1II7GrGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764918150522-cddkqp3fi69nb033gldhlm31euv77hqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764918150522:android:e96df01d9edcdc619512c3",
+        "android_client_info": {
+          "package_name": "org.mazhuang.cleanexpert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764918150522-44klmm2hqa2gk0846k09tv710s6dvd6n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.mazhuang.cleanexpert",
+            "certificate_hash": "1a484e82e2c2599aaec6331dc35dc1ed93cfa0f6"
           }
         },
         {

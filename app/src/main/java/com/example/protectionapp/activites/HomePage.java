@@ -21,6 +21,7 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.fragments.AccountFragment;
 import com.example.protectionapp.fragments.HomeFragment;
 import com.example.protectionapp.fragments.PersonalRecordFragment;
+import com.example.protectionapp.fragments.SosFragment;
 import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.navigation.NavigationView;
 import com.luseen.spacenavigation.SpaceItem;
@@ -56,7 +57,7 @@ public class HomePage extends AppCompatActivity  {
         spaceNavigationView = findViewById(R.id.space);
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_library_books_24));
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_sms_failed_24));
+        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_sos));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_sms_failed_24));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_account_circle_24));
         setUpToolBar();
@@ -102,16 +103,13 @@ public class HomePage extends AppCompatActivity  {
             @Override
             public void onItemClick(int itemIndex, String itemName) {
                 Fragment selectedFragment = null;
-                switch (itemIndex){
+                switch (itemIndex) {
                     case 0:
-                        selectedFragment = new  PersonalRecordFragment();
+                        selectedFragment = new PersonalRecordFragment();
                         break;
-                   /* case 1:
-                        selectedFragment = new  AppLockFragment();
+                    case 1:
+                        selectedFragment = new SosFragment();
                         break;
-                    case 2:
-                        selectedFragment = new AppLockFragment();
-                        break;*/
                     case 3:
                         selectedFragment = new AccountFragment();
                         break;

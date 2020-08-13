@@ -1,4 +1,4 @@
-package com.example.protectionapp.services;
+package org.mazhuang.cleanexpert.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,13 +13,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.example.protectionapp.R;
-import com.example.protectionapp.activites.SplashScreen;
-import com.example.protectionapp.utils.AppConstant;
-import com.example.protectionapp.utils.PrefManager;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.mazhuang.cleanexpert.R;
+import org.mazhuang.cleanexpert.ui.MainActivity;
 
 public class NotificationsMessagingService extends FirebaseMessagingService {
     @Override
@@ -32,8 +31,8 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         String title = remoteMessage.getNotification().getTitle();
         String message = remoteMessage.getData().get("msg");
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-        SharedPreferences sharedPreferences = getSharedPreferences(PrefManager.PREF_NAME, MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(AppConstant.ISLOGGEDIN, false)) {
+        SharedPreferences sharedPreferences = getSharedPreferences("protectionApp", MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("is_loggedIn", false)) {
             sendNotification(
                     "",
                     title,
@@ -51,7 +50,7 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
         final String CHANNEL_ID = "default";
         final String CHANNEL_NAME = "Default";
 
-        Intent notificationIntent = new Intent(this, SplashScreen.class);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,

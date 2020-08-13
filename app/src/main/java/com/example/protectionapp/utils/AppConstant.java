@@ -27,6 +27,7 @@ public interface AppConstant {
     String BANK = "bank";
     String ATM = "atm";
     String VOTER_ID = "voter id";
+    String NOTIFICATION = "Notification";
 
     //Runtime Permissions Constant
     int SYSTEM_ALERT_CODE = 900;

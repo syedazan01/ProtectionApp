@@ -25,13 +25,19 @@
             android:name=".ui.JunkCleanActivity"
             android:label="@string/title_activity_junk_clean"
             android:theme="@style/AppTheme.NoActionBar" />
-       <!-- <activity android:name=".ui.SplashActivity"
-            android:theme="@style/SplashTheme">
+
+        <service android:name=".services.NotificationsMessagingService">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </activity>-->
+        </service>
+        <!-- <activity android:name=".ui.SplashActivity"
+             android:theme="@style/SplashTheme">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>-->
     </application>
 
 </manifest>
