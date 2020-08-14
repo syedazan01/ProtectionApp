@@ -1,9 +1,9 @@
-package com.example.protectionapp.utils.views;
+package com.example.protectionapp.model;
 
-public class BankHelperClass {
-    String AccountHolderName,accountNumber,ifscCode,branchName,BankName;
+public class BankBean {
+    String AccountHolderName, accountNumber, ifscCode, branchName, BankName;
 
-    public BankHelperClass(String accountHolderName, String accountNumber, String ifscCode, String branchName, String bankName) {
+    public BankBean(String accountHolderName, String accountNumber, String ifscCode, String branchName, String bankName) {
         AccountHolderName = accountHolderName;
         this.accountNumber = accountNumber;
         this.ifscCode = ifscCode;

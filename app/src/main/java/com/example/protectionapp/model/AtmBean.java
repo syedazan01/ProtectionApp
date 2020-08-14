@@ -1,9 +1,9 @@
-package com.example.protectionapp.utils;
+package com.example.protectionapp.model;
 
-public class AtmHelperClass {
+public class AtmBean {
     String bankname, atmnumber, nameoncard, cardVailidity, cvvcode;
 
-    public AtmHelperClass(String bankname, String atmnumber, String nameoncard, String cardVailidity, String cvvcode) {
+    public AtmBean(String bankname, String atmnumber, String nameoncard, String cardVailidity, String cvvcode) {
         this.bankname = bankname;
         this.atmnumber = atmnumber;
         this.nameoncard = nameoncard;

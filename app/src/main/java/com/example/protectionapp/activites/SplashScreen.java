@@ -33,6 +33,16 @@ LottieAnimationView animation;
             setTheme(R.style.AppTheme_Base_Light);
         super.onCreate(savedInstanceState);
         mContext = this;
+       /* List<PlansBean> plansBeans=new ArrayList<>();
+        plansBeans.add(new PlansBean("200 \u20B9","Primium Plan","For 3 Month",""));
+        plansBeans.add(new PlansBean("100 \u20B9","Silver Plan","For 2 Month",""));
+        plansBeans.add(new PlansBean("50 \u20B9","Platinum Plan","For 4 Month",""));
+        plansBeans.add(new PlansBean("20 \u20B9","Basic Plan","For 1 Month",""));
+        for (PlansBean plansBean : plansBeans)
+        {
+            Utils.storePlansToRTD(this,plansBean);
+        }*/
+
         setContentView(R.layout.splash_screen_layout);
 
         animation = findViewById(R.id.animation);

@@ -1,9 +1,5 @@
 package com.example.protectionapp.RecordsActivites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -18,10 +14,13 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.protectionapp.R;
-import com.example.protectionapp.UserHelperClass;
+import com.example.protectionapp.model.AtmBean;
 import com.example.protectionapp.utils.AppConstant;
-import com.example.protectionapp.utils.AtmHelperClass;
 import com.example.protectionapp.utils.Utils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
@@ -131,8 +130,8 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                AtmHelperClass atmHelperClass = new AtmHelperClass(banknames,atmnumbers,nameoncards,cardVailiditys,cvvcodes);
-                Utils.storeDocumentsInRTD(ATM.this, AppConstant.ATM, Utils.toJson(atmHelperClass, AtmHelperClass.class));
+                AtmBean atmBean = new AtmBean(banknames, atmnumbers, nameoncards, cardVailiditys, cvvcodes);
+                Utils.storeDocumentsInRTD(AppConstant.ATM, Utils.toJson(atmBean, AtmBean.class));
                 //progress dialog
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -141,7 +140,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                         uploadingDialog.dismissdialog();
 
                     }
-                },4000);
+                }, 4000);
             }
         });
         final Calendar calendar = Calendar.getInstance();
@@ -167,7 +166,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog(this);
+        SendDailog sendDailog = new SendDailog(this, true);
         sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 
@@ -193,7 +192,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
     public void applyTexts(String message, String password) {
 
     }
-};
+}
 
 
 

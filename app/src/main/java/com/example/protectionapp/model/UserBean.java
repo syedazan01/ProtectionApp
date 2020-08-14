@@ -2,6 +2,15 @@ package com.example.protectionapp.model;
 
 public class UserBean {
     String mobile, profilePic, fcmToken;
+    boolean isSubscribe;
+
+    public boolean isSubscribe() {
+        return isSubscribe;
+    }
+
+    public void setSubscribe(boolean subscribe) {
+        isSubscribe = subscribe;
+    }
 
     public String getFcmToken() {
         return fcmToken;

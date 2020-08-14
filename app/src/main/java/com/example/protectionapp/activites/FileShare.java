@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.RecordsActivites.SendDailog;
 import com.example.protectionapp.ViewPageAdapter;
 import com.example.protectionapp.fragments.ReceivedFragment;
 import com.example.protectionapp.fragments.SendFragment;
@@ -18,7 +19,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
-public class FileShare extends AppCompatActivity {
+public class FileShare extends AppCompatActivity implements SendDailog.SendDialogListener {
     Toolbar toolbar;
     ImageView ivBack;
     TextView tvToolbarTitle;
@@ -26,9 +27,18 @@ public class FileShare extends AppCompatActivity {
     private ViewPager viewPager;
 
     @Override
+    public void applyTexts(String message, String password) {
+        if (viewPager.getCurrentItem() == 0) {
+            SendFragment.sendDialogListener.applyTexts(message, password);
+        } else
+            ReceivedFragment.sendDialogListener.applyTexts(message, password);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+        if (PrefManager.getBoolean(ISNIGHTMODE))
             setTheme(R.style.AppTheme_Base_Night);
         else
             setTheme(R.style.AppTheme_Base_Light);
@@ -37,6 +47,38 @@ public class FileShare extends AppCompatActivity {
         initActions();
         setUpViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (viewPager.getCurrentItem() == 0) {
+                    if (SendFragment.sendClickListener != null) {
+                        SendFragment.sendClickListener.onSent();
+                    }
+                } else {
+                    if (ReceivedFragment.recievedClickListener != null) {
+                        ReceivedFragment.recievedClickListener.onRecieved();
+                    }
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    public interface SendClickListener {
+        void onSent();
+    }
+
+    public interface RecievedClickListener {
+        void onRecieved();
     }
 
     private void initActions() {

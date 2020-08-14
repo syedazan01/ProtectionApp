@@ -87,7 +87,7 @@ public class HomePage extends AppCompatActivity  {
                 return false;
             }
         });
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PersonalRecordFragment()).commit();
        // bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
 
 
@@ -169,7 +169,7 @@ public class HomePage extends AppCompatActivity  {
             case R.id.file_share:
                 Intent intent3 = new Intent(HomePage.this, FileShare.class);
                 startActivity(intent3);
-                Toast.makeText(this, "File Sharer under progress", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "File Sharer under progress", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.camera_detector:
                 Intent intent4 = new Intent(HomePage.this, CameraDetector.class);

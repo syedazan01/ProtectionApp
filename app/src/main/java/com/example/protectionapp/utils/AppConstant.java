@@ -28,6 +28,8 @@ public interface AppConstant {
     String ATM = "atm";
     String VOTER_ID = "voter id";
     String NOTIFICATION = "Notification";
+    String FILE_SHARE = "File Share";
+    String PLANS = "Plans";
 
     //Runtime Permissions Constant
     int SYSTEM_ALERT_CODE = 900;

@@ -1,9 +1,9 @@
-package com.example.protectionapp.utils;
+package com.example.protectionapp.model;
 
-public class DlicenceHelperClass {
-    String fullname,son_of,licenceNumber,bloodGroup,dateOfBirth,dateOfIssue,validity;
+public class DlicenceBean {
+    String fullname, son_of, licenceNumber, bloodGroup, dateOfBirth, dateOfIssue, validity;
 
-    public DlicenceHelperClass(String fullname, String son_of, String licenceNumber, String bloodGroup, String dateOfBirth, String dateOfIssue, String validity) {
+    public DlicenceBean(String fullname, String son_of, String licenceNumber, String bloodGroup, String dateOfBirth, String dateOfIssue, String validity) {
         this.fullname = fullname;
         this.son_of = son_of;
         this.licenceNumber = licenceNumber;

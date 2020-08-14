@@ -1,14 +1,31 @@
-package com.example.protectionapp;
+package com.example.protectionapp.model;
 
-public class UserHelperClass {
-    String Fullname,dateofbirth,gender,aadharNumber,Address;
+import java.io.Serializable;
 
-    public UserHelperClass(String fullname, String dateofbirth, String gender, String aadharNumber, String address) {
+public class AdhaarBean implements Serializable {
+    String mobileNo, Fullname, dateofbirth, gender, aadharNumber, Address, Adhaarimage;
+   /* public AdhaarBean(String fullname, String dateofbirth, String gender, String aadharNumber, String address) {
         Fullname = fullname;
         this.dateofbirth = dateofbirth;
         this.gender = gender;
         this.aadharNumber = aadharNumber;
         Address = address;
+    }*/
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public String getAdhaarimage() {
+        return Adhaarimage;
+    }
+
+    public void setAdhaarimage(String adhaarimage) {
+        Adhaarimage = adhaarimage;
     }
 
     public String getFullname() {

@@ -30,10 +30,11 @@ import com.bumptech.glide.Glide;
 import com.example.protectionapp.BuildConfig;
 import com.example.protectionapp.R;
 import com.example.protectionapp.activites.LogIn;
-import com.example.protectionapp.activites.Payment_premiumUser;
+import com.example.protectionapp.adapters.AdapterSubscription;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.FetchNotification;
 import com.example.protectionapp.model.NotificationBean;
+import com.example.protectionapp.model.PlansBean;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.network.ApiResonse;
 import com.example.protectionapp.utils.AppConstant;
@@ -51,6 +52,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
@@ -175,7 +177,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                             final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
                             rvUser.setLayoutManager(new LinearLayoutManager(mActivity));
                             rvUser.addItemDecoration(new DividerItemDecoration(mActivity, RecyclerView.VERTICAL));
-                            Utils.getUserReference(getContext()).addValueEventListener(new ValueEventListener() {
+                            Utils.getUserReference().addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (isImageUpload) {
@@ -207,7 +209,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                                 @Override
                                 public void onClick(View view) {
                                     for (FetchNotification fetchNotification : fetchNotifications) {
-                                        Utils.storeNotificationInRTD(mActivity, fetchNotification);
+                                        Utils.storeNotificationInRTD(fetchNotification);
                                     }
                                     dialog.dismiss();
                                     Gson gson = new GsonBuilder()
@@ -255,11 +257,38 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         cardSubscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity, Payment_premiumUser.class);
-                startActivity(intent);
-
+//                Intent intent = new Intent(mActivity, Payment_premiumUser.class);
+//                startActivity(intent);
+                openBottomSheet();
             }
         });
+    }
+
+    private void openBottomSheet() {
+        ProgressDialog pd = Utils.getProgressDialog(getActivity());
+        pd.show();
+        final List<PlansBean> plansBeans = new ArrayList<>();
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.AppBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.subscribtion_dialog);
+        RecyclerView rvSubscribe = bottomSheetDialog.findViewById(R.id.rvSubscription);
+        rvSubscribe.setLayoutManager(new LinearLayoutManager(getActivity()));
+        Utils.getPlansReference().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                pd.dismiss();
+                for (DataSnapshot postShot : dataSnapshot.getChildren()) {
+                    PlansBean plansBean = postShot.getValue(PlansBean.class);
+                    plansBeans.add(plansBean);
+                }
+                rvSubscribe.setAdapter(new AdapterSubscription(getActivity(), plansBeans));
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                pd.dismiss();
+            }
+        });
+        bottomSheetDialog.show();
     }
 
     public static Uri generateContentLink() {
@@ -346,7 +375,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     private void getUser() {
         final ProgressDialog pd = Utils.getProgressDialog(mActivity);
         pd.show();
-        Utils.getUserReference(getContext()).child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
+        Utils.getUserReference().child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
@@ -405,7 +434,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                         userBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
                         userBean.setProfilePic(fileUri.getLastPathSegment());
                         userBean.setFcmToken(PrefManager.getString(AppConstant.FCMTOKEN));
-                        Utils.storeUserDetailsToRTD(mActivity, userBean);
+                        Utils.storeUserDetailsToRTD(userBean);
                     } else {
 
                     }

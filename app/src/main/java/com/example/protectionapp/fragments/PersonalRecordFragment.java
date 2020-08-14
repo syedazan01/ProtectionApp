@@ -2,31 +2,23 @@ package com.example.protectionapp.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
-import android.widget.LinearLayout;
-
 import com.example.protectionapp.R;
-import com.example.protectionapp.RecordsActivites.ATM;
-import com.example.protectionapp.RecordsActivites.Adhaar;
-import com.example.protectionapp.RecordsActivites.Bank;
-import com.example.protectionapp.RecordsActivites.DrivingLicence;
-import com.example.protectionapp.RecordsActivites.PAN;
-import com.example.protectionapp.RecordsActivites.VoterID;
+import com.example.protectionapp.RecordsActivites.DocumentList;
 import com.example.protectionapp.adapters.PersonalRecordAdapter;
 import com.example.protectionapp.model.PersonalRecord;
+import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 
 import java.util.ArrayList;
@@ -67,20 +59,21 @@ public class PersonalRecordFragment extends Fragment {
         recyclerViewClickListener = new PersonalRecordAdapter.RecyclerViewClickListener() {
             @Override
             public void onClick(View v, int position) {
-                Intent intent = null;
+                Intent intent = new Intent(getActivity(), DocumentList.class);
                 if (position==0) {
-                    intent = new Intent(getActivity(), Adhaar.class);
+//                    intent = new Intent(getActivity(), Adhaar.class);
+                    intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.ADHAAR);
                 }
                 else if(position==1)
-                    intent = new Intent(getActivity(), PAN.class);
+                    intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.PAN);
                 else if(position==2)
-                    intent = new Intent(getActivity(), DrivingLicence.class);
+                    intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.DRIVING_LICENSE);
                 else if(position==3)
-                    intent = new Intent(getActivity(), Bank.class);
+                    intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.BANK);
                 else if(position==4)
-                    intent = new Intent(getActivity(), ATM.class);
+                    intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.ATM);
                 else if(position==5)
-                    intent = new Intent(getActivity(), VoterID.class);
+                    intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.VOTER_ID);
 
                 startActivity(intent);
             }

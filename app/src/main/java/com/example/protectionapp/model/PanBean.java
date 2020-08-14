@@ -1,9 +1,9 @@
-package com.example.protectionapp.utils;
+package com.example.protectionapp.model;
 
-public class PanHelperClass {
-    String fullName,fatherName,dateOfBirth,PermanentAccountNumber;
+public class PanBean {
+    String fullName, fatherName, dateOfBirth, PermanentAccountNumber;
 
-    public PanHelperClass(String fullName, String fatherName, String dateOfBirth, String permanentAccountNumber) {
+    public PanBean(String fullName, String fatherName, String dateOfBirth, String permanentAccountNumber) {
         this.fullName = fullName;
         this.fatherName = fatherName;
         this.dateOfBirth = dateOfBirth;

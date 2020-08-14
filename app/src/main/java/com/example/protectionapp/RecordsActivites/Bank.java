@@ -1,9 +1,5 @@
 package com.example.protectionapp.RecordsActivites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -16,13 +12,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.protectionapp.R;
+import com.example.protectionapp.model.BankBean;
 import com.example.protectionapp.utils.AppConstant;
-import com.example.protectionapp.utils.AtmHelperClass;
 import com.example.protectionapp.utils.Utils;
-import com.example.protectionapp.utils.views.BankHelperClass;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class Bank extends AppCompatActivity implements SendDailog.SendDialogListener {
@@ -119,8 +117,8 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                BankHelperClass bankHelperClass = new BankHelperClass(accountHoldernames, accountNumbers, ifscCodes, branchNames, banknames);
-                Utils.storeDocumentsInRTD(Bank.this, AppConstant.BANK, Utils.toJson(bankHelperClass, BankHelperClass.class));
+                BankBean bankBean = new BankBean(accountHoldernames, accountNumbers, ifscCodes, branchNames, banknames);
+                Utils.storeDocumentsInRTD(AppConstant.BANK, Utils.toJson(bankBean, BankBean.class));
                 //progress dialog
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -129,13 +127,13 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                         uploadingDialog.dismissdialog();
 
                     }
-                },4000);
+                }, 4000);
             }
         });
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog(this);
+        SendDailog sendDailog = new SendDailog(this, true);
         sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 

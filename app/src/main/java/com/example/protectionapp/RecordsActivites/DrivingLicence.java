@@ -1,9 +1,5 @@
 package com.example.protectionapp.RecordsActivites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -18,11 +14,14 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.protectionapp.R;
+import com.example.protectionapp.model.DlicenceBean;
 import com.example.protectionapp.utils.AppConstant;
-import com.example.protectionapp.utils.DlicenceHelperClass;
 import com.example.protectionapp.utils.Utils;
-import com.example.protectionapp.utils.views.BankHelperClass;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -123,8 +122,8 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                DlicenceHelperClass dlicenceHelperClass = new DlicenceHelperClass(FullNames, sonOfName, licenceNumber, bloddgroups, DLdob,dateofIssue,DLvaliditys);
-                Utils.storeDocumentsInRTD(DrivingLicence.this, AppConstant.DRIVING_LICENSE, Utils.toJson(dlicenceHelperClass, DlicenceHelperClass.class));
+                DlicenceBean dlicenceBean = new DlicenceBean(FullNames, sonOfName, licenceNumber, bloddgroups, DLdob, dateofIssue, DLvaliditys);
+                Utils.storeDocumentsInRTD(AppConstant.DRIVING_LICENSE, Utils.toJson(dlicenceBean, DlicenceBean.class));
                 //progress dialog
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -133,7 +132,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                         uploadingDialog.dismissdialog();
 
                     }
-                },4000);
+                }, 4000);
             }
         });
 
@@ -197,7 +196,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog(this);
+        SendDailog sendDailog = new SendDailog(this, true);
         sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 

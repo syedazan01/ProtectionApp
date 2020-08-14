@@ -132,7 +132,7 @@ public class Otp extends AppCompatActivity {
                             Log.d("Otp Screen>>>", "signInWithCredential:success");
                             PrefManager.putString(AppConstant.USER_MOBILE, "+91" + getIntent().getStringExtra(AppConstant.LOGIN_MOBILE));
                             PrefManager.putBoolean(AppConstant.ISLOGGEDIN, true);
-                            Utils.getUserReference(activity).child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
+                            Utils.getUserReference().child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     pd.dismiss();
@@ -143,7 +143,7 @@ public class Otp extends AppCompatActivity {
                                     else
                                         userBean.setProfilePic(userBean.getProfilePic());
                                     userBean.setFcmToken(PrefManager.getString(AppConstant.FCMTOKEN));
-                                    Utils.storeUserDetailsToRTD(activity, userBean);
+                                    Utils.storeUserDetailsToRTD(userBean);
                                     finishAffinity();
                                     Intent intent = new Intent(activity, HomePage.class);
                                     startActivity(intent);

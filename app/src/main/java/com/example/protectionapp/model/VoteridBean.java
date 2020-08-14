@@ -1,9 +1,9 @@
-package com.example.protectionapp.utils;
+package com.example.protectionapp.model;
 
-public class VoteridHelperClass {
-    String FullName,FathersName,Gender,dateofbirth,Address,Assemblyname;
+public class VoteridBean {
+    String FullName, FathersName, Gender, dateofbirth, Address, Assemblyname;
 
-    public VoteridHelperClass(String fullName, String fathersName, String gender, String dateofbirth, String address, String assemblyname) {
+    public VoteridBean(String fullName, String fathersName, String gender, String dateofbirth, String address, String assemblyname) {
         FullName = fullName;
         FathersName = fathersName;
         Gender = gender;

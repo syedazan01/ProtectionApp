@@ -86,7 +86,7 @@ public class SosFragment extends Fragment {
         rvSos.setLayoutManager(new LinearLayoutManager(getContext()));
         final ProgressDialog pd = Utils.getProgressDialog(getActivity());
         pd.show();
-        Utils.getNotificationReference(getContext()).addValueEventListener(new ValueEventListener() {
+        Utils.getNotificationReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 pd.dismiss();

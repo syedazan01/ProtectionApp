@@ -31,8 +31,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.protectionapp.R;
-import com.example.protectionapp.UserHelperClass;
+import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.FetchNotification;
+import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.PlansBean;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.views.RoundView;
 import com.firebase.client.Firebase;
@@ -131,22 +133,21 @@ public class Utils {
         return new float[]{value, value, value, value, value, value, value, value};
     }
 
-    public static void storeDocumentsInRTD(Context context, String child, String modelString) {
+    public static void storeDocumentsInRTD(String child, String modelString) {
         Firebase reference;
-        Firebase.setAndroidContext(context);
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.PERSONAL_DOCUMENT + "/" + child + "/");
         if (child.equals(AppConstant.ADHAAR)) {
-            UserHelperClass userHelperClass = fromJson(modelString, UserHelperClass.class);
-            reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userHelperClass);
+            AdhaarBean adhaarBean = fromJson(modelString, AdhaarBean.class);
+            reference.push().setValue(adhaarBean);
         }
             /*else if(child.equals(AppConstant.ADHAAR))
             {
             }*/
     }
 
-    public static void storeNotificationInRTD(Context context, FetchNotification fetchNotification) {
+    public static void storeNotificationInRTD(FetchNotification fetchNotification) {
         Firebase reference;
-        Firebase.setAndroidContext(context);
+
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.NOTIFICATION + "/");
         fetchNotification.setPush_key(reference.push().getKey());
         reference.child(fetchNotification.getPush_key()).setValue(fetchNotification);
@@ -198,24 +199,58 @@ public class Utils {
         }
     }
 
-    public static void storeUserDetailsToRTD(Context context, UserBean userBean) {
+    public static void storeUserDetailsToRTD(UserBean userBean) {
         Firebase reference;
-        Firebase.setAndroidContext(context);
+
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.USER_DETAIL + "/");
         reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userBean);
     }
 
-    public static Firebase getUserReference(Context context) {
+    public static void storeFileShareToRTD(FileShareBean fileShareBean) {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.FILE_SHARE + "/");
+        reference.push().setValue(fileShareBean);
+    }
+
+    public static void storePlansToRTD(PlansBean plansBean) {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.PLANS + "/");
+        reference.push().setValue(plansBean);
+    }
+
+    public static Firebase getUserReference() {
         Firebase reference;
 
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.USER_DETAIL + "/");
         return reference;
     }
 
-    public static Firebase getNotificationReference(Context context) {
+    public static Firebase getPlansReference() {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.PLANS + "/");
+        return reference;
+    }
+
+    public static Firebase getPersonalDocReference(String child) {
+        Firebase reference;
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.PERSONAL_DOCUMENT + "/" + child + "/");
+        return reference;
+    }
+
+    public static Firebase getNotificationReference() {
         Firebase reference;
 
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.NOTIFICATION + "/");
+        return reference;
+    }
+
+    public static Firebase getFileShareReference() {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.FILE_SHARE + "/");
         return reference;
     }
 

@@ -1,9 +1,5 @@
 package com.example.protectionapp.RecordsActivites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -18,10 +14,13 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.protectionapp.R;
+import com.example.protectionapp.model.PanBean;
 import com.example.protectionapp.utils.AppConstant;
-import com.example.protectionapp.utils.DlicenceHelperClass;
-import com.example.protectionapp.utils.PanHelperClass;
 import com.example.protectionapp.utils.Utils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.textfield.TextInputEditText;
@@ -132,8 +131,8 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                PanHelperClass panHelperClass = new PanHelperClass(FullNames, fathersname, pandob, pannumber);
-                Utils.storeDocumentsInRTD(PAN.this, AppConstant.DRIVING_LICENSE, Utils.toJson(panHelperClass, PanHelperClass.class));
+                PanBean panBean = new PanBean(FullNames, fathersname, pandob, pannumber);
+                Utils.storeDocumentsInRTD(AppConstant.DRIVING_LICENSE, Utils.toJson(panBean, PanBean.class));
                 //progress dialog
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -142,7 +141,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
                         uploadingDialog.dismissdialog();
 
                     }
-                },4000);
+                }, 4000);
             }
         });
         final Calendar calendar = Calendar.getInstance();
@@ -166,7 +165,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog(this);
+        SendDailog sendDailog = new SendDailog(this, true);
         sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 

@@ -12,16 +12,19 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
-    <uses-permission android:name="android.permission.CLEAR_APP_CACHE"
+    <uses-permission
+        android:name="android.permission.CLEAR_APP_CACHE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
-<uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
-    tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false"/>
+        android:required="false" />
+
     <application
         android:name="org.mazhuang.cleanexpert.Protection"
         android:allowBackup="true"
@@ -33,14 +36,16 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme">
-        <activity android:name="com.example.protectionapp.cameraDetector.OutsideTips" />
-        <activity android:name="com.example.protectionapp.cameraDetector.Changingroom" />
-        <activity android:name="com.example.protectionapp.cameraDetector.BathroomTips" />
-        <activity android:name="com.example.protectionapp.cameraDetector.BedroomTips" />
-        <activity android:name="com.example.protectionapp.cameraDetector.CamDetector_tips" />
-        <activity android:name="com.example.protectionapp.cameraDetector.CameraDectectorByRM" />
+        <activity android:name=".RecordsActivites.AdhaarFile"></activity>
+        <activity android:name=".RecordsActivites.DocumentList" />
+        <activity android:name=".cameraDetector.OutsideTips" />
+        <activity android:name=".cameraDetector.Changingroom" />
+        <activity android:name=".cameraDetector.BathroomTips" />
+        <activity android:name=".cameraDetector.BedroomTips" />
+        <activity android:name=".cameraDetector.CamDetector_tips" />
+        <activity android:name=".cameraDetector.CameraDectectorByRM" />
         <activity android:name=".activites.Payment_premiumUser" />
-        <activity android:name=".activites.KillNotification"></activity>
+        <activity android:name=".activites.KillNotification" />
         <activity android:name=".activites.Otp" />
         <activity android:name=".RecordsActivites.VoterID" />
         <activity android:name=".RecordsActivites.ATM" />
@@ -92,8 +97,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <service android:name=".services.RecordingService" />
-        <!--        <service android:name=".hoverwindow.HoverService" />-->
+        <service android:name=".services.RecordingService" /> <!-- <service android:name=".hoverwindow.HoverService" /> -->
         <service
             android:name=".services.ForgroundService"
             android:enabled="true"
