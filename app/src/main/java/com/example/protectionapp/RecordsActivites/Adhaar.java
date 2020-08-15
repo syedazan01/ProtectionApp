@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,7 +34,9 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.NotificationBean;
 import com.example.protectionapp.model.UserBean;
+import com.example.protectionapp.network.ApiResonse;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -50,6 +53,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.net.URL;
@@ -58,6 +63,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private TextInputEditText dobinput;
@@ -85,6 +96,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     Activity activity = this;
     private Uri fileUri;
     List<FileShareBean> fileShareBeans = new ArrayList<>();
+    List<String> tokenList = new ArrayList<>();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -334,6 +346,30 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                 dialog.dismiss();
                 final ProgressDialog pd = Utils.getProgressDialog(activity);
                 pd.show();
+                dialog.dismiss();
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+                Retrofit retrofit = new Retrofit.Builder().baseUrl("https://a2zcreation.000webhostapp.com/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+                ApiResonse apiResonse = retrofit.create(ApiResonse.class);
+                String tokens = tokenList.toString();
+                tokens = tokens.replaceAll("[\\[\\](){}]", "");
+                tokens = tokens.replace("\"", "");
+                tokens = tokens.replaceAll(" ", "");
+                Log.e("dvdfbtrghtbe", tokens + message);
+                Call<NotificationBean> call = apiResonse.fileSendMsg(tokens, message);
+                tokenList.clear();
+                call.enqueue(new Callback<NotificationBean>() {
+                    @Override
+                    public void onResponse(Call<NotificationBean> call, Response<NotificationBean> response) {
+                        Log.e("vdfbdbedtbher", String.valueOf(response.body().getSuccess()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<NotificationBean> call, Throwable t) {
+                        Log.e("vdfbdbedtbher", t.getMessage());
+                    }
+                });
                 for (FileShareBean fileShareBean : fileShareBeans) {
                     Utils.storeFileShareToRTD(fileShareBean);
                 }
@@ -386,6 +422,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
             fileShareBean.setPassword(password);
             fileShareBean.setMsg(msg);
             fileShareBeans.add(fileShareBean);
+            tokenList.add(userBean.getFcmToken());
         } else {
             fileShareBeans.remove(position);
         }
