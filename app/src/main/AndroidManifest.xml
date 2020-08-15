@@ -36,7 +36,17 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme">
-        <activity android:name=".RecordsActivites.AdhaarFile"></activity>
+        <activity android:name=".RecordsActivites.StudentIDFile"></activity>
+        <activity android:name=".RecordsActivites.VoterIDFile" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity android:name=".RecordsActivites.ATMFile" />
+        <activity android:name=".RecordsActivites.BankFile" />
+        <activity android:name=".RecordsActivites.DrivingLicenseFile" />
+        <activity android:name=".RecordsActivites.StudentID" />
+        <activity android:name=".RecordsActivites.PanFile" />
+        <activity android:name=".RecordsActivites.AdhaarFile" />
         <activity android:name=".RecordsActivites.DocumentList" />
         <activity android:name=".cameraDetector.OutsideTips" />
         <activity android:name=".cameraDetector.Changingroom" />

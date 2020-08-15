@@ -170,10 +170,8 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
                             uploadingDialog.dismissdialog();
                             finish();
-                        }
                     }
                 });
 
@@ -274,7 +272,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                 radioFemale.setChecked(true);
             else
                 radioOther.setChecked(true);
-            ProgressDialog pd = Utils.getProgressDialog(Adhaar.this);
+            final ProgressDialog pd = Utils.getProgressDialog(Adhaar.this);
             pd.show();
             Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + adhaarBean.getAdhaarimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override

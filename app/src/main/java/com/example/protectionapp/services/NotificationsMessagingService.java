@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -31,7 +30,7 @@ public class NotificationsMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
         String title = remoteMessage.getNotification().getTitle();
         String message = remoteMessage.getData().get("msg");
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
         SharedPreferences sharedPreferences = getSharedPreferences(PrefManager.PREF_NAME, MODE_PRIVATE);
         if (sharedPreferences.getBoolean(AppConstant.ISLOGGEDIN, false)) {
             sendNotification(

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecordsActivites.PAN">
+    tools:context=".RecordsActivites.PanFile">
 
     <include
         android:id="@+id/toolbarLay"
@@ -43,36 +43,38 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/panFullname"
                     android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true"
-        app:hintEnabled="false">
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
+            app:hintEnabled="false">
 
-        <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_border"
+                android:enabled="false"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/panFathersname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_border"
-            android:hint="Full Name"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:errorEnabled="true"
+            app:hintEnabled="false">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/panFathersname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:errorEnabled="true"
-        app:hintEnabled="false">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_border"
-            android:hint="Father Name"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textSize="14sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_border"
+                android:enabled="false"
+                android:hint="Father Name"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/pan_dob"
@@ -86,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_border"
+                android:enabled="false"
                 android:focusable="false"
                 android:hint="Date Of Birth"
                 android:padding="10dp"
@@ -103,48 +106,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_border"
+                android:enabled="false"
                 android:hint="Permanent Account Number"
                 android:inputType="textPersonName"
                 android:padding="10dp"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageView
-            android:id="@+id/pan_imageview"
-            android:layout_width="87dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/panscanbt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:text="SCAN PAN CARD"
-            android:textColor="@color/white" />
-
-                <Button
-                    android:id="@+id/pansavebt"
+                <ImageView
+                    android:id="@+id/pan_imageview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="SAVE"
-                    android:textColor="@color/white" />
-
-                <Button
-                    android:id="@+id/pan_sendBT"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="send"
-                    android:textColor="@color/white" />
+                    android:scaleType="fitXY" />
 
 
             </LinearLayout>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
-
-
-
 
 </RelativeLayout>

@@ -72,8 +72,10 @@ public class PersonalRecordFragment extends Fragment {
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.BANK);
                 else if(position==4)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.ATM);
-                else if(position==5)
+                else if (position == 5)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.VOTER_ID);
+                else if (position == 6)
+                    intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.STUDENT_ID);
 
                 startActivity(intent);
             }
@@ -97,5 +99,6 @@ public class PersonalRecordFragment extends Fragment {
         recordList.add(new PersonalRecord("Bank"));
         recordList.add(new PersonalRecord("ATM"));
         recordList.add(new PersonalRecord("Voter ID"));
+        recordList.add(new PersonalRecord("Student ID"));
     }
 }

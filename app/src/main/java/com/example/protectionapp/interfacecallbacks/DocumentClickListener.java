@@ -6,6 +6,7 @@ import com.example.protectionapp.model.AtmBean;
 import com.example.protectionapp.model.BankBean;
 import com.example.protectionapp.model.DlicenceBean;
 import com.example.protectionapp.model.PanBean;
+import com.example.protectionapp.model.StudentIdBean;
 import com.example.protectionapp.model.VoteridBean;
 
 public interface DocumentClickListener {
@@ -20,4 +21,6 @@ public interface DocumentClickListener {
     void onSelectAtm(AtmBean atmBean);
 
     void onSelectVoterID(VoteridBean voteridBean);
+
+    void onSelectStudentID(StudentIdBean studentIdBean);
 }

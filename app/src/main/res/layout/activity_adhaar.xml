@@ -5,176 +5,187 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".RecordsActivites.Adhaar">
+
     <include
         android:id="@+id/toolbarLay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/custum_toolbar"/>
-    <ImageView
-        android:layout_below="@+id/toolbarLay"
-        android:id="@+id/aadharlogo"
-        android:layout_width="match_parent"
-        android:layout_height="78dp"
-        android:layout_marginTop="7dp"
-        android:gravity="center"
-        android:src="@drawable/aadharlogo"
-        android:textSize="24sp" />
+        layout="@layout/custum_toolbar" />
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/aadharlogo"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_below="@+id/toolbarLay"
+        android:fillViewport="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/adhhar_fullname"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintEnabled="false"
-            app:errorEnabled="true">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:background="@drawable/round_border"
-                android:padding="10dp"
-                android:textSize="14sp"
+            <ImageView
+                android:id="@+id/aadharlogo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Full Name"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="78dp"
+                android:layout_below="@+id/toolbarLay"
+                android:layout_marginTop="7dp"
+                android:gravity="center"
+                android:src="@drawable/aadharlogo"
+                android:textSize="24sp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/dob"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:hintEnabled="false"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dob_calender"
-                android:background="@drawable/round_border"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:focusable="false"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Date Of Birth"
-                 />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"
+                android:layout_below="@+id/aadharlogo"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text=" Select Gender"
-            android:textSize="18sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/adhhar_fullname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:hintEnabled="false">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_border"
+                        android:hint="Full Name"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:hintEnabled="false">
 
-        <RadioGroup
-            android:id="@+id/Gradio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dob_calender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_border"
+                        android:focusable="false"
+                        android:hint="Date Of Birth"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <RadioButton
-                    android:id="@+id/Gen_male"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:padding="10dp"
-                    android:text="Male" />
+                    android:layout_marginTop="8dp"
+                    android:text=" Select Gender"
+                    android:textSize="18sp" />
 
-                <RadioButton
-                    android:id="@+id/Gen_female"
+
+                <RadioGroup
+                    android:id="@+id/Gradio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/Gen_male"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:padding="10dp"
+                        android:text="Male" />
+
+                    <RadioButton
+                        android:id="@+id/Gen_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Female" />
+
+                    <RadioButton
+                        android:id="@+id/Gen_other"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Other" />
+
+                </RadioGroup>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/adhar_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="16"
+                    app:errorEnabled="true"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_border"
+                        android:hint="Aadhar Number"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:textSize="14sp"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/adhar_addres"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_border"
+                        android:hint="Address"
+                        android:inputType="textPostalAddress"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/adhar_imageView"
+                    android:layout_width="87dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/cam_openbt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Female" />
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:text="Scan Adhaar"
+                    android:textColor="@color/white" />
 
-                <RadioButton
-                    android:id="@+id/Gen_other"
-                    android:layout_width="wrap_content"
+
+                <Button
+                    android:id="@+id/addhr_savebt"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Other" />
+                    android:layout_marginTop="10dp"
+                    android:text="SAVE/update"
+                    android:textColor="@color/white" />
 
-        </RadioGroup>
+                <Button
+                    android:id="@+id/adhaar_sendBT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="send"
+                    android:textColor="@color/white" />
 
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/adhar_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:counterEnabled="true"
-            app:counterMaxLength="16"
-            app:errorEnabled="true"
-            app:hintEnabled="false"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_border"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:hint="Aadhar Number"
-                android:inputType="number"
-
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/adhar_addres"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hintEnabled="false"
-            app:errorEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Address"
-                android:background="@drawable/round_border"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:inputType="textPostalAddress" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/adhar_imageView"
-            android:layout_width="87dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-        <Button
-            android:textColor="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cam_openbt"
-            android:text="Scan Adhaar"
-            android:ems="10"
-            android:layout_marginTop="10dp"/>
-
-
-
-        <Button
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white"
-            android:id="@+id/addhr_savebt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="SAVE/update" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/adhaar_sendBT"
-            android:text="send"
-            android:textColor="@color/white"/>
-
-    </LinearLayout>
 
 </RelativeLayout>

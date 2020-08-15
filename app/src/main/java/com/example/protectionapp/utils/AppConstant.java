@@ -30,6 +30,7 @@ public interface AppConstant {
     String NOTIFICATION = "Notification";
     String FILE_SHARE = "File Share";
     String PLANS = "Plans";
+    String STUDENT_ID = "Student";
 
     //Runtime Permissions Constant
     int SYSTEM_ALERT_CODE = 900;

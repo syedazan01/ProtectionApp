@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecordsActivites.AdhaarFile">
+    tools:context=".RecordsActivites.VoterIDFile">
 
     <include
         android:id="@+id/toolbarLay"
@@ -23,24 +23,25 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/aadharlogo"
+                android:id="@+id/votericon"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
                 android:layout_below="@+id/toolbarLay"
                 android:layout_marginTop="7dp"
                 android:gravity="center"
-                android:src="@drawable/aadharlogo"
+                android:src="@drawable/voteridlogo"
                 android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/aadharlogo"
+                android:layout_below="@id/votericon"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:padding="16dp">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/adhhar_fullname"
+                    android:id="@+id/voteridFullname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true"
@@ -50,7 +51,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_border"
-                        android:enabled="false"
                         android:hint="Full Name"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -58,20 +58,18 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/dob"
+                    android:id="@+id/voteridFathername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true"
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/dob_calender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_border"
-                        android:enabled="false"
-                        android:focusable="false"
-                        android:hint="Date Of Birth"
+                        android:hint="Father Name"
+                        android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -85,67 +83,56 @@
 
 
                 <RadioGroup
-
-                    android:id="@+id/Gradio"
+                    android:id="@+id/VoteridGradio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:orientation="horizontal">
 
                     <RadioButton
-                        android:id="@+id/Gen_male"
+                        android:id="@+id/Gen_votermale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:enabled="false"
                         android:padding="10dp"
                         android:text="Male" />
 
                     <RadioButton
-
-                        android:id="@+id/Gen_female"
+                        android:id="@+id/Gen_voterfemale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:padding="10dp"
                         android:text="Female" />
 
                     <RadioButton
-
-                        android:id="@+id/Gen_other"
+                        android:id="@+id/Gen_voterother"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
                         android:padding="10dp"
                         android:text="Other" />
 
                 </RadioGroup>
 
-
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/adhar_number"
+                    android:id="@+id/voterid_dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="16"
                     app:errorEnabled="true"
                     app:hintEnabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/voteriddob_calender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_border"
-                        android:enabled="false"
-                        android:hint="Aadhar Number"
-                        android:inputType="number"
+                        android:focusable="false"
+                        android:hint="Date Of Birth"
                         android:padding="10dp"
-                        android:textSize="14sp"
-
-                        />
+                        android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/adhar_addres"
+                    android:id="@+id/voterid_addres"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true"
@@ -155,21 +142,39 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_border"
-                        android:enabled="false"
                         android:hint="Address"
                         android:inputType="textPostalAddress"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/adhar_imageView"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/elction_constituency"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_border"
+                        android:hint="Assembly Constituency No. Name"
+                        android:inputType="textPostalAddress"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/ivVoterid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:scaleType="fitXY" />
+
+
             </LinearLayout>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
-
 
 </RelativeLayout>

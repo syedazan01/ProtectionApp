@@ -12,27 +12,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/votericon"
-        android:layout_width="match_parent"
-        android:layout_height="78dp"
-        android:layout_below="@+id/toolbarLay"
-        android:layout_marginTop="7dp"
-        android:gravity="center"
-        android:src="@drawable/voteridlogo"
-        android:textSize="24sp" />
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/votericon"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_below="@+id/toolbarLay"
+        android:fillViewport="true">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/voteridFullname"
-        android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/votericon"
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                android:layout_below="@+id/toolbarLay"
+                android:layout_marginTop="7dp"
+                android:gravity="center"
+                android:src="@drawable/voteridlogo"
+                android:textSize="24sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/votericon"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/voteridFullname"
+                    android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
         app:hintEnabled="false">
@@ -156,7 +166,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
-            android:id="@+id/voterid_imageview"
+            android:id="@+id/ivVoterid"
             android:layout_width="87dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
@@ -177,16 +187,17 @@
             android:layout_marginTop="10dp"
             android:text="SAVE"
             android:textColor="@color/white" />
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/voter_sendBT"
-            android:text="send"
-            android:textColor="@color/white"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/voter_sendBT"
+                    android:text="send"
+                    android:textColor="@color/white" />
 
 
-
-
-    </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>
