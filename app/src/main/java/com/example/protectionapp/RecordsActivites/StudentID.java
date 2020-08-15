@@ -305,7 +305,7 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
             });
         } else {
             btnSTDSave.setText("Save");
-            btnSTDScan.setVisibility(View.GONE);
+            btnSTDSend.setVisibility(View.GONE);
         }
     }
 
