@@ -201,35 +201,35 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
 
     @Override
     public void onSelectDL(DlicenceBean dlicenceBean) {
-        Intent intent = new Intent(this, PAN.class);
+        Intent intent = new Intent(this, DrivingLicence.class);
         intent.putExtra(AppConstant.DRIVING_LICENSE, dlicenceBean);
         startActivity(intent);
     }
 
     @Override
     public void onSelectBank(BankBean bankBean) {
-        Intent intent = new Intent(this, PAN.class);
+        Intent intent = new Intent(this, Bank.class);
         intent.putExtra(AppConstant.BANK, bankBean);
         startActivity(intent);
     }
 
     @Override
     public void onSelectAtm(AtmBean atmBean) {
-        Intent intent = new Intent(this, PAN.class);
+        Intent intent = new Intent(this, ATM.class);
         intent.putExtra(AppConstant.ATM, atmBean);
         startActivity(intent);
     }
 
     @Override
     public void onSelectVoterID(VoteridBean voteridBean) {
-        Intent intent = new Intent(this, PAN.class);
+        Intent intent = new Intent(this, VoterID.class);
         intent.putExtra(AppConstant.VOTER_ID, voteridBean);
         startActivity(intent);
     }
 
     @Override
     public void onSelectStudentID(StudentIdBean studentIdBean) {
-        Intent intent = new Intent(this, PAN.class);
+        Intent intent = new Intent(this, StudentID.class);
         intent.putExtra(AppConstant.STUDENT_ID, studentIdBean);
         startActivity(intent);
     }
