@@ -9,6 +9,7 @@ public interface AppConstant {
 
     //Pref Constant
     String ISNIGHTMODE = "nightMode";
+    String OVERLAY = "overlay";
     String IS_CALL_RECORDING_ON = "call_recording_is_on";
     String ISLOGGEDIN = "is_loggedIn";
     String USER_MOBILE = "user_mobile";
@@ -46,4 +47,6 @@ public interface AppConstant {
     String SETTING_NOTIFICATION_LISTENER = "enabled_notification_listeners";
     String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
 
+    //BroadCast Reciever
+    String OVERLAY_ACTION = "overlay_action";
 }

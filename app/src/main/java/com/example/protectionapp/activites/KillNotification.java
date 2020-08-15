@@ -24,7 +24,7 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.InstalledApps;
 import com.example.protectionapp.interfacecallbacks.OnNotificationChecked;
 import com.example.protectionapp.model.PInfo;
-import com.example.protectionapp.services.NotificationForgroundService;
+import com.example.protectionapp.services.ForgroundService;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
@@ -64,14 +64,14 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         swAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Intent intent = new Intent(KillNotification.this, NotificationForgroundService.class);
+                Intent intent = new Intent(KillNotification.this, ForgroundService.class);
                 if (b) {
                     pref.edit().putBoolean(AppConstant.NOTIFICATION_ENABLE, true).apply();
-                    intent.setAction(NotificationForgroundService.ACTION_NOTIFICATION_START_FOREGROUND_SERVICE);
+                    intent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
                     startService(intent);
                 } else {
                     pref.edit().putBoolean(AppConstant.NOTIFICATION_ENABLE, false).apply();
-                    intent.setAction(NotificationForgroundService.ACTION_NOTIFICATION_STOP_FOREGROUND_SERVICE);
+                    intent.setAction(ForgroundService.ACTION_STOP_FOREGROUND_SERVICE);
                     stopService(intent);
                 }
             }

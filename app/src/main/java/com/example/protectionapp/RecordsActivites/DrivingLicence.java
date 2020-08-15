@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,7 +33,9 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.DlicenceBean;
 import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.NotificationBean;
 import com.example.protectionapp.model.UserBean;
+import com.example.protectionapp.network.ApiResonse;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -45,6 +48,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -52,6 +57,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DrivingLicence extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnDLscan, btnDLsave, btnDLSend;
@@ -66,6 +77,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     UploadingDialog uploadingDialog = new UploadingDialog(DrivingLicence.this);
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
     private String password, msg;
+    List<String> tokenList = new ArrayList<>();
 
 
     @Override
@@ -361,6 +373,29 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 for (FileShareBean fileShareBean : fileShareBeans) {
                     Utils.storeFileShareToRTD(fileShareBean);
                 }
+                Gson gson = new GsonBuilder()
+                        .setLenient()
+                        .create();
+                Retrofit retrofit = new Retrofit.Builder().baseUrl("https://a2zcreation.000webhostapp.com/").addConverterFactory(GsonConverterFactory.create(gson)).build();
+                ApiResonse apiResonse = retrofit.create(ApiResonse.class);
+                String tokens = tokenList.toString();
+                tokens = tokens.replaceAll("[\\[\\](){}]", "");
+                tokens = tokens.replace("\"", "");
+                tokens = tokens.replaceAll(" ", "");
+                Log.e("dvdfbtrghtbe", tokens + message);
+                Call<NotificationBean> call = apiResonse.fileSendMsg(tokens, message);
+                tokenList.clear();
+                call.enqueue(new Callback<NotificationBean>() {
+                    @Override
+                    public void onResponse(Call<NotificationBean> call, Response<NotificationBean> response) {
+                        Log.e("vdfbdbedtbher", String.valueOf(response.body().getSuccess()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<NotificationBean> call, Throwable t) {
+                        Log.e("vdfbdbedtbher", t.getMessage());
+                    }
+                });
                 pd.dismiss();
                 Utils.showToast(activity, "File Sent Successfully", AppConstant.succeedColor);
             }

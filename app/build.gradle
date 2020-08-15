@@ -103,9 +103,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation project(":cleanmaster")
     //Circular Floating
-    implementation 'com.ramotion.circlemenu:circle-menu:0.3.2'
-    implementation 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
-    implementation 'com.github.HamedTaherpour:floating-layout-android:1.1.0'
+    implementation 'com.github.clans:fab:1.6.4'
+//    implementation 'com.ramotion.circlemenu:circle-menu:0.3.2'
+//    implementation 'com.oguzdev:CircularFloatingActionMenu:1.0.2'
+//    implementation 'com.github.HamedTaherpour:floating-layout-android:1.1.0'
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

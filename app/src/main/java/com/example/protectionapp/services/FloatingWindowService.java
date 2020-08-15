@@ -2,40 +2,35 @@ package com.example.protectionapp.services;
 
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.fragments.UtilityFeaturesFragment;
+import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.github.clans.fab.FloatingActionButton;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class FloatingWindowService extends Service {
-    private WindowManager windowManager;
-    private LinearLayout linearLayout;
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+    private static final float CLICK_DRAG_TOLERANCE = 100;
+    private WindowManager mWindowManager;
+    private View mFloatingWidget;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        linearLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-//        linearLayout.setBackgroundColor(Color.argb(66, 255, 0, 0));
-        linearLayout.setLayoutParams(layoutParams);
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
       /*  TextView textView = new TextView(this);
         textView.setText("This is a floating window");
         textView.setTextColor(Color.BLUE);
@@ -64,89 +59,110 @@ public class FloatingWindowService extends Service {
             setTheme(R.style.AppTheme_Base_Night);
         else
             setTheme(R.style.AppTheme_Base_Light);
-        FloatingActionButton floatingActionButton = new FloatingActionButton(this);
+       /* FloatingActionButton floatingActionButton = new FloatingActionButton(this);
         floatingActionButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         floatingActionButton.setBackgroundColor(Color.WHITE);
         floatingActionButton.setImageResource(R.drawable.login_logo);
-        linearLayout.addView(floatingActionButton);
+        linearLayout.addView(floatingActionButton);*/
 //        actionMenu.open(true);
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(400, 150, Build.VERSION.SDK_INT > Build.VERSION_CODES.O
+        mFloatingWidget = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, Build.VERSION.SDK_INT > Build.VERSION_CODES.O
                 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
+        params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
         params.x = 0;
-        params.y = 0;
-        params.gravity = Gravity.END;
-        windowManager.addView(linearLayout, params);
+        params.y = 100;
 
-        /*linearLayout.setOnTouchListener(new View.OnTouchListener() {
-            WindowManager.LayoutParams updatedParams = params;
-            int x,y;
-            float touchX,touchY;
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        mWindowManager.addView(mFloatingWidget, params);
+        final View collapsedView = mFloatingWidget.findViewById(R.id.collapse_view);
+        final View expandedView = mFloatingWidget.findViewById(R.id.expanded_container);
+//        ExpandCollapseAnimationHelper expandCollapseAnimationHelper=new ExpandCollapseAnimationHelper(mFloatingWidget.findViewById(R.id.root_container));
+        FloatingActionButton closeMenuItem = mFloatingWidget.findViewById(R.id.closeMenuItem);
+        closeMenuItem.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams)view.getLayoutParams();
-
-                int action = motionEvent.getAction();
-                if (action == MotionEvent.ACTION_DOWN) {
-
-                    downRawX = motionEvent.getRawX();
-                    downRawY = motionEvent.getRawY();
-                    dX = view.getX() - downRawX;
-                    dY = view.getY() - downRawY;
-
-                    return true; // Consumed
-
+            public void onClick(View view) {
+                PrefManager.putBoolean(AppConstant.OVERLAY, false);
+                if (UtilityFeaturesFragment.onFabClick != null) {
+                    UtilityFeaturesFragment.onFabClick.onClose();
                 }
-                else if (action == MotionEvent.ACTION_MOVE) {
+                stopSelf();
+            }
+        });
+        ImageView closeButtonCollapsed = (ImageView) mFloatingWidget.findViewById(R.id.close_btn);
+        closeButtonCollapsed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopSelf();
+            }
+        });
 
-                    int viewWidth = view.getWidth();
-                    int viewHeight = view.getHeight();
+        ImageView closeButton = (ImageView) mFloatingWidget.findViewById(R.id.close_button);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                collapsedView.setVisibility(View.VISIBLE);
+                expandedView.setVisibility(View.GONE);
+            }
+        });
 
-                    View viewParent = (View)view.getParent();
-                    int parentWidth = viewParent.getWidth();
-                    int parentHeight = viewParent.getHeight();
+        mFloatingWidget.findViewById(R.id.root_container).setOnTouchListener(new View.OnTouchListener() {
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
 
-                    float newX = motionEvent.getRawX() + dX;
-                    newX = Math.max(layoutParams.leftMargin, newX); // Don't allow the FAB past the left hand side of the parent
-                    newX = Math.min(parentWidth - viewWidth - layoutParams.rightMargin, newX); // Don't allow the FAB past the right hand side of the parent
-
-                    float newY = motionEvent.getRawY() + dY;
-                    newY = Math.max(layoutParams.topMargin, newY); // Don't allow the FAB past the top of the parent
-                    newY = Math.min(parentHeight - viewHeight - layoutParams.bottomMargin, newY); // Don't allow the FAB past the bottom of the parent
-
-                    view.animate()
-                            .x(newX)
-                            .y(newY)
-                            .setDuration(0)
-                            .start();
-
-                    return true; // Consumed
-
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        initialX = params.x;
+                        initialY = params.y;
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        int Xdiff = (int) (event.getRawX() - initialTouchX);
+                        int Ydiff = (int) (event.getRawY() - initialTouchY);
+                        if (Xdiff < 10 && Ydiff < 10) {
+//                            expandCollapseAnimationHelper.toggle();
+                           /* if (isViewCollapsed()) {
+                                collapsedView.setVisibility(View.GONE);
+                                expandedView.setVisibility(View.VISIBLE);
+                            }*/
+                        }
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        params.x = initialX + (int) (event.getRawX() - initialTouchX);
+                        params.y = initialY + (int) (event.getRawY() - initialTouchY);
+                        mWindowManager.updateViewLayout(mFloatingWidget, params);
+                        return true;
                 }
-                else if (action == MotionEvent.ACTION_UP) {
-
-                    float upRawX = motionEvent.getRawX();
-                    float upRawY = motionEvent.getRawY();
-
-                    float upDX = upRawX - downRawX;
-                    float upDY = upRawY - downRawY;
-
-                    if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) { // A click
-                        return performClick();
-                    }
-                    else { // A drag
-                        return true; // Consumed
-                    }
-
-                }
-                else {
-                    return super.onTouchEvent(motionEvent);
-                }
-        ;
+                return false;
+            }
+        });
     }
 
-}*/
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    private boolean isViewCollapsed() {
+        return mFloatingWidget == null || mFloatingWidget.findViewById(R.id.collapse_view).getVisibility() == View.VISIBLE;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mFloatingWidget != null) mWindowManager.removeView(mFloatingWidget);
+    }
+
+    public interface OnFabClick {
+        void onClose();
     }
 }

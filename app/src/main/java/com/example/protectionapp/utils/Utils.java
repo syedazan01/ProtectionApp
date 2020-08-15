@@ -209,7 +209,6 @@ public class Utils {
         toast.setView(layout);
         toast.show();
     }
-
     public static void hideKeyboard(Activity _activity) {
         View view = _activity.getCurrentFocus();
         if (view != null) {
