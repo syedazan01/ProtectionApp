@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.FileShareBean;
@@ -228,7 +229,7 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
         radioMale = findViewById(R.id.Gen_votermale);
         radioFemale = findViewById(R.id.Gen_voterfemale);
         radioOther = findViewById(R.id.Gen_voterother);
-        dobET=findViewById(R.id.voteriddob_calender);
+        dobET = findViewById(R.id.voteriddob_calender);
 
 
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
@@ -236,6 +237,39 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
         ivVid = findViewById(R.id.ivBack);
         Utils.makeButton(btnVoteridscan, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(btnVoteridsave, getResources().getColor(R.color.colorPrimary), 40F);
+        if (getIntent().hasExtra(AppConstant.VOTER_ID)) {
+            btnVoteridsave.setText("Update");
+            VoteridBean voteridBean = (VoteridBean) getIntent().getSerializableExtra(AppConstant.VOTER_ID);
+            FullName.getEditText().setText(voteridBean.getFullName());
+            FatherName.getEditText().setText(voteridBean.getFathersName());
+            dob.getEditText().setText(voteridBean.getDateofbirth());
+            Address.getEditText().setText(voteridBean.getAddress());
+            AssemblyName.getEditText().setText(voteridBean.getAssemblyname());
+            if (voteridBean.getGender().equals("Male"))
+                radioMale.setChecked(true);
+            else if (voteridBean.getGender().equals("Female"))
+                radioFemale.setChecked(true);
+            else
+                radioOther.setChecked(true);
+            final ProgressDialog pd = Utils.getProgressDialog(VoterID.this);
+            pd.show();
+            Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + voteridBean.getVoterImage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri = task.getResult();
+                        Glide.with(VoterID.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivVoterid);
+                    }
+                }
+            });
+        } else {
+            btnVoteridsave.setText("Save");
+            btnVoteridsend.setVisibility(View.GONE);
+        }
     }
 
     @Override

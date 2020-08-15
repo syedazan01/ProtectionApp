@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.AtmBean;
@@ -202,15 +203,15 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
     }
 
 
-    private void initViews(){
-        bankname=findViewById(R.id.Bank_name);
-        atmnumber=findViewById(R.id.atmnumberET);
-        nameoncard=findViewById(R.id.cardnameET);
-        cardVailidity=findViewById(R.id.cardvaliTxtIL);
-        cardvaliET=findViewById(R.id.cardvaliET);
-        cvvcode=findViewById(R.id.cvvET);
-        btnAtmScan=findViewById(R.id.btnAtmScan);
-        btnAtmSave=findViewById(R.id.btnAtmSave);
+    private void initViews() {
+        bankname = findViewById(R.id.Bank_name);
+        atmnumber = findViewById(R.id.atmnumberET);
+        nameoncard = findViewById(R.id.cardnameET);
+        cardVailidity = findViewById(R.id.cardvaliTxtIL);
+        cardvaliET = findViewById(R.id.cardvaliET);
+        cvvcode = findViewById(R.id.cvvET);
+        btnAtmScan = findViewById(R.id.btnAtmScan);
+        btnAtmSave = findViewById(R.id.btnAtmSave);
         btnatmsend = findViewById(R.id.atm_sendBT);
         ivATM = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
@@ -218,6 +219,34 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
         ivatmscan = findViewById(R.id.atm_imageView);
         Utils.makeButton(btnAtmScan, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(btnAtmSave, getResources().getColor(R.color.colorPrimary), 40F);
+        if (getIntent().hasExtra(AppConstant.ATM)) {
+            btnAtmSave.setText("Update");
+            AtmBean atmBean = (AtmBean) getIntent().getSerializableExtra(AppConstant.ATM);
+            bankname.getEditText().setText(atmBean.getBankname());
+            atmnumber.getEditText().setText(atmBean.getAtmnumber());
+            nameoncard.getEditText().setText(atmBean.getNameoncard());
+            cardVailidity.getEditText().setText(atmBean.getCardVailidity());
+            cvvcode.getEditText().setText(atmBean.getCvvcode());
+
+            final ProgressDialog pd = Utils.getProgressDialog(ATM.this);
+            pd.show();
+            Utils.getStorageReference().child(AppConstant.ATM + "/" + atmBean.getAtmimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri = task.getResult();
+                        Glide.with(ATM.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivatmscan);
+                    }
+                }
+            });
+        } else {
+            btnAtmSave.setText("Save");
+            btnatmsend.setVisibility(View.GONE);
+        }
     }
 
     @Override

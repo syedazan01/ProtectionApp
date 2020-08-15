@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.BankBean;
@@ -214,6 +215,35 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
         ivBank = findViewById(R.id.ivBack);
         Utils.makeButton(btnBankScan, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(btnBankSave, getResources().getColor(R.color.colorPrimary), 40F);
+        if (getIntent().hasExtra(AppConstant.BANK)) {
+            btnBankSave.setText("Update");
+            BankBean bankBean = (BankBean) getIntent().getSerializableExtra(AppConstant.BANK);
+            accountHolderName.getEditText().setText(bankBean.getAccountHolderName());
+            accountNumber.getEditText().setText(bankBean.getAccountNumber());
+            ifscCode.getEditText().setText(bankBean.getIfscCode());
+            branchName.getEditText().setText(bankBean.getBranchName());
+            bankName.getEditText().setText(bankBean.getBankName());
+
+
+            final ProgressDialog pd = Utils.getProgressDialog(Bank.this);
+            pd.show();
+            Utils.getStorageReference().child(AppConstant.BANK + "/" + bankBean.getBankimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri = task.getResult();
+                        Glide.with(Bank.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivbankscan);
+                    }
+                }
+            });
+        } else {
+            btnBankSave.setText("Save");
+            btnbankSend.setVisibility(View.GONE);
+        }
     }
 
     @Override

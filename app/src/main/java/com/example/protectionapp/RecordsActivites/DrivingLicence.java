@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.DlicenceBean;
@@ -265,7 +266,36 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
         ivDL = findViewById(R.id.ivBack);
         Utils.makeButton(btnDLscan, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(btnDLsave, getResources().getColor(R.color.colorPrimary), 40F);
+        if (getIntent().hasExtra(AppConstant.DRIVING_LICENSE)) {
+            btnDLsave.setText("Update");
+            DlicenceBean dlicenceBean = (DlicenceBean) getIntent().getSerializableExtra(AppConstant.DRIVING_LICENSE);
+            FullName.getEditText().setText(dlicenceBean.getFullname());
+            sonOf.getEditText().setText(dlicenceBean.getSon_of());
+            LicenceNumber.getEditText().setText(dlicenceBean.getLicenceNumber());
+            BloodGroup.getEditText().setText(dlicenceBean.getBloodGroup());
+            dob.getEditText().setText(dlicenceBean.getDateOfBirth());
+            dateofissue.getEditText().setText(dlicenceBean.getDateOfBirth());
+            validity.getEditText().setText(dlicenceBean.getDateOfBirth());
 
+            final ProgressDialog pd = Utils.getProgressDialog(DrivingLicence.this);
+            pd.show();
+            Utils.getStorageReference().child(AppConstant.ATM + "/" + dlicenceBean.getDLimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri = task.getResult();
+                        Glide.with(DrivingLicence.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivDLscan);
+                    }
+                }
+            });
+        } else {
+            btnDLsave.setText("Save");
+            btnDLSend.setVisibility(View.GONE);
+        }
     }
 
     @Override

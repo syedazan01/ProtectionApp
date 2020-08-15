@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.FileShareBean;
@@ -278,34 +279,34 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
         Utils.makeButton(btnSTDSave, getResources().getColor(R.color.colorPrimary), 40F);
 
         //filling view document
-        /*if (getIntent().hasExtra(AppConstant.PAN)) {
+        if (getIntent().hasExtra(AppConstant.STUDENT_ID)) {
             btnSTDSave.setText("Update");
-            PanBean panBean = (PanBean) getIntent().getSerializableExtra(AppConstant.PAN);
-            FullName.getEditText().setText(panBean.getFullName());
-            FatherName.getEditText().setText(panBean.getFatherName());
-            PermanentAccountNumber.getEditText().setText(panBean.getPermanentAccountNumber());
-            dobET.setText(panBean.getDateOfBirth());
-            final ProgressDialog pd = Utils.getProgressDialog(PAN.this);
+            StudentIdBean studentIdBean = (StudentIdBean) getIntent().getSerializableExtra(AppConstant.STUDENT_ID);
+            institutionname.getEditText().setText(studentIdBean.getInstitutionname());
+            enroll.getEditText().setText(studentIdBean.getEnroll());
+            rollno.getEditText().setText(studentIdBean.getRollno());
+            fullname.getEditText().setText(studentIdBean.getFullname());
+            fathername.getEditText().setText(studentIdBean.getFathername());
+            branch.getEditText().setText(studentIdBean.getBranch());
+            final ProgressDialog pd = Utils.getProgressDialog(StudentID.this);
             pd.show();
-            Utils.getStorageReference().child(AppConstant.PAN + "/" + panBean.getPanimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.PAN + "/" + studentIdBean.getStudntidimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
-                        Glide.with(PAN.this).load(task.getResult())
+                        Glide.with(StudentID.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
-                                .into(pan_imageview);
+                                .into(imageViewstid);
                     }
                 }
             });
         } else {
-            btnPANsave.setText("Save");
-            btnPANsend.setVisibility(View.GONE);
+            btnSTDSave.setText("Save");
+            btnSTDScan.setVisibility(View.GONE);
         }
-    }*/
-
     }
 
     @Override

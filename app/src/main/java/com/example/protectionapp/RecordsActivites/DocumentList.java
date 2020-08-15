@@ -14,7 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdhaarAdapter;
+import com.example.protectionapp.adapters.AtmAdapter;
+import com.example.protectionapp.adapters.BankAdapter;
+import com.example.protectionapp.adapters.DrivingLicenseAdapter;
 import com.example.protectionapp.adapters.PanAdapter;
+import com.example.protectionapp.adapters.StudentIDAdapter;
+import com.example.protectionapp.adapters.VoterIDAdapter;
 import com.example.protectionapp.interfacecallbacks.DocumentClickListener;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.AtmBean;
@@ -41,6 +46,11 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
     FloatingActionButton fabInsertDoc;
     List<AdhaarBean> adhaarBeanList = new ArrayList<>();
     List<PanBean> panBeanList = new ArrayList<>();
+    List<DlicenceBean> dlicenceBeanList = new ArrayList<>();
+    List<BankBean> bankBeanList = new ArrayList<>();
+    List<AtmBean> atmBeanList = new ArrayList<>();
+    List<VoteridBean> voteridBeanList = new ArrayList<>();
+    List<StudentIdBean> studentIdBeanList = new ArrayList<>();
     String personal_document;
 
     @Override
@@ -68,6 +78,10 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                 pd.dismiss();
                 adhaarBeanList.clear();
                 panBeanList.clear();
+                dlicenceBeanList.clear();
+                bankBeanList.clear();
+                voteridBeanList.clear();
+                studentIdBeanList.clear();
                 for (DataSnapshot postShot : dataSnapshot.getChildren()) {
                     if (personal_document.equals(AppConstant.ADHAAR)) {
                         AdhaarBean adhaarBean = postShot.getValue(AdhaarBean.class);
@@ -80,6 +94,36 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                         if (panBean.getPanmobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
                             panBeanList.add(panBean);
                         }
+                    } else if (personal_document.equals(AppConstant.DRIVING_LICENSE)) {
+                        Log.e("eroor", postShot.getValue() + "");
+                        DlicenceBean dlicenceBean = postShot.getValue(DlicenceBean.class);
+                        if (dlicenceBean.getMobileno().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            dlicenceBeanList.add(dlicenceBean);
+                        }
+                    } else if (personal_document.equals(AppConstant.BANK)) {
+                        Log.e("eroor", postShot.getValue() + "");
+                        BankBean bankBean = postShot.getValue(BankBean.class);
+                        if (bankBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            bankBeanList.add(bankBean);
+                        }
+                    } else if (personal_document.equals(AppConstant.ATM)) {
+                        Log.e("eroor", postShot.getValue() + "");
+                        AtmBean atmBean = postShot.getValue(AtmBean.class);
+                        if (atmBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            atmBeanList.add(atmBean);
+                        }
+                    } else if (personal_document.equals(AppConstant.VOTER_ID)) {
+                        Log.e("eroor", postShot.getValue() + "");
+                        VoteridBean voteridBean = postShot.getValue(VoteridBean.class);
+                        if (voteridBean.getVoterMobileNo().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            voteridBeanList.add(voteridBean);
+                        }
+                    } else if (personal_document.equals(AppConstant.STUDENT_ID)) {
+                        Log.e("eroor", postShot.getValue() + "");
+                        StudentIdBean studentIdBean = postShot.getValue(StudentIdBean.class);
+                        if (studentIdBean.getMobilenumber().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            studentIdBeanList.add(studentIdBean);
+                        }
                     }
                 }
                 if (adhaarBeanList.size() > 0) {
@@ -88,6 +132,21 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                 } else if (panBeanList.size() > 0) {
                     PanAdapter panAdapter = new PanAdapter(DocumentList.this, panBeanList, DocumentList.this);
                     rvDoc.setAdapter(panAdapter);
+                } else if (dlicenceBeanList.size() > 0) {
+                    DrivingLicenseAdapter drivingLicenseAdapter = new DrivingLicenseAdapter(DocumentList.this, dlicenceBeanList, DocumentList.this);
+                    rvDoc.setAdapter(drivingLicenseAdapter);
+                } else if (bankBeanList.size() > 0) {
+                    BankAdapter bankAdapter = new BankAdapter(DocumentList.this, bankBeanList, DocumentList.this);
+                    rvDoc.setAdapter(bankAdapter);
+                } else if (atmBeanList.size() > 0) {
+                    AtmAdapter atmAdapter = new AtmAdapter(DocumentList.this, atmBeanList, DocumentList.this);
+                    rvDoc.setAdapter(atmAdapter);
+                } else if (voteridBeanList.size() > 0) {
+                    VoterIDAdapter voterIDAdapter = new VoterIDAdapter(DocumentList.this, voteridBeanList, DocumentList.this);
+                    rvDoc.setAdapter(voterIDAdapter);
+                } else if (studentIdBeanList.size() > 0) {
+                    StudentIDAdapter studentIDAdapter = new StudentIDAdapter(DocumentList.this, studentIdBeanList, DocumentList.this);
+                    rvDoc.setAdapter(studentIDAdapter);
                 }
             }
 
