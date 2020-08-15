@@ -3,10 +3,12 @@ package com.example.protectionapp.RecordsActivites;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -15,35 +17,57 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.adapters.AdapterUsers;
+import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.model.VoteridBean;
 import com.example.protectionapp.utils.AppConstant;
+import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
-public class VoterID extends AppCompatActivity  implements SendDailog.SendDialogListener{
+public class VoterID extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnVoteridscan, btnVoteridsave, btnVoteridsend;
-    private ImageView ivVid;
+    String password, msg;
     private TextView tvToolbarTitle;
-    TextInputLayout FullName, FatherName,dob,Address, AssemblyName;
+    TextInputLayout FullName, FatherName, dob, Address, AssemblyName;
     RadioGroup radioGender;
     RadioButton radioMale, radioFemale, radioOther;
     TextInputEditText dobET;
     int yearofdob, monthofdob, dayofdob;
     Activity activity = this;
+    private ImageView ivVid, ivVoterid;
     private Uri fileUri;
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(VoterID.this);
+    private List<FileShareBean> fileShareBeans = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +94,25 @@ public class VoterID extends AppCompatActivity  implements SendDailog.SendDialog
                         .start();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            //Image Uri will not be null for RESULT_OK
+            fileUri = data.getData();
+            ivVoterid.setImageURI(fileUri);
+
+            //You can get File object from intent
+            File file = ImagePicker.Companion.getFile(data);
+
+
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initActions() {
@@ -128,17 +171,22 @@ public class VoterID extends AppCompatActivity  implements SendDailog.SendDialog
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                VoteridBean voteridBean = new VoteridBean(FullNames, fathersname, gender, Voterdob, address, assemblyNames);
-                Utils.storeDocumentsInRTD(AppConstant.DRIVING_LICENSE, Utils.toJson(voteridBean, VoteridBean.class));
-                //progress dialog
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
+                VoteridBean voteridBean = new VoteridBean();
+                voteridBean.setFullName(FullNames);
+                voteridBean.setFathersName(fathersname);
+                voteridBean.setDateofbirth(Voterdob);
+                voteridBean.setAddress(address);
+                voteridBean.setAssemblyname(assemblyNames);
+                voteridBean.setGender(gender);
+                Utils.storeDocumentsInRTD(AppConstant.VOTER_ID, Utils.toJson(voteridBean, VoteridBean.class));
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void run() {
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         uploadingDialog.dismissdialog();
-
+                        finish();
                     }
-                }, 4000);
+                });
             }
         });
         final Calendar calendar = Calendar.getInstance();
@@ -172,8 +220,9 @@ public class VoterID extends AppCompatActivity  implements SendDailog.SendDialog
         btnVoteridsend = findViewById(R.id.voter_sendBT);
         FullName=findViewById(R.id.voteridFullname);
         FatherName=findViewById(R.id.voteridFathername);
-        dob=findViewById(R.id.voterid_dob);
-        Address=findViewById(R.id.voterid_addres);
+        dob = findViewById(R.id.voterid_dob);
+        ivVoterid = findViewById(R.id.ivVoterid);
+        Address = findViewById(R.id.voterid_addres);
         AssemblyName=findViewById(R.id.elction_constituency);
         radioGender = findViewById(R.id.VoteridGradio);
         radioMale = findViewById(R.id.Gen_votermale);
@@ -191,6 +240,68 @@ public class VoterID extends AppCompatActivity  implements SendDailog.SendDialog
 
     @Override
     public void applyTexts(String message, String password) {
+        this.msg = message;
+        this.password = password;
+        final ProgressDialog pd = Utils.getProgressDialog(activity);
+        pd.show();
+        final Dialog dialog = Utils.getRegisteredUserList(activity);
+        Button btnSend = dialog.findViewById(R.id.btnSend);
+        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+        final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
+        rvUser.setLayoutManager(new LinearLayoutManager(activity));
+        rvUser.addItemDecoration(new DividerItemDecoration(activity, RecyclerView.VERTICAL));
+        Utils.getUserReference().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                pd.dismiss();
+                List<UserBean> userBeans = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    UserBean userBean = postSnapshot.getValue(UserBean.class);
+                    if (userBean.getMobile() != null) {
+                        if (!userBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            userBeans.add(userBean);
+                        }
+                    }
+                }
 
+                rvUser.setAdapter(new AdapterUsers(activity, userBeans, VoterID.this));
+                dialog.show();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                final ProgressDialog pd = Utils.getProgressDialog(activity);
+                pd.show();
+                for (FileShareBean fileShareBean : fileShareBeans) {
+                    Utils.storeFileShareToRTD(fileShareBean);
+                }
+                pd.dismiss();
+                Utils.showToast(activity, "File Sent Successfully", AppConstant.succeedColor);
+            }
+        });
+
+    }
+
+    @Override
+    public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        if (isChecked) {
+            FileShareBean fileShareBean = new FileShareBean();
+            fileShareBean.setSentTo(userBean.getMobile());
+            fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
+            fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+            fileShareBean.setDocument_type(AppConstant.VOTER_ID);
+            fileShareBean.setPassword(password);
+            fileShareBean.setMsg(msg);
+            fileShareBeans.add(fileShareBean);
+        } else {
+            fileShareBeans.remove(position);
+        }
     }
 }

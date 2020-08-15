@@ -1,14 +1,25 @@
 package com.example.protectionapp.model;
 
-public class AtmBean {
-    String bankname, atmnumber, nameoncard, cardVailidity, cvvcode;
+import java.io.Serializable;
 
-    public AtmBean(String bankname, String atmnumber, String nameoncard, String cardVailidity, String cvvcode) {
-        this.bankname = bankname;
-        this.atmnumber = atmnumber;
-        this.nameoncard = nameoncard;
-        this.cardVailidity = cardVailidity;
-        this.cvvcode = cvvcode;
+public class AtmBean implements Serializable {
+    String bankname, atmnumber, nameoncard, cardVailidity, cvvcode, mobile, atmimage;
+
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getAtmimage() {
+        return atmimage;
+    }
+
+    public void setAtmimage(String atmimage) {
+        this.atmimage = atmimage;
     }
 
     public String getBankname() {

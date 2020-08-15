@@ -2,6 +2,9 @@ package com.example.protectionapp.RecordsActivites;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,25 +14,49 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.BankBean;
+import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.AppConstant;
+import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.UploadTask;
 
-public class Bank extends AppCompatActivity implements SendDailog.SendDialogListener {
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class Bank extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnBankScan, btnBankSave, btnbankSend;
-    private ImageView ivBank;
+    String msg, password;
     private TextView tvToolbarTitle;
     TextInputLayout accountHolderName, accountNumber, ifscCode, branchName, bankName;
     Activity activity = this;
     private Uri fileUri;
+    List<FileShareBean> fileShareBeans = new ArrayList<>();
+    private ImageView ivBank, ivbankscan;
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(Bank.this);
 
@@ -60,6 +87,25 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                         .start();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            //Image Uri will not be null for RESULT_OK
+            fileUri = data.getData();
+            ivbankscan.setImageURI(fileUri);
+
+            //You can get File object from intent
+            File file = ImagePicker.Companion.getFile(data);
+
+
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initActions() {
@@ -117,7 +163,22 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                BankBean bankBean = new BankBean(accountHoldernames, accountNumbers, ifscCodes, branchNames, banknames);
+                BankBean bankBean = new BankBean();
+                bankBean.setAccountHolderName(accountHoldernames);
+                bankBean.setAccountNumber(accountNumbers);
+                bankBean.setIfscCode(ifscCodes);
+                bankBean.setBranchName(branchNames);
+                bankBean.setBankName(banknames);
+                bankBean.setBankimage(fileUri.getLastPathSegment());
+                bankBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        uploadingDialog.dismissdialog();
+                        finish();
+                    }
+                });
                 Utils.storeDocumentsInRTD(AppConstant.BANK, Utils.toJson(bankBean, BankBean.class));
                 //progress dialog
                 Handler handler = new Handler();
@@ -146,6 +207,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
         ifscCode = findViewById(R.id.ifsc_code);
         branchName = findViewById(R.id.branch_name);
         bankName = findViewById(R.id.Bank_name);
+        ivbankscan = findViewById(R.id.bank_imageview);
 
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Bank Detail Form");
@@ -156,6 +218,69 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
 
     @Override
     public void applyTexts(String message, String password) {
+        this.msg = message;
+        this.password = password;
+        final ProgressDialog pd = Utils.getProgressDialog(activity);
+        pd.show();
+        final Dialog dialog = Utils.getRegisteredUserList(activity);
+        Button btnSend = dialog.findViewById(R.id.btnSend);
+        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+        final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
+        rvUser.setLayoutManager(new LinearLayoutManager(activity));
+        rvUser.addItemDecoration(new DividerItemDecoration(activity, RecyclerView.VERTICAL));
+        Utils.getUserReference().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                pd.dismiss();
+                List<UserBean> userBeans = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    UserBean userBean = postSnapshot.getValue(UserBean.class);
+                    if (userBean.getMobile() != null) {
+                        if (!userBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            userBeans.add(userBean);
+                        }
+                    }
+                }
+
+                rvUser.setAdapter(new AdapterUsers(activity, userBeans, Bank.this));
+                dialog.show();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                final ProgressDialog pd = Utils.getProgressDialog(activity);
+                pd.show();
+                for (FileShareBean fileShareBean : fileShareBeans) {
+                    Utils.storeFileShareToRTD(fileShareBean);
+                }
+                pd.dismiss();
+                Utils.showToast(activity, "File Sent Successfully", AppConstant.succeedColor);
+            }
+        });
+
+    }
+
+    @Override
+    public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        if (isChecked) {
+            FileShareBean fileShareBean = new FileShareBean();
+            fileShareBean.setSentTo(userBean.getMobile());
+            fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
+            fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+            fileShareBean.setDocument_type(AppConstant.BANK);
+            fileShareBean.setPassword(password);
+            fileShareBean.setMsg(msg);
+            fileShareBeans.add(fileShareBean);
+        } else {
+            fileShareBeans.remove(position);
+        }
 
     }
 }

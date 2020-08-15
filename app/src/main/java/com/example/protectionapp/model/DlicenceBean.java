@@ -1,16 +1,25 @@
 package com.example.protectionapp.model;
 
-public class DlicenceBean {
-    String fullname, son_of, licenceNumber, bloodGroup, dateOfBirth, dateOfIssue, validity;
+import java.io.Serializable;
 
-    public DlicenceBean(String fullname, String son_of, String licenceNumber, String bloodGroup, String dateOfBirth, String dateOfIssue, String validity) {
-        this.fullname = fullname;
-        this.son_of = son_of;
-        this.licenceNumber = licenceNumber;
-        this.bloodGroup = bloodGroup;
-        this.dateOfBirth = dateOfBirth;
-        this.dateOfIssue = dateOfIssue;
-        this.validity = validity;
+public class DlicenceBean implements Serializable {
+    String fullname, son_of, licenceNumber, bloodGroup, dateOfBirth, dateOfIssue, validity, mobileno, DLimage;
+
+
+    public String getMobileno() {
+        return mobileno;
+    }
+
+    public void setMobileno(String mobileno) {
+        this.mobileno = mobileno;
+    }
+
+    public String getDLimage() {
+        return DLimage;
+    }
+
+    public void setDLimage(String DLimage) {
+        this.DLimage = DLimage;
     }
 
     public String getFullname() {

@@ -1,13 +1,24 @@
 package com.example.protectionapp.model;
 
-public class PanBean {
-    String fullName, fatherName, dateOfBirth, PermanentAccountNumber;
+import java.io.Serializable;
 
-    public PanBean(String fullName, String fatherName, String dateOfBirth, String permanentAccountNumber) {
-        this.fullName = fullName;
-        this.fatherName = fatherName;
-        this.dateOfBirth = dateOfBirth;
-        PermanentAccountNumber = permanentAccountNumber;
+public class PanBean implements Serializable {
+    String fullName, fatherName, dateOfBirth, PermanentAccountNumber, panimage, panmobile;
+
+    public String getPanimage() {
+        return panimage;
+    }
+
+    public void setPanimage(String panimage) {
+        this.panimage = panimage;
+    }
+
+    public String getPanmobile() {
+        return panmobile;
+    }
+
+    public void setPanmobile(String panmobile) {
+        this.panmobile = panmobile;
     }
 
     public String getFullName() {

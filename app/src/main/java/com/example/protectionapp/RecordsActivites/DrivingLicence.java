@@ -3,6 +3,9 @@ package com.example.protectionapp.RecordsActivites;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,25 +16,45 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.DlicenceBean;
+import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.AppConstant;
+import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
-public class DrivingLicence extends AppCompatActivity implements SendDailog.SendDialogListener {
+public class DrivingLicence extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnDLscan, btnDLsave, btnDLSend;
-    private ImageView ivDL;
+    private ImageView ivDL, ivDLscan;
     private TextView tvToolbarTitle;
     TextInputLayout FullName, sonOf, LicenceNumber, BloodGroup, dob, dateofissue, validity;
     TextInputEditText dobET, dateOfIssueET, ValidityET;
@@ -40,6 +63,8 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     private Uri fileUri;
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(DrivingLicence.this);
+    private List<FileShareBean> fileShareBeans = new ArrayList<>();
+    private String password, msg;
 
 
     @Override
@@ -122,7 +147,23 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                DlicenceBean dlicenceBean = new DlicenceBean(FullNames, sonOfName, licenceNumber, bloddgroups, DLdob, dateofIssue, DLvaliditys);
+                DlicenceBean dlicenceBean = new DlicenceBean();
+                dlicenceBean.setFullname(FullNames);
+                dlicenceBean.setSon_of(sonOfName);
+                dlicenceBean.setLicenceNumber(licenceNumber);
+                dlicenceBean.setBloodGroup(bloddgroups);
+                dlicenceBean.setDateOfBirth(DLdob);
+                dlicenceBean.setDateOfIssue(dateofIssue);
+                dlicenceBean.setValidity(DLvaliditys);
+                dlicenceBean.setDLimage(fileUri.getLastPathSegment());
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                        uploadingDialog.dismissdialog();
+                        finish();
+                    }
+                });
                 Utils.storeDocumentsInRTD(AppConstant.DRIVING_LICENSE, Utils.toJson(dlicenceBean, DlicenceBean.class));
                 //progress dialog
                 Handler handler = new Handler();
@@ -211,6 +252,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
         dob = findViewById(R.id.Driving_dob);
         dateofissue= findViewById(R.id.Drivingdofissue);
         validity = findViewById(R.id.licence_validity);
+        ivDLscan = findViewById(R.id.dl_imageview);
 
 
         dobET = findViewById(R.id.Drivingdob_calender);
@@ -227,7 +269,87 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     }
 
     @Override
-    public void applyTexts(String message, String password) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            //Image Uri will not be null for RESULT_OK
+            fileUri = data.getData();
+            ivDLscan.setImageURI(fileUri);
 
+            //You can get File object from intent
+            File file = ImagePicker.Companion.getFile(data);
+
+
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void applyTexts(String message, String password) {
+        this.msg = message;
+        this.password = password;
+        final ProgressDialog pd = Utils.getProgressDialog(activity);
+        pd.show();
+        final Dialog dialog = Utils.getRegisteredUserList(activity);
+        Button btnSend = dialog.findViewById(R.id.btnSend);
+        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+        final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
+        rvUser.setLayoutManager(new LinearLayoutManager(activity));
+        rvUser.addItemDecoration(new DividerItemDecoration(activity, RecyclerView.VERTICAL));
+        Utils.getUserReference().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                pd.dismiss();
+                List<UserBean> userBeans = new ArrayList<>();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    UserBean userBean = postSnapshot.getValue(UserBean.class);
+                    if (userBean.getMobile() != null) {
+                        if (!userBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            userBeans.add(userBean);
+                        }
+                    }
+                }
+
+                rvUser.setAdapter(new AdapterUsers(activity, userBeans, DrivingLicence.this));
+                dialog.show();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                final ProgressDialog pd = Utils.getProgressDialog(activity);
+                pd.show();
+                for (FileShareBean fileShareBean : fileShareBeans) {
+                    Utils.storeFileShareToRTD(fileShareBean);
+                }
+                pd.dismiss();
+                Utils.showToast(activity, "File Sent Successfully", AppConstant.succeedColor);
+            }
+        });
+    }
+
+    @Override
+    public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        if (isChecked) {
+            FileShareBean fileShareBean = new FileShareBean();
+            fileShareBean.setSentTo(userBean.getMobile());
+            fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
+            fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+            fileShareBean.setDocument_type(AppConstant.DRIVING_LICENSE);
+            fileShareBean.setPassword(password);
+            fileShareBean.setMsg(msg);
+            fileShareBeans.add(fileShareBean);
+        } else {
+            fileShareBeans.remove(position);
+        }
     }
 }

@@ -1,15 +1,24 @@
 package com.example.protectionapp.model;
 
-public class VoteridBean {
-    String FullName, FathersName, Gender, dateofbirth, Address, Assemblyname;
+import java.io.Serializable;
 
-    public VoteridBean(String fullName, String fathersName, String gender, String dateofbirth, String address, String assemblyname) {
-        FullName = fullName;
-        FathersName = fathersName;
-        Gender = gender;
-        this.dateofbirth = dateofbirth;
-        Address = address;
-        Assemblyname = assemblyname;
+public class VoteridBean implements Serializable {
+    String FullName, FathersName, Gender, dateofbirth, Address, Assemblyname, voterMobileNo, voterImage;
+
+    public String getVoterMobileNo() {
+        return voterMobileNo;
+    }
+
+    public void setVoterMobileNo(String voterMobileNo) {
+        this.voterMobileNo = voterMobileNo;
+    }
+
+    public String getVoterImage() {
+        return voterImage;
+    }
+
+    public void setVoterImage(String voterImage) {
+        this.voterImage = voterImage;
     }
 
     public String getFullName() {

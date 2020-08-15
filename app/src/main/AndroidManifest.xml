@@ -36,7 +36,9 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme">
-        <activity android:name=".RecordsActivites.AdhaarFile"></activity>
+        <activity android:name=".RecordsActivites.StudentID"></activity>
+        <activity android:name=".RecordsActivites.PanFile" />
+        <activity android:name=".RecordsActivites.AdhaarFile" />
         <activity android:name=".RecordsActivites.DocumentList" />
         <activity android:name=".cameraDetector.OutsideTips" />
         <activity android:name=".cameraDetector.Changingroom" />

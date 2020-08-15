@@ -1,14 +1,25 @@
 package com.example.protectionapp.model;
 
-public class BankBean {
-    String AccountHolderName, accountNumber, ifscCode, branchName, BankName;
+import java.io.Serializable;
 
-    public BankBean(String accountHolderName, String accountNumber, String ifscCode, String branchName, String bankName) {
-        AccountHolderName = accountHolderName;
-        this.accountNumber = accountNumber;
-        this.ifscCode = ifscCode;
-        this.branchName = branchName;
-        BankName = bankName;
+public class BankBean implements Serializable {
+    String AccountHolderName, accountNumber, ifscCode, branchName, BankName, mobile, bankimage;
+
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getBankimage() {
+        return bankimage;
+    }
+
+    public void setBankimage(String bankimage) {
+        this.bankimage = bankimage;
     }
 
     public String getAccountHolderName() {

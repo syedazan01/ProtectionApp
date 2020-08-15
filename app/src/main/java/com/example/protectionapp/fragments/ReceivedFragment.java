@@ -104,7 +104,7 @@ public class ReceivedFragment extends Fragment implements AdapterFileShare.FileS
     @Override
     public void applyTexts(String message, String password) {
         if (password.equals(fileShareBean.getPassword())) {
-            Utils.getPersonalDocReference(AppConstant.ADHAAR).addValueEventListener(new ValueEventListener() {
+            Utils.getPersonalDocReference(fileShareBean.getDocument_type()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot postShot : dataSnapshot.getChildren()) {

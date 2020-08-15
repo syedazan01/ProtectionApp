@@ -16,11 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.AdhaarFile;
+import com.example.protectionapp.RecordsActivites.PanFile;
 import com.example.protectionapp.RecordsActivites.SendDailog;
 import com.example.protectionapp.activites.FileShare;
 import com.example.protectionapp.adapters.AdapterFileShare;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.PanBean;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -126,7 +128,7 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
     public void applyTexts(String message, String password) {
         if (password.equals(fileShareBean.getPassword())) {
 
-            Utils.getPersonalDocReference(AppConstant.ADHAAR).addValueEventListener(new ValueEventListener() {
+            Utils.getPersonalDocReference(fileShareBean.getDocument_type()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot postShot : dataSnapshot.getChildren()) {
@@ -135,6 +137,14 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
                             if (adhaarBean.getMobileNo().equals(fileShareBean.getSentFrom())) {
                                 Log.e("dvbsfbdf", postShot.getValue() + "");
                                 startActivity(new Intent(getActivity(), AdhaarFile.class).putExtra(AppConstant.ADHAAR, adhaarBean));
+                                break;
+                            }
+                        }
+                        if (fileShareBean.getDocument_type().equals(AppConstant.PAN)) {
+                            PanBean panBean = postShot.getValue(PanBean.class);
+                            if (panBean.getPanmobile().equals(fileShareBean.getSentFrom())) {
+                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                                startActivity(new Intent(getActivity(), PanFile.class).putExtra(AppConstant.PAN, panBean));
                                 break;
                             }
                         }

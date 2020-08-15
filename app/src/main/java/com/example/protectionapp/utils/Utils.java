@@ -32,10 +32,16 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.model.AdhaarBean;
+import com.example.protectionapp.model.AtmBean;
+import com.example.protectionapp.model.BankBean;
+import com.example.protectionapp.model.DlicenceBean;
 import com.example.protectionapp.model.FetchNotification;
 import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.PanBean;
 import com.example.protectionapp.model.PlansBean;
+import com.example.protectionapp.model.StudentIdBean;
 import com.example.protectionapp.model.UserBean;
+import com.example.protectionapp.model.VoteridBean;
 import com.example.protectionapp.utils.views.RoundView;
 import com.firebase.client.Firebase;
 import com.google.android.gms.appinvite.AppInvite;
@@ -139,10 +145,25 @@ public class Utils {
         if (child.equals(AppConstant.ADHAAR)) {
             AdhaarBean adhaarBean = fromJson(modelString, AdhaarBean.class);
             reference.push().setValue(adhaarBean);
+        } else if (child.equals(AppConstant.PAN)) {
+            PanBean panBean = fromJson(modelString, PanBean.class);
+            reference.push().setValue(panBean);
+        } else if (child.equals(AppConstant.DRIVING_LICENSE)) {
+            DlicenceBean dlicenceBean = fromJson(modelString, DlicenceBean.class);
+            reference.push().setValue(dlicenceBean);
+        } else if (child.equals(AppConstant.BANK)) {
+            BankBean bankBean = fromJson(modelString, BankBean.class);
+            reference.push().setValue(bankBean);
+        } else if (child.equals(AppConstant.ATM)) {
+            AtmBean atmBean = fromJson(modelString, AtmBean.class);
+            reference.push().setValue(atmBean);
+        } else if (child.equals(AppConstant.VOTER_ID)) {
+            VoteridBean voteridBean = fromJson(modelString, VoteridBean.class);
+            reference.push().setValue(voteridBean);
+        } else if (child.equals(AppConstant.STUDENT_ID)) {
+            StudentIdBean studentIdBean = fromJson(modelString, StudentIdBean.class);
+            reference.push().setValue(studentIdBean);
         }
-            /*else if(child.equals(AppConstant.ADHAAR))
-            {
-            }*/
     }
 
     public static void storeNotificationInRTD(FetchNotification fetchNotification) {
