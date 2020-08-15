@@ -7,8 +7,6 @@ import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
 import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 
@@ -35,7 +33,7 @@ public class FloatingWindowService extends Service {
         super.onCreate();
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         linearLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
 //        linearLayout.setBackgroundColor(Color.argb(66, 255, 0, 0));
         linearLayout.setLayoutParams(layoutParams);
       /*  TextView textView = new TextView(this);
@@ -82,31 +80,73 @@ public class FloatingWindowService extends Service {
         params.gravity = Gravity.END;
         windowManager.addView(linearLayout, params);
 
-        linearLayout.setOnTouchListener(new View.OnTouchListener() {
+        /*linearLayout.setOnTouchListener(new View.OnTouchListener() {
             WindowManager.LayoutParams updatedParams = params;
             int x,y;
             float touchX,touchY;
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        x = updatedParams.x;
-                        y = updatedParams.y;
-                        touchX = motionEvent.getRawX();
-                        touchY = motionEvent.getRawY();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        updatedParams.x = (int) (x + (touchX - motionEvent.getRawX()));
-                        updatedParams.y = (int) (y + (touchY - motionEvent.getRawY()));
-                        windowManager.updateViewLayout(linearLayout, updatedParams);
-                    default:
-                        break;
-                }
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams)view.getLayoutParams();
 
-                return true;
-            }
-        })
+                int action = motionEvent.getAction();
+                if (action == MotionEvent.ACTION_DOWN) {
+
+                    downRawX = motionEvent.getRawX();
+                    downRawY = motionEvent.getRawY();
+                    dX = view.getX() - downRawX;
+                    dY = view.getY() - downRawY;
+
+                    return true; // Consumed
+
+                }
+                else if (action == MotionEvent.ACTION_MOVE) {
+
+                    int viewWidth = view.getWidth();
+                    int viewHeight = view.getHeight();
+
+                    View viewParent = (View)view.getParent();
+                    int parentWidth = viewParent.getWidth();
+                    int parentHeight = viewParent.getHeight();
+
+                    float newX = motionEvent.getRawX() + dX;
+                    newX = Math.max(layoutParams.leftMargin, newX); // Don't allow the FAB past the left hand side of the parent
+                    newX = Math.min(parentWidth - viewWidth - layoutParams.rightMargin, newX); // Don't allow the FAB past the right hand side of the parent
+
+                    float newY = motionEvent.getRawY() + dY;
+                    newY = Math.max(layoutParams.topMargin, newY); // Don't allow the FAB past the top of the parent
+                    newY = Math.min(parentHeight - viewHeight - layoutParams.bottomMargin, newY); // Don't allow the FAB past the bottom of the parent
+
+                    view.animate()
+                            .x(newX)
+                            .y(newY)
+                            .setDuration(0)
+                            .start();
+
+                    return true; // Consumed
+
+                }
+                else if (action == MotionEvent.ACTION_UP) {
+
+                    float upRawX = motionEvent.getRawX();
+                    float upRawY = motionEvent.getRawY();
+
+                    float upDX = upRawX - downRawX;
+                    float upDY = upRawY - downRawY;
+
+                    if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) { // A click
+                        return performClick();
+                    }
+                    else { // A drag
+                        return true; // Consumed
+                    }
+
+                }
+                else {
+                    return super.onTouchEvent(motionEvent);
+                }
         ;
     }
 
+}*/
+    }
 }
