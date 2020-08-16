@@ -10,6 +10,7 @@ public interface AppConstant {
     //Pref Constant
     String ISNIGHTMODE = "nightMode";
     String OVERLAY = "overlay";
+    String SCREENSHOT_ONVOLUME = "Screenshot_Onvolume_is_on";
     String IS_CALL_RECORDING_ON = "call_recording_is_on";
     String ISLOGGEDIN = "is_loggedIn";
     String USER_MOBILE = "user_mobile";

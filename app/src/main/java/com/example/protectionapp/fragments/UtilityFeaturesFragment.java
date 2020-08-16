@@ -26,6 +26,7 @@ public class UtilityFeaturesFragment extends Fragment implements FloatingWindowS
 
     public static FloatingWindowService.OnFabClick onFabClick = null;
     private Switch swEnableLauncher;
+    private Switch ssEnableVolume;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,12 +41,14 @@ public class UtilityFeaturesFragment extends Fragment implements FloatingWindowS
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_utility_features, container, false);
         swEnableLauncher = view.findViewById(R.id.swEnableLauncher);
+        ssEnableVolume = view.findViewById(R.id.ss_Enable);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ssEnableVolume.setChecked(PrefManager.getBoolean(AppConstant.SCREENSHOT_ONVOLUME));
         swEnableLauncher.setChecked(PrefManager.getBoolean(AppConstant.OVERLAY));
         onFabClick = this;
         swEnableLauncher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
