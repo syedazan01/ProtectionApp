@@ -97,7 +97,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     Boolean imagepick = true;
     List<FileShareBean> fileShareBeans = new ArrayList<>();
     List<String> tokenList = new ArrayList<>();
-    private Uri fileUri, fileUri2;
+    private Uri fileUri,fileUri2;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -109,18 +109,19 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         }*/
         if (resultCode == Activity.RESULT_OK) {
             //Image Uri will not be null for RESULT_OK
-            if (imagepick == true) {
-                fileUri = data.getData();
-                imageView.setImageURI(fileUri);
-                //You can get File object from intent
-                File file = ImagePicker.Companion.getFile(data);
-                imagepick = false;
-            } else if (imagepick == false) {
-                fileUri2 = data.getData();
-                imageView2.setImageURI(fileUri2);
-                //You can get File object from intent
-                File file2 = ImagePicker.Companion.getFile(data);
-                imagepick = true;
+           if (imagepick == true) {
+               fileUri = data.getData();
+               imageView.setImageURI(fileUri);
+               //You can get File object from intent
+               File file = ImagePicker.Companion.getFile(data);
+               imagepick = false;
+           }
+           else if (imagepick == false){
+               fileUri2 = data.getData();
+               imageView2.setImageURI(fileUri2);
+               //You can get File object from intent
+               File file2 = ImagePicker.Companion.getFile(data);
+               imagepick = true;
 
             }
 

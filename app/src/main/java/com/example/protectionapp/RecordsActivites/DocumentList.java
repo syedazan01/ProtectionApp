@@ -16,6 +16,7 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdhaarAdapter;
 import com.example.protectionapp.adapters.AtmAdapter;
 import com.example.protectionapp.adapters.BankAdapter;
+import com.example.protectionapp.adapters.BirthCertificateAdapter;
 import com.example.protectionapp.adapters.DrivingLicenseAdapter;
 import com.example.protectionapp.adapters.PanAdapter;
 import com.example.protectionapp.adapters.PassportAdapter;
@@ -25,6 +26,7 @@ import com.example.protectionapp.interfacecallbacks.DocumentClickListener;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.AtmBean;
 import com.example.protectionapp.model.BankBean;
+import com.example.protectionapp.model.BirthCertificateBean;
 import com.example.protectionapp.model.DlicenceBean;
 import com.example.protectionapp.model.PanBean;
 import com.example.protectionapp.model.PassportBean;
@@ -54,6 +56,7 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
     List<VoteridBean> voteridBeanList = new ArrayList<>();
     List<StudentIdBean> studentIdBeanList = new ArrayList<>();
     List<PassportBean> passportBeansList = new ArrayList<>();
+    List<BirthCertificateBean> birthCertificateBeanList = new ArrayList<>();
     String personal_document;
 
     @Override
@@ -86,6 +89,8 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                 voteridBeanList.clear();
                 studentIdBeanList.clear();
                 passportBeansList.clear();
+                birthCertificateBeanList.clear();
+
                 for (DataSnapshot postShot : dataSnapshot.getChildren()) {
                     if (personal_document.equals(AppConstant.ADHAAR)) {
                         AdhaarBean adhaarBean = postShot.getValue(AdhaarBean.class);
@@ -134,6 +139,12 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                         if (passportBean.getMobilenumber().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
                             passportBeansList.add(passportBean);
                         }
+                    } else if (personal_document.equals(AppConstant.BIRTH_CERTIFICATE)) {
+                        Log.e("eroor", postShot.getValue() + "");
+                        BirthCertificateBean birthCertificateBean = postShot.getValue(BirthCertificateBean.class);
+                        if (birthCertificateBean.getMoblilenumber().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            birthCertificateBeanList.add(birthCertificateBean);
+                        }
                     }
 
                 }
@@ -161,6 +172,9 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                 } else if (passportBeansList.size() > 0) {
                     PassportAdapter passportAdapter = new PassportAdapter(DocumentList.this, passportBeansList, DocumentList.this);
                     rvDoc.setAdapter(passportAdapter);
+                } else if (birthCertificateBeanList.size() > 0) {
+                    BirthCertificateAdapter birthCertificateAdapter = new BirthCertificateAdapter(DocumentList.this, birthCertificateBeanList, DocumentList.this);
+                    rvDoc.setAdapter(birthCertificateAdapter);
                 }
             }
 
@@ -188,6 +202,8 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                     startActivity(new Intent(DocumentList.this, StudentID.class));
                 } else if (personal_document.equals(AppConstant.PASSPORT)) {
                     startActivity(new Intent(DocumentList.this, Passport.class));
+                } else if (personal_document.equals(AppConstant.BIRTH_CERTIFICATE)) {
+                    startActivity(new Intent(DocumentList.this, DateOfBirth.class));
                 }
             }
         });
@@ -256,6 +272,13 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
         intent.putExtra(AppConstant.PASSPORT, passportBean);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void onSelectBirthCertificate(BirthCertificateBean birthCertificateBean) {
+        Intent intent = new Intent(this, DateOfBirth.class);
+        intent.putExtra(AppConstant.BIRTH_CERTIFICATE, birthCertificateBean);
+        startActivity(intent);
     }
 
 
