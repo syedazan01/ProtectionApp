@@ -46,7 +46,7 @@ public class VoterIDFile extends AppCompatActivity {
         FullName = findViewById(R.id.voteridFullname);
         FatherName = findViewById(R.id.voteridFathername);
         dob = findViewById(R.id.voterid_dob);
-        ivVoterid = findViewById(R.id.ivVoterid);
+        ivVoterid = findViewById(R.id.ivVoterid_1);
         Address = findViewById(R.id.voterid_addres);
         AssemblyName = findViewById(R.id.elction_constituency);
         radioGender = findViewById(R.id.VoteridGradio);

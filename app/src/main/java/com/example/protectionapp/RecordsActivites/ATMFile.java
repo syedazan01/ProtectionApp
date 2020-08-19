@@ -50,7 +50,7 @@ public class ATMFile extends AppCompatActivity {
         ivATM = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("ATM Detail Form");
-        ivatmscan = findViewById(R.id.atm_imageView);
+        ivatmscan = findViewById(R.id.atm_imageView1);
         if (getIntent().hasExtra(AppConstant.ATM)) {
 
             AtmBean atmBean = (AtmBean) getIntent().getSerializableExtra(AppConstant.ATM);

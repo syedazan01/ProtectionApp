@@ -13,58 +13,56 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.interfacecallbacks.DocumentClickListener;
-import com.example.protectionapp.model.AtmBean;
+import com.example.protectionapp.model.PassportBean;
 
 import java.util.List;
 import java.util.Random;
 
-
-public class AtmAdapter extends RecyclerView.Adapter<AtmAdapter.AdhaarHolder> {
+public class PassportAdapter extends RecyclerView.Adapter<PassportAdapter.PassportHolder> {
     private Activity activity;
-    private List<AtmBean> atmBeanList;
+    private List<PassportBean> passportBeanList;
     private DocumentClickListener documentClickListener;
 
-    public AtmAdapter(Activity activity, List<AtmBean> atmBeanList, DocumentClickListener documentClickListener) {
+    public PassportAdapter(Activity activity, List<PassportBean> passportBeanList, DocumentClickListener documentClickListener) {
         this.activity = activity;
-        this.atmBeanList = atmBeanList;
+        this.passportBeanList = passportBeanList;
         this.documentClickListener = documentClickListener;
     }
 
+
     @NonNull
     @Override
-    public AdhaarHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PassportAdapter.PassportHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.personal_document_item, parent, false);
-        return new AdhaarHolder(view);
+        return new PassportHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdhaarHolder holder, final int position) {
-        AtmBean atmBean = atmBeanList.get(position);
+    public void onBindViewHolder(@NonNull PassportAdapter.PassportHolder holder, int position) {
+        PassportBean passportBean = passportBeanList.get(position);
         int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
         holder.constMain.setBackgroundColor(color);
-        holder.tvFileName.setText(atmBean.getNameoncard());
+        holder.tvFileName.setText(passportBean.getFullname());
         holder.constMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                documentClickListener.onSelectAtm(atmBeanList.get(position));
+                documentClickListener.onSelectPassport(passportBeanList.get(position));
             }
         });
+
     }
 
     @Override
     public int getItemCount() {
-        return atmBeanList.size();
+        return passportBeanList.size();
     }
 
-    public class AdhaarHolder extends RecyclerView.ViewHolder {
+    public class PassportHolder extends RecyclerView.ViewHolder {
         ConstraintLayout constMain;
         TextView tvFileName;
 
-
-        public AdhaarHolder(@NonNull View itemView) {
+        public PassportHolder(@NonNull View itemView) {
             super(itemView);
-            tvFileName = itemView.findViewById(R.id.tvFileName);
-            constMain = itemView.findViewById(R.id.ConstrainMain);
         }
     }
 }

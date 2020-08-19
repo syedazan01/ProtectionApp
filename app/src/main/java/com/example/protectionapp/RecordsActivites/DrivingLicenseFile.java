@@ -42,7 +42,7 @@ public class DrivingLicenseFile extends AppCompatActivity {
         dob = findViewById(R.id.Driving_dob);
         dateofissue = findViewById(R.id.Drivingdofissue);
         validity = findViewById(R.id.licence_validity);
-        ivDLscan = findViewById(R.id.dl_imageview);
+        ivDLscan = findViewById(R.id.dl_imageview1);
 
 
         dobET = findViewById(R.id.Drivingdob_calender);

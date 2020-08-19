@@ -127,8 +127,14 @@
 
 
                 <ImageView
-                    android:id="@+id/bank_imageview"
-                    android:layout_width="87dp"
+                    android:id="@+id/bank_imageview1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/bank_imageview2"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 

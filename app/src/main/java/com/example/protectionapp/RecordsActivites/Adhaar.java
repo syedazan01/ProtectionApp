@@ -78,7 +78,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     int yearofdob, monthofdob, dayofdob;
     RadioGroup radioGender;
     RadioButton radioMale, radioFemale, radioOther;
-    ImageView imageView;
+    ImageView imageView, imageView2;
     Button opencam, sendBT;
     String msg = "", password = "";
     //initilizing progress dialog
@@ -94,9 +94,10 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     ImageView ivBack;
     TextView tvToolbarTitle;
     Activity activity = this;
-    private Uri fileUri;
+    Boolean imagepick = true;
     List<FileShareBean> fileShareBeans = new ArrayList<>();
     List<String> tokenList = new ArrayList<>();
+    private Uri fileUri, fileUri2;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -108,11 +109,20 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         }*/
         if (resultCode == Activity.RESULT_OK) {
             //Image Uri will not be null for RESULT_OK
-            fileUri = data.getData();
-            imageView.setImageURI(fileUri);
+            if (imagepick == true) {
+                fileUri = data.getData();
+                imageView.setImageURI(fileUri);
+                //You can get File object from intent
+                File file = ImagePicker.Companion.getFile(data);
+                imagepick = false;
+            } else if (imagepick == false) {
+                fileUri2 = data.getData();
+                imageView2.setImageURI(fileUri2);
+                //You can get File object from intent
+                File file2 = ImagePicker.Companion.getFile(data);
+                imagepick = true;
 
-            //You can get File object from intent
-            File file = ImagePicker.Companion.getFile(data);
+            }
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
@@ -176,14 +186,15 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                 adhaarBean.setAadharNumber(aadharNumber);
                 adhaarBean.setAddress(Address);
                 adhaarBean.setAdhaarimage(fileUri.getLastPathSegment());
+                adhaarBean.setAdhaarimage2(fileUri2.getLastPathSegment());
                 adhaarBean.setMobileNo(PrefManager.getString(AppConstant.USER_MOBILE));
                 UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
                 Utils.storeDocumentsInRTD(AppConstant.ADHAAR, Utils.toJson(adhaarBean, AdhaarBean.class));
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            uploadingDialog.dismissdialog();
-                            finish();
+                        uploadingDialog.dismissdialog();
+                        finish();
                     }
                 });
 
@@ -198,7 +209,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                     Manifest.permission.CAMERA
             }, 100);
         }
-
+        //open camera to capture image
         opencam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -248,7 +259,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
 
     private void openDialog() {
         SendDailog sendDailog = new SendDailog(this, true);
-        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+        sendDailog.show(getSupportFragmentManager(), "Send Dialog");
     }
 
     private void initViews() {
@@ -257,12 +268,12 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         adharaddres = findViewById(R.id.adhar_addres);
         addharsavebt = findViewById(R.id.addhr_savebt);
         dob = findViewById(R.id.dob);
-        imageView = findViewById(R.id.adhar_imageView);
+        imageView = findViewById(R.id.adhar_imageView1);
         radioGender = findViewById(R.id.Gradio);
         radioMale = findViewById(R.id.Gen_male);
         radioFemale = findViewById(R.id.Gen_female);
         radioOther = findViewById(R.id.Gen_other);
-        imageView = findViewById(R.id.adhar_imageView);
+        imageView2 = findViewById(R.id.adhar_imageView2);
         opencam = findViewById(R.id.cam_openbt);
         sendBT = findViewById(R.id.adhaar_sendBT);
         dobinput = findViewById(R.id.dob_calender);
@@ -286,10 +297,10 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                 radioOther.setChecked(true);
             final ProgressDialog pd = Utils.getProgressDialog(Adhaar.this);
             pd.show();
+
             Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + adhaarBean.getAdhaarimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
                         Glide.with(Adhaar.this).load(task.getResult())
@@ -298,6 +309,21 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                                 .into(imageView);
                     }
                 }
+
+            });
+            Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + adhaarBean.getAdhaarimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri2 = task.getResult();
+                        Glide.with(Adhaar.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(imageView2);
+                    }
+                }
+
             });
         } else {
             addharsavebt.setText("Save");

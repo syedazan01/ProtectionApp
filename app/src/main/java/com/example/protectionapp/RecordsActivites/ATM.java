@@ -71,12 +71,13 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
     TextInputLayout bankname, atmnumber, nameoncard, cardVailidity, cvvcode;
     int yearofdob, monthofdob, dayofdob;
     Activity activity = this;
-    private Uri fileUri;
+    private Uri fileUri, fileUri2;
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(ATM.this);
-    private ImageView ivATM, ivatmscan;
+    private ImageView ivATM, ivatmscan, ivatmscan2;
     private String password, msg;
     private List<String> tokenList = new ArrayList<>();
+    private Boolean imagepicker = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +176,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                 atmBean.setCvvcode(cvvcodes);
                 atmBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
                 atmBean.setAtmimage(fileUri.getLastPathSegment());
+                atmBean.setAtmimage2(fileUri2.getLastPathSegment());
                 UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.ATM + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -228,7 +230,8 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
         ivATM = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("ATM Detail Form");
-        ivatmscan = findViewById(R.id.atm_imageView);
+        ivatmscan = findViewById(R.id.atm_imageView1);
+        ivatmscan2 = findViewById(R.id.atm_imageView2);
         Utils.makeButton(btnAtmScan, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(btnAtmSave, getResources().getColor(R.color.colorPrimary), 40F);
         if (getIntent().hasExtra(AppConstant.ATM)) {
@@ -245,13 +248,25 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
             Utils.getStorageReference().child(AppConstant.ATM + "/" + atmBean.getAtmimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
                         Glide.with(ATM.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(ivatmscan);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.ATM + "/" + atmBean.getAtmimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri2 = task.getResult();
+                        Glide.with(ATM.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivatmscan2);
                     }
                 }
             });
@@ -345,12 +360,20 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
             imageView.setImageBitmap(captureImage);
         }*/
         if (resultCode == Activity.RESULT_OK) {
-            //Image Uri will not be null for RESULT_OK
-            fileUri = data.getData();
-            ivatmscan.setImageURI(fileUri);
-
-            //You can get File object from intent
-            File file = ImagePicker.Companion.getFile(data);
+            if (imagepicker == false) {
+                //Image Uri will not be null for RESULT_OK
+                fileUri = data.getData();
+                ivatmscan.setImageURI(fileUri);
+                //You can get File object from intent
+                File file = ImagePicker.Companion.getFile(data);
+                imagepicker = true;
+            } else if (imagepicker == true) {
+                fileUri2 = data.getData();
+                ivatmscan2.setImageURI(fileUri2);
+                //You can get File object from intent
+                File file2 = ImagePicker.Companion.getFile(data);
+                imagepicker = false;
+            }
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {

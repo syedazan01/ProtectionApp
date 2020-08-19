@@ -3,8 +3,15 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class DlicenceBean implements Serializable {
-    String fullname, son_of, licenceNumber, bloodGroup, dateOfBirth, dateOfIssue, validity, mobileno, DLimage;
+    String fullname, son_of, licenceNumber, bloodGroup, dateOfBirth, dateOfIssue, validity, mobileno, DLimage, DLimage2;
 
+    public String getDLimage2() {
+        return DLimage2;
+    }
+
+    public void setDLimage2(String DLimage2) {
+        this.DLimage2 = DLimage2;
+    }
 
     public String getMobileno() {
         return mobileno;

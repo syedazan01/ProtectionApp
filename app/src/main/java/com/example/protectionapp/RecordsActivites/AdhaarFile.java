@@ -27,7 +27,7 @@ public class AdhaarFile extends AppCompatActivity {
     TextInputLayout adhharfullname, adharnumber, adharaddres, dob;
     RadioGroup radioGender;
     RadioButton radioMale, radioFemale, radioOther;
-    ImageView imageView;
+    ImageView imageView, imageView2;
     ImageView ivBack;
     TextView tvToolbarTitle;
     Activity activity = this;
@@ -55,7 +55,8 @@ public class AdhaarFile extends AppCompatActivity {
         adharnumber = findViewById(R.id.adhar_number);
         adharaddres = findViewById(R.id.adhar_addres);
         dob = findViewById(R.id.dob);
-        imageView = findViewById(R.id.adhar_imageView);
+        imageView = findViewById(R.id.adhar_imageView1);
+        imageView2 = findViewById(R.id.adhar_imageView2);
         radioGender = findViewById(R.id.Gradio);
         radioMale = findViewById(R.id.Gen_male);
         radioFemale = findViewById(R.id.Gen_female);
@@ -81,12 +82,23 @@ public class AdhaarFile extends AppCompatActivity {
             Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + adhaarBean.getAdhaarimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         Glide.with(AdhaarFile.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(imageView);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + adhaarBean.getAdhaarimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        Glide.with(AdhaarFile.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(imageView2);
                     }
                 }
             });

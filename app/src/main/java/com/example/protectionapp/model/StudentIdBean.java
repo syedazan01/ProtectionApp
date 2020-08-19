@@ -3,8 +3,16 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class StudentIdBean implements Serializable {
-    String institutionname,enroll,rollno,fullname,fathername,branch,Studntidimage,mobilenumber;
+    String institutionname, enroll, rollno, fullname, fathername, branch, Studntidimage, Studntidimage2, mobilenumber;
 
+
+    public String getStudntidimage2() {
+        return Studntidimage2;
+    }
+
+    public void setStudntidimage2(String studntidimage2) {
+        Studntidimage2 = studntidimage2;
+    }
 
     public String getInstitutionname() {
         return institutionname;

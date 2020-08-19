@@ -3,7 +3,15 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class PanBean implements Serializable {
-    String fullName, fatherName, dateOfBirth, PermanentAccountNumber, panimage, panmobile;
+    String fullName, fatherName, dateOfBirth, PermanentAccountNumber, panimage, panimage2, panmobile;
+
+    public String getPanimage2() {
+        return panimage2;
+    }
+
+    public void setPanimage2(String panimage2) {
+        this.panimage2 = panimage2;
+    }
 
     public String getPanimage() {
         return panimage;

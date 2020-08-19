@@ -3,7 +3,15 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class VoteridBean implements Serializable {
-    String FullName, FathersName, Gender, dateofbirth, Address, Assemblyname, voterMobileNo, voterImage;
+    String FullName, FathersName, Gender, dateofbirth, Address, Assemblyname, voterMobileNo, voterImage, voterImage2;
+
+    public String getVoterImage2() {
+        return voterImage2;
+    }
+
+    public void setVoterImage2(String voterImage2) {
+        this.voterImage2 = voterImage2;
+    }
 
     public String getVoterMobileNo() {
         return voterMobileNo;

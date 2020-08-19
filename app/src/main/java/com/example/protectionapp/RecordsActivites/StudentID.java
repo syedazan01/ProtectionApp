@@ -63,13 +63,14 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
     TextInputLayout institutionname, enroll, rollno, fullname, fathername, branch;
     UploadingDialog uploadingDialog = new UploadingDialog(StudentID.this);
     private Button btnSTDScan, btnSTDSave, btnSTDSend;
-    private ImageView ivBack, imageViewstid;
+    private ImageView ivBack, imageViewstid, imageViewstid2;
     private TextView tvToolbarTitle;
-    private Uri fileUri;
+    private Uri fileUri, fileUri2;
     private Activity activity = this;
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
     private String password, msg;
     List<String> tokenList = new ArrayList<>();
+    private Boolean imagepicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +136,7 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
                 studentIdBean.setFathername(Fathername);
                 studentIdBean.setBranch(Branch);
                 studentIdBean.setStudntidimage(fileUri.getLastPathSegment());
+                studentIdBean.setStudntidimage2(fileUri2.getLastPathSegment());
                 studentIdBean.setMobilenumber(PrefManager.getString(AppConstant.USER_MOBILE));
                 UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.STUDENT_ID + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
                 Utils.storeDocumentsInRTD(AppConstant.STUDENT_ID, Utils.toJson(studentIdBean, StudentIdBean.class));
@@ -243,12 +245,20 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
             imageView.setImageBitmap(captureImage);
         }*/
         if (resultCode == Activity.RESULT_OK) {
-            //Image Uri will not be null for RESULT_OK
-            fileUri = data.getData();
-            imageViewstid.setImageURI(fileUri);
-
-            //You can get File object from intent
-            File file = ImagePicker.Companion.getFile(data);
+            if (imagepicker == false) {
+                //Image Uri will not be null for RESULT_OK
+                fileUri = data.getData();
+                imageViewstid.setImageURI(fileUri);
+                //You can get File object from intent
+                File file = ImagePicker.Companion.getFile(data);
+                imagepicker = true;
+            } else if (imagepicker == true) {
+                fileUri2 = data.getData();
+                imageViewstid2.setImageURI(fileUri2);
+                //You can get File object from intent
+                File file2 = ImagePicker.Companion.getFile(data);
+                imagepicker = false;
+            }
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
@@ -306,7 +316,8 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
         btnSTDSave = findViewById(R.id.btnSTDSave);
         btnSTDScan = findViewById(R.id.btnSTDscan);
         btnSTDSend = findViewById(R.id.send_STD_BT);
-        imageViewstid = findViewById(R.id.ivStudentid);
+        imageViewstid = findViewById(R.id.ivStudentid_1);
+        imageViewstid2 = findViewById(R.id.ivStudentid_2);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Student Detail Form");
         ivBack = findViewById(R.id.ivBack);
@@ -328,13 +339,25 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
             Utils.getStorageReference().child(AppConstant.PAN + "/" + studentIdBean.getStudntidimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
                         Glide.with(StudentID.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(imageViewstid);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.PAN + "/" + studentIdBean.getStudntidimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri2 = task.getResult();
+                        Glide.with(StudentID.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(imageViewstid2);
                     }
                 }
             });

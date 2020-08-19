@@ -45,7 +45,7 @@ public class BankFile extends AppCompatActivity {
         ifscCode = findViewById(R.id.ifsc_code);
         branchName = findViewById(R.id.branch_name);
         bankName = findViewById(R.id.Bank_name);
-        ivbankscan = findViewById(R.id.bank_imageview);
+        ivbankscan = findViewById(R.id.bank_imageview1);
 
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Bank Detail Form");

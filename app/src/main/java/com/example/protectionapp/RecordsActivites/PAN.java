@@ -65,18 +65,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PAN extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnPANscan, btnPANsave, btnPANsend;
-    Uri fileUri;
+    Uri fileUri, fileUri2;
     private TextView tvToolbarTitle;
     TextInputLayout FullName, FatherName, dob, PermanentAccountNumber;
     TextInputEditText dobET;
     int yearofdob, monthofdob, dayofdob;
     Activity activity = this;
-    private ImageView ivPAN, pan_imageview;
+    private ImageView ivPAN, pan_imageview, pan_imageview2;
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(PAN.this);
     private String msg, password;
     List<String> tokenList = new ArrayList<>();
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
+    private Boolean imagepicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +100,8 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
         btnPANscan = findViewById(R.id.panscanbt);
         FullName = findViewById(R.id.panFullname);
         FatherName = findViewById(R.id.panFathersname);
-        pan_imageview = findViewById(R.id.pan_imageview);
+        pan_imageview = findViewById(R.id.pan_imageview1);
+        pan_imageview2 = findViewById(R.id.pan_imageview2);
         dob = findViewById(R.id.pan_dob);
         PermanentAccountNumber = findViewById(R.id.pan_number);
         dobET = findViewById(R.id.pandob_calender);
@@ -129,6 +131,19 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(pan_imageview);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.PAN + "/" + panBean.getPanimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri2 = task.getResult();
+                        Glide.with(PAN.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(pan_imageview2);
                     }
                 }
             });
@@ -177,6 +192,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
                 panBean.setDateOfBirth(pandob);
                 panBean.setPermanentAccountNumber(pannumber);
                 panBean.setPanimage(fileUri.getLastPathSegment());
+                panBean.setPanimage2(fileUri2.getLastPathSegment());
                 panBean.setPanmobile(PrefManager.getString(AppConstant.USER_MOBILE));
                 UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
                 Utils.storeDocumentsInRTD(AppConstant.PAN, Utils.toJson(panBean, PanBean.class));
@@ -337,12 +353,20 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
             imageView.setImageBitmap(captureImage);
         }*/
         if (resultCode == Activity.RESULT_OK) {
-            //Image Uri will not be null for RESULT_OK
-            fileUri = data.getData();
-            pan_imageview.setImageURI(fileUri);
-
-            //You can get File object from intent
-            File file = ImagePicker.Companion.getFile(data);
+            if (imagepicker == false) {
+                //Image Uri will not be null for RESULT_OK
+                fileUri = data.getData();
+                pan_imageview.setImageURI(fileUri);
+                //You can get File object from intent
+                File file = ImagePicker.Companion.getFile(data);
+                imagepicker = true;
+            } else if (imagepicker == true) {
+                fileUri2 = data.getData();
+                pan_imageview2.setImageURI(fileUri2);
+                //You can get File object from intent
+                File file2 = ImagePicker.Companion.getFile(data);
+                imagepicker = false;
+            }
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {

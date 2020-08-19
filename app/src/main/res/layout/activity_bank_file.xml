@@ -26,7 +26,6 @@
                 android:id="@+id/bankicon"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
-                android:layout_below="@+id/toolbarLay"
                 android:layout_marginTop="7dp"
                 android:gravity="center"
                 android:src="@drawable/bankicon"
@@ -127,7 +126,14 @@
 
 
                 <ImageView
-                    android:id="@+id/bank_imageview"
+                    android:id="@+id/bank_imageview1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/bank_imageview2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

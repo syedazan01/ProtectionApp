@@ -66,12 +66,13 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     private TextView tvToolbarTitle;
     TextInputLayout accountHolderName, accountNumber, ifscCode, branchName, bankName;
     Activity activity = this;
-    private Uri fileUri;
+    private Uri fileUri, fileUri2;
     List<FileShareBean> fileShareBeans = new ArrayList<>();
-    private ImageView ivBank, ivbankscan;
+    private ImageView ivBank, ivbankscan, ivbankscan2;
     List<String> tokenList = new ArrayList<>();
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(Bank.this);
+    private Boolean imagepicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +107,20 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            //Image Uri will not be null for RESULT_OK
-            fileUri = data.getData();
-            ivbankscan.setImageURI(fileUri);
-
-            //You can get File object from intent
-            File file = ImagePicker.Companion.getFile(data);
+            if (imagepicker == false) {
+                //Image Uri will not be null for RESULT_OK
+                fileUri = data.getData();
+                ivbankscan.setImageURI(fileUri);
+                //You can get File object from intent
+                File file = ImagePicker.Companion.getFile(data);
+                imagepicker = true;
+            } else if (imagepicker == true) {
+                fileUri2 = data.getData();
+                ivbankscan2.setImageURI(fileUri2);
+                //You can get File object from intent
+                File file2 = ImagePicker.Companion.getFile(data);
+                imagepicker = false;
+            }
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
@@ -183,6 +192,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                 bankBean.setBranchName(branchNames);
                 bankBean.setBankName(banknames);
                 bankBean.setBankimage(fileUri.getLastPathSegment());
+                bankBean.setBankimage2(fileUri2.getLastPathSegment());
                 bankBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
                 UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -220,7 +230,8 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
         ifscCode = findViewById(R.id.ifsc_code);
         branchName = findViewById(R.id.branch_name);
         bankName = findViewById(R.id.Bank_name);
-        ivbankscan = findViewById(R.id.bank_imageview);
+        ivbankscan = findViewById(R.id.bank_imageview1);
+        ivbankscan2 = findViewById(R.id.bank_imageview2);
 
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Bank Detail Form");
@@ -242,13 +253,25 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
             Utils.getStorageReference().child(AppConstant.BANK + "/" + bankBean.getBankimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
                         Glide.with(Bank.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(ivbankscan);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.BANK + "/" + bankBean.getBankimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri2 = task.getResult();
+                        Glide.with(Bank.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivbankscan2);
                     }
                 }
             });

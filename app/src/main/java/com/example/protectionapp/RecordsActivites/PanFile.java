@@ -41,7 +41,7 @@ public class PanFile extends AppCompatActivity {
 
         FullName = findViewById(R.id.panFullname);
         FatherName = findViewById(R.id.panFathersname);
-        pan_imageview = findViewById(R.id.pan_imageview);
+        pan_imageview = findViewById(R.id.pan_imageview1);
         dob = findViewById(R.id.pan_dob);
         PermanentAccountNumber = findViewById(R.id.pan_number);
         dobET = findViewById(R.id.pandob_calender);

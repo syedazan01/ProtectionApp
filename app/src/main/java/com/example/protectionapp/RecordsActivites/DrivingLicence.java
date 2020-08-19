@@ -66,18 +66,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DrivingLicence extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnDLscan, btnDLsave, btnDLSend;
-    private ImageView ivDL, ivDLscan;
+    private ImageView ivDL, ivDLscan, ivDlscan2;
     private TextView tvToolbarTitle;
     TextInputLayout FullName, sonOf, LicenceNumber, BloodGroup, dob, dateofissue, validity;
     TextInputEditText dobET, dateOfIssueET, ValidityET;
     int yearofdob, monthofdob, dayofdob;
     Activity activity = this;
-    private Uri fileUri;
+    private Uri fileUri, fileUri2;
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(DrivingLicence.this);
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
     private String password, msg;
     List<String> tokenList = new ArrayList<>();
+    private Boolean imagepicker;
 
 
     @Override
@@ -169,6 +170,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 dlicenceBean.setDateOfIssue(dateofIssue);
                 dlicenceBean.setValidity(DLvaliditys);
                 dlicenceBean.setDLimage(fileUri.getLastPathSegment());
+                dlicenceBean.setDLimage2(fileUri2.getLastPathSegment());
                 UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -263,9 +265,10 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
         LicenceNumber = findViewById(R.id.LicenceNumber);
         BloodGroup = findViewById(R.id.bloodgroupDriving);
         dob = findViewById(R.id.Driving_dob);
-        dateofissue= findViewById(R.id.Drivingdofissue);
+        dateofissue = findViewById(R.id.Drivingdofissue);
         validity = findViewById(R.id.licence_validity);
-        ivDLscan = findViewById(R.id.dl_imageview);
+        ivDLscan = findViewById(R.id.dl_imageview1);
+        ivDlscan2 = findViewById(R.id.dl_imageview2);
 
 
         dobET = findViewById(R.id.Drivingdob_calender);
@@ -294,13 +297,25 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
             Utils.getStorageReference().child(AppConstant.ATM + "/" + dlicenceBean.getDLimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
                         Glide.with(DrivingLicence.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(ivDLscan);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.ATM + "/" + dlicenceBean.getDLimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri2 = task.getResult();
+                        Glide.with(DrivingLicence.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivDlscan2);
                     }
                 }
             });
@@ -314,12 +329,20 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            //Image Uri will not be null for RESULT_OK
-            fileUri = data.getData();
-            ivDLscan.setImageURI(fileUri);
-
-            //You can get File object from intent
-            File file = ImagePicker.Companion.getFile(data);
+            if (imagepicker == false) {
+                //Image Uri will not be null for RESULT_OK
+                fileUri = data.getData();
+                ivDLscan.setImageURI(fileUri);
+                //You can get File object from intent
+                File file = ImagePicker.Companion.getFile(data);
+                imagepicker = true;
+            } else if (imagepicker == true) {
+                fileUri2 = data.getData();
+                ivDlscan2.setImageURI(fileUri2);
+                //You can get File object from intent
+                File file2 = ImagePicker.Companion.getFile(data);
+                imagepicker = false;
+            }
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {

@@ -18,6 +18,7 @@ import com.example.protectionapp.adapters.AtmAdapter;
 import com.example.protectionapp.adapters.BankAdapter;
 import com.example.protectionapp.adapters.DrivingLicenseAdapter;
 import com.example.protectionapp.adapters.PanAdapter;
+import com.example.protectionapp.adapters.PassportAdapter;
 import com.example.protectionapp.adapters.StudentIDAdapter;
 import com.example.protectionapp.adapters.VoterIDAdapter;
 import com.example.protectionapp.interfacecallbacks.DocumentClickListener;
@@ -26,6 +27,7 @@ import com.example.protectionapp.model.AtmBean;
 import com.example.protectionapp.model.BankBean;
 import com.example.protectionapp.model.DlicenceBean;
 import com.example.protectionapp.model.PanBean;
+import com.example.protectionapp.model.PassportBean;
 import com.example.protectionapp.model.StudentIdBean;
 import com.example.protectionapp.model.VoteridBean;
 import com.example.protectionapp.utils.AppConstant;
@@ -51,6 +53,7 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
     List<AtmBean> atmBeanList = new ArrayList<>();
     List<VoteridBean> voteridBeanList = new ArrayList<>();
     List<StudentIdBean> studentIdBeanList = new ArrayList<>();
+    List<PassportBean> passportBeansList = new ArrayList<>();
     String personal_document;
 
     @Override
@@ -82,6 +85,7 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                 bankBeanList.clear();
                 voteridBeanList.clear();
                 studentIdBeanList.clear();
+                passportBeansList.clear();
                 for (DataSnapshot postShot : dataSnapshot.getChildren()) {
                     if (personal_document.equals(AppConstant.ADHAAR)) {
                         AdhaarBean adhaarBean = postShot.getValue(AdhaarBean.class);
@@ -124,7 +128,14 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                         if (studentIdBean.getMobilenumber().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
                             studentIdBeanList.add(studentIdBean);
                         }
+                    } else if (personal_document.equals(AppConstant.PASSPORT)) {
+                        Log.e("eroor", postShot.getValue() + "");
+                        PassportBean passportBean = postShot.getValue(PassportBean.class);
+                        if (passportBean.getMobilenumber().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            passportBeansList.add(passportBean);
+                        }
                     }
+
                 }
                 if (adhaarBeanList.size() > 0) {
                     AdhaarAdapter adhaarAdapter = new AdhaarAdapter(DocumentList.this, adhaarBeanList, DocumentList.this);
@@ -147,6 +158,9 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                 } else if (studentIdBeanList.size() > 0) {
                     StudentIDAdapter studentIDAdapter = new StudentIDAdapter(DocumentList.this, studentIdBeanList, DocumentList.this);
                     rvDoc.setAdapter(studentIDAdapter);
+                } else if (passportBeansList.size() > 0) {
+                    PassportAdapter passportAdapter = new PassportAdapter(DocumentList.this, passportBeansList, DocumentList.this);
+                    rvDoc.setAdapter(passportAdapter);
                 }
             }
 
@@ -172,6 +186,8 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
                     startActivity(new Intent(DocumentList.this, VoterID.class));
                 } else if (personal_document.equals(AppConstant.STUDENT_ID)) {
                     startActivity(new Intent(DocumentList.this, StudentID.class));
+                } else if (personal_document.equals(AppConstant.PASSPORT)) {
+                    startActivity(new Intent(DocumentList.this, Passport.class));
                 }
             }
         });
@@ -233,4 +249,14 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
         intent.putExtra(AppConstant.STUDENT_ID, studentIdBean);
         startActivity(intent);
     }
+
+    @Override
+    public void onSelectPassport(PassportBean passportBean) {
+        Intent intent = new Intent(this, Passport.class);
+        intent.putExtra(AppConstant.PASSPORT, passportBean);
+        startActivity(intent);
+
+    }
+
+
 }

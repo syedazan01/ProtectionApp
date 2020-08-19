@@ -75,12 +75,13 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
     TextInputEditText dobET;
     int yearofdob, monthofdob, dayofdob;
     Activity activity = this;
-    private ImageView ivVid, ivVoterid;
-    private Uri fileUri;
+    private ImageView ivVid, ivVoterid, ivVoterid2;
+    private Uri fileUri, fileUri2;
     List<String> tokenList = new ArrayList<>();
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(VoterID.this);
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
+    private Boolean imagepicker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,12 +114,20 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            //Image Uri will not be null for RESULT_OK
-            fileUri = data.getData();
-            ivVoterid.setImageURI(fileUri);
-
-            //You can get File object from intent
-            File file = ImagePicker.Companion.getFile(data);
+            if (imagepicker == false) {
+                //Image Uri will not be null for RESULT_OK
+                fileUri = data.getData();
+                ivVoterid.setImageURI(fileUri);
+                //You can get File object from intent
+                File file = ImagePicker.Companion.getFile(data);
+                imagepicker = true;
+            } else if (imagepicker == true) {
+                fileUri2 = data.getData();
+                ivVoterid2.setImageURI(fileUri2);
+                //You can get File object from intent
+                File file2 = ImagePicker.Companion.getFile(data);
+                imagepicker = false;
+            }
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
@@ -191,6 +200,9 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
                 voteridBean.setAddress(address);
                 voteridBean.setAssemblyname(assemblyNames);
                 voteridBean.setGender(gender);
+                voteridBean.setVoterMobileNo((PrefManager.getString(AppConstant.USER_MOBILE)));
+                voteridBean.setVoterImage(fileUri.getLastPathSegment());
+                voteridBean.setVoterImage2(fileUri2.getLastPathSegment());
                 Utils.storeDocumentsInRTD(AppConstant.VOTER_ID, Utils.toJson(voteridBean, VoteridBean.class));
                 UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -228,15 +240,16 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
     }
 
     private void initViews() {
-        btnVoteridscan=findViewById(R.id.voterscanbt);
-        btnVoteridsave=findViewById(R.id.voterid_savebt);
+        btnVoteridscan = findViewById(R.id.voterscanbt);
+        btnVoteridsave = findViewById(R.id.voterid_savebt);
         btnVoteridsend = findViewById(R.id.voter_sendBT);
-        FullName=findViewById(R.id.voteridFullname);
-        FatherName=findViewById(R.id.voteridFathername);
+        FullName = findViewById(R.id.voteridFullname);
+        FatherName = findViewById(R.id.voteridFathername);
         dob = findViewById(R.id.voterid_dob);
-        ivVoterid = findViewById(R.id.ivVoterid);
+        ivVoterid = findViewById(R.id.ivVoterid_1);
+        ivVoterid2 = findViewById(R.id.ivVoterid_2);
         Address = findViewById(R.id.voterid_addres);
-        AssemblyName=findViewById(R.id.elction_constituency);
+        AssemblyName = findViewById(R.id.elction_constituency);
         radioGender = findViewById(R.id.VoteridGradio);
         radioMale = findViewById(R.id.Gen_votermale);
         radioFemale = findViewById(R.id.Gen_voterfemale);

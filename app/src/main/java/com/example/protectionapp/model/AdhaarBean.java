@@ -3,15 +3,23 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class AdhaarBean implements Serializable {
-    String mobileNo, Fullname, dateofbirth, gender, aadharNumber, Address, Adhaarimage;
-   /* public AdhaarBean(String fullname, String dateofbirth, String gender, String aadharNumber, String address) {
-        Fullname = fullname;
-        this.dateofbirth = dateofbirth;
-        this.gender = gender;
-        this.aadharNumber = aadharNumber;
-        Address = address;
-    }*/
+    String mobileNo, Fullname, dateofbirth, gender, aadharNumber, Address, Adhaarimage, Adhaarimage2;
 
+    public String getAdhaarimage2() {
+        return Adhaarimage2;
+    }
+
+    public void setAdhaarimage2(String adhaarimage2) {
+        Adhaarimage2 = adhaarimage2;
+    }
+
+    /* public AdhaarBean(String fullname, String dateofbirth, String gender, String aadharNumber, String address) {
+            Fullname = fullname;
+            this.dateofbirth = dateofbirth;
+            this.gender = gender;
+            this.aadharNumber = aadharNumber;
+            Address = address;
+        }*/
     public String getMobileNo() {
         return mobileNo;
     }

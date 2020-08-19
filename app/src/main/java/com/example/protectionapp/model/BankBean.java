@@ -3,8 +3,15 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class BankBean implements Serializable {
-    String AccountHolderName, accountNumber, ifscCode, branchName, BankName, mobile, bankimage;
+    String AccountHolderName, accountNumber, ifscCode, branchName, BankName, mobile, bankimage, bankimage2;
 
+    public String getBankimage2() {
+        return bankimage2;
+    }
+
+    public void setBankimage2(String bankimage2) {
+        this.bankimage2 = bankimage2;
+    }
 
     public String getMobile() {
         return mobile;

@@ -37,7 +37,7 @@ public class StudentIDFile extends AppCompatActivity {
         fullname = findViewById(R.id.STfullname_TL);
         fathername = findViewById(R.id.fathername_IL);
         branch = findViewById(R.id.branch_name_IL);
-        imageViewstid = findViewById(R.id.ivStudentid);
+        imageViewstid = findViewById(R.id.ivStudentid_1);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Student Detail Form");
         ivBack = findViewById(R.id.ivBack);

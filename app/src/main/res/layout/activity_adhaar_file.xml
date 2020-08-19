@@ -26,7 +26,6 @@
                 android:id="@+id/aadharlogo"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
-                android:layout_below="@+id/toolbarLay"
                 android:layout_marginTop="7dp"
                 android:gravity="center"
                 android:src="@drawable/aadharlogo"
@@ -165,7 +164,15 @@
                 <ImageView
                     android:id="@+id/adhar_imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/adhar_imageView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:scaleType="fitXY" />
             </LinearLayout>
         </RelativeLayout>
