@@ -1,3 +1,4 @@
+include ':infrared-release'
 include ':cleanmaster'
 include ':app'
 rootProject.name = "ProtectionApp"

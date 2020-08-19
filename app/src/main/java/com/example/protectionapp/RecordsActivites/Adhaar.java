@@ -439,18 +439,20 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
 
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setSentTo(userBean.getMobile());
+        fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
+        fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+        fileShareBean.setDocument_type(AppConstant.ADHAAR);
+        fileShareBean.setPassword(password);
+        fileShareBean.setMsg(msg);
         if (isChecked) {
-            FileShareBean fileShareBean = new FileShareBean();
-            fileShareBean.setSentTo(userBean.getMobile());
-            fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
-            fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-            fileShareBean.setDocument_type(AppConstant.ADHAAR);
-            fileShareBean.setPassword(password);
-            fileShareBean.setMsg(msg);
+
             fileShareBeans.add(fileShareBean);
             tokenList.add(userBean.getFcmToken());
         } else {
-            fileShareBeans.remove(position);
+            fileShareBeans.remove(fileShareBean);
+            tokenList.remove(userBean.getFcmToken());
         }
     }
 }

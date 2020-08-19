@@ -64,7 +64,7 @@ public class Otp extends AppCompatActivity {
         tvResend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PhoneAuthProvider.getInstance().verifyPhoneNumber(verficationId, 30L, TimeUnit.SECONDS, activity, callbacks, resendToken);
+                PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" + getIntent().getStringExtra(AppConstant.LOGIN_MOBILE), 30L, TimeUnit.SECONDS, activity, callbacks);
                 tvResend.setEnabled(false);
                 otpSendTimer();
             }
@@ -137,7 +137,10 @@ public class Otp extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     pd.dismiss();
                                     UserBean userBean = dataSnapshot.getValue(UserBean.class);
+                                    PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, userBean.isSubscribe());
+                                    PrefManager.putBoolean(AppConstant.ISREFERED, userBean.isRefer());
                                     userBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                                    userBean.setReferBy(PrefManager.getString(AppConstant.INVITED_BY));
                                     if (userBean.getProfilePic().isEmpty())
                                         userBean.setProfilePic("");
                                     else

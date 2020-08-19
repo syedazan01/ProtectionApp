@@ -4,10 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.util.Log;
 
 import com.example.protectionapp.utils.AppConstant;
-import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
 
 import java.util.Arrays;
@@ -17,7 +15,6 @@ public class BlockListener extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification notification) {
         super.onNotificationPosted(notification);
-        Log.e("fdbdgbdgnb",notification.getPackageName());
         SharedPreferences preferences=Utils.getDefaultManager(BlockListener.this);
         if(preferences.getBoolean(AppConstant.NOTIFICATION_ENABLE,false))
         {

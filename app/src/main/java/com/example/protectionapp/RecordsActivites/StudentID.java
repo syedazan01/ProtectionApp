@@ -369,17 +369,19 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
 
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setSentTo(userBean.getMobile());
+        fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
+        fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+        fileShareBean.setDocument_type(AppConstant.STUDENT_ID);
+        fileShareBean.setPassword(password);
+        fileShareBean.setMsg(msg);
         if (isChecked) {
-            FileShareBean fileShareBean = new FileShareBean();
-            fileShareBean.setSentTo(userBean.getMobile());
-            fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
-            fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-            fileShareBean.setDocument_type(AppConstant.STUDENT_ID);
-            fileShareBean.setPassword(password);
-            fileShareBean.setMsg(msg);
+            tokenList.add(userBean.getFcmToken());
             fileShareBeans.add(fileShareBean);
         } else {
-            fileShareBeans.remove(position);
+            fileShareBeans.remove(fileShareBean);
+            tokenList.remove(userBean.getFcmToken());
         }
     }
 }

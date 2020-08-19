@@ -1,8 +1,24 @@
 package com.example.protectionapp.model;
 
 public class UserBean {
-    String mobile, profilePic, fcmToken;
-    boolean isSubscribe;
+    String mobile, profilePic, fcmToken, referBy;
+    boolean isSubscribe, isRefer;
+
+    public boolean isRefer() {
+        return isRefer;
+    }
+
+    public void setRefer(boolean refer) {
+        isRefer = refer;
+    }
+
+    public String getReferBy() {
+        return referBy;
+    }
+
+    public void setReferBy(String referBy) {
+        this.referBy = referBy;
+    }
 
     public boolean isSubscribe() {
         return isSubscribe;

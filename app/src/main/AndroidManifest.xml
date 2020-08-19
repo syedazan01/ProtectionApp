@@ -36,9 +36,6 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme">
-        <activity android:name=".RecordsActivites.PassportFile"></activity>
-        <activity android:name=".RecordsActivites.Passport" />
-        <activity android:name=".activites.TakeScreenshot" />
         <activity android:name=".RecordsActivites.StudentIDFile" />
         <activity android:name=".RecordsActivites.VoterIDFile" />
         <activity android:name=".RecordsActivites.ATMFile" />

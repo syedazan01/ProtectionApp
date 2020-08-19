@@ -29,12 +29,14 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
     private ArrayList<PInfo> pInfos;
     private OnNotificationChecked notificationChecked;
     private SharedPreferences pref;
+    private String typeOfList;
 
-    public InstalledApps(Activity activity, ArrayList<PInfo> pInfos, OnNotificationChecked notificationChecked) {
+    public InstalledApps(Activity activity, ArrayList<PInfo> pInfos, OnNotificationChecked notificationChecked, String typeOfList) {
         this.activity = activity;
         this.pInfos = pInfos;
         this.notificationChecked = notificationChecked;
-        pref= Utils.getDefaultManager(activity);
+        this.typeOfList = typeOfList;
+        pref = Utils.getDefaultManager(activity);
     }
 
     @NonNull
@@ -54,7 +56,7 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
         holder.swOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                notificationChecked.onCheckboxAppChecked(position,b);
+                notificationChecked.onCheckboxAppChecked(position, b, typeOfList);
             }
         });
     }

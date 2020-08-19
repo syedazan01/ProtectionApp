@@ -32,6 +32,7 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.activites.LogIn;
 import com.example.protectionapp.adapters.AdapterSubscription;
 import com.example.protectionapp.adapters.AdapterUsers;
+import com.example.protectionapp.billing.GooglePaySetup;
 import com.example.protectionapp.model.FetchNotification;
 import com.example.protectionapp.model.NotificationBean;
 import com.example.protectionapp.model.PlansBean;
@@ -50,8 +51,12 @@ import com.google.android.gms.appinvite.AppInviteReferral;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wallet.AutoResolveHelper;
+import com.google.android.gms.wallet.PaymentData;
+import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.dynamiclinks.DynamicLink;
@@ -59,6 +64,9 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -77,10 +85,13 @@ import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, AdapterUsers.RecyclerViewListener {
+public class AccountFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, AdapterUsers.RecyclerViewListener, AdapterSubscription.RecyclerViewClickListener {
+    private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 300;
+    private static final String DEEP_LINK_URL = "https://a2zprotection.page.link/Go1D";
+    GooglePaySetup googlePaySetup;
     UploadTask mUploadTask;
     List<FetchNotification> fetchNotifications = new ArrayList<>();
-    private CardView cardSubscription, cardInvite, cardLogout, cardSos;
+    private CardView cardSubscription, cardInvite, cardLogout, cardSos, cardWallet;
     String deepLink = "";
     private TextView tvMobile;
     UserBean userBean;
@@ -124,6 +135,21 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
             mActivity.setTheme(R.style.AppTheme_Base_Night);
         else
             mActivity.setTheme(R.style.AppTheme_Base_Light);
+        googlePaySetup = new GooglePaySetup(getContext());
+        try {
+            Task<Boolean> task = googlePaySetup.readyToPay();
+            task.addOnCompleteListener(new OnCompleteListener<Boolean>() {
+                @Override
+                public void onComplete(@NonNull Task<Boolean> task) {
+                    if (task.isSuccessful()) {
+//Utils.showToast(getActivity(),"Success",AppConstant.succeedColor);
+                    }
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         deepLink = generateContentLink().toString();
         tvMobile.setText(PrefManager.getString(AppConstant.USER_MOBILE));
         msgDialog = Utils.getMsgDialog(mActivity);
@@ -139,14 +165,29 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         ivEdit = view.findViewById(R.id.ivEdit);
         ivProfile = view.findViewById(R.id.ivProfile);
         cardSubscription = view.findViewById(R.id.cardSubscription);
+        cardWallet = view.findViewById(R.id.cardWallet);
         getUser();
     }
 
     private void initActions() {
+        cardWallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
+                    Utils.showNoSubsDialog(getContext());
+                    return;
+                }
+            }
+        });
         cardInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareLink();
+                /*if(!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
+                    Utils.showNoSubsDialog(getContext());
+                    return;
+                }*/
+                final Uri deepLink = buildDeepLink(Uri.parse(DEEP_LINK_URL + "/?" + AppConstant.INVITED_BY + "=" + PrefManager.getString(AppConstant.USER_MOBILE)), 0);
+                shareDeepLink(deepLink.toString());
             }
         });
         cardLogout.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +199,10 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         cardSos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*if(!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
+                    Utils.showNoSubsDialog(getContext());
+                return;
+                }*/
                 msgDialog.show();
                 Button btnProceed = msgDialog.findViewById(R.id.btnProceed);
                 Utils.makeButton(btnProceed, getResources().getColor(R.color.colorAccent), 40F);
@@ -280,7 +325,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                     PlansBean plansBean = postShot.getValue(PlansBean.class);
                     plansBeans.add(plansBean);
                 }
-                rvSubscribe.setAdapter(new AdapterSubscription(getActivity(), plansBeans));
+                rvSubscribe.setAdapter(new AdapterSubscription(getActivity(), plansBeans, AccountFragment.this));
             }
 
             @Override
@@ -305,6 +350,24 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         return link.getUri();
     }
 
+    public Uri buildDeepLink(@NonNull Uri deepLink, int minVersion) {
+        String uriPrefix = "https://a2zprotection.page.link";
+        String lnk = mActivity.getPackageName();
+
+        DynamicLink.Builder builder = FirebaseDynamicLinks.getInstance()
+                .createDynamicLink()
+                .setLink(Uri.parse(lnk))
+                .setDomainUriPrefix(uriPrefix)
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder()
+                        .setMinimumVersion(minVersion)
+                        .setFallbackUrl(Uri.parse("https://play.google.com/store/apps/details?id=" + lnk))
+                        .build())
+                .setLink(deepLink);
+
+        DynamicLink link = builder.buildDynamicLink();
+        return link.getUri();
+    }
+
     private void generateDeepLink() {
         GoogleApiClient googleApiClient = Utils.createGoogleClient((FragmentActivity) mActivity, this);
         AppInvite.AppInviteApi.getInvitation(googleApiClient, mActivity, true)
@@ -324,19 +387,29 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
 
     }
 
-    private void shareLink() {
+    private void shareDeepLink(String deepLink) {
+        //Uri imageUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/" + "ic_refer");
+/*        Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.ic_refer);
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Clapio/invite.jpeg";
+        OutputStream out = null;
+        File file=new File(path);
         try {
-
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-//            shareIntent.putExtra(Intent.EXTRA_SUBJECT, mActivity.getResources().getString(R.string.app_name));
-            String shareMessage = "\nRefer & Earn Link\n\n";
-            shareMessage = shareMessage + deepLink;
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-            startActivity(Intent.createChooser(shareIntent, "choose one"));
+            out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
         } catch (Exception e) {
-            //e.toString();
-        }
+            e.printStackTrace();
+        }*/
+
+
+//        Uri bmpUri = Uri.parse("android.resource://" + mActivity.getPackageName() + "/drawable/" + "ic_refer.jpeg");
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        //intent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+        intent.putExtra(Intent.EXTRA_TEXT, deepLink + "\n\nJoin me on ProtectionApp & Earn Cash, an Amazing Utility App.!");
+        //intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(intent);
     }
 
     @Override
@@ -414,6 +487,26 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Utils.showToast(mActivity, resultCode + "", AppConstant.errorColor);
+        if (resultCode == Activity.RESULT_OK && requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE) {
+            PaymentData paymentData = PaymentData.getFromIntent(data);
+//                String json = data.toJSon()
+            try {
+                JSONObject paymentMethodData = new JSONObject(paymentData.toJson())
+                        .getJSONObject("paymentMethodData");
+                String paymentToken = paymentMethodData
+                        .getJSONObject("tokenizationData")
+                        .getString("token");
+                Log.e("payment??>>", paymentToken);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return;
+        } else if (resultCode == 1 && requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE) {
+            Status status = AutoResolveHelper.getStatusFromIntent(data);
+            Log.e("dfvbdfbdfbn", status.getStatusMessage());
+            return;
+        }
         if (resultCode == Activity.RESULT_OK) {
             //Image Uri will not be null for RESULT_OK
             final Uri fileUri = data.getData();
@@ -445,24 +538,48 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         } else {
             Utils.showToast(mActivity, "Task Cancelled", AppConstant.errorColor);
         }
+
     }
 
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        FetchNotification fetchNotification = new FetchNotification();
+        fetchNotification.setMsg(etMsg.getText().toString());
+        fetchNotification.setTo_mobile(PrefManager.getString(AppConstant.USER_MOBILE));
+        fetchNotification.setFrom_mobile(userBean.getMobile());
+        fetchNotification.setProfile_Pic(userBean.getProfilePic());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        fetchNotification.setCreated_date(dateFormat.format(new Date()));
         if (isChecked) {
             tokenList.add(userBean.getFcmToken());
-            FetchNotification fetchNotification = new FetchNotification();
-            fetchNotification.setMsg(etMsg.getText().toString());
-            fetchNotification.setTo_mobile(PrefManager.getString(AppConstant.USER_MOBILE));
-            fetchNotification.setFrom_mobile(userBean.getMobile());
-            fetchNotification.setProfile_Pic(userBean.getProfilePic());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-            fetchNotification.setCreated_date(dateFormat.format(new Date()));
             fetchNotifications.add(fetchNotification);
         } else {
-            tokenList.remove(position);
-            fetchNotifications.remove(position);
+            fetchNotifications.remove(fetchNotification);
+            tokenList.remove(userBean.getFcmToken());
         }
 
     }
+
+    @Override
+    public void onSelectPlan(PlansBean plansBean) {
+        try {
+            final JSONObject paymentRequestJson = googlePaySetup.baseConfigurationJson();
+            paymentRequestJson.put("transactionInfo", new JSONObject()
+                    .put("totalPrice", plansBean.getPlanPrice().replace("\u20B9", ""))
+                    .put("totalPriceStatus", "FINAL")
+                    .put("currencyCode", "INR")
+            );
+            paymentRequestJson.put("merchantInfo", new JSONObject()
+                    .put("merchantId", "01234567890123456789")
+                    .put("merchantName", "Example Merchant")
+
+            );
+            final PaymentDataRequest request = PaymentDataRequest.fromJson(paymentRequestJson.toString());
+            AutoResolveHelper.resolveTask(googlePaySetup.paymentsClient.loadPaymentData(request), getActivity(), LOAD_PAYMENT_DATA_REQUEST_CODE
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

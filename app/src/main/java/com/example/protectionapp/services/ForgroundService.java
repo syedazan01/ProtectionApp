@@ -5,17 +5,18 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -45,14 +46,65 @@ public class ForgroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG_FOREGROUND_SERVICE, "My foreground service onCreate().");
-    }
+        Log.e(TAG_FOREGROUND_SERVICE, "My foreground service onCreate().");
+     /*   MediaSessionCompat mediaSession = new MediaSessionCompat(this, "ForgroundService");
+        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mediaSession.setPlaybackState(new PlaybackStateCompat.Builder()
+                .setState(PlaybackStateCompat.STATE_PLAYING, 0, 0) //you simulate a player which plays something.
+                .build());
 
+        //this will only work on Lollipop and up, see https://code.google.com/p/android/issues/detail?id=224134
+        VolumeProviderCompat myVolumeProvider =
+                new VolumeProviderCompat(VolumeProviderCompat.VOLUME_CONTROL_RELATIVE, *//*max volume*//*100, *//*initial volume level*//*50) {
+                    @Override
+                    public void onAdjustVolume(int direction) {
+                *//*
+                -1 -- volume down
+                1 -- volume up
+                0 -- volume button released
+
+                 *//*
+                        Log.e("dfbfdgnbrdtg","Up");
+                    }
+                };
+
+        mediaSession.setPlaybackToRemote(myVolumeProvider);
+        mediaSession.setActive(true);*/
+    }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        final int[] volumePrev = {0};
+        MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.camera_detector);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                if ("android.media.VOLUME_CHANGED_ACTION".equals(intent.getAction())) {
+
+                    int volume = intent.getIntExtra("android.media.EXTRA_VOLUME_STREAM_VALUE", 0);
+
+                    Log.i("dfzfvbdbg", "volume = " + volume);
+
+                    if (volumePrev[0] < volume) {
+                        Log.i("sdfgbdfbf", "You have pressed volume up button");
+                    } else {
+                        Log.i("dfvbdfbdf", "You have pressed volume down button");
+                    }
+                    volumePrev[0] = volume;
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.media.VOLUME_CHANGED_ACTION");
+        registerReceiver(broadcastReceiver, filter);
+
         if (intent != null) {
             String action = intent.getAction();
-            if(action!=null)
+            if (action != null)
 
                 switch (action) {
                     case ACTION_START_FOREGROUND_SERVICE:
@@ -71,7 +123,7 @@ public class ForgroundService extends Service {
                         break;
                 }
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     /* Used to build and start foreground service. */
@@ -165,4 +217,5 @@ public class ForgroundService extends Service {
         // Stop the foreground service.
         stopSelf();
     }
+
 }

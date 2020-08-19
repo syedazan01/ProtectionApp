@@ -43,4 +43,11 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="notify_error">Record error</string>
+    <string name="stop_speaker">Stop Speaker</string>
+    <string name="recording_speaker_on">Recording Speaker On</string>
+    <string name="start_speaker">Start Speaker</string>
+    <string name="recording_speaker_off">Recording Speaker Off</string>
+    <string name="error_notification_title">Notification Error</string>
+    <string name="notification_success">Notifcation Success</string>
 </resources>

@@ -1,20 +1,13 @@
 package com.example.protectionapp.activites;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.viewpager.widget.ViewPager;
-
 import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,7 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.aykuttasil.callrecord.CallRecord;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.viewpager.widget.ViewPager;
+
 import com.example.protectionapp.R;
 import com.example.protectionapp.ViewPageAdapter;
 import com.example.protectionapp.adapters.RecordingFileAdapter;
@@ -36,8 +35,7 @@ import com.example.protectionapp.fragments.PlayerFragment;
 import com.example.protectionapp.fragments.Recording_fragment;
 import com.example.protectionapp.interfacecallbacks.onPlay;
 import com.example.protectionapp.model.RecordingFileData;
-import com.example.protectionapp.services.ForgroundService;
-import com.example.protectionapp.utils.AppConstant;
+import com.example.protectionapp.services.CallRecorderService;
 import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.tabs.TabLayout;
 
@@ -59,11 +57,12 @@ public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.On
     private Handler handler;
     private ToggleButton callToggle;
     private RelativeLayout rltCallRecording;
-    private CallRecord callRecord;
+
+    //    private CallRecord callRecord;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+        if (PrefManager.getBoolean(ISNIGHTMODE))
             setTheme(R.style.AppTheme_Base_Night);
         else
             setTheme(R.style.AppTheme_Base_Light);
@@ -80,22 +79,17 @@ private void initActions()
     callToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            Intent intent = new Intent(CallRecorder.this, ForgroundService.class);
-            if(b)
-            {
-                PrefManager.putBoolean(AppConstant.IS_CALL_RECORDING_ON,true);
-               intent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
+            Intent intent = new Intent(CallRecorder.this, CallRecorderService.class);
+            if (b) {
                 startService(intent);
-                callRecord.startCallRecordService();
+//                PrefManager.putBoolean(AppConstant.IS_CALL_RECORDING_ON,true);
+//                callRecord.startCallRecordService();
                 Toast.makeText(getApplicationContext(), "Call Recording is set ON", Toast.LENGTH_SHORT).show();
-            }
-                else
-            {
-                intent.setAction(ForgroundService.ACTION_STOP_FOREGROUND_SERVICE);
-                startService(intent);
-                callRecord.stopCallReceiver();
+            } else {
+                stopService(intent);
+//                callRecord.stopCallReceiver();
                 Toast.makeText(getApplicationContext(), "Call Recording is set OFF", Toast.LENGTH_SHORT).show();
-                PrefManager.putBoolean(AppConstant.IS_CALL_RECORDING_ON,false);
+//                PrefManager.putBoolean(AppConstant.IS_CALL_RECORDING_ON,false);
             }
                 }
     });
@@ -182,13 +176,14 @@ private void initActions()
         rltCallRecording = findViewById(R.id.rltCallRecording);
         callToggle = findViewById(R.id.callToggle);
         sbPlayer.setOnSeekBarChangeListener(this);
-        handler=new Handler();
-        RecordingFileAdapter.onPlay=this;
-        if(PrefManager.getBoolean(AppConstant.IS_CALL_RECORDING_ON))
-          callToggle.setChecked(true);
+        handler = new Handler();
+        RecordingFileAdapter.onPlay = this;
+
+        if (isMyServiceRunning(CallRecorderService.class))
+            callToggle.setChecked(true);
         else
             callToggle.setChecked(false);
-        callRecord = new CallRecord.Builder(this)
+       /* callRecord = new CallRecord.Builder(this)
                 .setLogEnable(true)
                 .setRecordFileName("call_"+System.currentTimeMillis())
                 .setRecordDirName("Protection Call Records")
@@ -199,7 +194,7 @@ private void initActions()
                 .setShowSeed(true) // optional & default value ->Ex: RecordFileName_incoming.amr || RecordFileName_outgoing.amr
 //                .setLogEnable(true)
 //                .setShowPhoneNumber(true)
-                .build();
+                .build();*/
     }
     private void setUpViewPager(ViewPager viewPager){
         ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(),2);
@@ -301,4 +296,13 @@ private void initActions()
         }
     }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

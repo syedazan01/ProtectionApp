@@ -3,7 +3,6 @@ package org.mazhuang.cleanexpert.ui;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,8 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.Toolbar;
 
 import org.mazhuang.cleanexpert.R;
 import org.mazhuang.cleanexpert.callback.IScanCallback;
@@ -72,7 +73,7 @@ public class JunkCleanActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_junk_clean);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         handler = new Handler() {
@@ -146,8 +147,8 @@ public class JunkCleanActivity extends BaseActivity {
             }
         };
 
-        mCleanButton = (Button) findViewById(R.id.do_junk_clean);
-        mCleanButton.setEnabled(false);
+        mCleanButton = findViewById(R.id.do_junk_clean);
+//        mCleanButton.setEnabled(false);
         mCleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +159,7 @@ public class JunkCleanActivity extends BaseActivity {
 
         resetState();
 
-        ExpandableListView listView = (ExpandableListView) findViewById(R.id.junk_list);
+        ExpandableListView listView = findViewById(R.id.junk_list);
         mHeaderView = new ListHeaderView(this, listView);
         mHeaderView.mProgress.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
         listView.addHeaderView(mHeaderView);
@@ -237,8 +238,8 @@ public class JunkCleanActivity extends BaseActivity {
                     convertView = LayoutInflater.from(JunkCleanActivity.this)
                             .inflate(R.layout.group_list, null);
                     holder = new GroupViewHolder();
-                    holder.mPackageNameTv = (TextView)convertView.findViewById(R.id.package_name);
-                    holder.mPackageSizeTv = (TextView)convertView.findViewById(R.id.package_size);
+                    holder.mPackageNameTv = convertView.findViewById(R.id.package_name);
+                    holder.mPackageSizeTv = convertView.findViewById(R.id.package_size);
                     convertView.setTag(holder);
                 } else {
                     holder = (GroupViewHolder)convertView.getTag();
@@ -265,8 +266,8 @@ public class JunkCleanActivity extends BaseActivity {
                                 .inflate(R.layout.level1_item_list, null);
                     }
                     holder = new ChildViewHolder();
-                    holder.mJunkTypeTv = (TextView) convertView.findViewById(R.id.junk_type);
-                    holder.mJunkSizeTv = (TextView) convertView.findViewById(R.id.junk_size);
+                    holder.mJunkTypeTv = convertView.findViewById(R.id.junk_type);
+                    holder.mJunkSizeTv = convertView.findViewById(R.id.junk_size);
 
                     holder.mJunkTypeTv.setText(info.name);
                     holder.mJunkSizeTv.setText(CleanUtil.formatShortFileSize(JunkCleanActivity.this, info.mSize));
@@ -385,6 +386,7 @@ public class JunkCleanActivity extends BaseActivity {
             mHeaderView.mProgress.setGravity(Gravity.CENTER);
 
             mCleanButton.setEnabled(true);
+            Toast.makeText(this, "Start", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -476,24 +478,28 @@ public class JunkCleanActivity extends BaseActivity {
 
             @Override
             public void onFinish(ArrayList<JunkInfo> children) {
-                for (JunkInfo info : children) {
-                    String path = info.mChildren.get(0).mPath;
-                    int groupFlag = 0;
-                    if (path.endsWith(".apk")) {
-                        groupFlag = JunkGroup.GROUP_APK;
-                    } else if (path.endsWith(".log")) {
-                        groupFlag = JunkGroup.GROUP_LOG;
-                    } else if (path.endsWith(".tmp") || path.endsWith(".temp")) {
-                        groupFlag = JunkGroup.GROUP_TMP;
+                try {
+                    for (JunkInfo info : children) {
+                        String path = info.mChildren.get(0).mPath;
+                        int groupFlag = 0;
+                        if (path.endsWith(".apk")) {
+                            groupFlag = JunkGroup.GROUP_APK;
+                        } else if (path.endsWith(".log")) {
+                            groupFlag = JunkGroup.GROUP_LOG;
+                        } else if (path.endsWith(".tmp") || path.endsWith(".temp")) {
+                            groupFlag = JunkGroup.GROUP_TMP;
+                        }
+
+                        JunkGroup cacheGroup = mJunkGroups.get(groupFlag);
+                        cacheGroup.mChildren.addAll(info.mChildren);
+                        cacheGroup.mSize = info.mSize;
                     }
 
-                    JunkGroup cacheGroup = mJunkGroups.get(groupFlag);
-                    cacheGroup.mChildren.addAll(info.mChildren);
-                    cacheGroup.mSize = info.mSize;
+                    Message msg = handler.obtainMessage(MSG_OVERALL_FINISH);
+                    msg.sendToTarget();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                Message msg = handler.obtainMessage(MSG_OVERALL_FINISH);
-                msg.sendToTarget();
             }
         });
         overallScanTask.execute();

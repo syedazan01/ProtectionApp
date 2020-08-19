@@ -2,7 +2,6 @@ package com.example.protectionapp.activites;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.protectionapp.R;
@@ -23,7 +20,13 @@ import com.example.protectionapp.fragments.HomeFragment;
 import com.example.protectionapp.fragments.PersonalRecordFragment;
 import com.example.protectionapp.fragments.SosFragment;
 import com.example.protectionapp.fragments.UtilityFeaturesFragment;
+import com.example.protectionapp.model.UserBean;
+import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
+import com.example.protectionapp.utils.Utils;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.material.navigation.NavigationView;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
@@ -34,7 +37,7 @@ import org.mazhuang.cleanexpert.ui.JunkCleanActivity;
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class HomePage extends AppCompatActivity  {
-    DrawerLayout drawerLayout;
+    //    DrawerLayout drawerLayout;
     Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
@@ -47,24 +50,38 @@ public class HomePage extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+        if (PrefManager.getBoolean(ISNIGHTMODE))
             setTheme(R.style.AppTheme_Base_Night);
         else
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_home_page);
-
-
         //set up id of spacenavigaton
         spaceNavigationView = findViewById(R.id.space);
+        if (PrefManager.getString(AppConstant.INVITED_BY).equals("") && !PrefManager.getBoolean(AppConstant.ISREFERED)) {
+            Utils.getUserReference().child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    UserBean userBean = dataSnapshot.getValue(UserBean.class);
+                    userBean.setRefer(true);
+                    Utils.storeUserDetailsToRTD(userBean);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+            Utils.showCongratsDialog(this);
+        }
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_library_books_24));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_sos));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_feature));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_account_circle_24));
         setUpToolBar();
-      //  bottomNavigationView = findViewById(R.id.bottom_navigation);
-      //  bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        navigationView = findViewById(R.id.navigation_view);
+        //  bottomNavigationView = findViewById(R.id.bottom_navigation);
+        //  bottomNavigationView.setOnNavigationItemSelectedListener(this);
+       /* navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -87,7 +104,7 @@ public class HomePage extends AppCompatActivity  {
                 }
                 return false;
             }
-        });
+        });*/
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PersonalRecordFragment()).commit();
        // bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
 
@@ -185,14 +202,13 @@ public class HomePage extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setUpToolBar()
-    {
-        drawerLayout = findViewById(R.id.drawerlayout);
+    private void setUpToolBar() {
+//        drawerLayout = findViewById(R.id.drawerlayout);
         toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.app_name,R.string.app_name);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
+//        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.app_name,R.string.app_name);
+//        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+//        actionBarDrawerToggle.syncState();
 
     }
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,29 +27,39 @@ import com.example.protectionapp.interfacecallbacks.OnNotificationChecked;
 import com.example.protectionapp.model.PInfo;
 import com.example.protectionapp.services.ForgroundService;
 import com.example.protectionapp.utils.AppConstant;
+import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
+
+import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
 public class KillNotification extends AppCompatActivity implements OnNotificationChecked {
     ImageView ivBack;
     TextView tvToolbarTitle;
-    RecyclerView rvInstalledApps;
+    ConstraintLayout constMostUsed, constRareUsed;
+    RecyclerView rvMostInstalledApps, rvRareInstalledApps;
     androidx.appcompat.widget.SearchView searchApp;
     Switch swAll;
     SharedPreferences pref;
     ArrayList<PInfo> pInfos = new ArrayList<>();
-    InstalledApps installedAppAdapter;
+    ArrayList<PInfo> mostPInfos = new ArrayList<>();
+    InstalledApps installedAppAdapter, mostInstalledAppAdapter;
     Activity activity = KillNotification.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (PrefManager.getBoolean(ISNIGHTMODE))
+            setTheme(R.style.AppTheme_Base_Night);
+        else
+            setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_kill_notification);
         iniiViews();
         initActions();
@@ -93,19 +104,46 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
 
             @Override
             public boolean onQueryTextChange(String s) {
-                if (TextUtils.isEmpty(s)) {
-                    installedAppAdapter.notifyList(pInfos);
-                }
-                String query = s.toLowerCase(Locale.getDefault());
-                ArrayList<PInfo> filteredPInfo = new ArrayList<>();
+                Executors.newSingleThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (TextUtils.isEmpty(s)) {
+                                    installedAppAdapter.notifyList(pInfos);
+                                    mostInstalledAppAdapter.notifyList(mostPInfos);
+                                }
+                            }
+                        });
 
-                for (PInfo pInfo : pInfos) {
-                    String label = pInfo.getAppname();
-                    if (label.contains(query)) {
-                        filteredPInfo.add(pInfo);
+                        String query = s.toLowerCase(Locale.getDefault());
+                        ArrayList<PInfo> filteredPInfo = new ArrayList<>();
+                        ArrayList<PInfo> mostFilteredPInfo = new ArrayList<>();
+
+                        for (PInfo pInfo : mostPInfos) {
+                            String label = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                            if (label.contains(query)) {
+                                mostFilteredPInfo.add(pInfo);
+                            }
+                        }
+                        for (PInfo pInfo : pInfos) {
+                            String label = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                            if (label.contains(query)) {
+                                filteredPInfo.add(pInfo);
+                            }
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                installedAppAdapter.notifyList(filteredPInfo);
+                                mostInstalledAppAdapter.notifyList(mostFilteredPInfo);
+                            }
+                        });
+
                     }
-                }
-                installedAppAdapter.notifyList(filteredPInfo);
+                });
+
                 return false;
             }
         });
@@ -117,9 +155,13 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         swAll = findViewById(R.id.swAll);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
-        rvInstalledApps = findViewById(R.id.rvInstalledApps);
+        constRareUsed = findViewById(R.id.constRareUsed);
+        constMostUsed = findViewById(R.id.constMostUsed);
+        rvMostInstalledApps = findViewById(R.id.rvMostInstalledApps);
+        rvRareInstalledApps = findViewById(R.id.rvRareInstalledApps);
         tvToolbarTitle.setText("Kill Notifications");
-        rvInstalledApps.setLayoutManager(new LinearLayoutManager(this));
+        rvMostInstalledApps.setLayoutManager(new LinearLayoutManager(this));
+        rvRareInstalledApps.setLayoutManager(new LinearLayoutManager(this));
 
         final ProgressDialog dialog = Utils.getProgressDialog(activity);
 
@@ -134,12 +176,27 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                     }
                 });
                 pInfos = new PInfo(activity).getInstalledApps(false);
+                List<PInfo> tempPInfos = new ArrayList<>(pInfos);
+                for (int i = 0; i < tempPInfos.size(); i++) {
+                    PInfo pInfo = tempPInfos.get(i);
+                    String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                    if (appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
+                        mostPInfos.add(pInfo);
+                        pInfos.remove(pInfo);
+                    }
+                }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         dialog.dismiss();
-                        installedAppAdapter = new InstalledApps(activity, pInfos, KillNotification.this);
-                        rvInstalledApps.setAdapter(installedAppAdapter);
+
+                        if (mostPInfos.size() < 0) {
+                            constMostUsed.setVisibility(View.GONE);
+                        }
+                        installedAppAdapter = new InstalledApps(activity, pInfos, KillNotification.this, AppConstant.RAREUSED);
+                        mostInstalledAppAdapter = new InstalledApps(activity, mostPInfos, KillNotification.this, AppConstant.MOSTUSED);
+                        rvMostInstalledApps.setAdapter(mostInstalledAppAdapter);
+                        rvRareInstalledApps.setAdapter(installedAppAdapter);
                     }
                 });
 
@@ -151,8 +208,13 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     }
 
     @Override
-    public void onCheckboxAppChecked(int position, boolean isChecked) {
-        String pkg = installedAppAdapter.getItem(position).getPname();
+    public void onCheckboxAppChecked(int position, boolean isChecked, String typeOfList) {
+        String pkg = null;
+        if (typeOfList.equals(AppConstant.RAREUSED)) {
+            pkg = installedAppAdapter.getItem(position).getPname();
+        } else {
+            pkg = mostInstalledAppAdapter.getItem(position).getPname();
+        }
         if (pref.contains(AppConstant.PREF_PACKAGES_BLOCKED)) {
             HashSet pkgs = new HashSet(Arrays.asList(pref.getString(AppConstant.PREF_PACKAGES_BLOCKED, "").split(";")));
             if (isChecked) {
@@ -209,13 +271,15 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     }
 
     private void showApps() {
-        rvInstalledApps.setVisibility(View.VISIBLE);
+        rvMostInstalledApps.setVisibility(View.VISIBLE);
+        rvRareInstalledApps.setVisibility(View.VISIBLE);
         searchApp.setVisibility(View.VISIBLE);
 //        Utils.showToast(activity,"No App Found",AppConstant.errorColor);
     }
 
     private void hideApps() {
-        rvInstalledApps.setVisibility(View.GONE);
+        rvMostInstalledApps.setVisibility(View.GONE);
+        rvRareInstalledApps.setVisibility(View.GONE);
         searchApp.setVisibility(View.GONE);
         Utils.showToast(activity, "No App Found", AppConstant.errorColor);
     }

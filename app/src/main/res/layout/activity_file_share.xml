@@ -25,7 +25,7 @@
             android:id="@+id/fileshareTL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicator="?attr/primaryTitleColor"
+            app:tabIndicatorColor="?attr/primaryTitleColor"
             app:tabIndicatorHeight="3dp"
             app:tabMode="fixed"
             app:tabGravity="fill" />

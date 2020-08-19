@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.protectionapp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -69,7 +69,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.1'
 
     //Meter View
-    implementation 'eo.view:batterymeter:2.0.0'
+    implementation 'com.ekn.gruzer.gaugelibrary:gaugelibrary:0.2.2'
 
     //Call Recording
     implementation 'com.github.aykuttasil:CallRecorder:1.5.3'
@@ -102,6 +102,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation project(":cleanmaster")
+    implementation project(":infrared-release")
     //Circular Floating
     implementation 'com.github.clans:fab:1.6.4'
 //    implementation 'com.ramotion.circlemenu:circle-menu:0.3.2'
@@ -111,4 +112,8 @@ dependencies {
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //In app purchase
+    implementation 'com.google.android.gms:play-services-wallet:18.0.0'
+    implementation 'com.android.billingclient:billing:3.0.0'
 }

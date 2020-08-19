@@ -17,10 +17,12 @@ import java.util.List;
 public class AdapterSubscription extends RecyclerView.Adapter<AdapterSubscription.SubscribeHolder> {
     private Activity activity;
     private List<PlansBean> plansBeans;
+    private RecyclerViewClickListener recyclerViewClickListener;
 
-    public AdapterSubscription(Activity activity, List<PlansBean> plansBeans) {
+    public AdapterSubscription(Activity activity, List<PlansBean> plansBeans, RecyclerViewClickListener recyclerViewClickListener) {
         this.activity = activity;
         this.plansBeans = plansBeans;
+        this.recyclerViewClickListener = recyclerViewClickListener;
     }
 
     @NonNull
@@ -43,6 +45,10 @@ public class AdapterSubscription extends RecyclerView.Adapter<AdapterSubscriptio
         return plansBeans.size();
     }
 
+    public interface RecyclerViewClickListener {
+        void onSelectPlan(PlansBean plansBean);
+    }
+
     public class SubscribeHolder extends RecyclerView.ViewHolder {
         TextView tvPrice, tvPeriod, tvScheme;
 
@@ -51,6 +57,12 @@ public class AdapterSubscription extends RecyclerView.Adapter<AdapterSubscriptio
             tvPrice = itemView.findViewById(R.id.tvPrice);
             tvPeriod = itemView.findViewById(R.id.tvPeriod);
             tvScheme = itemView.findViewById(R.id.tvScheme);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    recyclerViewClickListener.onSelectPlan(plansBeans.get(getAdapterPosition()));
+                }
+            });
         }
     }
 }

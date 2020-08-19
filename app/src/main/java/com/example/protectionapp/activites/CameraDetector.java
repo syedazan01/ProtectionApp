@@ -13,9 +13,9 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.cameraDetector.CamDetector_tips;
 import com.example.protectionapp.cameraDetector.CameraDectectorByRM;
 
-public class CameraDetector extends AppCompatActivity  {
+public class CameraDetector extends AppCompatActivity {
     Toolbar toolbar;
-    Button camDetect,tipsBt;
+    Button camDetect, tipsBt, btnInfraredCamera;
     ImageView ivBack;
 
     @Override
@@ -33,6 +33,7 @@ public class CameraDetector extends AppCompatActivity  {
         camDetect = findViewById(R.id.btnCameraByRM);
         tipsBt = findViewById(R.id.tips_camBT);
         ivBack = findViewById(R.id.ivBack);
+        btnInfraredCamera = findViewById(R.id.btnInfraredCamera);
     }
 
 
@@ -57,6 +58,13 @@ public class CameraDetector extends AppCompatActivity  {
                 Intent intent = new Intent(CameraDetector.this, CameraDectectorByRM.class);
                 startActivity(intent);
 
+            }
+        });
+        btnInfraredCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CameraDetector.this, IRCameraDetector.class);
+                startActivity(intent);
             }
         });
     }
