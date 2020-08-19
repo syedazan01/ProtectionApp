@@ -3,21 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:id="@+id/root_container"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:clickable="true"
-    android:focusable="true">
-
+    android:layout_gravity="top|end"
+    android:visibility="invisible"
+    >
 
     <com.github.clans.fab.FloatingActionMenu
+        android:layout_gravity="top|end"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_alignParentEnd="true"
         android:id="@+id/rootMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|center"
-        android:background="@android:color/transparent"
-        android:clickable="true"
-        android:focusable="true"
         app:menu_animationDelayPerItem="50"
         app:menu_colorNormal="#DA4336"
         app:menu_colorPressed="#E75043"
@@ -40,7 +38,7 @@
         app:menu_labels_singleLine="false"
         app:menu_labels_textColor="#FFFFFF"
         app:menu_labels_textSize="14sp"
-        app:menu_openDirection="up"
+        app:menu_openDirection="down"
         app:menu_shadowColor="#66000000"
         app:menu_shadowRadius="4dp"
         app:menu_shadowXOffset="1dp"
@@ -146,4 +144,12 @@
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>
+    <FrameLayout
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="top|end"
+        android:id="@+id/root_container"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
 </FrameLayout>

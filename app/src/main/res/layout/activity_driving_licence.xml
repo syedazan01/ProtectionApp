@@ -169,13 +169,14 @@
                     android:id="@+id/dl_imageview1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    />
 
                 <ImageView
+                    android:layout_marginTop="10dp"
                     android:id="@+id/dl_imageview2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    />
 
                 <Button
                     android:id="@+id/btdl_scan"

@@ -162,17 +162,16 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
-                    android:id="@+id/adhar_imageView"
+                    android:id="@+id/adhar_imageView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:scaleType="fitXY" />
 
                 <ImageView
+                    android:layout_marginTop="10dp"
                     android:id="@+id/adhar_imageView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:scaleType="fitXY" />
             </LinearLayout>
         </RelativeLayout>

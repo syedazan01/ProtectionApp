@@ -76,6 +76,7 @@ public class ForgroundService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         final int[] volumePrev = {0};
         MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.camera_detector);
+        mediaPlayer.setVolume(0,0);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 

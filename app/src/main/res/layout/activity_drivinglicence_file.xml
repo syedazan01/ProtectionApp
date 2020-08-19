@@ -26,7 +26,6 @@
                 android:id="@+id/bankicon"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
-                android:layout_below="@+id/toolbarLay"
                 android:layout_marginTop="7dp"
                 android:gravity="center"
                 android:src="@drawable/drivinglicenselogo"
@@ -167,14 +166,15 @@
                     android:id="@+id/dl_imageview1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                   
                     android:scaleType="fitXY" />
 
                 <ImageView
+                    android:layout_marginTop="10dp"
                     android:id="@+id/dl_imageview2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                   
                     android:scaleType="fitXY" />
 
 

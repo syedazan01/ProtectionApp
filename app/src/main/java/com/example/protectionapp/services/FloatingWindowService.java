@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.example.protectionapp.fragments.UtilityFeaturesFragment;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
@@ -30,6 +32,8 @@ public class FloatingWindowService extends Service {
     private WindowManager mWindowManager;
     private View mFloatingWidget;
     private FloatingActionButton fabCameraDetector, fabVoiceRecorder, fabFileShare, fabClose;
+    private FloatingActionMenu rootMenu;
+    private FrameLayout root_container;
 
     @Override
     public void onCreate() {
@@ -41,20 +45,22 @@ public class FloatingWindowService extends Service {
             setTheme(R.style.AppTheme_Base_Light);
 
         mFloatingWidget = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, Build.VERSION.SDK_INT > Build.VERSION_CODES.O
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, Build.VERSION.SDK_INT > Build.VERSION_CODES.O
                 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                0,
                 PixelFormat.TRANSLUCENT);
-        params.gravity = Gravity.CENTER | Gravity.END;
-        params.x = 0;
-        params.y = 100;
+        params.gravity = Gravity.TOP | Gravity.END;
+        params.x = WindowManager.LayoutParams.MATCH_PARENT;
+        params.y = WindowManager.LayoutParams.MATCH_PARENT;
 
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mFloatingWidget, params);
         final View collapsedView = mFloatingWidget.findViewById(R.id.collapse_view);
         final View expandedView = mFloatingWidget.findViewById(R.id.expanded_container);
+        root_container = mFloatingWidget.findViewById(R.id.root_container);
         fabVoiceRecorder = mFloatingWidget.findViewById(R.id.fabVoiceRecorder);
+        rootMenu = mFloatingWidget.findViewById(R.id.rootMenu);
         fabCameraDetector = mFloatingWidget.findViewById(R.id.fabCameraDetector);
         fabFileShare = mFloatingWidget.findViewById(R.id.fabFileShare);
         fabClose = mFloatingWidget.findViewById(R.id.closeMenuItem);
@@ -102,10 +108,17 @@ public class FloatingWindowService extends Service {
                 expandedView.setVisibility(View.GONE);
             }
         });
+        root_container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rootMenu.performClick();
+            }
+        });
 
-        mFloatingWidget.findViewById(R.id.rootMenu).setOnTouchListener(new View.OnTouchListener() {
-            private int initialX;
-            private int initialY;
+
+        root_container.setOnTouchListener(new View.OnTouchListener() {
+            private float initialX;
+            private float initialY;
             private float initialTouchX;
             private float initialTouchY;
 
@@ -137,13 +150,19 @@ public class FloatingWindowService extends Service {
 
                     case MotionEvent.ACTION_DOWN:
 
-                        initialTouchX = view.getX() - event.getRawX();
-                        initialTouchY = view.getY() - event.getRawY();
+                        initialX = view.getX() - event.getRawX();
+                        initialTouchX = rootMenu.getX() - event.getRawX();
+                        initialY = view.getY() - event.getRawY();
+                        initialTouchY =rootMenu.getY() - event.getRawY();
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-
-                        view.animate()
+                       view.animate()
+                                .x(event.getRawX() + initialX)
+                                .y(event.getRawY() + initialY)
+                                .setDuration(0)
+                                .start();
+                        rootMenu.animate()
                                 .x(event.getRawX() + initialTouchX)
                                 .y(event.getRawY() + initialTouchY)
                                 .setDuration(0)

@@ -28,17 +28,17 @@ public interface AppConstant {
     String FIREBASE_STORAGE_DATABASE_URL = "gs://protectionapp-3baf6.appspot.com/";
     String PERSONAL_DOCUMENT = "Personal Document";
     String USER_DETAIL = "User Details";
-    String ADHAAR = "adhaar";
-    String PAN = "pan";
-    String DRIVING_LICENSE = "driving license";
-    String BANK = "bank";
-    String ATM = "atm";
-    String VOTER_ID = "voter id";
+    String ADHAAR = "Adhaar";
+    String PAN = "PAN";
+    String DRIVING_LICENSE = "Driving License";
+    String BANK = "Bank";
+    String ATM = "ATM";
+    String VOTER_ID = "Voter Id";
     String NOTIFICATION = "Notification";
     String FILE_SHARE = "File Share";
     String PLANS = "Plans";
     String STUDENT_ID = "Student";
-    String PASSPORT = "passport";
+    String PASSPORT = "Passport";
 
     //Runtime Permissions Constant
     int REQUEST_OVERLAY_PERMISSION = 900;

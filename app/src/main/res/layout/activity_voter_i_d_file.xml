@@ -168,14 +168,15 @@
                     android:id="@+id/ivVoterid_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                   
                     android:scaleType="fitXY" />
 
                 <ImageView
+                    android:layout_marginTop="10dp"
                     android:id="@+id/ivVoterid_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                   
                     android:scaleType="fitXY" />
 
 

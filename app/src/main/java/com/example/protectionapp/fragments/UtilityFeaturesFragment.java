@@ -94,6 +94,12 @@ public class UtilityFeaturesFragment extends Fragment implements FloatingWindowS
                 startActivity(new Intent(getActivity(), KillNotification.class));
             }
         });
+        ssEnableVolume.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                PrefManager.putBoolean(AppConstant.SCREENSHOT_ONVOLUME,b);
+            }
+        });
         swEnableLauncher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override

@@ -4,6 +4,23 @@
     package="com.example.protectionapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.TRANSMIT_IR"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.consumerir"
+        android:required="false" />
+
+    <permission
+        android:name="android.permission.CAPTURE_AUDIO_OUTPUT"
+        android:protectionLevel="signature|privileged" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
+    <uses-permission android:name="android.permission.PROCESS_INCOMING_CALLS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -36,6 +53,13 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme">
+
+
+        <activity android:name=".RecordsActivites.PassportFile"></activity>
+        <activity android:name=".RecordsActivites.Passport" />
+
+        <activity android:name=".activites.IRCameraDetector"></activity>
+        >>>>>>> Stashed changes
         <activity android:name=".RecordsActivites.StudentIDFile" />
         <activity android:name=".RecordsActivites.VoterIDFile" />
         <activity android:name=".RecordsActivites.ATMFile" />
@@ -98,6 +122,9 @@
         </provider>
 
         <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+        <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/login_logo" />
         <meta-data
@@ -124,6 +151,44 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
+        </service>
+
+        <receiver android:name=".receivers.BootCompleteReceiver">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".receivers.CallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+
+        </receiver>
+
+        <receiver
+            android:name=".receivers.ControlRecordingReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="net.synapticweb.callrecorder.START_RECORDING" />
+                <action android:name="net.synapticweb.callrecorder.STOP_SPEAKER" />
+                <action android:name="net.synapticweb.callrecorder.START_SPEAKER" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.CallRecorderService" />
+        <service
+            android:name=".services.AccessibilityKeyDetector"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accesiblity_service" />
+
         </service>
     </application>
 
