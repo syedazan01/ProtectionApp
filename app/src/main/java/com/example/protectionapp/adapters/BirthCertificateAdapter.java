@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.protectionapp.R;
 import com.example.protectionapp.interfacecallbacks.DocumentClickListener;
 import com.example.protectionapp.model.BirthCertificateBean;
+
 import java.util.List;
 import java.util.Random;
 
@@ -27,7 +28,6 @@ public class BirthCertificateAdapter extends RecyclerView.Adapter<BirthCertifica
         this.birthCertificateBeanList = birthCertificateBeanList;
         this.documentClickListener = documentClickListener;
     }
-
 
 
     @NonNull

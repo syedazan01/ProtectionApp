@@ -5,14 +5,12 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
-import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.services.ForgroundService;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.MIUIUtils;
@@ -67,9 +64,9 @@ public class SplashScreen extends AppCompatActivity {
             forrgroundIntent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
             startService(forrgroundIntent);
         }
-        if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
+       /* if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
             startService(new Intent(this, FloatingWindowService.class));
-        }
+        }*/
 
         if (Build.VERSION.SDK_INT >= 19 && MIUIUtils.isMIUI() && !MIUIUtils.isFloatWindowOptionAllowed(this)) {
             Log.i("TAG", "MIUI DEVICE: Screen Overlay Not allowed");
@@ -88,20 +85,8 @@ public class SplashScreen extends AppCompatActivity {
 
         animation.playAnimation();
         Utils.setShader(Color.BLUE, Color.GREEN, tvSplashTitle);
-
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.d("TAG", "Key pressed");
-        if (event.getAction() == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            MediaProjectionManager projectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-            startActivityForResult(projectionManager.createScreenCaptureIntent(), 900);
-        }
-//this prevents the key from performing the base function. Replace with super.onKeyDown to let it perform it's original function, after being consumed by your app.
-        return true;
-
-    }
 
     private void startHandler() {
         Handler handler = new Handler();

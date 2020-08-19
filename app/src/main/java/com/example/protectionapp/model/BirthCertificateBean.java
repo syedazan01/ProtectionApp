@@ -3,7 +3,7 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class BirthCertificateBean implements Serializable {
-    String moblilenumber,fathername,mothername,childname,sex,dateofbirth,hospitalname,imageview1,imageview2;
+    String moblilenumber, fathername, mothername, childname, sex, dateofbirth, hospitalname, imageview1, imageview2;
 
     public String getMoblilenumber() {
         return moblilenumber;

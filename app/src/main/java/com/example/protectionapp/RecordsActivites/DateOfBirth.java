@@ -1,12 +1,5 @@
 package com.example.protectionapp.RecordsActivites;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -25,14 +18,19 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.BirthCertificateBean;
 import com.example.protectionapp.model.FileShareBean;
 import com.example.protectionapp.model.NotificationBean;
-import com.example.protectionapp.model.PanBean;
-import com.example.protectionapp.model.PassportBean;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.network.ApiResonse;
 import com.example.protectionapp.utils.AppConstant;
@@ -64,7 +62,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener{
+public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     TextInputEditText dateofbirth;
     TextInputLayout fathername, mothername, childname, hospitalname;
     Button scanbirthBT, sendbirthBT, savebirthBT;
@@ -247,7 +245,7 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
         radioOther = findViewById(R.id.Gen_other);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
-        tvToolbarTitle.setText("Passport Form");
+        tvToolbarTitle.setText("Birth Certificate Form");
         Utils.makeButton(scanbirthBT, getResources().getColor(R.color.colorAccent), 40F);
         Utils.makeButton(savebirthBT, getResources().getColor(R.color.colorPrimary), 40F);
         if (getIntent().hasExtra(AppConstant.BIRTH_CERTIFICATE)) {
@@ -302,6 +300,7 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
 
 
     }
+
     @Override
     public void applyTexts(String message, String password) {
         this.msg = message;
@@ -406,4 +405,4 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
     }
-    }
+}

@@ -10,13 +10,18 @@ public interface AppConstant {
     //Pref Constant
     String ISNIGHTMODE = "nightMode";
     String OVERLAY = "overlay";
+    String MOSTUSED = "mostUsed";
+    String RAREUSED = "rareUsed";
     String SCREENSHOT_ONVOLUME = "Screenshot_Onvolume_is_on";
     String IS_CALL_RECORDING_ON = "call_recording_is_on";
+    String IS_SUBSCRIBE = "isSubscribe";
     String ISLOGGEDIN = "is_loggedIn";
     String USER_MOBILE = "user_mobile";
     String NOTIFICATION_ENABLE = "notifcation_enable";
     String PREF_PACKAGES_BLOCKED = "pref_packages_blocked";
     String FCMTOKEN = "fcm_token";
+    String INVITED_BY = "invitedBy";
+    String ISREFERED = "is_refered";
 
     //Real time database constants
     String FIREBASE_DATABASE_URL = "https://protectionapp-3baf6.firebaseio.com/";
@@ -34,6 +39,10 @@ public interface AppConstant {
     String PLANS = "Plans";
     String STUDENT_ID = "Student";
     String PASSPORT = "passport";
+    String BIRTH_CERTIFICATE = "birth certificate";
+
+    //Runtime Permissions Constant
+    int REQUEST_OVERLAY_PERMISSION = 900;
 
     //Runtime Permissions Constant
     int SYSTEM_ALERT_CODE = 900;

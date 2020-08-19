@@ -64,13 +64,13 @@ public class PersonalRecordFragment extends Fragment {
 //                    intent = new Intent(getActivity(), Adhaar.class);
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.ADHAAR);
                 }
-                else if(position==1)
+                else if (position == 1)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.PAN);
-                else if(position==2)
+                else if (position == 2)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.DRIVING_LICENSE);
-                else if(position==3)
+                else if (position == 3)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.BANK);
-                else if(position==4)
+                else if (position == 4)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.ATM);
                 else if (position == 5)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.VOTER_ID);
@@ -78,7 +78,7 @@ public class PersonalRecordFragment extends Fragment {
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.STUDENT_ID);
                 else if (position == 7)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.PASSPORT);
-                else if (position==8)
+                else if (position == 8)
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.BIRTH_CERTIFICATE);
 
 

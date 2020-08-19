@@ -1,8 +1,5 @@
 package com.example.protectionapp.RecordsActivites;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.net.Uri;
@@ -13,31 +10,30 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
 import com.example.protectionapp.model.BirthCertificateBean;
-import com.example.protectionapp.model.FileShareBean;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DateOfBirth_File extends AppCompatActivity {
     TextInputEditText dateofbirth;
     TextInputLayout fathername, mothername, childname, hospitalname;
-    Button  savebirthBT;
+    Button savebirthBT;
     RadioGroup radioGender;
     RadioButton radioMale, radioFemale, radioOther;
     ImageView imageView, imageView2;
     ImageView ivBack;
     TextView tvToolbarTitle;
     Activity activity = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
