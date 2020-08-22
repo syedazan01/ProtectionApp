@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -45,19 +46,17 @@ public class FloatingWindowService extends Service {
             setTheme(R.style.AppTheme_Base_Light);
 
         mFloatingWidget = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, Build.VERSION.SDK_INT > Build.VERSION_CODES.O
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, Build.VERSION.SDK_INT > Build.VERSION_CODES.O
                 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
-                0,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.TOP | Gravity.END;
-        params.x = WindowManager.LayoutParams.MATCH_PARENT;
-        params.y = WindowManager.LayoutParams.MATCH_PARENT;
-
+        params.x = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.y = WindowManager.LayoutParams.WRAP_CONTENT;
+//        mWindowManager.updateViewLayout(mFloatingWidget,params);
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mFloatingWidget, params);
-        final View collapsedView = mFloatingWidget.findViewById(R.id.collapse_view);
-        final View expandedView = mFloatingWidget.findViewById(R.id.expanded_container);
         root_container = mFloatingWidget.findViewById(R.id.root_container);
         fabVoiceRecorder = mFloatingWidget.findViewById(R.id.fabVoiceRecorder);
         rootMenu = mFloatingWidget.findViewById(R.id.rootMenu);
@@ -92,39 +91,21 @@ public class FloatingWindowService extends Service {
                 stopSelf();
             }
         });
-        ImageView closeButtonCollapsed = mFloatingWidget.findViewById(R.id.close_btn);
-        closeButtonCollapsed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                stopSelf();
-            }
-        });
-
-        ImageView closeButton = mFloatingWidget.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                collapsedView.setVisibility(View.VISIBLE);
-                expandedView.setVisibility(View.GONE);
-            }
-        });
-        root_container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rootMenu.performClick();
-            }
-        });
 
 
         root_container.setOnTouchListener(new View.OnTouchListener() {
+            private float DX,DY;
+            private float initialDX;
+            private float initialDY;
             private float initialX;
             private float initialY;
             private float initialTouchX;
             private float initialTouchY;
+            private boolean shouldClick;
 
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-               /* switch (event.getAction()) {
+                /*switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         initialX = params.x;
                         initialY = params.y;
@@ -146,18 +127,35 @@ public class FloatingWindowService extends Service {
                 }
                 return false;
             }*/
-                switch (event.getAction()) {
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
 
                     case MotionEvent.ACTION_DOWN:
-
+                        DX =mFloatingWidget.getX() - event.getRawX();
+                        DY = mFloatingWidget.getY() - event.getRawY();
+                        initialDX = event.getRawX();
+                        initialDY = event.getRawY();
+                        shouldClick=true;
                         initialX = view.getX() - event.getRawX();
                         initialTouchX = rootMenu.getX() - event.getRawX();
                         initialY = view.getY() - event.getRawY();
                         initialTouchY =rootMenu.getY() - event.getRawY();
                         break;
+                    case MotionEvent.ACTION_UP:
 
+                        if (shouldClick) {
+                            if (!rootMenu.isOpened()) {
+                                rootMenu.open(true);
+                            }
+                            else
+                                rootMenu.close(true);
+                        }
+
+                        return true;
                     case MotionEvent.ACTION_MOVE:
-                       view.animate()
+                        shouldClick=false;
+
+
+                        view.animate()
                                 .x(event.getRawX() + initialX)
                                 .y(event.getRawY() + initialY)
                                 .setDuration(0)
@@ -167,6 +165,10 @@ public class FloatingWindowService extends Service {
                                 .y(event.getRawY() + initialTouchY)
                                 .setDuration(0)
                                 .start();
+
+                        /*params.x = (int) initialTouchX;
+                        params.y = (int) initialTouchY;
+                        mWindowManager.updateViewLayout(mFloatingWidget, params);*/
                         break;
                     default:
                         return false;

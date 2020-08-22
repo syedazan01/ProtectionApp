@@ -31,8 +31,8 @@ public class PersonalRecordAdapter extends RecyclerView.Adapter<PersonalRecordAd
 
     @Override
     public void onBindViewHolder(@NonNull PersonalRecordHolder holder, int position) {
-        int color= Color.argb(255,new Random().nextInt(100)+150,new Random().nextInt(100)+150,new Random().nextInt(100)+150);
-        holder.llPersonal.setBackgroundColor(color);
+//        int color= Color.argb(255,new Random().nextInt(100)+150,new Random().nextInt(100)+150,new Random().nextInt(100)+150);
+//        holder.llPersonal.setBackgroundColor(color);
         holder.tvRecordName.setText(recordList.get(position).getRecordsName());
 
     }

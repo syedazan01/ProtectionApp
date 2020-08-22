@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -32,19 +33,24 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
+import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.AtmBean;
 import com.example.protectionapp.model.BankBean;
+import com.example.protectionapp.model.BirthCertificateBean;
 import com.example.protectionapp.model.DlicenceBean;
 import com.example.protectionapp.model.FetchNotification;
 import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.MediaDocBean;
 import com.example.protectionapp.model.PanBean;
+import com.example.protectionapp.model.PassportBean;
 import com.example.protectionapp.model.PlansBean;
 import com.example.protectionapp.model.StudentIdBean;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.model.VoteridBean;
 import com.example.protectionapp.utils.views.RoundView;
 import com.firebase.client.Firebase;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.storage.FirebaseStorage;
@@ -164,6 +170,18 @@ public class Utils {
         } else if (child.equals(AppConstant.STUDENT_ID)) {
             StudentIdBean studentIdBean = fromJson(modelString, StudentIdBean.class);
             reference.push().setValue(studentIdBean);
+        }
+        else if (child.equals(AppConstant.PASSPORT)) {
+            PassportBean passportBean = fromJson(modelString, PassportBean.class);
+            reference.push().setValue(passportBean);
+        }
+        else if (child.equals(AppConstant.BIRTH_CERTIFICATE)) {
+            BirthCertificateBean birthCertificateBean = fromJson(modelString, BirthCertificateBean.class);
+            reference.push().setValue(birthCertificateBean);
+        }
+        else if (child.equals(AppConstant.MEDIA_DOC) ) {
+            MediaDocBean mediaDocBean = fromJson(modelString, MediaDocBean.class);
+            reference.push().setValue(mediaDocBean);
         }
     }
 
@@ -386,5 +404,80 @@ public class Utils {
                 dialog.dismiss();
             }
         });
+    }
+    public static void showDocsDialog(Activity activity) {
+        Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.media_picker_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout llMedia,llPdf;
+        llMedia=dialog.findViewById(R.id.llMedia);
+        llPdf=dialog.findViewById(R.id.llPdf);
+        llMedia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePicker.Companion.with(activity)
+                        .crop()                    //Crop image(Optional), Check Customization for more option
+                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                        .start();
+                dialog.dismiss();
+            }
+        });
+        llPdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("application/pdf");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                // special intent for Samsung file manager
+                Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
+                // if you want any file type, you can skip next line
+                sIntent.putExtra("CONTENT_TYPE", "application/pdf");
+                sIntent.addCategory(Intent.CATEGORY_DEFAULT);
+
+                Intent chooserIntent;
+                if (activity.getPackageManager().resolveActivity(sIntent, 0) != null){
+                    // it is device with Samsung file manager
+                    chooserIntent = Intent.createChooser(sIntent, "Open file");
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { intent});
+                } else {
+                    chooserIntent = Intent.createChooser(intent, "Open file");
+                }
+
+                try {
+                    activity.startActivityForResult(chooserIntent, AppConstant.CHOOSE_PDF_REQUESTCODE);
+                } catch (android.content.ActivityNotFoundException ex) {
+                   showToast(activity, "No suitable File Manager was found.",AppConstant.errorColor);
+                }
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+    public static void showMediaChooseDialog(Activity activity) {
+        Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.media_send_view_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout llView,llSend;
+        llView=dialog.findViewById(R.id.llView);
+        llSend=dialog.findViewById(R.id.llSend);
+        llView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+        llSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

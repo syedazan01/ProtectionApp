@@ -15,8 +15,8 @@
 
     </item>
     <item
-        android:id="@+id/cache_cleaner"
-        android:title="Cache Cleaner"
+        android:id="@+id/personalRecords"
+        android:title="Personal Documents"
         app:showAsAction="never">
 
     </item>

@@ -26,7 +26,7 @@
         android:required="false" />
 
     <application
-        android:name="org.mazhuang.cleanexpert.Protection"
+        android:name=".Protection"
         android:allowBackup="true"
         android:icon="@mipmap/protectionapp"
         android:label="@string/app_name"
@@ -35,11 +35,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
-        tools:replace="android:allowBackup,android:icon,android:name,android:theme">
+        tools:replace="android:allowBackup,android:icon,android:name,android:theme,android:roundIcon">
+        <activity android:name=".RecordsActivites.PersonalRecords"></activity>
         <activity android:name=".RecordsActivites.DateOfBirth" />
-        <activity android:name=".RecordsActivites.PassportFile"></activity>
+        <activity android:name=".RecordsActivites.PassportFile" />
         <activity android:name=".RecordsActivites.Passport" />
-
         <activity android:name=".RecordsActivites.StudentIDFile" />
         <activity android:name=".RecordsActivites.VoterIDFile" />
         <activity android:name=".RecordsActivites.ATMFile" />

@@ -3,7 +3,8 @@ package com.example.protectionapp.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import org.mazhuang.cleanexpert.Protection;
+import com.example.protectionapp.Protection;
+
 
 public class PrefManager {
     private static SharedPreferences sharedPreferences;
@@ -11,7 +12,7 @@ public class PrefManager {
     private final String ISLOGGEDIN = "isloggedin";
 
     static {
-        sharedPreferences = Protection.instance.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = Protection.getInstance().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
     public static void putString(String key, String value) {

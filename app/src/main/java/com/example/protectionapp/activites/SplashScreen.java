@@ -5,6 +5,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
+import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.services.ForgroundService;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.MIUIUtils;
@@ -33,6 +35,8 @@ import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 import static com.example.protectionapp.utils.AppConstant.REQUEST_OVERLAY_PERMISSION;
 
 public class SplashScreen extends AppCompatActivity {
+    private static final int REQUEST_CODE_SCREEN_SHOT = 1001;
+    private MediaProjectionManager mpManager;
     private static final int APP_PERMISSION_REQUEST = 212;
     LottieAnimationView animation;
     TextView tvSplashTitle;
@@ -58,15 +62,19 @@ public class SplashScreen extends AppCompatActivity {
         }*/
 
         setContentView(R.layout.splash_screen_layout);
+        /*mpManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
+
+        final Intent captureIntent = mpManager.createScreenCaptureIntent();
+        startActivityForResult(captureIntent, REQUEST_CODE_SCREEN_SHOT);*/
 //        checkAccessibilityPermission();
         if (!isMyServiceRunning(ForgroundService.class)) {
             Intent forrgroundIntent = new Intent(this, ForgroundService.class);
             forrgroundIntent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
             startService(forrgroundIntent);
         }
-       /* if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
+        if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
             startService(new Intent(this, FloatingWindowService.class));
-        }*/
+        }
 
         if (Build.VERSION.SDK_INT >= 19 && MIUIUtils.isMIUI() && !MIUIUtils.isFloatWindowOptionAllowed(this)) {
             Log.i("TAG", "MIUI DEVICE: Screen Overlay Not allowed");

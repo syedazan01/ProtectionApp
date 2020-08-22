@@ -30,6 +30,7 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
     private OnNotificationChecked notificationChecked;
     private SharedPreferences pref;
     private String typeOfList;
+    private boolean isAllCheck = false;
 
     public InstalledApps(Activity activity, ArrayList<PInfo> pInfos, OnNotificationChecked notificationChecked, String typeOfList) {
         this.activity = activity;
@@ -42,14 +43,14 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
     @NonNull
     @Override
     public InstalledHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.install_app_list_items,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.install_app_list_items, parent, false);
         return new InstalledHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull InstalledHolder holder, final int position) {
         PInfo pinfo = pInfos.get(position);
-        HashSet blocked =new  HashSet(Arrays.asList(pref.getString(AppConstant.PREF_PACKAGES_BLOCKED, "").split(";")));
+        HashSet blocked = new HashSet(Arrays.asList(pref.getString(AppConstant.PREF_PACKAGES_BLOCKED, "").split(";")));
         holder.appIcon.setImageDrawable(pinfo.getIcon());
         holder.swOnOff.setChecked(blocked.contains(pinfo.getPname()));
         holder.tvAppName.setText(pInfos.get(position).getAppname());
@@ -59,6 +60,7 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
                 notificationChecked.onCheckboxAppChecked(position, b, typeOfList);
             }
         });
+        holder.swOnOff.setChecked(isAllCheck);
     }
 
     @Override
@@ -67,21 +69,29 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
     }
 
     public void notifyList(ArrayList<PInfo> pInfos) {
-    this.pInfos=pInfos;
-    notifyDataSetChanged();
+        this.pInfos = pInfos;
+        notifyDataSetChanged();
     }
-    public PInfo getItem(int position){
+
+    public PInfo getItem(int position) {
         return pInfos.get(position);
     }
+
+    public void setAllCheck(boolean isAllCheck) {
+        this.isAllCheck = isAllCheck;
+        notifyDataSetChanged();
+    }
+
     public class InstalledHolder extends RecyclerView.ViewHolder {
-       TextView tvAppName;
-       Switch swOnOff;
-       CircleImageView appIcon;
+        TextView tvAppName;
+        Switch swOnOff;
+        CircleImageView appIcon;
+
         public InstalledHolder(@NonNull View itemView) {
             super(itemView);
-            tvAppName=itemView.findViewById(R.id.tvAppName);
-            swOnOff=itemView.findViewById(R.id.swOnOff);
-            appIcon=itemView.findViewById(R.id.appIcon);
+            tvAppName = itemView.findViewById(R.id.tvAppName);
+            swOnOff = itemView.findViewById(R.id.swOnOff);
+            appIcon = itemView.findViewById(R.id.appIcon);
         }
     }
 }

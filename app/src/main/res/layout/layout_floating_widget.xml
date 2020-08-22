@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+
     android:layout_gravity="top|end"
     >
-
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            >
+<!--    android:background="#1AFFC107"-->
     <com.github.clans.fab.FloatingActionMenu
         android:layout_gravity="top|end"
-        android:clickable="true"
-        android:focusable="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/rootMenu"
         android:layout_width="wrap_content"
@@ -51,7 +55,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_close"
             app:fab_label="Close"
-            app:fab_size="normal" />
+            app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabFileShare"
@@ -59,7 +63,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/file_share"
             app:fab_label="File Share"
-            app:fab_size="normal" />
+            app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabCameraDetector"
@@ -68,7 +72,7 @@
             android:src="@drawable/ic_shutter"
             android:tint="@color/white"
             app:fab_label="Camera Detector"
-            app:fab_size="normal" />
+            app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/fabVoiceRecorder"
@@ -77,78 +81,19 @@
             android:src="@drawable/ic_mic"
             android:tint="@color/white"
             app:fab_label="Voice Recorder"
-            app:fab_size="normal" />
+            app:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>
-
-        <RelativeLayout
-
-            android:id="@+id/collapse_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <ImageView
-
-                android:id="@+id/collapsed_iv"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/diamond"
-                tools:ignore="ContentDescription" />
-
-            <ImageView
-                android:id="@+id/close_btn"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="50dp"
-                android:src="@drawable/error"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/expanded_container"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:background="#00C1E7"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/diamond"
-                tools:ignore="ContentDescription" />
-
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:lineSpacingExtra="1dp"
-                android:padding="5dp"
-                android:text="Floating Widget contols here"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <ImageView
-
-                android:id="@+id/close_button"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/error"
-                tools:ignore="ContentDescription" />
-
-        </LinearLayout>
     <FrameLayout
-        android:background="?attr/selectableItemBackground"
+
         android:clickable="true"
         android:focusable="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="top|end"
         android:id="@+id/root_container"
         android:layout_width="100dp"
-        android:layout_height="100dp"/>
+        android:layout_height="100dp"
+
+        />
+    </RelativeLayout>
 </FrameLayout>

@@ -5,10 +5,13 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.provider.Telephony;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -33,10 +36,19 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
@@ -52,6 +64,8 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     ArrayList<PInfo> mostPInfos = new ArrayList<>();
     InstalledApps installedAppAdapter, mostInstalledAppAdapter;
     Activity activity = KillNotification.this;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +79,80 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         initActions();
     }
 
+    private void getInstalledAppsList() {
+//        pd.show();
+        /*Observable<List<PInfo>> pInfoobserve = Observable.create(emitter -> {
+            pInfos = new PInfo(activity).getInstalledApps(false);
+            List<PInfo> tempPInfos = new ArrayList<>(pInfos);
+            for (int i = 0; i < tempPInfos.size(); i++) {
+                PInfo pInfo = tempPInfos.get(i);
+                String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                if (appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
+                    mostPInfos.add(pInfo);
+                    pInfos.remove(pInfo);
+                }
+            }
+        });*/
+       /* Observable.just(getPackageManager().getInstalledPackages(0))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .unsubscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> {pd.show();})
+                .doOnNext(packageInfos -> {
+                    Log.e("fbefesfb",packageInfos.get(1).packageName);
+                    for (int j = 0; j < packageInfos.size(); j++) {
+                        PackageInfo p = packageInfos.get(j);
+                        if (p.versionName == null) {
+                            continue;
+                        }
+                        PInfo newInfo = new PInfo(KillNotification.this);
+                        newInfo.appname = p.applicationInfo.loadLabel(getPackageManager()).toString();
+                        newInfo.pname = p.packageName;
+                        newInfo.versionName = p.versionName;
+                        newInfo.versionCode = p.versionCode;
+                        newInfo.icon = p.applicationInfo.loadIcon(getPackageManager());
+                    }
+                        List<PInfo> tempPInfos = new ArrayList<>(pInfos);
+                        for (int i = 0; i < tempPInfos.size(); i++) {
+                            PInfo pInfo = tempPInfos.get(i);
+                            String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                            if (appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
+                                mostPInfos.add(pInfo);
+                                pInfos.remove(pInfo);
+                            }
+                        }
+                        if (mostPInfos.size() < 0) {
+                            constMostUsed.setVisibility(View.GONE);
+                        }
+                        installedAppAdapter = new InstalledApps(activity, (ArrayList<PInfo>) pInfos, KillNotification.this, AppConstant.RAREUSED);
+                        mostInstalledAppAdapter = new InstalledApps(activity, mostPInfos, KillNotification.this, AppConstant.MOSTUSED);
+                        rvMostInstalledApps.setAdapter(mostInstalledAppAdapter);
+                        rvRareInstalledApps.setAdapter(installedAppAdapter);
+                        pd.dismiss();
+                })
+                .subscribe(new Observer<List<PackageInfo>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        compositeDisposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(List<PackageInfo> packageInfos) {
+                        Log.e("fbefesfb",packageInfos.get(0).packageName);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });*/
+    }
+
     private void initActions() {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,16 +163,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         swAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Intent intent = new Intent(KillNotification.this, ForgroundService.class);
-                if (b) {
-                    pref.edit().putBoolean(AppConstant.NOTIFICATION_ENABLE, true).apply();
-                    intent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
-                    startService(intent);
-                } else {
-                    pref.edit().putBoolean(AppConstant.NOTIFICATION_ENABLE, false).apply();
-                    intent.setAction(ForgroundService.ACTION_STOP_FOREGROUND_SERVICE);
-                    stopService(intent);
-                }
+                    installedAppAdapter.setAllCheck(b);
             }
         });
         searchApp.setOnClickListener(new View.OnClickListener() {
@@ -162,8 +241,9 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         tvToolbarTitle.setText("Kill Notifications");
         rvMostInstalledApps.setLayoutManager(new LinearLayoutManager(this));
         rvRareInstalledApps.setLayoutManager(new LinearLayoutManager(this));
-
-        final ProgressDialog dialog = Utils.getProgressDialog(activity);
+        pd = Utils.getProgressDialog(this);
+//        getInstalledAppsList();
+//        final ProgressDialog dialog = Utils.getProgressDialog(activity);
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -171,8 +251,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.setTitle("Loading...");
-                        dialog.show();
+                        pd.show();
                     }
                 });
                 pInfos = new PInfo(activity).getInstalledApps(false);
@@ -180,7 +259,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                 for (int i = 0; i < tempPInfos.size(); i++) {
                     PInfo pInfo = tempPInfos.get(i);
                     String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
-                    if (appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
+                    if (pInfo.getPname().equals(Telephony.Sms.getDefaultSmsPackage(KillNotification.this)) || appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
                         mostPInfos.add(pInfo);
                         pInfos.remove(pInfo);
                     }
@@ -188,7 +267,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        dialog.dismiss();
+
 
                         if (mostPInfos.size() < 0) {
                             constMostUsed.setVisibility(View.GONE);
@@ -197,6 +276,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                         mostInstalledAppAdapter = new InstalledApps(activity, mostPInfos, KillNotification.this, AppConstant.MOSTUSED);
                         rvMostInstalledApps.setAdapter(mostInstalledAppAdapter);
                         rvRareInstalledApps.setAdapter(installedAppAdapter);
+                        pd.dismiss();
                     }
                 });
 

@@ -101,8 +101,8 @@ dependencies {
     //Glide Image Loader
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    implementation project(":cleanmaster")
-    implementation project(":infrared-release")
+    implementation project(":cleanermaster")
+//    implementation project(":infrared-release")
     //Circular Floating
     implementation 'com.github.clans:fab:1.6.4'
 //    implementation 'com.ramotion.circlemenu:circle-menu:0.3.2'
@@ -116,4 +116,12 @@ dependencies {
     //In app purchase
     implementation 'com.google.android.gms:play-services-wallet:18.0.0'
     implementation 'com.android.billingclient:billing:3.0.0'
+
+    //ScreenShot
+    implementation 'com.github.MindorksOpenSource:screenshot:v0.0.1'
+
+    //Rxjava
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
 }

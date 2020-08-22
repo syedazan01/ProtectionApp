@@ -11,9 +11,9 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.example.protectionapp.Protection;
 import com.example.protectionapp.services.CallRecorderService;
 
-import org.mazhuang.cleanexpert.Protection;
 
 public class CallReceiver extends BroadcastReceiver {
     public static final String ARG_NUM_PHONE = "arg_num_phone";

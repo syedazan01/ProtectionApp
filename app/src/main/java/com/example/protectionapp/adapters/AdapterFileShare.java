@@ -72,6 +72,21 @@ public class AdapterFileShare extends RecyclerView.Adapter<AdapterFileShare.File
             case AppConstant.VOTER_ID:
                 holder.ivType.setImageResource(R.drawable.voteridlogo);
                 break;
+            case AppConstant.STUDENT_ID:
+                holder.ivType.setImageResource(R.drawable.student_id);
+                break;
+            case AppConstant.PASSPORT:
+                holder.ivType.setImageResource(R.drawable.passportlogo);
+                break;
+            case AppConstant.BIRTH_CERTIFICATE:
+                holder.ivType.setImageResource(R.drawable.birthlogo);
+                break;
+            case AppConstant.PDF_DOC:
+                holder.ivType.setImageResource(R.drawable.ic_pdf);
+                break;
+            case AppConstant.DOC_IMAGE:
+                holder.ivType.setImageResource(R.drawable.ic_media);
+                break;
         }
         holder.cardFileShare.setOnClickListener(new View.OnClickListener() {
             @Override

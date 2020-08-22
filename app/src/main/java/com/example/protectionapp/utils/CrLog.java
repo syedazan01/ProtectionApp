@@ -11,9 +11,9 @@ import androidx.annotation.StringDef;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.protectionapp.BuildConfig;
+import com.example.protectionapp.Protection;
 import com.example.protectionapp.R;
 
-import org.mazhuang.cleanexpert.Protection;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

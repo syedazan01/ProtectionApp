@@ -15,11 +15,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.fragments.AccountFragment;
 import com.example.protectionapp.fragments.HomeFragment;
 import com.example.protectionapp.fragments.PersonalRecordFragment;
 import com.example.protectionapp.fragments.SosFragment;
 import com.example.protectionapp.fragments.UtilityFeaturesFragment;
+import com.example.protectionapp.model.PersonalRecord;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
@@ -32,7 +34,8 @@ import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
 
-import org.mazhuang.cleanexpert.ui.JunkCleanActivity;
+
+import theredspy15.ltecleanerfoss.MainActivity;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
@@ -74,48 +77,18 @@ public class HomePage extends AppCompatActivity  {
             Utils.showCongratsDialog(this);
         }
         spaceNavigationView.initWithSaveInstanceState(savedInstanceState);
-        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_library_books_24));
+        spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_home_24));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_sos));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_feature));
         spaceNavigationView.addSpaceItem(new SpaceItem("", R.drawable.ic_baseline_account_circle_24));
         setUpToolBar();
-        //  bottomNavigationView = findViewById(R.id.bottom_navigation);
-        //  bottomNavigationView.setOnNavigationItemSelectedListener(this);
-       /* navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-                switch (menuItem.getItemId()){
-                    case R.id.kill_notification:
-                       new Handler().postDelayed(new Runnable() {
-                           @Override
-                           public void run() {
-                               startActivity(new Intent(HomePage.this,KillNotification.class));
-                           }
-                       },200);
-                        return true;
-                    case R.id.about_us:
-                        Toast.makeText(HomePage.this, "work is not complete yet, App is in progress", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.setting:
-                        Toast.makeText(HomePage.this, "Work is not complete yet, App is in progress", Toast.LENGTH_SHORT).show();
-                        return true;
-                }
-                return false;
-            }
-        });*/
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PersonalRecordFragment()).commit();
-       // bottomNavigationView.getMenu().findItem(R.id.home).setChecked(true);
-
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         //code of spaceNavigation bar
         spaceNavigationView.setSpaceOnClickListener(new SpaceOnClickListener() {
 
             @Override
             public void onCentreButtonClick() {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new HomeFragment()).commit();
-
+                startActivity(new Intent(HomePage.this, MainActivity.class));
             }
 
             @Override
@@ -123,7 +96,7 @@ public class HomePage extends AppCompatActivity  {
                 Fragment selectedFragment = null;
                 switch (itemIndex) {
                     case 0:
-                        selectedFragment = new PersonalRecordFragment();
+                        selectedFragment = new HomeFragment();
                         break;
                     case 1:
                         selectedFragment = new SosFragment();
@@ -180,8 +153,9 @@ public class HomePage extends AppCompatActivity  {
                 startActivity(intent);
 //                Toast.makeText(this, "Call Recorder under progress", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.cache_cleaner:
-                Intent intent2 = new Intent(HomePage.this, JunkCleanActivity.class);
+            case R.id.personalRecords:
+//                Intent intent2 = new Intent(HomePage.this, JunkCleanActivity.class);
+                Intent intent2 = new Intent(HomePage.this, PersonalRecords.class);
                 startActivity(intent2);
                /* Intent intent2 = new Intent(HomePage.this, CacheCleaner.class);
                 startActivity(intent2);

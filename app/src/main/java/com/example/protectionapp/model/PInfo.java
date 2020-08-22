@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 public class PInfo {
     private String appname = "";
@@ -75,7 +76,7 @@ public class PInfo {
 
     public ArrayList<PInfo> getInstalledApps(boolean getSysPackages) {
         ArrayList<PInfo> res = new ArrayList<PInfo>();
-        List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(0);
+        List<PackageInfo> packs=context.getPackageManager().getInstalledPackages(0);
         for (int i = 0; i < packs.size(); i++) {
             PackageInfo p = packs.get(i);
             if ((!getSysPackages) && (p.versionName == null)) {

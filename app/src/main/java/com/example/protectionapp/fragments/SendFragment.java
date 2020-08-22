@@ -18,8 +18,10 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.ATMFile;
 import com.example.protectionapp.RecordsActivites.AdhaarFile;
 import com.example.protectionapp.RecordsActivites.BankFile;
+import com.example.protectionapp.RecordsActivites.DateOfBirth_File;
 import com.example.protectionapp.RecordsActivites.DrivingLicenseFile;
 import com.example.protectionapp.RecordsActivites.PanFile;
+import com.example.protectionapp.RecordsActivites.PassportFile;
 import com.example.protectionapp.RecordsActivites.SendDailog;
 import com.example.protectionapp.RecordsActivites.StudentIDFile;
 import com.example.protectionapp.RecordsActivites.VoterIDFile;
@@ -28,9 +30,12 @@ import com.example.protectionapp.adapters.AdapterFileShare;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.AtmBean;
 import com.example.protectionapp.model.BankBean;
+import com.example.protectionapp.model.BirthCertificateBean;
 import com.example.protectionapp.model.DlicenceBean;
 import com.example.protectionapp.model.FileShareBean;
+import com.example.protectionapp.model.MediaDocBean;
 import com.example.protectionapp.model.PanBean;
+import com.example.protectionapp.model.PassportBean;
 import com.example.protectionapp.model.StudentIdBean;
 import com.example.protectionapp.model.VoteridBean;
 import com.example.protectionapp.utils.AppConstant;
@@ -190,6 +195,33 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
                             if (studentIdBean.getMobilenumber().equals(fileShareBean.getSentFrom())) {
                                 Log.e("dvbsfbdf", postShot.getValue() + "");
                                 startActivity(new Intent(getActivity(), StudentIDFile.class).putExtra(AppConstant.STUDENT_ID, studentIdBean));
+                                break;
+                            }
+                        }
+                        else if(fileShareBean.getDocument_type().equals(AppConstant.PASSPORT))
+                        {
+                            PassportBean passportBean = postShot.getValue(PassportBean.class);
+                            if (passportBean.getMobilenumber().equals(fileShareBean.getSentFrom())) {
+                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                                startActivity(new Intent(getActivity(), PassportFile.class).putExtra(AppConstant.PASSPORT, passportBean));
+                                break;
+                            }
+                        }
+                        else if(fileShareBean.getDocument_type().equals(AppConstant.BIRTH_CERTIFICATE))
+                        {
+                            BirthCertificateBean birthCertificateBean = postShot.getValue(BirthCertificateBean.class);
+                            if (birthCertificateBean.getMoblilenumber().equals(fileShareBean.getSentFrom())) {
+                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                                startActivity(new Intent(getActivity(), DateOfBirth_File.class).putExtra(AppConstant.BIRTH_CERTIFICATE, birthCertificateBean));
+                                break;
+                            }
+                        }
+                        else if(fileShareBean.getDocument_type().equals(AppConstant.PDF_DOC) || fileShareBean.getDocument_type().equals(AppConstant.DOC_IMAGE))
+                        {
+                            MediaDocBean mediaDocBean = postShot.getValue(MediaDocBean.class);
+                            if (mediaDocBean.getDocMobile().equals(fileShareBean.getSentFrom())) {
+                                Log.e("dvbsfbdf", postShot.getValue() + "");
+
                                 break;
                             }
                         }

@@ -18,6 +18,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.protectionapp.Protection;
 import com.example.protectionapp.R;
 import com.example.protectionapp.activites.SplashScreen;
 import com.example.protectionapp.model.Recorder;
@@ -26,7 +27,6 @@ import com.example.protectionapp.receivers.ControlRecordingReceiver;
 import com.example.protectionapp.utils.CrLog;
 import com.example.protectionapp.utils.RecordingException;
 
-import org.mazhuang.cleanexpert.Protection;
 
 public class CallRecorderService extends Service {
     public static final int NOTIFICATION_ID = 1;

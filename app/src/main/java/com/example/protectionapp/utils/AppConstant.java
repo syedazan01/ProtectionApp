@@ -28,18 +28,21 @@ public interface AppConstant {
     String FIREBASE_STORAGE_DATABASE_URL = "gs://protectionapp-3baf6.appspot.com/";
     String PERSONAL_DOCUMENT = "Personal Document";
     String USER_DETAIL = "User Details";
-    String ADHAAR = "adhaar";
-    String PAN = "pan";
-    String DRIVING_LICENSE = "driving license";
-    String BANK = "bank";
-    String ATM = "atm";
-    String VOTER_ID = "voter id";
+    String ADHAAR = "Adhaar";
+    String PAN = "PAN";
+    String DRIVING_LICENSE = "Driving license";
+    String BANK = "Bank";
+    String ATM = "ATM";
+    String VOTER_ID = "Voter id";
     String NOTIFICATION = "Notification";
     String FILE_SHARE = "File Share";
     String PLANS = "Plans";
     String STUDENT_ID = "Student";
-    String PASSPORT = "passport";
-    String BIRTH_CERTIFICATE = "birth certificate";
+    String PASSPORT = "Passport";
+    String BIRTH_CERTIFICATE = "Birth certificate";
+    String DOC_IMAGE = "Image";
+    String PDF_DOC = "Pdf";
+    String MEDIA_DOC = "Media Docs";
 
     //Runtime Permissions Constant
     int REQUEST_OVERLAY_PERMISSION = 900;
@@ -60,4 +63,7 @@ public interface AppConstant {
 
     //BroadCast Reciever
     String OVERLAY_ACTION = "overlay_action";
+
+
+    int CHOOSE_PDF_REQUESTCODE = 666;
 }

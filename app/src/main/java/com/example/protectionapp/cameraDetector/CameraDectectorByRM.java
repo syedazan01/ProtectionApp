@@ -35,7 +35,8 @@ public class CameraDectectorByRM extends AppCompatActivity implements SensorEven
     Sensor magnetometerSensor;
     MediaPlayer mp;
     HalfGauge meterView;
-
+private ImageView ivObject;
+private TextView tvObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +77,8 @@ public class CameraDectectorByRM extends AppCompatActivity implements SensorEven
         toolbar=findViewById(R.id.toolbar);
         ivBack=findViewById(R.id.ivBack);
         tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
+        ivObject=findViewById(R.id.ivObject);
+        tvObject=findViewById(R.id.tvObject);
         meterView=findViewById(R.id.meterView);
 
         tvToolbarTitle.setText("Hidden Camera Detector");
@@ -102,9 +105,27 @@ public class CameraDectectorByRM extends AppCompatActivity implements SensorEven
             // set value on the screen
             meterView.setValue(magnitude);
             if (magnitude >= 50.0)
+            {
+                if(magnitude<100.0)
+                {
+                    ivObject.setImageResource(R.drawable.ic_photo_camera_black_48dp);
+                    tvObject.setText("Camera or similar object is detected");
+                }
+                else
+                {
+
+                    ivObject.setImageResource(R.drawable.ic_baseline_headset_24);
+                    tvObject.setText("Microphone or similar object is detected");
+                }
                 play();
+            }
             else
+            {
+                ivObject.setImageBitmap(null);
+                tvObject.setText(null);
                 stop();
+            }
+
 //            value.setText(DECIMAL_FORMATTER.format(magnitude) + " \u00B5Tesla");
         }
       /*  if(sensorEvent.sensor.getType() ==Sensor.TYPE_MAGNETIC_FIELD)

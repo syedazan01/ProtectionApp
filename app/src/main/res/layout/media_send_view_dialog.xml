@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.cardview.widget.CardView
+    android:layout_marginHorizontal="20dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:layout_width="0dp"
+    android:layout_height="200dp"
+    app:cardBackgroundColor="?attr/primaryBackgroundColor"
+    app:cardCornerRadius="10dp"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2"
+            >
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/llView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground">
+                <ImageView
+                    android:id="@+id/ivView"
+                    android:src="@drawable/ic_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:tint="?attr/primaryTitleColor" />
+                <TextView
+                    android:text="View"
+                    android:layout_marginTop="20dp"
+                    android:textColor="?attr/primaryTitleColor"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            <View
+                android:id="@+id/seperator"
+                android:background="@color/black"
+                android:layout_width="0.4dp"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/llSend"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground">
+                <ImageView
+                    android:id="@+id/ivSend"
+                    android:src="@drawable/ic_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:tint="?attr/primaryTitleColor" />
+                <TextView
+                    android:text="Send"
+                    android:layout_marginTop="20dp"
+                    android:textColor="?attr/primaryTitleColor"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
