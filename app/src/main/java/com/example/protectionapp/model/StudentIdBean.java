@@ -3,6 +3,15 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class StudentIdBean implements Serializable {
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     String institutionname, enroll, rollno, fullname, fathername, branch, Studntidimage, Studntidimage2, mobilenumber;
 
 

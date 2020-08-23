@@ -54,6 +54,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -81,6 +82,7 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
     List<String> tokenList = new ArrayList<>();
     private Uri fileUri, fileUri2;
     private Boolean imagepicker = false;
+    private BirthCertificateBean birthCertificateBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +133,8 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                BirthCertificateBean birthCertificateBean = new BirthCertificateBean();
+                birthCertificateBean = new BirthCertificateBean();
+                birthCertificateBean.setId((int)System.currentTimeMillis());
                 birthCertificateBean.setFathername(Fathersname);
                 birthCertificateBean.setMothername(Mothersname);
                 birthCertificateBean.setChildname(Childname);
@@ -141,7 +144,8 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
                 birthCertificateBean.setImageview1(fileUri.getLastPathSegment());
                 birthCertificateBean.setImageview2(fileUri2.getLastPathSegment());
                 birthCertificateBean.setMoblilenumber(PrefManager.getString(AppConstant.USER_MOBILE));
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 Utils.storeDocumentsInRTD(AppConstant.PAN, Utils.toJson(birthCertificateBean, BirthCertificateBean.class));
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -163,6 +167,7 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
                 DatePickerDialog datePickerDialog = new DatePickerDialog(DateOfBirth.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        calendar.set(i,i1,i2);
                         dateofbirth.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
 
                     }
@@ -220,9 +225,13 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
             return false;
         }
         if (fileUri == null) {
-            Utils.showToast(activity, "Scan PAN Card", AppConstant.errorColor);
+            Utils.showToast(activity, getResources().getString(R.string.birth_scan_error), AppConstant.errorColor);
             return false;
 
+        }
+        if (fileUri2 == null) {
+            Utils.showToast(activity, getResources().getString(R.string.birth_scan_error), AppConstant.errorColor);
+            return false;
         }
         return true;
     }
@@ -376,7 +385,22 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
 
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)birthCertificateBean.getId());
+        fileShareBean.setSentTo(userBean.getMobile());
+        fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
+        fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+        fileShareBean.setDocument_type(AppConstant.ADHAAR);
+        fileShareBean.setPassword(password);
+        fileShareBean.setMsg(msg);
+        if (isChecked) {
 
+            fileShareBeans.add(fileShareBean);
+            tokenList.add(userBean.getFcmToken());
+        } else {
+            fileShareBeans.remove(fileShareBean);
+            tokenList.remove(userBean.getFcmToken());
+        }
     }
 
     @Override

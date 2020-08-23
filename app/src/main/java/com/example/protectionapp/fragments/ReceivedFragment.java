@@ -2,6 +2,7 @@ package com.example.protectionapp.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +45,8 @@ import com.example.protectionapp.utils.Utils;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,55 +126,62 @@ public class ReceivedFragment extends Fragment implements AdapterFileShare.FileS
     @Override
     public void applyTexts(String message, String password) {
         if (password.equals(fileShareBean.getPassword())) {
-            Utils.getPersonalDocReference(fileShareBean.getDocument_type()).addValueEventListener(new ValueEventListener() {
+            String documentType=fileShareBean.getDocument_type();
+            if(fileShareBean.getDocument_type().equals(AppConstant.PDF_DOC) || fileShareBean.getDocument_type().equals(AppConstant.DOC_IMAGE))
+            {
+                documentType=AppConstant.MEDIA_DOC;
+            }
+            Utils.getPersonalDocReference(documentType).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot postShot : dataSnapshot.getChildren()) {
+                        Log.e("dvbsfbdf", postShot.getValue() + "");
                         if (fileShareBean.getDocument_type().equals(AppConstant.ADHAAR)) {
                             AdhaarBean adhaarBean = postShot.getValue(AdhaarBean.class);
-                            if (adhaarBean.getMobileNo().equals(fileShareBean.getSentTo())) {
+                            if (adhaarBean.getId()==fileShareBean.getId() && adhaarBean.getMobileNo().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), AdhaarFile.class).putExtra(AppConstant.ADHAAR, adhaarBean));
                                 break;
                             }
                         } else if (fileShareBean.getDocument_type().equals(AppConstant.PAN)) {
                             PanBean panBean = postShot.getValue(PanBean.class);
-                            if (panBean.getPanmobile().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            if (panBean.getId()==fileShareBean.getId() && panBean.getPanmobile().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), PanFile.class).putExtra(AppConstant.PAN, panBean));
                                 break;
                             }
                         } else if (fileShareBean.getDocument_type().equals(AppConstant.DRIVING_LICENSE)) {
                             DlicenceBean dlicenceBean = postShot.getValue(DlicenceBean.class);
-                            if (dlicenceBean.getMobileno().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            if (dlicenceBean.getId()==fileShareBean.getId() && dlicenceBean.getMobileno().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), DrivingLicenseFile.class).putExtra(AppConstant.DRIVING_LICENSE, dlicenceBean));
                                 break;
                             }
                         } else if (fileShareBean.getDocument_type().equals(AppConstant.BANK)) {
                             BankBean bankBean = postShot.getValue(BankBean.class);
-                            if (bankBean.getMobile().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            if (bankBean.getId()==fileShareBean.getId() && bankBean.getMobile().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), BankFile.class).putExtra(AppConstant.BANK, bankBean));
                                 break;
                             }
                         } else if (fileShareBean.getDocument_type().equals(AppConstant.ATM)) {
                             AtmBean atmBean = postShot.getValue(AtmBean.class);
-                            if (atmBean.getMobile().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            if (atmBean.getId()==fileShareBean.getId() && atmBean.getMobile().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), ATMFile.class).putExtra(AppConstant.ATM, atmBean));
                                 break;
                             }
                         } else if (fileShareBean.getDocument_type().equals(AppConstant.VOTER_ID)) {
                             VoteridBean voteridBean = postShot.getValue(VoteridBean.class);
-                            if (voteridBean.getVoterMobileNo().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            if (voteridBean.getId()==fileShareBean.getId() && voteridBean.getVoterMobileNo().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), VoterIDFile.class).putExtra(AppConstant.VOTER_ID, voteridBean));
                                 break;
                             }
                         } else if (fileShareBean.getDocument_type().equals(AppConstant.STUDENT_ID)) {
                             StudentIdBean studentIdBean = postShot.getValue(StudentIdBean.class);
-                            if (studentIdBean.getMobilenumber().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            if (studentIdBean.getId()==fileShareBean.getId() && studentIdBean.getMobilenumber().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), StudentIDFile.class).putExtra(AppConstant.STUDENT_ID, studentIdBean));
                                 break;
                             }
@@ -179,8 +189,8 @@ public class ReceivedFragment extends Fragment implements AdapterFileShare.FileS
                         else if(fileShareBean.getDocument_type().equals(AppConstant.PASSPORT))
                         {
                             PassportBean passportBean = postShot.getValue(PassportBean.class);
-                            if (passportBean.getMobilenumber().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            if (passportBean.getId()==fileShareBean.getId() && passportBean.getMobilenumber().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), PassportFile.class).putExtra(AppConstant.PASSPORT, passportBean));
                                 break;
                             }
@@ -188,8 +198,8 @@ public class ReceivedFragment extends Fragment implements AdapterFileShare.FileS
                         else if(fileShareBean.getDocument_type().equals(AppConstant.BIRTH_CERTIFICATE))
                         {
                             BirthCertificateBean birthCertificateBean = postShot.getValue(BirthCertificateBean.class);
-                            if (birthCertificateBean.getMoblilenumber().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            if (birthCertificateBean.getId()==fileShareBean.getId() && birthCertificateBean.getMoblilenumber().equals(fileShareBean.getSentTo())) {
+
                                 startActivity(new Intent(getActivity(), DateOfBirth_File.class).putExtra(AppConstant.BIRTH_CERTIFICATE, birthCertificateBean));
                                 break;
                             }
@@ -197,9 +207,28 @@ public class ReceivedFragment extends Fragment implements AdapterFileShare.FileS
                         else if(fileShareBean.getDocument_type().equals(AppConstant.PDF_DOC) || fileShareBean.getDocument_type().equals(AppConstant.DOC_IMAGE))
                         {
                             MediaDocBean mediaDocBean = postShot.getValue(MediaDocBean.class);
-                            if (mediaDocBean.getDocMobile().equals(fileShareBean.getSentTo())) {
-                                Log.e("dvbsfbdf", postShot.getValue() + "");
+                            Log.e("fdfdfgdfg",mediaDocBean.getId()+" "+fileShareBean.getId());
+                            if (mediaDocBean.getId()==fileShareBean.getId() && mediaDocBean.getDocMobile().equals(fileShareBean.getSentTo())) {
 
+                                ProgressDialog pd = Utils.getProgressDialog(getActivity());
+                                pd.show();
+                                Utils.getStorageReference()
+                                        .child(AppConstant.MEDIA_DOC + "/" + mediaDocBean.getDocUrl())
+                                        .getDownloadUrl()
+                                        .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Uri> task) {
+                                                pd.dismiss();
+                                                Intent it = new Intent(Intent.ACTION_VIEW);
+                                                String mediaType;
+                                                if (fileShareBean.getDocument_type().equals(AppConstant.DOC_IMAGE))
+                                                    mediaType = "image/*";
+                                                else
+                                                    mediaType = "application/pdf";
+                                                it.setDataAndType(task.getResult(), mediaType);
+                                                startActivity(it);
+                                            }
+                                        });
                                 break;
                             }
                         }

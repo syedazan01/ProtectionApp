@@ -1,7 +1,16 @@
 package com.example.protectionapp.model;
 
 public class FileShareBean {
+    int id;
     String sentTo, sentFrom, password, document_type, msg, createdDate;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCreatedDate() {
         return createdDate;

@@ -82,6 +82,7 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
     UploadingDialog uploadingDialog = new UploadingDialog(VoterID.this);
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
     private Boolean imagepicker;
+    private VoteridBean voteridBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,6 +178,14 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
                     AssemblyName.getEditText().requestFocus();
                     return;
                 }
+                if (fileUri == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.voterId_scan_error), AppConstant.errorColor);
+                    return;
+                }
+                if (fileUri2 == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.voterId_scan_error), AppConstant.errorColor);
+                    return;
+                }
                 //get  all the values
                 String FullNames = FullName.getEditText().getText().toString();
                 String fathersname = FatherName.getEditText().getText().toString();
@@ -193,7 +202,8 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                VoteridBean voteridBean = new VoteridBean();
+                voteridBean = new VoteridBean();
+                voteridBean.setId((int)System.currentTimeMillis());
                 voteridBean.setFullName(FullNames);
                 voteridBean.setFathersName(fathersname);
                 voteridBean.setDateofbirth(Voterdob);
@@ -204,7 +214,8 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
                 voteridBean.setVoterImage(fileUri.getLastPathSegment());
                 voteridBean.setVoterImage2(fileUri2.getLastPathSegment());
                 Utils.storeDocumentsInRTD(AppConstant.VOTER_ID, Utils.toJson(voteridBean, VoteridBean.class));
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -224,6 +235,7 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
                 DatePickerDialog datePickerDialog = new DatePickerDialog(VoterID.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        calendar.set(i,i1,i2);
                         dobET.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
 
                     }
@@ -374,6 +386,7 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
         FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)voteridBean.getId());
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));

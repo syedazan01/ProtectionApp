@@ -78,6 +78,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
     private String password, msg;
     private List<String> tokenList = new ArrayList<>();
     private Boolean imagepicker = false;
+    private AtmBean atmBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +150,11 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                     return;
                 }
                 if (fileUri == null) {
-                    Utils.showToast(activity, getResources().getString(R.string.adhaar_scan_error), AppConstant.errorColor);
+                    Utils.showToast(activity, getResources().getString(R.string.atm_scan_error), AppConstant.errorColor);
+                    return;
+                }
+                if (fileUri2 == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.atm_scan_error), AppConstant.errorColor);
                     return;
                 }
                 if (cvvcode.getEditText().getText().toString().length() < 16) {
@@ -168,7 +173,8 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                AtmBean atmBean = new AtmBean();
+                atmBean = new AtmBean();
+                atmBean.setId((int)System.currentTimeMillis());
                 atmBean.setBankname(banknames);
                 atmBean.setAtmnumber(atmnumbers);
                 atmBean.setNameoncard(nameoncards);
@@ -177,7 +183,8 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                 atmBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
                 atmBean.setAtmimage(fileUri.getLastPathSegment());
                 atmBean.setAtmimage2(fileUri2.getLastPathSegment());
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.ATM + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                Utils.getStorageReference().child(AppConstant.ATM + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.ATM + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -199,6 +206,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                 DatePickerDialog datePickerDialog = new DatePickerDialog(ATM.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        calendar.set(i,i1,i2);
                         cardvaliET.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
 
                     }
@@ -386,6 +394,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
         FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)atmBean.getId());
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));

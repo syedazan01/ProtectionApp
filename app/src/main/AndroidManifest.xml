@@ -36,7 +36,8 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme,android:roundIcon">
-        <activity android:name=".RecordsActivites.PersonalRecords"></activity>
+        <activity android:name=".activites.SosActivity"></activity>
+        <activity android:name=".RecordsActivites.PersonalRecords" />
         <activity android:name=".RecordsActivites.DateOfBirth" />
         <activity android:name=".RecordsActivites.PassportFile" />
         <activity android:name=".RecordsActivites.Passport" />

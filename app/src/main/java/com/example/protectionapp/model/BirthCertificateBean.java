@@ -3,6 +3,15 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class BirthCertificateBean implements Serializable {
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     String moblilenumber, fathername, mothername, childname, sex, dateofbirth, hospitalname, imageview1, imageview2;
 
     public String getMoblilenumber() {

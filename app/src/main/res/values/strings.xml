@@ -33,7 +33,17 @@
     <!--    Form Validation Msgs-->
     <string name="empty_error">Field is missing*</string>
     <string name="adhaar_error">Invalid adhaar number*</string>
+
     <string name="adhaar_scan_error">Scan Adhaar Card*</string>
+    <string name="pan_scan_error">Scan Pan Card*</string>
+    <string name="dl_scan_error">Scan Driving License Card*</string>
+    <string name="bank_scan_error">Scan Bank Card*</string>
+    <string name="atm_scan_error">Scan Atm Card*</string>
+    <string name="voterId_scan_error">Scan Voter ID Card*</string>
+    <string name="studentId_scan_error">Scan Student ID Card*</string>
+    <string name="passport_scan_error">Scan Passport *</string>
+    <string name="birth_scan_error">Scan Birth Certificate *</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

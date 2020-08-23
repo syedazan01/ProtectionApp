@@ -44,9 +44,9 @@ public class AdapterFileShare extends RecyclerView.Adapter<AdapterFileShare.File
     public void onBindViewHolder(@NonNull FileShareHolder holder, int position) {
         FileShareBean fileShareBean = fileShareBeans.get(position);
         if (shareType.equals("Sent")) {
-            holder.tvSentTo.setText(fileShareBean.getSentTo());
-        } else
             holder.tvSentTo.setText(fileShareBean.getSentFrom());
+        } else
+            holder.tvSentTo.setText(fileShareBean.getSentTo());
         holder.tvCreatedDate.setText(Utils.getTimeAgo(fileShareBean.getCreatedDate()));
         holder.tvMsg.setText(fileShareBean.getMsg());
         int redColor = new Random().nextInt(100) + 150;

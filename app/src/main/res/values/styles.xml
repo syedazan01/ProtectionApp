@@ -11,7 +11,7 @@
         <item name="primaryBackgroundColor">@color/primaryBackgroundColor</item>
         <item name="primaryCardBackgroundColor">@color/primaryCardBackgroundColor</item>
         <item name="themeMode">@drawable/nightmode</item>
-        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+        <item name="android:windowSoftInputMode">stateHidden</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="bottomNavColor">@color/colorPrimary</item>
@@ -31,7 +31,8 @@
         <item name="primaryBackgroundColor">@color/primaryBackgroundColorNight</item>
         <item name="primaryCardBackgroundColor">@color/primaryCardBackgroundColorNight</item>
         <item name="themeMode">@drawable/daymode</item>
-        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>
+        <item name="android:windowSoftInputMode">stateHidden</item>
+<!--        <item name="android:windowSoftInputMode">stateAlwaysHidden</item>-->
         <item name="bottomNavColor">@color/white</item>
         <!--        <item name="android:windowFullscreen">true</item>-->
         <!--        <item name="android:windowContentOverlay">@null</item>-->
@@ -86,7 +87,7 @@
         <item name="android:background">@drawable/round_corner</item>
     </style>
 
-    <style name="Transparent">
+    <!--<style name="Transparent">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -95,5 +96,5 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsFloating">true</item>
-    </style>
+    </style>-->
 </resources>

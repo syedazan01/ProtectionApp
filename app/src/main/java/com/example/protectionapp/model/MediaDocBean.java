@@ -1,7 +1,16 @@
 package com.example.protectionapp.model;
 
 public class MediaDocBean {
+   int id;
     String fileName,docUrl,docMobile,docType;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDocType() {
         return docType;

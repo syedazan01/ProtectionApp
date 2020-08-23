@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.DocsPagerAdapter;
+import com.example.protectionapp.fragments.MediaFragment;
 import com.example.protectionapp.model.MediaDocBean;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
@@ -32,12 +33,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.storage.UploadTask;
+import com.jaiselrahman.filepicker.activity.FilePickerActivity;
+import com.jaiselrahman.filepicker.model.MediaFile;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
 
-public class PersonalRecords extends AppCompatActivity {
+public class PersonalRecords extends AppCompatActivity implements SendDailog.SendDialogListener {
     Activity activity=this;
     private TextView tvToolbarTitle;
     private ImageView ivBack;
@@ -45,6 +49,8 @@ public class PersonalRecords extends AppCompatActivity {
     private TabLayout tabDocs;
     private ViewPager docsViewPager;
     private UploadingDialog uploadingDialog;
+    private String documentType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,56 +102,18 @@ public class PersonalRecords extends AppCompatActivity {
                 Uri fileUri = data.getData();
                 if(requestCode==AppConstant.CHOOSE_PDF_REQUESTCODE)
                 {
-
-                    String uriString = data.getData().toString();
-                    File myFile = new File(uriString);
-                    String path = myFile.getAbsolutePath();
-                    String displayName = null;
-
-                    if (uriString.startsWith("content://")) {
-                        Uri _uri = data.getData();
-                        Log.d("","URI = "+ _uri);
-                        if (_uri != null && "content".equals(_uri.getScheme())) {
-                            Cursor cursor = this.getContentResolver().query(_uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
-                            cursor.moveToFirst();
-                            path = cursor.getString(0);
-                            cursor.close();
-                        } else {
-                            path = _uri.getPath();
-                        }
-                        myFile=new File(uriString.substring(uriString.lastIndexOf("raw:")+1));
-                       /* Cursor cursor = null;
-                        try {
-                            cursor = getContentResolver().query(data.getData(), null, null, null, null);
-                            if (cursor != null && cursor.moveToFirst()) {
-                                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                            }
-                        } catch (Exception e){
-                            e.printStackTrace();
-                            myFile=null;
-                        }finally {
-                            cursor.close();
-                        }*/
-                    } else if (uriString.startsWith("file://")) {
-                        displayName = myFile.getName();
-                    }
-                    if (myFile!=null) {
+                    ArrayList<MediaFile> files = data.getParcelableArrayListExtra(FilePickerActivity.MEDIA_FILES);
+                    if (files!=null && files.size()>0) {
+                        String fileUrl=files.get(0).getUri().getLastPathSegment().substring(files.get(0).getUri().getLastPathSegment().lastIndexOf("/")+1);
                         MediaDocBean mediaDocBean=new MediaDocBean();
-                        String fileName=myFile.getAbsolutePath().substring(myFile.getAbsolutePath().lastIndexOf("/")+1);
-                        try {
-                            Log.e("vsdxVBsfdb",fileName);
-                            mediaDocBean.setFileName(fileName.substring(0,fileName.lastIndexOf(".")));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Utils.showToast(activity,"File may be unsupported",AppConstant.errorColor);
-                            return;
-                        }
-                        mediaDocBean.setDocUrl(fileName);
+                        mediaDocBean.setId((int)System.currentTimeMillis());
+                        mediaDocBean.setFileName(fileUrl.substring(0,fileUrl.lastIndexOf(".")));
+                        mediaDocBean.setDocUrl(fileUrl);
                         mediaDocBean.setDocType(AppConstant.PDF_DOC);
                         mediaDocBean.setDocMobile(PrefManager.getString(AppConstant.USER_MOBILE));
                         uploadingDialog.startloadingDialog();
                         Utils.storeDocumentsInRTD(AppConstant.MEDIA_DOC,Utils.toJson(mediaDocBean,MediaDocBean.class));
-                        UploadTask uploadTask=Utils.getStorageReference().child(AppConstant.MEDIA_DOC+"/"+fileName).putFile(Uri.fromFile(myFile));
+                        UploadTask uploadTask=Utils.getStorageReference().child(AppConstant.MEDIA_DOC+"/"+files.get(0).getUri().getLastPathSegment().substring(files.get(0).getUri().getLastPathSegment().lastIndexOf("/")+1)).putFile(files.get(0).getUri());
                         uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -154,12 +122,15 @@ public class PersonalRecords extends AppCompatActivity {
                             }
                         });
                     }
-                    else
-                        Utils.showToast(activity,"File may be unsupported",AppConstant.errorColor);
+//                    else
+//                        Utils.showToast(activity,"No file selected",AppConstant.errorColor);
                 }
+
+
                 else
                 {
                     MediaDocBean mediaDocBean=new MediaDocBean();
+                    mediaDocBean.setId((int)System.currentTimeMillis());
                     mediaDocBean.setFileName(fileUri.getLastPathSegment().substring(0,fileUri.getLastPathSegment().lastIndexOf(".")));
                     mediaDocBean.setDocUrl(fileUri.getLastPathSegment());
                     mediaDocBean.setDocType(AppConstant.DOC_IMAGE);
@@ -180,5 +151,14 @@ public class PersonalRecords extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Task Cancelled", Toast.LENGTH_SHORT).show();
         }
+    }
+    public void setDocumentType(String documentType)
+    {
+        this.documentType=documentType;
+    }
+    @Override
+    public void applyTexts(String message, String password) {
+        MediaFragment mediaFragment=(MediaFragment) ((DocsPagerAdapter)docsViewPager.getAdapter()).fragmentList.get(1);
+    mediaFragment.setOnSendDialog(documentType, message, password);
     }
 }

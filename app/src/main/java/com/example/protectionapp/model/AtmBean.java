@@ -3,6 +3,15 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class AtmBean implements Serializable {
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     String bankname, atmnumber, nameoncard, cardVailidity, cvvcode, mobile, atmimage, atmimage2;
 
     public String getAtmimage2() {

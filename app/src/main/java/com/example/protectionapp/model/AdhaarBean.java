@@ -3,6 +3,16 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class AdhaarBean implements Serializable {
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     String mobileNo, Fullname, dateofbirth, gender, aadharNumber, Address, Adhaarimage, Adhaarimage2;
 
     public String getAdhaarimage2() {

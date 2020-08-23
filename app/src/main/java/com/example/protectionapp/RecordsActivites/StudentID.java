@@ -71,6 +71,7 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
     private String password, msg;
     List<String> tokenList = new ArrayList<>();
     private Boolean imagepicker;
+    private StudentIdBean studentIdBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +129,8 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
                 uploadingDialog.startloadingDialog();
 
 
-                StudentIdBean studentIdBean = new StudentIdBean();
+                studentIdBean = new StudentIdBean();
+                studentIdBean.setId((int)System.currentTimeMillis());
                 studentIdBean.setInstitutionname(Institutionname);
                 studentIdBean.setEnroll(Enroll);
                 studentIdBean.setRollno(Rollno);
@@ -138,7 +140,8 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
                 studentIdBean.setStudntidimage(fileUri.getLastPathSegment());
                 studentIdBean.setStudntidimage2(fileUri2.getLastPathSegment());
                 studentIdBean.setMobilenumber(PrefManager.getString(AppConstant.USER_MOBILE));
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.STUDENT_ID + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                Utils.getStorageReference().child(AppConstant.STUDENT_ID + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.STUDENT_ID + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 Utils.storeDocumentsInRTD(AppConstant.STUDENT_ID, Utils.toJson(studentIdBean, StudentIdBean.class));
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -300,7 +303,11 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
             return false;
         }
         if (fileUri == null) {
-            Utils.showToast(activity, "Scan ST Card", AppConstant.errorColor);
+            Utils.showToast(activity, getResources().getString(R.string.studentId_scan_error), AppConstant.errorColor);
+            return false;
+        }
+        if (fileUri2 == null) {
+            Utils.showToast(activity, getResources().getString(R.string.studentId_scan_error), AppConstant.errorColor);
             return false;
         }
         return true;
@@ -370,6 +377,7 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
         FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)studentIdBean.getId());
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));

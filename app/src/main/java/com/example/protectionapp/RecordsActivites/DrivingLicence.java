@@ -79,6 +79,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     private String password, msg;
     List<String> tokenList = new ArrayList<>();
     private Boolean imagepicker;
+    private DlicenceBean dlicenceBean;
 
 
     @Override
@@ -149,6 +150,14 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                     BloodGroup.getEditText().requestFocus();
                     return;
                 }
+                if (fileUri == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.dl_scan_error), AppConstant.errorColor);
+                    return;
+                }
+                if (fileUri2 == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.dl_scan_error), AppConstant.errorColor);
+                    return;
+                }
                 // get all the values
                 String FullNames = FullName.getEditText().getText().toString();
                 String sonOfName = sonOf.getEditText().getText().toString();
@@ -161,7 +170,8 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                DlicenceBean dlicenceBean = new DlicenceBean();
+                dlicenceBean = new DlicenceBean();
+                dlicenceBean.setId((int)System.currentTimeMillis());
                 dlicenceBean.setFullname(FullNames);
                 dlicenceBean.setSon_of(sonOfName);
                 dlicenceBean.setLicenceNumber(licenceNumber);
@@ -171,7 +181,8 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 dlicenceBean.setValidity(DLvaliditys);
                 dlicenceBean.setDLimage(fileUri.getLastPathSegment());
                 dlicenceBean.setDLimage2(fileUri2.getLastPathSegment());
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+               Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -202,6 +213,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 DatePickerDialog datePickerDialog = new DatePickerDialog(DrivingLicence.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        calendar.set(i,i1,i2);
                         dobET.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
 
                     }
@@ -428,6 +440,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
         FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)dlicenceBean.getId());
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));

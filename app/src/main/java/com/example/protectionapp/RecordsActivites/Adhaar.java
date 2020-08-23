@@ -81,6 +81,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     ImageView imageView, imageView2;
     Button opencam, sendBT;
     String msg = "", password = "";
+    AdhaarBean adhaarBean=null;
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(Adhaar.this);
     String Gender;
@@ -179,7 +180,8 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                AdhaarBean adhaarBean = new AdhaarBean();
+               adhaarBean = new AdhaarBean();
+                adhaarBean.setId((int)System.currentTimeMillis());
                 adhaarBean.setFullname(Fullname);
                 adhaarBean.setDateofbirth(dateofbirth);
                 adhaarBean.setGender(gender);
@@ -188,7 +190,8 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                 adhaarBean.setAdhaarimage(fileUri.getLastPathSegment());
                 adhaarBean.setAdhaarimage2(fileUri2.getLastPathSegment());
                 adhaarBean.setMobileNo(PrefManager.getString(AppConstant.USER_MOBILE));
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                 Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.ADHAAR + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 Utils.storeDocumentsInRTD(AppConstant.ADHAAR, Utils.toJson(adhaarBean, AdhaarBean.class));
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -236,6 +239,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
                 DatePickerDialog datePickerDialog = new DatePickerDialog(Adhaar.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        calendar.set(i,i1,i2);
                         dobinput.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
 
                     }
@@ -434,12 +438,17 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
             Utils.showToast(activity, getResources().getString(R.string.adhaar_scan_error), AppConstant.errorColor);
             return false;
         }
+        if (fileUri2 == null) {
+            Utils.showToast(activity, getResources().getString(R.string.adhaar_scan_error), AppConstant.errorColor);
+            return false;
+        }
         return true;
     }
 
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
         FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)adhaarBean.getId());
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));

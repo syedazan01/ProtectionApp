@@ -3,6 +3,15 @@ package com.example.protectionapp.model;
 import java.io.Serializable;
 
 public class PassportBean implements Serializable {
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     String passportnumber, type, countrycode, nationalty, fullname, sex, dateofbirth, placeofbirth, placeofissue, dateofissue, dateofexpiry, mobilenumber, passportimage1, passportimage2;
 
     public String getPassportnumber() {

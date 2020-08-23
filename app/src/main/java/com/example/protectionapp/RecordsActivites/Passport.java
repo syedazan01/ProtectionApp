@@ -86,6 +86,7 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
     List<String> tokenList = new ArrayList<>();
     Boolean imagepick = true;
     private Uri fileUri, fileUri2;
+    private PassportBean passportBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +136,8 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                PassportBean passportBean = new PassportBean();
+                passportBean = new PassportBean();
+                passportBean.setId((int)System.currentTimeMillis());
                 passportBean.setPassportnumber(Passportnumber);
                 passportBean.setType(Type);
                 passportBean.setCountrycode(Countrycode);
@@ -150,7 +152,8 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
                 passportBean.setPassportimage1(fileUri.getLastPathSegment());
                 passportBean.setPassportimage2(fileUri2.getLastPathSegment());
                 passportBean.setMobilenumber(PrefManager.getString(AppConstant.USER_MOBILE));
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 Utils.storeDocumentsInRTD(AppConstant.PASSPORT, Utils.toJson(passportBean, PassportBean.class));
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -195,6 +198,7 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
                 DatePickerDialog datePickerDialog = new DatePickerDialog(Passport.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        calendar.set(i,i1,i2);
                         dobinput.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
 
                     }
@@ -300,11 +304,11 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
             return false;
         }
         if (fileUri == null) {
-            Utils.showToast(activity, getResources().getString(R.string.adhaar_scan_error), AppConstant.errorColor);
+            Utils.showToast(activity, getResources().getString(R.string.passport_scan_error), AppConstant.errorColor);
             return false;
         }
         if (fileUri2 == null) {
-            Utils.showToast(activity, getResources().getString(R.string.adhaar_scan_error), AppConstant.errorColor);
+            Utils.showToast(activity, getResources().getString(R.string.passport_scan_error), AppConstant.errorColor);
             return false;
         }
         return true;
@@ -312,18 +316,21 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
 
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
+        FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)passportBean.getId());
+        fileShareBean.setSentTo(userBean.getMobile());
+        fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
+        fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+        fileShareBean.setDocument_type(AppConstant.ADHAAR);
+        fileShareBean.setPassword(password);
+        fileShareBean.setMsg(msg);
         if (isChecked) {
-            FileShareBean fileShareBean = new FileShareBean();
-            fileShareBean.setSentTo(userBean.getMobile());
-            fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
-            fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-            fileShareBean.setDocument_type(AppConstant.ADHAAR);
-            fileShareBean.setPassword(password);
-            fileShareBean.setMsg(msg);
+
             fileShareBeans.add(fileShareBean);
             tokenList.add(userBean.getFcmToken());
         } else {
-            fileShareBeans.remove(position);
+            fileShareBeans.remove(fileShareBean);
+            tokenList.remove(userBean.getFcmToken());
         }
     }
 

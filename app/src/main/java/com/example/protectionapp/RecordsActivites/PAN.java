@@ -78,6 +78,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
     List<String> tokenList = new ArrayList<>();
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
     private Boolean imagepicker;
+    PanBean panBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +187,8 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                PanBean panBean = new PanBean();
+                panBean = new PanBean();
+                panBean.setId((int)System.currentTimeMillis());
                 panBean.setFullName(FullNames);
                 panBean.setFatherName(fathersname);
                 panBean.setDateOfBirth(pandob);
@@ -194,7 +196,8 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
                 panBean.setPanimage(fileUri.getLastPathSegment());
                 panBean.setPanimage2(fileUri2.getLastPathSegment());
                 panBean.setPanmobile(PrefManager.getString(AppConstant.USER_MOBILE));
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 Utils.storeDocumentsInRTD(AppConstant.PAN, Utils.toJson(panBean, PanBean.class));
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -218,6 +221,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
                 DatePickerDialog datePickerDialog = new DatePickerDialog(PAN.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                        calendar.set(i,i1,i2);
                         dobET.setText(SimpleDateFormat.getDateInstance().format(calendar.getTime()));
 
                     }
@@ -260,7 +264,11 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
             return false;
         }
         if (fileUri == null) {
-            Utils.showToast(activity, "Scan PAN Card", AppConstant.errorColor);
+            Utils.showToast(activity, getResources().getString(R.string.pan_scan_error), AppConstant.errorColor);
+            return false;
+        }
+        if (fileUri2 == null) {
+            Utils.showToast(activity, getResources().getString(R.string.pan_scan_error), AppConstant.errorColor);
             return false;
         }
         return true;
@@ -379,6 +387,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
         FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)panBean.getId());
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));

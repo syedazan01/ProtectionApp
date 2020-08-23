@@ -9,7 +9,12 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import com.example.protectionapp.fragments.MediaFragment;
 import com.example.protectionapp.fragments.PersonalRecordFragment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class DocsPagerAdapter extends FragmentStatePagerAdapter {
+    public List<Fragment> fragmentList=new ArrayList<>(Arrays.asList(new PersonalRecordFragment(),new MediaFragment()));
     public DocsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
@@ -17,16 +22,7 @@ public class DocsPagerAdapter extends FragmentStatePagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        switch (position)
-        {
-            case 0:
-                return new PersonalRecordFragment();
-            case 1:
-                return new MediaFragment();
-            default:
-                return null;
-        }
-
+        return fragmentList.get(position);
     }
 
     @Override

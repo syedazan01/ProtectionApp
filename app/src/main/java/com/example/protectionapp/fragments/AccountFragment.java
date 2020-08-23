@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.example.protectionapp.BuildConfig;
 import com.example.protectionapp.R;
 import com.example.protectionapp.activites.LogIn;
+import com.example.protectionapp.activites.SosActivity;
 import com.example.protectionapp.adapters.AdapterSubscription;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.billing.GooglePaySetup;
@@ -203,7 +204,8 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                     Utils.showNoSubsDialog(getContext());
                 return;
                 }*/
-                msgDialog.show();
+                startActivity(new Intent(mActivity, SosActivity.class));
+               /* msgDialog.show();
                 Button btnProceed = msgDialog.findViewById(R.id.btnProceed);
                 Utils.makeButton(btnProceed, getResources().getColor(R.color.colorAccent), 40F);
                 btnProceed.setOnClickListener(new View.OnClickListener() {
@@ -284,7 +286,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                             });
                         }
                     }
-                });
+                });*/
 
 
             }

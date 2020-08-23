@@ -43,6 +43,7 @@ public interface AppConstant {
     String DOC_IMAGE = "Image";
     String PDF_DOC = "Pdf";
     String MEDIA_DOC = "Media Docs";
+    String SOS = "Sos";
 
     //Runtime Permissions Constant
     int REQUEST_OVERLAY_PERMISSION = 900;

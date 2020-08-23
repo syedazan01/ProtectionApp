@@ -53,9 +53,8 @@ public class SendDailog extends AppCompatDialogFragment {
                             Utils.showToast(umActivity, "Password is required", AppConstant.errorColor);
                             return;
                         }
+                        Utils.hideKeyboardFrom(umActivity,view);
                         sendDialogListener.applyTexts(message, password);
-
-
                     }
                 });
         editTextmessage = view.findViewById(R.id.dialog_messageET);

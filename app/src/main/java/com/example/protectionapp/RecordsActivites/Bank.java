@@ -73,6 +73,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(Bank.this);
     private Boolean imagepicker;
+    private BankBean bankBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +177,14 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                     bankName.getEditText().requestFocus();
                     return;
                 }
+                if (fileUri == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.bank_scan_error), AppConstant.errorColor);
+                    return;
+                }
+                if (fileUri2 == null) {
+                    Utils.showToast(activity, getResources().getString(R.string.bank_scan_error), AppConstant.errorColor);
+                    return;
+                }
                 // get all the values
                 String accountHoldernames = accountHolderName.getEditText().getText().toString();
                 String accountNumbers = accountNumber.getEditText().getText().toString();
@@ -185,7 +194,8 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                 //progress dialog
                 uploadingDialog.startloadingDialog();
 
-                BankBean bankBean = new BankBean();
+                bankBean = new BankBean();
+                bankBean.setId((int)System.currentTimeMillis());
                 bankBean.setAccountHolderName(accountHoldernames);
                 bankBean.setAccountNumber(accountNumbers);
                 bankBean.setIfscCode(ifscCodes);
@@ -194,7 +204,8 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                 bankBean.setBankimage(fileUri.getLastPathSegment());
                 bankBean.setBankimage2(fileUri2.getLastPathSegment());
                 bankBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -203,15 +214,6 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                     }
                 });
                 Utils.storeDocumentsInRTD(AppConstant.BANK, Utils.toJson(bankBean, BankBean.class));
-                //progress dialog
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        uploadingDialog.dismissdialog();
-
-                    }
-                }, 4000);
             }
         });
     }
@@ -358,6 +360,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
         FileShareBean fileShareBean = new FileShareBean();
+        fileShareBean.setId((int)bankBean.getId());
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));

@@ -15,8 +15,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,12 +30,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.PersonalRecords;
+import com.example.protectionapp.RecordsActivites.SendDailog;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.AtmBean;
 import com.example.protectionapp.model.BankBean;
@@ -44,7 +49,9 @@ import com.example.protectionapp.model.FileShareBean;
 import com.example.protectionapp.model.MediaDocBean;
 import com.example.protectionapp.model.PanBean;
 import com.example.protectionapp.model.PassportBean;
+import com.example.protectionapp.model.PersonalRecord;
 import com.example.protectionapp.model.PlansBean;
+import com.example.protectionapp.model.SosBean;
 import com.example.protectionapp.model.StudentIdBean;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.model.VoteridBean;
@@ -53,9 +60,13 @@ import com.firebase.client.Firebase;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
+import com.jaiselrahman.filepicker.activity.FilePickerActivity;
+import com.jaiselrahman.filepicker.config.Configurations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -170,16 +181,13 @@ public class Utils {
         } else if (child.equals(AppConstant.STUDENT_ID)) {
             StudentIdBean studentIdBean = fromJson(modelString, StudentIdBean.class);
             reference.push().setValue(studentIdBean);
-        }
-        else if (child.equals(AppConstant.PASSPORT)) {
+        } else if (child.equals(AppConstant.PASSPORT)) {
             PassportBean passportBean = fromJson(modelString, PassportBean.class);
             reference.push().setValue(passportBean);
-        }
-        else if (child.equals(AppConstant.BIRTH_CERTIFICATE)) {
+        } else if (child.equals(AppConstant.BIRTH_CERTIFICATE)) {
             BirthCertificateBean birthCertificateBean = fromJson(modelString, BirthCertificateBean.class);
             reference.push().setValue(birthCertificateBean);
-        }
-        else if (child.equals(AppConstant.MEDIA_DOC) ) {
+        } else if (child.equals(AppConstant.MEDIA_DOC)) {
             MediaDocBean mediaDocBean = fromJson(modelString, MediaDocBean.class);
             reference.push().setValue(mediaDocBean);
         }
@@ -193,6 +201,19 @@ public class Utils {
         reference.child(fetchNotification.getPush_key()).setValue(fetchNotification);
     }
 
+    public static void storeSosNumbersInRTD(SosBean sosBean) {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.SOS + "/");
+            sosBean.setPushKey(reference.push().getKey());
+        reference.child(sosBean.getPushKey()).setValue(sosBean);
+    }
+    public static void removeSosNumbersInRTD(String pushKey) {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.SOS + "/");
+        reference.child(pushKey).removeValue();
+    }
     public static <T> String toJson(T value, Class<T> model) {
         return new Gson().toJson(value, model);
     }
@@ -228,14 +249,19 @@ public class Utils {
         toast.setView(layout);
         toast.show();
     }
+
     public static void hideKeyboard(Activity _activity) {
         View view = _activity.getCurrentFocus();
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) _activity
                     .getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(),
-                    InputMethodManager.HIDE_NOT_ALWAYS);
+                    0);
         }
+    }
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public static void storeUserDetailsToRTD(UserBean userBean) {
@@ -263,6 +289,13 @@ public class Utils {
         Firebase reference;
 
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.USER_DETAIL + "/");
+        return reference;
+    }
+
+    public static Firebase getSosReference() {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.SOS + "/");
         return reference;
     }
 
@@ -373,7 +406,7 @@ public class Utils {
     }
 
     public static void showNoSubsDialog(Context context) {
-        Dialog dialog = new Dialog(context);
+        Dialog dialog = new Dialog(context,R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.no_subscribe_dialog);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -389,9 +422,10 @@ public class Utils {
     }
 
     public static void showCongratsDialog(Context context) {
-        Dialog dialog = new Dialog(context);
+        Dialog dialog = new Dialog(context,R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.earned_dialog);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
         dialog.show();
@@ -405,15 +439,17 @@ public class Utils {
             }
         });
     }
+
     public static void showDocsDialog(Activity activity) {
-        Dialog dialog = new Dialog(activity);
+        Dialog dialog = new Dialog(activity,R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.media_picker_dialog);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-        LinearLayout llMedia,llPdf;
-        llMedia=dialog.findViewById(R.id.llMedia);
-        llPdf=dialog.findViewById(R.id.llPdf);
+        LinearLayout llMedia, llPdf;
+        llMedia = dialog.findViewById(R.id.llMedia);
+        llPdf = dialog.findViewById(R.id.llPdf);
         llMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -428,54 +464,70 @@ public class Utils {
         llPdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("application/pdf");
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-                // special intent for Samsung file manager
-                Intent sIntent = new Intent("com.sec.android.app.myfiles.PICK_DATA");
-                // if you want any file type, you can skip next line
-                sIntent.putExtra("CONTENT_TYPE", "application/pdf");
-                sIntent.addCategory(Intent.CATEGORY_DEFAULT);
-
-                Intent chooserIntent;
-                if (activity.getPackageManager().resolveActivity(sIntent, 0) != null){
-                    // it is device with Samsung file manager
-                    chooserIntent = Intent.createChooser(sIntent, "Open file");
-                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { intent});
-                } else {
-                    chooserIntent = Intent.createChooser(intent, "Open file");
-                }
-
-                try {
-                    activity.startActivityForResult(chooserIntent, AppConstant.CHOOSE_PDF_REQUESTCODE);
-                } catch (android.content.ActivityNotFoundException ex) {
-                   showToast(activity, "No suitable File Manager was found.",AppConstant.errorColor);
-                }
+                Intent intent = new Intent(activity, FilePickerActivity.class);
+                intent.putExtra(FilePickerActivity.CONFIGS, new Configurations.Builder()
+                        .setCheckPermission(true)
+                        .setShowImages(false)
+                        .enableImageCapture(false)
+                        .setMaxSelection(1)
+                        .setShowAudios(false)
+                        .setShowFiles(true)
+                        .enableVideoCapture(false)
+                        .setShowVideos(false)
+                        .setSingleChoiceMode(true)
+                        .setSingleClickSelection(true)
+                        .setSkipZeroSizeFiles(true)
+                        .setSuffixes("pdf")
+                        .build());
+                activity.startActivityForResult(intent, AppConstant.CHOOSE_PDF_REQUESTCODE);
                 dialog.dismiss();
             }
         });
         dialog.show();
     }
-    public static void showMediaChooseDialog(Activity activity) {
-        Dialog dialog = new Dialog(activity);
+
+    public static void showMediaChooseDialog(String docType, String docUrl, AppCompatActivity activity) {
+        Dialog dialog = new Dialog(activity,R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.media_send_view_dialog);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-        LinearLayout llView,llSend;
-        llView=dialog.findViewById(R.id.llView);
-        llSend=dialog.findViewById(R.id.llSend);
+        LinearLayout llView, llSend;
+        llView = dialog.findViewById(R.id.llView);
+        llSend = dialog.findViewById(R.id.llSend);
         llView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ProgressDialog pd = getProgressDialog(activity);
+                pd.show();
+                Utils.getStorageReference()
+                        .child(AppConstant.MEDIA_DOC + "/" + docUrl)
+                        .getDownloadUrl()
+                        .addOnCompleteListener(new OnCompleteListener<Uri>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Uri> task) {
+                                pd.dismiss();
+                                Intent it = new Intent(Intent.ACTION_VIEW);
+                                String mediaType;
+                                if (docType.equals(AppConstant.DOC_IMAGE))
+                                    mediaType = "image/*";
+                                else
+                                    mediaType = "application/pdf";
+                                it.setDataAndType(task.getResult(), mediaType);
+                                activity.startActivity(it);
+                            }
+                        });
+                dialog.dismiss();
             }
         });
         llSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                SendDailog sendDailog = new SendDailog(activity, true);
+                sendDailog.show(activity.getSupportFragmentManager(), "Send Dialog");
                 dialog.dismiss();
+                ((PersonalRecords) activity).setDocumentType(docType);
             }
         });
         dialog.show();
