@@ -1,8 +1,24 @@
 package com.example.protectionapp.model;
 
 public class SosBean {
-    String mobile,name,ownerMobile,pushKey;
+    String mobile, name, ownerMobile, pushKey, profilePic, FcmToken;
     boolean isChecked;
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public String getFcmToken() {
+        return FcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        FcmToken = fcmToken;
+    }
 
     public String getPushKey() {
         return pushKey;

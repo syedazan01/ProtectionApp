@@ -1,13 +1,9 @@
 package com.example.protectionapp.activites;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,7 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.model.FetchNotification;
@@ -29,14 +28,15 @@ import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
 import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,7 +56,10 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
     private List<SosBean> sosBeanList = new ArrayList<>();
     private List<String> sosNumbers = new ArrayList<>();
     FloatingActionButton fabSend;
-    ;
+    private Dialog msgDialog;
+    private List<FetchNotification> fetchNotifications = new ArrayList<>();
+    private List<String> tokenList = new ArrayList<>();
+    private EditText etMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,8 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
         rvSos = findViewById(R.id.rvSos);
         fabSend = findViewById(R.id.fabSend);
         pd = Utils.getProgressDialog(sosActivity);
+        msgDialog = Utils.getMsgDialog(this);
+        etMsg = msgDialog.findViewById(R.id.etMsg);
     }
 
     private void initActions() {
@@ -102,7 +107,7 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
                                         for (FetchNotification fetchNotification : fetchNotifications) {
                                             Utils.storeNotificationInRTD(fetchNotification);
                                         }
-                                        dialog.dismiss();
+                                msgDialog.dismiss();
                                         Gson gson = new GsonBuilder()
                                                 .setLenient()
                                                 .create();
@@ -173,6 +178,8 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
                                 if (sosBeanList.size() == 0 || sosNumbers.indexOf(userBean.getMobile()) == -1) {
 
                                     sosBean2.setMobile(userBean.getMobile());
+                                    sosBean2.setProfilePic(userBean.getProfilePic());
+                                    sosBean2.setFcmToken(userBean.getFcmToken());
                                     sosBeanList.add(sosBean2);
                                 }
                             }
@@ -198,9 +205,25 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
 
     @Override
     public void onCheckedChanged(SosBean sosBean, boolean isChecked) {
+        FetchNotification fetchNotification = new FetchNotification();
+        fetchNotification.setMsg(etMsg.getText().toString());
+        fetchNotification.setTo_mobile(PrefManager.getString(AppConstant.USER_MOBILE));
+        fetchNotification.setFrom_mobile(sosBean.getMobile());
+        fetchNotification.setProfile_Pic(sosBean.getProfilePic());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        fetchNotification.setCreated_date(dateFormat.format(new Date()));
+        if (isChecked) {
+
+        } else {
+
+        }
         if (isChecked) {
             showSaveNameDialog(sosBean);
+            tokenList.add(sosBean.getFcmToken());
+            fetchNotifications.add(fetchNotification);
         } else {
+            fetchNotifications.remove(fetchNotification);
+            tokenList.remove(sosBean.getFcmToken());
             Utils.removeSosNumbersInRTD(sosBean.getPushKey());
         }
     }
