@@ -31,7 +31,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 import static com.example.protectionapp.utils.AppConstant.REQUEST_OVERLAY_PERMISSION;
 
 public class SplashScreen extends AppCompatActivity {
@@ -45,9 +45,9 @@ public class SplashScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+       /* if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             setTheme(R.style.AppTheme_Base_Light);
         super.onCreate(savedInstanceState);
         mContext = this;
@@ -73,6 +73,8 @@ public class SplashScreen extends AppCompatActivity {
             startService(forrgroundIntent);
         }
         if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
+            if(Utils.isMyFloatingServiceRunning(this))
+                stopService(new Intent(this,FloatingWindowService.class));
             startService(new Intent(this, FloatingWindowService.class));
         }
 

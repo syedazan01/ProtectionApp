@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class ForgroundService extends Service {
     int volumePrev =0;
@@ -71,9 +71,9 @@ public class ForgroundService extends Service {
     public void onCreate() {
         super.onCreate();
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+       /* if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             setTheme(R.style.AppTheme_Base_Light);
 
         mFloatingWidget = LayoutInflater.from(this).inflate(R.layout.layout_floating_screenshot, null);

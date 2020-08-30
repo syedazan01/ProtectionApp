@@ -8,7 +8,7 @@ public interface AppConstant {
     String DATABASE_NAME = "protection_db";
 
     //Pref Constant
-    String ISNIGHTMODE = "nightMode";
+    String ISBLUELIGHT = "blueLightFilter";
     String OVERLAY = "overlay";
     String MOSTUSED = "mostUsed";
     String RAREUSED = "rareUsed";

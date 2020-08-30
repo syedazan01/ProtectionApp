@@ -23,6 +23,7 @@ import com.example.protectionapp.fragments.SosFragment;
 import com.example.protectionapp.fragments.UtilityFeaturesFragment;
 import com.example.protectionapp.model.PersonalRecord;
 import com.example.protectionapp.model.UserBean;
+import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -37,7 +38,7 @@ import com.luseen.spacenavigation.SpaceOnClickListener;
 
 import theredspy15.ltecleanerfoss.MainActivity;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class HomePage extends AppCompatActivity  {
     //    DrawerLayout drawerLayout;
@@ -53,9 +54,9 @@ public class HomePage extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+       /* if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_home_page);
         //set up id of spacenavigaton
@@ -135,17 +136,21 @@ public class HomePage extends AppCompatActivity  {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.theme_mode:
-                if(PrefManager.getBoolean(ISNIGHTMODE))
+                if(PrefManager.getBoolean(ISBLUELIGHT))
                 {
-                    setTheme(R.style.AppTheme_Base_Light);
-                    PrefManager.putBoolean(ISNIGHTMODE,false);
-                }
+//                    setTheme(R.style.AppTheme_Base_Light);
+                    PrefManager.putBoolean(ISBLUELIGHT,false);
+                    }
                 else
                 {
-                    PrefManager.putBoolean(ISNIGHTMODE,true);
-                    setTheme(R.style.AppTheme_Base_Night);
+                    PrefManager.putBoolean(ISBLUELIGHT,true);
+//                    setTheme(R.style.AppTheme_Base_Night);
                 }
-                recreate();
+                if(Utils.isMyFloatingServiceRunning(this))
+                    stopService(new Intent(HomePage.this,FloatingWindowService.class));
+                startService(new Intent(HomePage.this, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
+
+//                recreate();
 
                 break;
             case R.id.Call_recorder:

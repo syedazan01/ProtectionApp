@@ -17,7 +17,7 @@ import com.example.protectionapp.fragments.SendFragment;
 import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.tabs.TabLayout;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class FileShare extends AppCompatActivity implements SendDailog.SendDialogListener {
     Toolbar toolbar;
@@ -38,9 +38,9 @@ public class FileShare extends AppCompatActivity implements SendDailog.SendDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+       /* if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_file_share);
         addViews();

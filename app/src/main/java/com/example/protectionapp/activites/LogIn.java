@@ -24,7 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class LogIn extends AppCompatActivity {
 EditText et_phone_number;
@@ -33,9 +33,9 @@ EditText et_phone_number;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+        /*if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.login_page);
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {

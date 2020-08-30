@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 
 public class PlayerFragment extends Fragment implements onRecordFileSave {
@@ -49,9 +49,9 @@ RecordingFileAdapter recordingFileAdapter;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+        /*if(PrefManager.getBoolean(ISBLUELIGHT))
             getActivity().setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             getActivity().setTheme(R.style.AppTheme_Base_Light);
         Recording_fragment.onRecordFileSave=this;
         recordingFileAdapter =new RecordingFileAdapter(recordingFileData,getActivity());

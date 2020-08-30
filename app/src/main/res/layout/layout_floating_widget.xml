@@ -4,96 +4,95 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-
-    android:layout_gravity="top|end"
     >
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            >
-<!--    android:background="#1AFFC107"-->
-    <com.github.clans.fab.FloatingActionMenu
-        android:layout_gravity="top|end"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/rootMenu"
+    <!--View while view is collapsed-->
+    <RelativeLayout
+        android:id="@+id/root_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:menu_animationDelayPerItem="50"
-        app:menu_colorNormal="#DA4336"
-        app:menu_colorPressed="#E75043"
-        app:menu_colorRipple="#99FFFFFF"
-        app:menu_fab_label="Launcher Widget"
-        app:menu_fab_size="normal"
-        app:menu_icon="@drawable/fab_add"
-        app:menu_labels_colorPressed="#444444"
-        app:menu_labels_colorRipple="#66FFFFFF"
-        app:menu_labels_cornerRadius="3dp"
-        app:menu_labels_ellipsize="none"
-        app:menu_labels_maxLines="-1"
-        app:menu_labels_padding="8dp"
-        app:menu_labels_paddingBottom="4dp"
-        app:menu_labels_paddingLeft="8dp"
-        app:menu_labels_paddingRight="8dp"
-        app:menu_labels_paddingTop="4dp"
-        app:menu_labels_position="left"
-        app:menu_labels_showShadow="true"
-        app:menu_labels_singleLine="false"
-        app:menu_labels_textColor="#FFFFFF"
-        app:menu_labels_textSize="14sp"
-        app:menu_openDirection="down"
-        app:menu_shadowColor="#66000000"
-        app:menu_shadowRadius="4dp"
-        app:menu_shadowXOffset="1dp"
-        app:menu_labels_colorNormal="#333333"
-        app:menu_shadowYOffset="3dp"
-        app:menu_showShadow="true">
+        tools:ignore="UselessParent"
+        >
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/closeMenuItem"
+    <RelativeLayout
+        android:id="@+id/collapse_view"
+        android:layout_width="wrap_content"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--Icon of floating widget -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/collapsed_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            app:fab_label="Close"
-            app:fab_size="mini" />
+            android:layout_marginTop="100dp"
+            app:fabSize="mini"
+            android:tint="@color/white"
+            android:src="@drawable/ic_floating_widget"
+            tools:ignore="ContentDescription"/>
+    </RelativeLayout>
 
-        <com.github.clans.fab.FloatingActionButton
+    <!--View while view is expanded-->
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/expanded_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!--Album image for the song currently playing.-->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabFileShare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginBottom="10dp"
             android:src="@drawable/file_share"
-            app:fab_label="File Share"
-            app:fab_size="mini" />
+            app:fabSize="mini"
+            tools:ignore="ContentDescription" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabCameraDetector"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabVoice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_shutter"
+            android:layout_marginStart="60dp"
+            android:layout_marginBottom="10dp"
             android:tint="@color/white"
-            app:fab_label="Camera Detector"
-            app:fab_size="mini" />
+            app:fabSize="mini"
+            android:src="@drawable/recording_button_icon"
+            tools:ignore="ContentDescription" />
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabVoiceRecorder"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_mic"
+            android:layout_marginStart="80dp"
+            android:layout_marginBottom="10dp"
             android:tint="@color/white"
-            app:fab_label="Voice Recorder"
-            app:fab_size="mini" />
+            app:fabSize="mini"
+            android:src="@drawable/ic_search"
+            tools:ignore="ContentDescription" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabScreenShot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginBottom="10dp"
+            android:tint="@color/white"
+            app:fabSize="mini"
+            android:src="@drawable/ic_screenshot"
+            tools:ignore="ContentDescription" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="10dp"
+            app:fabSize="mini"
+            android:src="@drawable/ic_close"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
 
-    </com.github.clans.fab.FloatingActionMenu>
-    <FrameLayout
-
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="top|end"
-        android:id="@+id/root_container"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-
-        />
     </RelativeLayout>
 </FrameLayout>

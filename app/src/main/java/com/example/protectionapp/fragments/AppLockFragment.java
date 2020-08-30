@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.example.protectionapp.R;
 import com.example.protectionapp.utils.PrefManager;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,9 +72,9 @@ public class AppLockFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+        /*if(PrefManager.getBoolean(ISBLUELIGHT))
             getActivity().setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             getActivity().setTheme(R.style.AppTheme_Base_Light);
     }
 }

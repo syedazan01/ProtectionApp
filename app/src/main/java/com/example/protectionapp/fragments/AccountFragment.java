@@ -81,7 +81,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -132,9 +132,9 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+        /*if (PrefManager.getBoolean(ISBLUELIGHT))
             mActivity.setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             mActivity.setTheme(R.style.AppTheme_Base_Light);
         googlePaySetup = new GooglePaySetup(getContext());
         try {

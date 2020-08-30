@@ -50,7 +50,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class KillNotification extends AppCompatActivity implements OnNotificationChecked {
     ImageView ivBack;
@@ -70,9 +70,9 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+      /*  if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_kill_notification);
         iniiViews();

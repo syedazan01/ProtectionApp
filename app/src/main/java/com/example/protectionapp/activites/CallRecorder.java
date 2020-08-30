@@ -36,13 +36,15 @@ import com.example.protectionapp.fragments.Recording_fragment;
 import com.example.protectionapp.interfacecallbacks.onPlay;
 import com.example.protectionapp.model.RecordingFileData;
 import com.example.protectionapp.services.CallRecorderService;
+import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.PrefManager;
+import com.example.protectionapp.utils.Utils;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.io.IOException;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.OnSeekBarChangeListener {
 
@@ -62,9 +64,9 @@ public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+        /*if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_call_recorder);
         initViews();
@@ -81,6 +83,8 @@ private void initActions()
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             Intent intent = new Intent(CallRecorder.this, CallRecorderService.class);
             if (b) {
+                if(isMyServiceRunning(CallRecorderService.class))
+                    stopService(new Intent(CallRecorder.this, FloatingWindowService.class));
                 startService(intent);
 //                PrefManager.putBoolean(AppConstant.IS_CALL_RECORDING_ON,true);
 //                callRecord.startCallRecordService();

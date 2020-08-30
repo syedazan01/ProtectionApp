@@ -18,7 +18,7 @@ import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
 import com.example.protectionapp.utils.views.RoundView;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 
 public class HomeFragment extends Fragment {
@@ -42,9 +42,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (PrefManager.getBoolean(ISNIGHTMODE))
+        /*if (PrefManager.getBoolean(ISBLUELIGHT))
             getActivity().setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             getActivity().setTheme(R.style.AppTheme_Base_Light);
 
         llNext.setBackground(new RoundView(getActivity().getResources().getColor(R.color.colorPrimary), Utils.getRadius(100f)));

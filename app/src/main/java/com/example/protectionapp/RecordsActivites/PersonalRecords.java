@@ -39,7 +39,7 @@ import com.jaiselrahman.filepicker.model.MediaFile;
 import java.io.File;
 import java.util.ArrayList;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class PersonalRecords extends AppCompatActivity implements SendDailog.SendDialogListener {
     Activity activity=this;
@@ -54,9 +54,9 @@ public class PersonalRecords extends AppCompatActivity implements SendDailog.Sen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+       /* if(PrefManager.getBoolean(ISBLUELIGHT))
           setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
           setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_personal_records);
         initViews();

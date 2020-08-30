@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.example.protectionapp.R;
 import com.example.protectionapp.utils.PrefManager;
 
-import static com.example.protectionapp.utils.AppConstant.ISNIGHTMODE;
+import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class CacheCleaner extends AppCompatActivity {
     Toolbar toolbar;
@@ -21,9 +21,9 @@ public class CacheCleaner extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(PrefManager.getBoolean(ISNIGHTMODE))
+        /*if(PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
-        else
+        else*/
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_cache_cleaner);
         addViews();
