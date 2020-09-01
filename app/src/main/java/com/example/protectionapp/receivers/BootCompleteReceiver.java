@@ -3,21 +3,19 @@ package com.example.protectionapp.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
-import com.example.protectionapp.activites.CallRecorder;
-import com.example.protectionapp.services.ForgroundService;
+import com.example.protectionapp.services.FloatingWindowService;
 
 public class BootCompleteReceiver extends BroadcastReceiver {
     Context context;
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e("SCREEN>>>", intent.getAction());
 
-
-        Intent serviceIntent = new Intent(context, CallRecorder.class);
-        context.startService(serviceIntent);
-        Intent forrgroundIntent = new Intent(context, ForgroundService.class);
-        forrgroundIntent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
+        Intent forrgroundIntent = new Intent(context, FloatingWindowService.class);
+        forrgroundIntent.setAction(FloatingWindowService.SCREEN_ON);
         context.startService(forrgroundIntent);
     }
 }

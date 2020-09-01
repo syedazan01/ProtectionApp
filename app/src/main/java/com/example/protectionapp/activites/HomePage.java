@@ -18,10 +18,8 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.fragments.AccountFragment;
 import com.example.protectionapp.fragments.HomeFragment;
-import com.example.protectionapp.fragments.PersonalRecordFragment;
 import com.example.protectionapp.fragments.SosFragment;
 import com.example.protectionapp.fragments.UtilityFeaturesFragment;
-import com.example.protectionapp.model.PersonalRecord;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.AppConstant;
@@ -34,7 +32,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
 import com.luseen.spacenavigation.SpaceOnClickListener;
-
 
 import theredspy15.ltecleanerfoss.MainActivity;
 
@@ -59,6 +56,7 @@ public class HomePage extends AppCompatActivity  {
         else*/
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_home_page);
+
         //set up id of spacenavigaton
         spaceNavigationView = findViewById(R.id.space);
         if (PrefManager.getString(AppConstant.INVITED_BY).equals("") && !PrefManager.getBoolean(AppConstant.ISREFERED)) {

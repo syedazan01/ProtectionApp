@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,24 +22,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-
+import com.andrognito.patternlockview.PatternLockView;
+import com.andrognito.patternlockview.listener.PatternLockViewListener;
 import com.example.protectionapp.Protection;
 import com.example.protectionapp.R;
 import com.example.protectionapp.activites.CallRecorder;
-import com.example.protectionapp.activites.CameraDetector;
 import com.example.protectionapp.activites.FileShare;
-import com.example.protectionapp.fragments.UtilityFeaturesFragment;
+import com.example.protectionapp.receivers.BootCompleteReceiver;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
-import com.example.protectionapp.utils.Utils;
-import com.example.protectionapp.utils.views.FloatView;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
@@ -47,6 +40,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static com.example.protectionapp.fragments.UtilityFeaturesFragment.onFabClick;
 import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
@@ -54,12 +48,16 @@ import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 public class FloatingWindowService extends Service implements View.OnClickListener {
     public static final String STOP_LAUNCHER_WIDGET = "action.stopservice";
     public static final String BLUE_LIGHT_FILTER = "action.bluelight";
-    private WindowManager mWindowManager,blueLightWindowManager;
-    private int bluelightFilterCode=Color.parseColor("#4DF7E6B4");
-    private View mFloatingView,blue_filter_container;
-    private FloatingActionButton collapsed_iv,fabFileShare,fabVoice,fabSearch,fabScreenShot,fabClose;
+    public static final String SCREEN_ON = "action.screenOn";
+    WindowManager.LayoutParams flaotingParams, blueLightparams, patternLockParams;
+    private int bluelightFilterCode = Color.parseColor("#4DF7E6B4");
+    private WindowManager mWindowManager, blueLightWindowManager, patternLockWindowManager;
+    private View mFloatingView, blue_filter_container, pattern_lock_container;
+    private FloatingActionButton collapsed_iv, fabFileShare, fabVoice, fabSearch, fabScreenShot, fabClose;
+
     public FloatingWindowService() {
     }
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -68,132 +66,13 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     @Override
     public void onCreate() {
         super.onCreate();
-
-            setTheme(R.style.AppTheme_Base_Light);
-        //Inflate the floating view layout we created
-        blue_filter_container = LayoutInflater.from(this).inflate(R.layout.blue_light_filter, null);
-        if(PrefManager.getBoolean(ISBLUELIGHT))
-            blue_filter_container.setBackgroundColor(bluelightFilterCode);
-        mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
-        collapsed_iv=mFloatingView.findViewById(R.id.collapsed_iv);
-        fabFileShare=mFloatingView.findViewById(R.id.fabFileShare);
-        fabVoice=mFloatingView.findViewById(R.id.fabVoice);
-        fabSearch=mFloatingView.findViewById(R.id.fabSearch);
-        fabScreenShot=mFloatingView.findViewById(R.id.fabScreenShot);
-        fabClose=mFloatingView.findViewById(R.id.fabClose);
-
-        fabFileShare.setOnClickListener(this);
-        fabVoice.setOnClickListener(this);
-        fabSearch.setOnClickListener(this);
-        fabScreenShot.setOnClickListener(this);
-        fabClose.setOnClickListener(this);
-        //Add the view to the window.
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                        ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
-                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSLUCENT);
-
-        //Specify the view position
-        params.gravity = Gravity.TOP | Gravity.START;        //Initially view will be added to top-left corner
-        params.x = 0;
-        params.y = 100;
-
-
-        //Add the view to the blueLight window.
-        final WindowManager.LayoutParams blueLightparams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                        ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
-                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                PixelFormat.TRANSLUCENT);
-
-        //Specify the view position
-        blueLightparams.gravity = Gravity.TOP | Gravity.START;        //Initially view will be added to top-left corner
-        blueLightparams.x = 0;
-        blueLightparams.y = 0;
-        //Add the view to the window
-        blueLightWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-
-        blueLightWindowManager.addView(blue_filter_container, blueLightparams);
-
-        mWindowManager.addView(mFloatingView, params);
-
-        //The root element of the collapsed view layout
-//        final View collapsedView = mFloatingView.findViewById(R.id.collapse_view);
-        //The root element of the expanded view layout
-//        final View expandedView = mFloatingView.findViewById(R.id.expanded_container);
-
-
-        //Set the close button
-        /*ImageView closeButtonCollapsed = (ImageView) mFloatingView.findViewById(R.id.close_btn);
-        closeButtonCollapsed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //close the service and remove the from from the window
-                stopSelf();
-            }
-        });*/
-
-        //Set the view while floating view is expanded.
-        //Set the play button.
-        /*ImageView playButton = (ImageView) mFloatingView.findViewById(R.id.play_btn);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(FloatingViewService.this, "Playing the song.", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        //Set the next button.
-        ImageView nextButton = (ImageView) mFloatingView.findViewById(R.id.next_btn);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(FloatingViewService.this, "Playing next song.", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        //Set the pause button.
-        ImageView prevButton = (ImageView) mFloatingView.findViewById(R.id.prev_btn);
-        prevButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(FloatingViewService.this, "Playing previous song.", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        //Set the close button
-        ImageView closeButton = (ImageView) mFloatingView.findViewById(R.id.close_button);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                collapsedView.setVisibility(View.VISIBLE);
-                expandedView.setVisibility(View.GONE);
-            }
-        });
-
-        //Open the application on thi button click
-        ImageView openButton = (ImageView) mFloatingView.findViewById(R.id.open_button);
-        openButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Open the application  click.
-                Intent intent = new Intent(FloatingViewService.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-
-                //close the service and remove view from the view hierarchy
-                stopSelf();
-            }
-        });*/
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        IntentFilter filter2 = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(new BootCompleteReceiver(), filter);
+        setTheme(R.style.AppTheme_Base_Light);
+        initFloatingWidget();
+        initBlueLightFilterWidget();
+        initPatterLockWidget();
 
         //Drag and move floating view using user's touch action.
         collapsed_iv.setOnTouchListener(new View.OnTouchListener() {
@@ -208,8 +87,8 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                     case MotionEvent.ACTION_DOWN:
 
                         //remember the initial position.
-                        initialX = params.x;
-                        initialY = params.y;
+                        initialX = flaotingParams.x;
+                        initialY = flaotingParams.y;
 
                         //get the touch location
                         initialTouchX = event.getRawX();
@@ -236,16 +115,117 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         //Calculate the X and Y coordinates of the view.
-                        params.x = initialX + (int) (event.getRawX() - initialTouchX);
-                        params.y = initialY + (int) (event.getRawY() - initialTouchY);
+                        flaotingParams.x = initialX + (int) (event.getRawX() - initialTouchX);
+                        flaotingParams.y = initialY + (int) (event.getRawY() - initialTouchY);
 
                         //Update the layout with new X & Y coordinate
-                        mWindowManager.updateViewLayout(mFloatingView, params);
+                        mWindowManager.updateViewLayout(mFloatingView, flaotingParams);
                         return true;
                 }
                 return false;
             }
         });
+    }
+
+    private void initPatterLockWidget() {
+        pattern_lock_container = LayoutInflater.from(this).inflate(R.layout.pattern_lock_view, null);
+        //Add the view to the blueLight window.
+        patternLockParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                        ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
+                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                PixelFormat.TRANSLUCENT);
+
+        //Specify the view position
+        patternLockParams.gravity = Gravity.TOP | Gravity.START;        //Initially view will be added to top-left corner
+        patternLockParams.x = 0;
+        patternLockParams.y = 0;
+        //Add the view to the window
+        patternLockWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        pattern_lock_container.setVisibility(View.GONE);
+        patternLockWindowManager.addView(pattern_lock_container, patternLockParams);
+        PatternLockView patternLockView = pattern_lock_container.findViewById(R.id.patterLockView);
+        patternLockView.addPatternLockListener(new PatternLockViewListener() {
+            @Override
+            public void onStarted() {
+
+            }
+
+            @Override
+            public void onProgress(List<PatternLockView.Dot> progressPattern) {
+
+            }
+
+            @Override
+            public void onComplete(List<PatternLockView.Dot> pattern) {
+//                patternLockView.setPattern(PatternLockView.PatternViewMode.CORRECT,pattern);
+            }
+
+            @Override
+            public void onCleared() {
+
+            }
+        });
+    }
+
+    private void initBlueLightFilterWidget() {
+        blue_filter_container = LayoutInflater.from(this).inflate(R.layout.blue_light_filter, null);
+        if (PrefManager.getBoolean(ISBLUELIGHT))
+            blue_filter_container.setBackgroundColor(bluelightFilterCode);
+        //Add the view to the blueLight window.
+        blueLightparams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                        ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
+                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                PixelFormat.TRANSLUCENT);
+
+        //Specify the view position
+        blueLightparams.gravity = Gravity.TOP | Gravity.START;        //Initially view will be added to top-left corner
+        blueLightparams.x = 0;
+        blueLightparams.y = 0;
+        //Add the view to the window
+        blueLightWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        blueLightWindowManager.addView(blue_filter_container, blueLightparams);
+    }
+
+    private void initFloatingWidget() {
+        //Inflate the floating view layout we created
+
+        mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
+        collapsed_iv = mFloatingView.findViewById(R.id.collapsed_iv);
+        fabFileShare = mFloatingView.findViewById(R.id.fabFileShare);
+        fabVoice = mFloatingView.findViewById(R.id.fabVoice);
+        fabSearch = mFloatingView.findViewById(R.id.fabSearch);
+        fabScreenShot = mFloatingView.findViewById(R.id.fabScreenShot);
+        fabClose = mFloatingView.findViewById(R.id.fabClose);
+
+        fabFileShare.setOnClickListener(this);
+        fabVoice.setOnClickListener(this);
+        fabSearch.setOnClickListener(this);
+        fabScreenShot.setOnClickListener(this);
+        fabClose.setOnClickListener(this);
+        //Add the view to the window.
+        flaotingParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                        ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
+                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+
+        //Specify the view position
+        flaotingParams.gravity = Gravity.TOP | Gravity.START;        //Initially view will be added to top-left corner
+        flaotingParams.x = 0;
+        flaotingParams.y = 100;
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        mWindowManager.addView(mFloatingView, flaotingParams);
     }
 
     /**
@@ -267,14 +247,13 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getAction() != null && intent.getAction().equals(STOP_LAUNCHER_WIDGET))
             stopSelf();
-        else if(intent.getAction()!=null && intent.getAction().equals(BLUE_LIGHT_FILTER))
-        {
-            if(PrefManager.getBoolean(ISBLUELIGHT))
+        else if (intent.getAction() != null && intent.getAction().equals(BLUE_LIGHT_FILTER)) {
+            if (PrefManager.getBoolean(ISBLUELIGHT))
                 blue_filter_container.setBackgroundColor(bluelightFilterCode);
             else
                 blue_filter_container.setBackgroundColor(0);
-        }
-
+        } else if (intent.getAction() != null && intent.getAction().equals(SCREEN_ON))
+            pattern_lock_container.setVisibility(View.VISIBLE);
         return START_STICKY;
     }
 

@@ -1,3 +1,4 @@
+include ':lockscreen'
 include ':cleanermaster'
 include ':app'
 rootProject.name = "ProtectionApp"
