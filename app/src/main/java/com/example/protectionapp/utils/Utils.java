@@ -27,7 +27,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -66,7 +65,6 @@ import com.example.protectionapp.model.FileShareBean;
 import com.example.protectionapp.model.MediaDocBean;
 import com.example.protectionapp.model.PanBean;
 import com.example.protectionapp.model.PassportBean;
-import com.example.protectionapp.model.PersonalRecord;
 import com.example.protectionapp.model.PlansBean;
 import com.example.protectionapp.model.SosBean;
 import com.example.protectionapp.model.StudentIdBean;
@@ -153,6 +151,14 @@ public class Utils {
         gradientDrawable.setShape(shape);
         gradientDrawable.setCornerRadius(cornerRadius);
         return gradientDrawable;
+    }
+
+    public static GradientDrawable getThemeGradient(float cornerRadius) {
+        return getColoredDrawable(Color.parseColor("#0077FF"), Color.parseColor("#003C80"), GradientDrawable.RECTANGLE, cornerRadius);
+    }
+
+    public static GradientDrawable getDisableColorButton(float cornerRadius) {
+        return getColoredDrawable(Color.parseColor("#DFDFDF"), Color.parseColor("#DFDFDF"), GradientDrawable.RECTANGLE, cornerRadius);
     }
 
     public static GradientDrawable getColoredDrawable(int startColor, int endColor, int shape, float cornerRadius, int strokeWidth, int strokeColor) {

@@ -10,89 +10,90 @@
         android:id="@+id/root_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:ignore="UselessParent"
-        >
+        tools:ignore="UselessParent">
 
-    <RelativeLayout
-        android:id="@+id/collapse_view"
-        android:layout_width="wrap_content"
-        android:visibility="visible"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!--Icon of floating widget -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/collapsed_iv"
+        <RelativeLayout
+            android:id="@+id/collapse_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            app:fabSize="mini"
-            android:tint="@color/white"
-            android:src="@drawable/ic_floating_widget"
-            tools:ignore="ContentDescription"/>
-    </RelativeLayout>
+            android:orientation="vertical"
+            android:visibility="visible">
 
-    <!--View while view is expanded-->
-    <LinearLayout
-        android:visibility="gone"
-        android:id="@+id/expanded_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+            <!--Icon of floating widget -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/collapsed_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:src="@drawable/ic_floating_widget"
+                android:tint="@color/white"
+                app:fabSize="mini"
+                tools:ignore="ContentDescription" />
+        </RelativeLayout>
 
-        <!--Album image for the song currently playing.-->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabFileShare"
+        <!--View while view is expanded-->
+        <LinearLayout
+            android:id="@+id/expanded_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/file_share"
-            app:fabSize="mini"
-            tools:ignore="ContentDescription" />
+            android:orientation="vertical"
+            android:padding="8dp"
+            android:visibility="gone">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabVoice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginBottom="10dp"
-            android:tint="@color/white"
-            app:fabSize="mini"
-            android:src="@drawable/recording_button_icon"
-            tools:ignore="ContentDescription" />
+            <!--Album image for the song currently playing.-->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabFileShare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/file_share"
+                app:fabSize="mini"
+                tools:ignore="ContentDescription" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginBottom="10dp"
-            android:tint="@color/white"
-            app:fabSize="mini"
-            android:src="@drawable/ic_search"
-            tools:ignore="ContentDescription" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabScreenShot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginBottom="10dp"
-            android:tint="@color/white"
-            app:fabSize="mini"
-            android:src="@drawable/ic_screenshot"
-            tools:ignore="ContentDescription" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginBottom="10dp"
-            app:fabSize="mini"
-            android:src="@drawable/ic_close"
-            tools:ignore="ContentDescription" />
-    </LinearLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabVoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/recording_button_icon"
+                android:tint="@color/white"
+                app:fabSize="mini"
+                tools:ignore="ContentDescription" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_search"
+                android:tint="@color/white"
+                app:fabSize="mini"
+                tools:ignore="ContentDescription" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabScreenShot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_screenshot"
+                android:tint="@color/white"
+                app:fabSize="mini"
+                tools:ignore="ContentDescription" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_close"
+                app:fabSize="mini"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
 
     </RelativeLayout>
 </FrameLayout>

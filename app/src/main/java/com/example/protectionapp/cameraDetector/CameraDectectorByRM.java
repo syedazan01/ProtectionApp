@@ -18,13 +18,10 @@ import androidx.appcompat.widget.Toolbar;
 import com.ekn.gruzer.gaugelibrary.HalfGauge;
 import com.ekn.gruzer.gaugelibrary.Range;
 import com.example.protectionapp.R;
-import com.example.protectionapp.utils.PrefManager;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
-
-import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class CameraDectectorByRM extends AppCompatActivity implements SensorEventListener {
     public static DecimalFormat DECIMAL_FORMATTER;
@@ -74,12 +71,12 @@ private TextView tvObject;
         sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
     private void addViews() {
-        toolbar=findViewById(R.id.toolbar);
-        ivBack=findViewById(R.id.ivBack);
-        tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
-        ivObject=findViewById(R.id.ivObject);
-        tvObject=findViewById(R.id.tvObject);
-        meterView=findViewById(R.id.meterView);
+        toolbar = findViewById(R.id.toolbar);
+        ivBack = findViewById(R.id.ivBack);
+        tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
+//        ivObject=findViewById(R.id.ivObject);
+//        tvObject=findViewById(R.id.tvObject);
+        meterView = findViewById(R.id.meterView);
 
         tvToolbarTitle.setText("Hidden Camera Detector");
 

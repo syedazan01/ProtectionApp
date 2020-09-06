@@ -22,19 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/passport_logo"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_marginTop="7dp"
-                android:gravity="center"
-                android:src="@drawable/passportlogo"
-                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/passport_logo"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -45,12 +36,12 @@
                     app:counterEnabled="true"
                     app:counterMaxLength="16"
                     app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Passport Number"
                         android:inputType="number"
                         android:padding="10dp"
@@ -62,13 +53,12 @@
                     android:id="@+id/passport_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Type"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -79,13 +69,12 @@
                     android:id="@+id/passport_countrycode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Country Code"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -96,13 +85,12 @@
                     android:id="@+id/passport_nationality"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Nationality"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -113,13 +101,12 @@
                     android:id="@+id/passport_fullname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Full Name"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -127,11 +114,13 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text=" Sex"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
 
                 <RadioGroup
@@ -147,6 +136,7 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:padding="10dp"
+                        android:fontFamily="@font/poppins_regular"
                         android:text="Male" />
 
                     <RadioButton
@@ -154,6 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:fontFamily="@font/poppins_regular"
                         android:text="Female" />
 
                     <RadioButton
@@ -161,6 +152,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:fontFamily="@font/poppins_regular"
                         android:text="Other" />
 
                 </RadioGroup>
@@ -169,14 +161,13 @@
                     android:id="@+id/dob_passport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dob_calender_passport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:focusable="false"
                         android:hint="Date Of Birth"
                         android:padding="10dp"
@@ -187,13 +178,12 @@
                     android:id="@+id/passport_placeofbirth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Place Of Birth"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -204,13 +194,12 @@
                     android:id="@+id/passport_placeofissue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Place Of Issue"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -221,14 +210,13 @@
                     android:id="@+id/passport_dateofissue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dofissue_calender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:focusable="false"
                         android:hint="Date Of Issue"
                         android:padding="10dp"
@@ -239,14 +227,13 @@
                     android:id="@+id/passport_dateofexpire"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passport_datevalidity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:focusable="false"
                         android:hint="Date Of Expiry"
                         android:padding="10dp"

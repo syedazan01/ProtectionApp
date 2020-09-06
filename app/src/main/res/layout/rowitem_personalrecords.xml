@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llPersonal"
-    android:background="@drawable/gradiant_background"
+    android:background="?attr/primaryBackgroundColor"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginTop="10dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp">
             <TextView
                 android:layout_width="match_parent"
@@ -15,6 +14,6 @@
                 android:text="Record Name"
                 android:layout_marginTop="2dp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="?attr/primaryTitleColor"
                 android:textSize="18sp"/>
         </LinearLayout>

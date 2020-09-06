@@ -27,6 +27,8 @@
         app:searchIcon="@drawable/ic_search" />
     <Switch
         android:text="Notification Block"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semibold"
         app:layout_constraintTop_toBottomOf="@id/searchApp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +38,7 @@
         android:buttonTint="@color/colorPrimary"
         android:thumbTint="@color/colorAccent"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textSize="16dp" />
 
     <androidx.core.widget.NestedScrollView
         android:fillViewport="true"
@@ -58,12 +60,14 @@
 
                 <TextView
                     android:id="@+id/tvMostUsed"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="#747474"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Most Used Apps"
-                    android:textColor="?attr/primaryDateColor"
+                    android:textSize="14dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

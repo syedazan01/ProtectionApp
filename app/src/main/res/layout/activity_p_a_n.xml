@@ -22,19 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/pan_icon"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_marginTop="7dp"
-                android:gravity="center"
-                android:src="@drawable/panlogo"
-                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/pan_icon"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -44,12 +35,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Full Name"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -60,13 +51,12 @@
                     android:id="@+id/panFathersname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Father Name"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -77,14 +67,13 @@
                     android:id="@+id/pan_dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/pandob_calender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:focusable="false"
                         android:hint="Date Of Birth"
                         android:padding="10dp"
@@ -95,31 +84,77 @@
                     android:id="@+id/pan_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Permanent Account Number"
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/pan_imageview1"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    />
+                    android:layout_height="179dp"
+                    android:background="@drawable/imageview">
 
-                <ImageView
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/pan_imageview2"
+                    <ImageView
+                        android:id="@+id/camloc"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your PAN front side"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/pan_imageview1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    />
+                    android:layout_height="179dp"
+                    android:background="@drawable/imageview">
+
+                    <ImageView
+                        android:id="@+id/camloc1"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your PAN back side"
+                        android:textSize="13sp" />
+
+
+                    <ImageView
+                        android:id="@+id/pan_imageview2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="10dp" />
+                </RelativeLayout>
+
 
                 <Button
                     android:id="@+id/panscanbt"
@@ -136,6 +171,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="SAVE"
+                    android:background="@drawable/activebutton"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textSize="18sp"
                     android:textColor="@color/white" />
 
                 <Button

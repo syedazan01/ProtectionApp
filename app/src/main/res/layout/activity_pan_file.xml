@@ -22,19 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/pan_icon"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_marginTop="7dp"
-                android:gravity="center"
-                android:src="@drawable/panlogo"
-                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/pan_icon"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
                 android:padding="16dp">
@@ -42,75 +33,71 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/panFullname"
                     android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:hintEnabled="false">
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_border"
-                android:enabled="false"
-                android:hint="Full Name"
-                android:inputType="textPersonName"
-                android:padding="10dp"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:hint="Full Name"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/panFathersname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:hintEnabled="false">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/panFathersname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_border"
-                android:enabled="false"
-                android:hint="Father Name"
-                android:inputType="textPersonName"
-                android:padding="10dp"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:hint="Father Name"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/pan_dob"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:hintEnabled="false">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pan_dob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/pandob_calender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_border"
-                android:enabled="false"
-                android:focusable="false"
-                android:hint="Date Of Birth"
-                android:padding="10dp"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/pandob_calender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:hint="Date Of Birth"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/pan_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            app:hintEnabled="false">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pan_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_border"
-                android:enabled="false"
-                android:hint="Permanent Account Number"
-                android:inputType="textPersonName"
-                android:padding="10dp"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:hint="Permanent Account Number"
+                        android:inputType="textPersonName"
+                        android:padding="10dp"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:id="@+id/pan_imageview1"

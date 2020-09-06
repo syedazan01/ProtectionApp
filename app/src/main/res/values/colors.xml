@@ -27,10 +27,12 @@
     <color name="primaryDateColorNight">#B3FFFFFF</color>
     <color name="primaryBackgroundColorNight">#303030</color>
     <color name="primaryCardBackgroundColorNight">#424242</color>
-  <!--  <color name="black">#000</color>
-    <color name="white">#FFF</color>-->
+    <!--  <color name="black">#000</color>
+      <color name="white">#FFF</color>-->
 
-<!--    Dialog Color-->
-<color name="green">#4CAF50</color>
-<color name="red">#EA291B</color>
+    <!--    Dialog Color-->
+    <color name="green">#4CAF50</color>
+    <color name="red">#EA291B</color>
+    <color name="grey">#DFDFDF</color>
+    <color name="hintColor">#DCDCDC</color>
 </resources>

@@ -14,11 +14,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.IntroPagerAdapter;
-import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
 import com.example.protectionapp.utils.views.RoundView;
-
-import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 
 public class HomeFragment extends Fragment {
@@ -30,12 +27,12 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.home_intro, container, false);
-        llNext = view.findViewById(R.id.llNext);
-        tvSkip = view.findViewById(R.id.tvSkip);
-        introPager = view.findViewById(R.id.introPager);
-        tvNext = view.findViewById(R.id.tvNext);
-        tvTitle = view.findViewById(R.id.tvTitle);
-        indicators = view.findViewById(R.id.indicators);
+//        llNext = view.findViewById(R.id.llNext);
+//        tvSkip = view.findViewById(R.id.tvSkip);
+//        introPager = view.findViewById(R.id.introPager);
+//        tvNext = view.findViewById(R.id.tvNext);
+//        tvTitle = view.findViewById(R.id.tvTitle);
+//        indicators = view.findViewById(R.id.indicators);
         return view;
     }
 

@@ -5,83 +5,104 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.Recording_fragment"
-    android:background="@drawable/gradiant_background">
+    android:background="#F3F9FF">
 
-<RelativeLayout
-    android:gravity="center"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_below="@id/chronometer"
-        android:id="@+id/mRecordingPrompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?attr/primaryTitleColor"
-        android:textSize="24sp"
-        android:layout_centerHorizontal="true"
-        />
-<Chronometer
-    android:id="@+id/chronometer"
-
-    android:layout_centerHorizontal="true"
-    android:layout_marginBottom="20dp"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-
-    android:textColor="?attr/primaryTitleColor"
-    android:textSize="20sp"
-    />
-    <com.example.protectionapp.utils.views.VisualizerView
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_below="@id/mRecordingPrompt"
-        android:id="@+id/visualizer"
-        />
-    <androidx.appcompat.widget.AppCompatImageView
-        android:visibility="gone"
-        android:layout_below="@id/mRecordingPrompt"
-        android:id="@+id/recording_bg"
-        android:layout_width="wrap_content"
-        android:layout_height="140dp"
-
-        android:src="@drawable/recroding_background">
-    </androidx.appcompat.widget.AppCompatImageView>
-
-    <TextView
-        android:layout_below="@id/cardRecord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textColor="?attr/primaryTitleColor"
-        android:layout_centerHorizontal="true"
-        android:text="Press The Button To Record"/>
-<androidx.cardview.widget.CardView
-    app:cardElevation="0dp"
-    android:layout_marginBottom="20dp"
-    android:layout_marginTop="20dp"
-    android:layout_centerHorizontal="true"
-    android:id="@+id/cardRecord"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:layout_below="@+id/visualizer"
-    android:layout_width="70dp"
-    android:layout_height="70dp"
-
-    app:cardBackgroundColor="?attr/primaryBackgroundColor"
-    app:cardCornerRadius="70dp"
-    >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <ImageView
-        android:layout_centerInParent="true"
-        android:id="@+id/recording_button"
-        android:src="@drawable/recording_button_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
-        />
+        <TextView
+            android:id="@+id/mRecordingPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/chronometer"
+            android:layout_centerHorizontal="true"
+            android:textColor="?attr/primaryTitleColor"
+            android:textSize="24sp" />
+
+        <Chronometer
+            android:id="@+id/chronometer"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+
+            android:textColor="?attr/primaryTitleColor"
+            android:textSize="20sp" />
+
+        <com.example.protectionapp.utils.views.VisualizerView
+            android:id="@+id/visualizer"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_below="@id/mRecordingPrompt" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/recording_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="140dp"
+            android:layout_below="@id/mRecordingPrompt"
+            android:src="@drawable/recroding_background"
+
+            android:visibility="gone"></androidx.appcompat.widget.AppCompatImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cardRecord"
+            android:layout_centerHorizontal="true"
+            android:alpha="0.50"
+            android:fontFamily="@font/poppins_regular"
+            android:text="Press The Button To Record"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardRecord"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_below="@+id/visualizer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            app:cardBackgroundColor="?attr/primaryBackgroundColor"
+
+            app:cardCornerRadius="70dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="71dp"
+                    android:layout_height="71dp"
+                    app:cardBackgroundColor="@color/red"
+                    app:cardCornerRadius="30dp">
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_gravity="center"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="30dp">
+
+                        <ImageView
+                            android:id="@+id/recording_button"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerInParent="true" />
+
+
+                    </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
+
+
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
     </RelativeLayout>
-</androidx.cardview.widget.CardView>
-</RelativeLayout>
 </FrameLayout>

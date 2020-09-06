@@ -5,65 +5,104 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activites.CameraDetector"
-    android:background="?attr/primaryBackgroundColor"
-    >
-   <include layout="@layout/custum_toolbar"/>
+    android:background="?attr/primaryBackgroundColor">
+
+    <include layout="@layout/custum_toolbar" />
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="66dp"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Camera Detector"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="114.85dp"
+        android:layout_height="93.07dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/cameradetector_logo" />
 
-        <ImageView
-            android:id="@+id/ivLogo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/shutter"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="100dp" />
+    <TextView
+        android:id="@+id/firsttext1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="66dp"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Camera Detector"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/secodtv2"
+        android:layout_width="198dp"
+        android:layout_height="42dp"
+        android:layout_below="@+id/firsttext1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="66dp"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Find any hidden spy eye around you on click "
+        android:textAlignment="center"
+        android:textColor="#797979"
+        android:textSize="14sp" />
+
 
     <LinearLayout
-        android:layout_below="@+id/ivLogo"
+        android:layout_below="@+id/secodtv2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
 
         >
-        <Button
-        android:layout_marginHorizontal="20dp"
-        android:id="@+id/btnCameraByRM"
-        android:layout_marginTop="60dp"
-        android:background="@drawable/button_design"
-        android:text="Detect Camera By Radiation Meter"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
-    <Button
-        android:visibility="gone"
-        android:layout_marginHorizontal="20dp"
-        android:id="@+id/btnInfraredCamera"
-        android:layout_marginTop="40dp"
-        app:layout_constraintTop_toBottomOf="@id/btnCameraByRM"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_design"
-        android:text="Detect Infrared Camera"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        />
-    <Button
-        android:id="@+id/tips_camBT"
-        android:layout_marginHorizontal="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_design"
-        android:textStyle="bold"
-        android:textAllCaps="false"
-        android:layout_marginTop="40dp"
-        android:textSize="18sp"
-        android:text="Tips And Tricks"/>
+        <Button
+            android:id="@+id/btnCameraByRM"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/activebutton"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Detect Camera By Radiation Meter"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/btnInfraredCamera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/button_design"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Detect Infrared Camera"
+            android:textAllCaps="false"
+            android:textSize="15dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/btnCameraByRM" />
+
+        <Button
+            android:id="@+id/tips_camBT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/transparentbutton"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Tips And Tricks"
+            android:textAllCaps="false"
+            android:textColor="#0054B3"
+            android:textSize="15dp" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline

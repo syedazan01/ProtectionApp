@@ -24,29 +24,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_recorder"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:layout_collapseMode="parallax"
-        app:title="Voice Recorder"
-        />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_recorder"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:layout_collapseMode="parallax"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Voice Recorder"
+            app:titleTextColor="@color/black" />
+
         <RelativeLayout
             android:id="@+id/rltCallRecording"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
             <TextView
                 android:layout_marginStart="10dp"
                 android:layout_centerVertical="true"
                 android:id="@+id/tvCallRecording"
                 android:text="Call Recording"
-                android:textStyle="bold"
-                android:textColor="@color/white"
+                android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:fontFamily="@font/poppins_semibold"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textColor="@color/black" />
             <ToggleButton
                 android:layout_centerVertical="true"
                 android:id="@+id/callToggle"
@@ -58,7 +62,7 @@
     <com.google.android.material.tabs.TabLayout
         app:layout_collapseMode="pin"
         android:id="@+id/tablayout_recorder"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tabIndicatorColor="@color/white"

@@ -21,11 +21,13 @@
         android:layout_height="wrap_content"
         />
 
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/fileshareTL"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabIndicatorColor="?attr/primaryTitleColor"
+            app:tabIndicatorColor="#0054B3"
             app:tabIndicatorHeight="3dp"
             app:tabMode="fixed"
             app:tabGravity="fill" />

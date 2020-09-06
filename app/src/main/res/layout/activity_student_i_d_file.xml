@@ -22,19 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/atmtoplogo"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/student_id" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/atmtoplogo"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -44,12 +35,13 @@
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
                     app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Institution Name"
                         android:inputType="text"
                         android:padding="10dp"
@@ -61,13 +53,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Enroll No."
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -79,13 +70,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Roll NO."
                         android:inputType="phone"
                         android:padding="10dp"
@@ -97,13 +87,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Full Name"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -115,14 +104,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etFname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Father Name"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -134,13 +122,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:counterEnabled="true"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Branch"
                         android:inputType="text"
                         android:padding="10dp"

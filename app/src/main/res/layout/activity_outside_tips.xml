@@ -10,12 +10,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/gradiant_background"
         android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:text="outside you might be under cctv"
-        android:textAllCaps="true"
-        android:textSize="15sp" />
+        android:layout_marginLeft="13dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Outside you might be under CCTV"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/outside_tipsTV"

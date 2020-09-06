@@ -38,6 +38,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvFromUserMobile" />
 
     <TextView
+        android:fontFamily="@font/poppins_regular"
         android:id="@+id/tvMsg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

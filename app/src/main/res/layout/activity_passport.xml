@@ -22,15 +22,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/passport_logo"
-                android:layout_width="match_parent"
-                android:layout_height="78dp"
-                android:layout_marginTop="7dp"
-                android:gravity="center"
-                android:src="@drawable/passportlogo"
-                android:textSize="24sp" />
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,12 +37,12 @@
                     app:counterEnabled="true"
                     app:counterMaxLength="16"
                     app:errorEnabled="true"
-                    app:hintEnabled="false">
+                  >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Passport Number"
                         android:inputType="number"
                         android:padding="10dp"
@@ -63,13 +54,12 @@
                     android:id="@+id/passport_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Type"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -80,13 +70,12 @@
                     android:id="@+id/passport_countrycode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Country Code"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -97,13 +86,12 @@
                     android:id="@+id/passport_nationality"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Nationality"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -114,13 +102,12 @@
                     android:id="@+id/passport_fullname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Full Name"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -132,7 +119,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text=" Sex"
-                    android:textSize="18sp" />
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
 
                 <RadioGroup
@@ -147,6 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
+                        android:fontFamily="@font/poppins_regular"
                         android:padding="10dp"
                         android:text="Male" />
 
@@ -155,6 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:fontFamily="@font/poppins_regular"
                         android:text="Female" />
 
                     <RadioButton
@@ -162,6 +153,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:fontFamily="@font/poppins_regular"
                         android:text="Other" />
 
                 </RadioGroup>
@@ -170,15 +162,14 @@
                     android:id="@+id/dob_passport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dob_calender_passport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
                         android:focusable="false"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Date Of Birth"
                         android:padding="10dp"
                         android:textSize="14sp" />
@@ -188,13 +179,12 @@
                     android:id="@+id/passport_placeofbirth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Place Of Birth"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -205,13 +195,12 @@
                     android:id="@+id/passport_placeofissue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Place Of Issue"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -222,14 +211,13 @@
                     android:id="@+id/passport_dateofissue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/dofissue_calender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:focusable="false"
                         android:hint="Date Of Issue"
                         android:padding="10dp"
@@ -240,34 +228,82 @@
                     android:id="@+id/passport_dateofexpire"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
-                    app:hintEnabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/passport_datevalidity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_border"
+                        android:fontFamily="@font/poppins_regular"
                         android:focusable="false"
                         android:hint="Date Of Expiry"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/passport_imageView1"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                   
-                    android:scaleType="fitXY" />
+                    android:layout_height="179dp"
+                    android:background="@drawable/imageview">
 
-                <ImageView
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/passport_imageView2"
+                    <ImageView
+                        android:id="@+id/camloc"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your atm front side"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/passport_imageView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:scaleType="fitXY" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                   
-                    android:scaleType="fitXY" />
+                    android:layout_height="179dp"
+                    android:background="@drawable/imageview">
+
+                    <ImageView
+                        android:id="@+id/camloc1"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your atm front side"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/passport_imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+
+                        android:scaleType="fitXY" />
+
+                </RelativeLayout>
+
 
                 <Button
                     android:id="@+id/cam_openbt"
@@ -284,6 +320,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:background="@drawable/activebutton"
+                    android:textSize="18sp"
                     android:text="SAVE/update"
                     android:textColor="@color/white" />
 

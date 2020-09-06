@@ -12,12 +12,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/gradiant_background"
         android:layout_marginTop="50dp"
-        android:gravity="center"
-        android:text="possibility of cam in bedroom is 15%"
-        android:textAllCaps="true"
-        android:textSize="20sp" />
+        android:layout_marginLeft="13dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Possibility of cam in bedroom is 15%"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
     <TextView
         android:id="@+id/bedroom_tipsTV"
         android:layout_centerInParent="true"
