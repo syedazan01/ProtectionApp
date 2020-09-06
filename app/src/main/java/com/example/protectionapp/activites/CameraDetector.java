@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.protectionapp.R;
 import com.example.protectionapp.cameraDetector.CamDetector_tips;
 import com.example.protectionapp.cameraDetector.CameraDectectorByRM;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 public class CameraDetector extends AppCompatActivity {
     Toolbar toolbar;
@@ -47,9 +48,12 @@ public class CameraDetector extends AppCompatActivity {
         tipsBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(CameraDetector.this, CamDetector_tips.class);
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(CameraDetector.this, R.style.AppBottomSheetDialogTheme);
+                bottomSheetDialog.setContentView(R.layout.activity_cam_detector_tips);
+                bottomSheetDialog.show();
+              /*  Intent intent= new Intent(CameraDetector.this, CamDetector_tips.class);
                 startActivity(intent);
-
+*/
             }
         });
         camDetect.setOnClickListener(new View.OnClickListener() {

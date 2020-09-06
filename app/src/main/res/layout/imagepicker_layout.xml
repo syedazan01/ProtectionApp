@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_border"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <View
+        android:layout_width="44dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_line" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Upload Image"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardviewCAm"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        app:cardCornerRadius="90dp"
+        android:backgroundTint="#0077FF">
+        
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:src="@drawable/cameranewlogo"
+            android:layout_gravity="center"/>
+
+    </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/cardviewCAm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Camera"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardviewGallery"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        app:cardCornerRadius="90dp"
+        android:backgroundTint="#0077FF">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:src="@drawable/gallerylogo"
+            android:layout_gravity="center"/>
+
+    </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_below="@+id/cardviewGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gallery"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="@color/black"/>
+
+    </RelativeLayout>
+
+    </LinearLayout>
+
+
+

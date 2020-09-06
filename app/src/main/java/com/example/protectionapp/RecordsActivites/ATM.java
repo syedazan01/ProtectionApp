@@ -98,6 +98,8 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
         btnAtmScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 //open camera code
                /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, 100);*/
@@ -221,7 +223,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
 
     private void openDialog() {
         SendDailog sendDailog = new SendDailog(this, true);
-        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+        //sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 
 

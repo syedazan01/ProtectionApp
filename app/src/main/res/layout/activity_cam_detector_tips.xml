@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_border"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    android:padding="10dp"
     tools:context="com.example.protectionapp.cameraDetector.CamDetector_tips">
 
-    <include layout="@layout/custum_toolbar" />
 
+    <View
+        android:layout_width="44dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_line" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/gradiant_background"
-        android:layout_marginTop="50dp"
-        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/poppins_semibold"
         android:text="Where are you now ?"
-        android:textSize="20sp" />
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <RadioGroup
+        android:layout_marginTop="22sp"
         android:id="@+id/Rgroup_rooms"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
@@ -28,11 +38,13 @@
             android:id="@+id/bedroom_tips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
             android:padding="15dp"
             android:text="Bedroom" />
 
         <RadioButton
             android:id="@+id/bathroom_tips"
+            android:fontFamily="@font/poppins_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -40,6 +52,7 @@
 
         <RadioButton
             android:id="@+id/changingroom_tips"
+            android:fontFamily="@font/poppins_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -47,6 +60,7 @@
 
         <RadioButton
             android:id="@+id/outside_tips"
+            android:fontFamily="@font/poppins_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -55,12 +69,17 @@
     </RadioGroup>
 
     <Button
+        android:layout_marginTop="25dp"
         android:id="@+id/next_tipsBT"
-        android:layout_width="match_parent"
+        android:layout_width="302dp"
+        android:layout_gravity="center"
         android:layout_height="wrap_content"
         android:text="next"
+        android:textColor="@color/white"
+        android:textSize="15sp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
+        android:background="@drawable/activebutton"
         />
+</LinearLayout>
 
-</RelativeLayout>

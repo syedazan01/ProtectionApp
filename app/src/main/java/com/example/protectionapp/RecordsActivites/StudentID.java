@@ -100,16 +100,7 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
         btnSTDScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //open camera code
-               /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);*/
-
-                ImagePicker.Companion.with(StudentID.this)
-                        .crop()                    //Crop image(Optional), Check Customization for more option
-                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
-
+                Utils.showMediaChooseBottomSheet(StudentID.this);
             }
         });
         btnSTDSave.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +154,7 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
 
     private void openDialog() {
         SendDailog sendDailog = new SendDailog(this, true);
-        sendDailog.show(getSupportFragmentManager(), "send dialog");
+        //sendDailog.show(getSupportFragmentManager(), "send dialog");
     }
 
     @Override

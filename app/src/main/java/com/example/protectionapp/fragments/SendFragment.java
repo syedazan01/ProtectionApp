@@ -115,7 +115,7 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
     public void onSelect(FileShareBean fileShareBean) {
         this.fileShareBean = fileShareBean;
         SendDailog sendDailog = new SendDailog(getActivity(), false);
-        sendDailog.show(this.getChildFragmentManager(), "Send Dialog");
+//        //sendDailog.show(this.getChildFragmentManager(), "Send Dialog");
     }
 
     @Override

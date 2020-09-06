@@ -98,15 +98,7 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
         btnVoteridscan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //open camera code
-               /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);*/
-
-                ImagePicker.Companion.with(VoterID.this)
-                        .crop()                    //Crop image(Optional), Check Customization for more option
-                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
+                Utils.showMediaChooseBottomSheet(VoterID.this);
             }
         });
     }
@@ -248,7 +240,7 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
 
     private void openDialog() {
         SendDailog sendDailog = new SendDailog(this, true);
-        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+        //sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 
     private void initViews() {

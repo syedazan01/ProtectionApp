@@ -48,11 +48,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
+import com.example.protectionapp.RecordsActivites.Adhaar;
 import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.RecordsActivites.SendDailog;
 import com.example.protectionapp.model.AdhaarBean;
@@ -78,6 +80,7 @@ import com.google.android.gms.appinvite.AppInvite;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
@@ -560,7 +563,7 @@ public class Utils {
             @Override
             public void onClick(View view) {
                 SendDailog sendDailog = new SendDailog(activity, true);
-                sendDailog.show(activity.getSupportFragmentManager(), "Send Dialog");
+                //sendDailog.show(activity.getSupportFragmentManager(), "Send Dialog");
                 dialog.dismiss();
                 ((PersonalRecords) activity).setDocumentType(docType);
             }
@@ -820,5 +823,41 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public static void showMediaChooseBottomSheet(Activity activity) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.imagepicker_layout);
+
+
+        CardView cardViewCam,cardViewGall;
+        cardViewCam = bottomSheetDialog.findViewById(R.id.cardviewCAm);
+        cardViewGall = bottomSheetDialog.findViewById(R.id.cardviewGallery);
+
+        cardViewGall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePicker.Companion.with(activity)
+                        .crop()//Crop image(Optional), Check Customization for more option
+                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                        .galleryOnly()
+                        .start();
+            }
+        });
+
+        cardViewCam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePicker.Companion.with(activity)
+                        .crop()//Crop image(Optional), Check Customization for more option
+                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                        .cameraOnly()
+                        .start();
+
+            }
+        });
+        bottomSheetDialog.show();
     }
 }

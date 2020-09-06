@@ -98,15 +98,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
         btnDLscan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //open camera code
-               /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);*/
-
-                ImagePicker.Companion.with(DrivingLicence.this)
-                        .crop()                    //Crop image(Optional), Check Customization for more option
-                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
+                Utils.showMediaChooseBottomSheet(DrivingLicence.this);
             }
         });
     }
@@ -265,7 +257,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
 
     private void openDialog() {
         SendDailog sendDailog = new SendDailog(this, true);
-        sendDailog.show(getSupportFragmentManager(),"Send Dialog");
+        //sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 
     private void initViews() {

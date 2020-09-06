@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -31,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
+import com.example.protectionapp.activites.CameraDetector;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.FileShareBean;
@@ -47,6 +49,7 @@ import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.FirebaseDatabase;
@@ -98,6 +101,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     Boolean imagepick = true;
     List<FileShareBean> fileShareBeans = new ArrayList<>();
     List<String> tokenList = new ArrayList<>();
+
     private Uri fileUri, fileUri2;
 
     @Override
@@ -153,6 +157,9 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
             public void onClick(View view) {
                 if (!validateForm())
                     return;
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(Adhaar.this, R.style.AppBottomSheetDialogTheme);
+                bottomSheetDialog.setContentView(R.layout.senddailog_bottomsheet);
+                bottomSheetDialog.show();
                 openDialog();
             }
         });
@@ -216,15 +223,8 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         opencam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //open camera code
-               /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);*/
+           Utils.showMediaChooseBottomSheet(Adhaar.this);
 
-                ImagePicker.Companion.with(Adhaar.this)
-                        .crop()                    //Crop image(Optional), Check Customization for more option
-                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
             }
         });
 
@@ -263,7 +263,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
 
     private void openDialog() {
         SendDailog sendDailog = new SendDailog(this, true);
-        sendDailog.show(getSupportFragmentManager(), "Send Dialog");
+        //sendDailog.show(getSupportFragmentManager(), "Send Dialog");
     }
 
     private void initViews() {
