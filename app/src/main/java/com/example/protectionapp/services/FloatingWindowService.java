@@ -46,7 +46,8 @@ import static com.example.protectionapp.fragments.UtilityFeaturesFragment.onFabC
 import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class FloatingWindowService extends Service implements View.OnClickListener {
-    public static final String STOP_LAUNCHER_WIDGET = "action.stopservice";
+    public static final String LAUNCHER_WIDGET = "action.floating.launcher";
+    private BootCompleteReceiver bootBroadCast;
     public static final String BLUE_LIGHT_FILTER = "action.bluelight";
     public static final String SCREEN_ON = "action.screenOn";
     WindowManager.LayoutParams flaotingParams, blueLightparams, patternLockParams;
@@ -68,63 +69,14 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         super.onCreate();
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         IntentFilter filter2 = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(new BootCompleteReceiver(), filter);
+        bootBroadCast = new BootCompleteReceiver();
+        registerReceiver(bootBroadCast, filter);
         setTheme(R.style.AppTheme_Base_Light);
-        initFloatingWidget();
-        initBlueLightFilterWidget();
+
+
         initPatterLockWidget();
 
-        //Drag and move floating view using user's touch action.
-        collapsed_iv.setOnTouchListener(new View.OnTouchListener() {
-            private int initialX;
-            private int initialY;
-            private float initialTouchX;
-            private float initialTouchY;
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-
-                        //remember the initial position.
-                        initialX = flaotingParams.x;
-                        initialY = flaotingParams.y;
-
-                        //get the touch location
-                        initialTouchX = event.getRawX();
-                        initialTouchY = event.getRawY();
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        int Xdiff = (int) (event.getRawX() - initialTouchX);
-                        int Ydiff = (int) (event.getRawY() - initialTouchY);
-
-                        //The check for Xdiff <10 && YDiff< 10 because sometime elements moves a little while clicking.
-                        //So that is click event.
-                        if (v==collapsed_iv && Xdiff < 10 && Ydiff < 10) {
-                            if (isViewCollapsed()) {
-                                //When user clicks on the image view of the collapsed layout,
-                                //visibility of the collapsed layout will be changed to "View.GONE"
-                                //and expanded view will become visible.
-//                                collapsedView.setVisibility(View.GONE);
-                                mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
-                            } else {
-                                mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
-                            }
-                            fadAniamtion();
-                        }
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        //Calculate the X and Y coordinates of the view.
-                        flaotingParams.x = initialX + (int) (event.getRawX() - initialTouchX);
-                        flaotingParams.y = initialY + (int) (event.getRawY() - initialTouchY);
-
-                        //Update the layout with new X & Y coordinate
-                        mWindowManager.updateViewLayout(mFloatingView, flaotingParams);
-                        return true;
-                }
-                return false;
-            }
-        });
     }
 
     private void initPatterLockWidget() {
@@ -226,6 +178,57 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         flaotingParams.y = 100;
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mFloatingView, flaotingParams);
+        //Drag and move floating view using user's touch action.
+        collapsed_iv.setOnTouchListener(new View.OnTouchListener() {
+            private int initialX;
+            private int initialY;
+            private float initialTouchX;
+            private float initialTouchY;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+
+                        //remember the initial position.
+                        initialX = flaotingParams.x;
+                        initialY = flaotingParams.y;
+
+                        //get the touch location
+                        initialTouchX = event.getRawX();
+                        initialTouchY = event.getRawY();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        int Xdiff = (int) (event.getRawX() - initialTouchX);
+                        int Ydiff = (int) (event.getRawY() - initialTouchY);
+
+                        //The check for Xdiff <10 && YDiff< 10 because sometime elements moves a little while clicking.
+                        //So that is click event.
+                        if (v == collapsed_iv && Xdiff < 10 && Ydiff < 10) {
+                            if (isViewCollapsed()) {
+                                //When user clicks on the image view of the collapsed layout,
+                                //visibility of the collapsed layout will be changed to "View.GONE"
+                                //and expanded view will become visible.
+//                                collapsedView.setVisibility(View.GONE);
+                                mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
+                            } else {
+                                mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
+                            }
+                            fadAniamtion();
+                        }
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        //Calculate the X and Y coordinates of the view.
+                        flaotingParams.x = initialX + (int) (event.getRawX() - initialTouchX);
+                        flaotingParams.y = initialY + (int) (event.getRawY() - initialTouchY);
+
+                        //Update the layout with new X & Y coordinate
+                        mWindowManager.updateViewLayout(mFloatingView, flaotingParams);
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -240,18 +243,27 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(bootBroadCast);
         if (mFloatingView != null) mWindowManager.removeView(mFloatingView);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getAction() != null && intent.getAction().equals(STOP_LAUNCHER_WIDGET))
-            stopSelf();
-        else if (intent.getAction() != null && intent.getAction().equals(BLUE_LIGHT_FILTER)) {
-            if (PrefManager.getBoolean(ISBLUELIGHT))
-                blue_filter_container.setBackgroundColor(bluelightFilterCode);
+        if (intent.getAction() != null && intent.getAction().equals(LAUNCHER_WIDGET)) {
+            if (PrefManager.getBoolean(AppConstant.OVERLAY))
+                initFloatingWidget();
             else
-                blue_filter_container.setBackgroundColor(0);
+                stopSelf();
+        } else if (intent.getAction() != null && intent.getAction().equals(BLUE_LIGHT_FILTER)) {
+
+            if (PrefManager.getBoolean(ISBLUELIGHT)) {
+                initBlueLightFilterWidget();
+                blue_filter_container.setBackgroundColor(bluelightFilterCode);
+            } else {
+                if (blue_filter_container != null)
+                    blue_filter_container.setBackgroundColor(0);
+            }
+
         } else if (intent.getAction() != null && intent.getAction().equals(SCREEN_ON))
             pattern_lock_container.setVisibility(View.VISIBLE);
         return START_STICKY;

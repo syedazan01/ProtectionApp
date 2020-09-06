@@ -144,9 +144,7 @@ public class HomePage extends AppCompatActivity  {
                     PrefManager.putBoolean(ISBLUELIGHT,true);
 //                    setTheme(R.style.AppTheme_Base_Night);
                 }
-                if(Utils.isMyFloatingServiceRunning(this))
-                    stopService(new Intent(HomePage.this,FloatingWindowService.class));
-                startService(new Intent(HomePage.this, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
+               startService(new Intent(HomePage.this, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
 
 //                recreate();
 

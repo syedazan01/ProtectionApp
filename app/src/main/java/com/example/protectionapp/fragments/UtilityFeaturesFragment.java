@@ -17,7 +17,6 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.protectionapp.R;
-import com.example.protectionapp.activites.HomePage;
 import com.example.protectionapp.activites.KillNotification;
 import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.AppConstant;
@@ -116,7 +115,7 @@ public class UtilityFeaturesFragment extends Fragment implements FloatingWindowS
                         PrefManager.putBoolean(AppConstant.OVERLAY, b);
                         if(Utils.isMyFloatingServiceRunning(getActivity()))
                             getActivity().stopService(new Intent(getActivity(),FloatingWindowService.class));
-                        getActivity().startService(new Intent(getActivity(), FloatingWindowService.class));
+                        getActivity().startService(new Intent(getActivity(), FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
                     }
                 } else {
                     if (getActivity() != null) {

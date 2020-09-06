@@ -31,7 +31,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
-import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 import static com.example.protectionapp.utils.AppConstant.REQUEST_OVERLAY_PERMISSION;
 
 public class SplashScreen extends AppCompatActivity {
@@ -75,7 +74,7 @@ public class SplashScreen extends AppCompatActivity {
         if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
             if(Utils.isMyFloatingServiceRunning(this))
                 stopService(new Intent(this,FloatingWindowService.class));
-            startService(new Intent(this, FloatingWindowService.class));
+            startService(new Intent(this, FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
         }
 
         if (Build.VERSION.SDK_INT >= 19 && MIUIUtils.isMIUI() && !MIUIUtils.isFloatWindowOptionAllowed(this)) {
