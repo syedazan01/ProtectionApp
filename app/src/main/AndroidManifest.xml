@@ -80,6 +80,7 @@
         </activity>
         <activity
             android:name=".activites.LogIn"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
             android:label="LogIn">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

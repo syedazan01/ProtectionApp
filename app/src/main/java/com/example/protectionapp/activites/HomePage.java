@@ -1,10 +1,14 @@
 package com.example.protectionapp.activites;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,46 +22,41 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.fragments.AccountFragment;
 import com.example.protectionapp.fragments.HomeFragment;
-import com.example.protectionapp.fragments.SosFragment;
-import com.example.protectionapp.fragments.UtilityFeaturesFragment;
-import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.services.FloatingWindowService;
-import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.luseen.spacenavigation.SpaceItem;
 import com.luseen.spacenavigation.SpaceNavigationView;
-import com.luseen.spacenavigation.SpaceOnClickListener;
 
 import theredspy15.ltecleanerfoss.MainActivity;
 
 import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
-public class HomePage extends AppCompatActivity  {
+public class HomePage extends AppCompatActivity implements View.OnClickListener {
     //    DrawerLayout drawerLayout;
     Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
-   // BottomNavigationView bottomNavigationView;
+    // BottomNavigationView bottomNavigationView;
     long backLong;
     Toast backToast;
     //spacenavigation
     SpaceNavigationView spaceNavigationView;
+    private LinearLayout llHome, llCategory, llNotification, llProfile;
+    private ImageView ivHome, ivCategory, ivNotification, ivProfile;
+    private View lineHome, lineCategory, lineNotification, lineProfile;
+
+    private FloatingActionButton fabCleaner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* if (PrefManager.getBoolean(ISBLUELIGHT))
-            setTheme(R.style.AppTheme_Base_Night);
-        else*/
-            setTheme(R.style.AppTheme_Base_Light);
+        Utils.changeColor(this, "#00000000", true);
         setContentView(R.layout.activity_home_page);
-
-        //set up id of spacenavigaton
+        initViews();
+        initActions();
+       /* //set up id of spacenavigaton
         spaceNavigationView = findViewById(R.id.space);
         if (PrefManager.getString(AppConstant.INVITED_BY).equals("") && !PrefManager.getBoolean(AppConstant.ISREFERED)) {
             Utils.getUserReference().child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
@@ -119,32 +118,122 @@ public class HomePage extends AppCompatActivity  {
             public void onItemReselected(int itemIndex, String itemName) {
 
             }
-        });
+        });*/
+
+        setBottomViews(0);
     }
 
+    private void initActions() {
+        llHome.setOnClickListener(this);
+        llCategory.setOnClickListener(this);
+        llNotification.setOnClickListener(this);
+        llProfile.setOnClickListener(this);
+
+        fabCleaner.setOnClickListener(this);
+    }
+
+    private void initViews() {
+
+        fabCleaner = findViewById(R.id.fabCleaner);
+
+        llHome = findViewById(R.id.llHome);
+        llCategory = findViewById(R.id.llCategory);
+        llNotification = findViewById(R.id.llNotification);
+        llProfile = findViewById(R.id.llProfile);
+
+        ivHome = findViewById(R.id.ivHome);
+        ivCategory = findViewById(R.id.ivCategory);
+        ivNotification = findViewById(R.id.ivNotification);
+        ivProfile = findViewById(R.id.ivProfile);
+
+        lineHome = findViewById(R.id.lineHome);
+        lineCategory = findViewById(R.id.lineCategory);
+        lineNotification = findViewById(R.id.lineNotification);
+        lineProfile = findViewById(R.id.lineProfile);
+    }
+
+    private void setBottomViews(int index) {
+        Fragment fragment = null;
+        switch (index) {
+            case 0:
+                ivHome.setColorFilter(Utils.getActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivCategory.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivNotification.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivProfile.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+
+                lineHome.setVisibility(View.VISIBLE);
+                lineCategory.setVisibility(View.GONE);
+                lineNotification.setVisibility(View.GONE);
+                lineProfile.setVisibility(View.GONE);
+                fragment = new HomeFragment();
+
+                break;
+            case 1:
+                ivCategory.setColorFilter(Utils.getActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivHome.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivNotification.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivProfile.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+
+                lineCategory.setVisibility(View.VISIBLE);
+                lineHome.setVisibility(View.GONE);
+                lineNotification.setVisibility(View.GONE);
+                lineProfile.setVisibility(View.GONE);
+
+                fragment = new HomeFragment();
+
+                break;
+            case 2:
+                ivNotification.setColorFilter(Utils.getActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivCategory.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivHome.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivProfile.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+
+                lineNotification.setVisibility(View.VISIBLE);
+                lineCategory.setVisibility(View.GONE);
+                lineHome.setVisibility(View.GONE);
+                lineProfile.setVisibility(View.GONE);
+
+                fragment = new HomeFragment();
+                break;
+
+            case 3:
+                ivProfile.setColorFilter(Utils.getActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivCategory.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivNotification.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+                ivHome.setColorFilter(Utils.getInActiveTintColor(this), PorterDuff.Mode.MULTIPLY);
+
+                lineProfile.setVisibility(View.VISIBLE);
+                lineCategory.setVisibility(View.GONE);
+                lineNotification.setVisibility(View.GONE);
+                lineHome.setVisibility(View.GONE);
+
+                fragment = new HomeFragment();
+                break;
+            default:
+                throw new IllegalStateException("UnknownState");
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu,menu);
+        inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.theme_mode:
-                if(PrefManager.getBoolean(ISBLUELIGHT))
-                {
+                if (PrefManager.getBoolean(ISBLUELIGHT)) {
 //                    setTheme(R.style.AppTheme_Base_Light);
-                    PrefManager.putBoolean(ISBLUELIGHT,false);
-                    }
-                else
-                {
-                    PrefManager.putBoolean(ISBLUELIGHT,true);
+                    PrefManager.putBoolean(ISBLUELIGHT, false);
+                } else {
+                    PrefManager.putBoolean(ISBLUELIGHT, true);
 //                    setTheme(R.style.AppTheme_Base_Night);
                 }
-               startService(new Intent(HomePage.this, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
+                startService(new Intent(HomePage.this, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
 
 //                recreate();
 
@@ -213,28 +302,39 @@ public class HomePage extends AppCompatActivity  {
 
     @Override
     public void onBackPressed() {
-        if(backLong+2000>=System.currentTimeMillis())
-        {
+        if (backLong + 2000 >= System.currentTimeMillis()) {
             backToast.cancel();
             finishAffinity();
-        }
-        else
-        {
-            backToast=Toast.makeText(this, "press back again to exit", Toast.LENGTH_SHORT);
+        } else {
+            backToast = Toast.makeText(this, "press back again to exit", Toast.LENGTH_SHORT);
             backToast.show();
         }
-        backLong=System.currentTimeMillis();
+        backLong = System.currentTimeMillis();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        for(Fragment fragment : getSupportFragmentManager().getFragments()) {
-            if(fragment instanceof AccountFragment)
-            {
-                fragment.onActivityResult(requestCode,resultCode,data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof AccountFragment) {
+                fragment.onActivityResult(requestCode, resultCode, data);
                 break;
             }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view == llHome) {
+            setBottomViews(0);
+        } else if (view == llCategory) {
+            setBottomViews(1);
+        } else if (view == llNotification) {
+            setBottomViews(2);
+        } else if (view == llProfile) {
+            setBottomViews(3);
+        } else if (view == fabCleaner) {
+            startActivity(new Intent(HomePage.this, MainActivity.class));
         }
     }
 }

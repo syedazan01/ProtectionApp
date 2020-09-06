@@ -1,123 +1,69 @@
 package com.example.protectionapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.protectionapp.R;
-import com.example.protectionapp.adapters.IntroPagerAdapter;
+import com.example.protectionapp.activites.CallRecorder;
+import com.example.protectionapp.activites.CameraDetector;
+import com.example.protectionapp.activites.FileShare;
+import com.example.protectionapp.activites.KillNotification;
 import com.example.protectionapp.utils.Utils;
-import com.example.protectionapp.utils.views.RoundView;
 
 
-public class HomeFragment extends Fragment {
-    private LinearLayout llNext,indicators;
-    TextView tvSkip,tvNext,tvTitle;
-    ViewPager introPager;
+public class HomeFragment extends Fragment implements View.OnClickListener {
+    private CardView cardCallRecorder, cardCameraDetector, cardFileShare, cardKillNotification;
+    private ImageView ivBluelightFilter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.home_intro, container, false);
-//        llNext = view.findViewById(R.id.llNext);
-//        tvSkip = view.findViewById(R.id.tvSkip);
-//        introPager = view.findViewById(R.id.introPager);
-//        tvNext = view.findViewById(R.id.tvNext);
-//        tvTitle = view.findViewById(R.id.tvTitle);
-//        indicators = view.findViewById(R.id.indicators);
+        cardCallRecorder = view.findViewById(R.id.cardCallRecorder);
+        cardCameraDetector = view.findViewById(R.id.cardCameraDetector);
+        cardFileShare = view.findViewById(R.id.cardFileShare);
+        cardKillNotification = view.findViewById(R.id.cardKillNotification);
+        ivBluelightFilter = view.findViewById(R.id.ivBluelightFilter);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        /*if (PrefManager.getBoolean(ISBLUELIGHT))
-            getActivity().setTheme(R.style.AppTheme_Base_Night);
-        else*/
-            getActivity().setTheme(R.style.AppTheme_Base_Light);
-
-        llNext.setBackground(new RoundView(getActivity().getResources().getColor(R.color.colorPrimary), Utils.getRadius(100f)));
-        IntroPagerAdapter introAdapter = new IntroPagerAdapter(getActivity());
-        introPager.setAdapter(introAdapter);
-
-        tvSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                startActivity(Intent(this @IntroActivity,LoginActivity:: class.java))
-
-            }
-        });
-
-        tvNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (tvNext.getText().toString().equals("Next")) {
-                    introPager.setCurrentItem(introPager.getCurrentItem() + 1);
-                } else {
-//                    startActivity(Intent(this @IntroActivity,LoginActivity:: class.java))
-//                    finish()
-                }
-            }
-        });
-
-
-        introPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                switch (position) {
-              /*      case 0:{
-                        tvTitle.setText(getActivity().getResources().getString(R.string.intoTitle1));
-                        tvNext.setText("Next");
-                        tvSkip.setVisibility(View.VISIBLE);
-                    }
-                    case 1:{
-                        tvTitle.setText(getActivity().getResources().getString(R.string.introTitle2));
-                        tvNext.setText("Next");
-                        tvSkip.setVisibility(View.VISIBLE);
-                    }
-                    case 2:{
-                        tvTitle.setText(getActivity().getResources().getString(R.string.introTitle3));
-                        tvNext.setText("Next");
-                        tvSkip.setVisibility(View.VISIBLE);
-                    }
-                    case 3:{
-                        tvTitle.setText(getString(R.string.introTitle4));
-                        tvNext.setText("Get Started");
-                        tvSkip.setVisibility(View.GONE);
-                    }*/
-                }
-
-                setIndicator(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
+        cardCallRecorder.setOnClickListener(this);
+        cardCameraDetector.setOnClickListener(this);
+        cardFileShare.setOnClickListener(this);
+        cardKillNotification.setOnClickListener(this);
+        ivBluelightFilter.setOnClickListener(this);
     }
-    private void setIndicator(int position) {
-        for(int i=0;i< indicators.getChildCount();i++){
-            View view = indicators.getChildAt(i);
-            if (i==position){
-                view.setBackgroundResource(R.drawable.capsule_primary);
-            }else{
-                view.setBackgroundResource(R.drawable.capsule_primary_lite);
-            }
+
+    @Override
+    public void onClick(View view) {
+        if (view == ivBluelightFilter) {
+            Utils.setBlueLightTheme(getActivity(), ivBluelightFilter);
+            return;
         }
+        Intent intent = null;
+        if (view == cardCallRecorder) {
+            intent = new Intent(getActivity(), CallRecorder.class);
+
+        } else if (view == cardCameraDetector) {
+            intent = new Intent(getActivity(), CameraDetector.class);
+        } else if (view == cardFileShare) {
+            intent = new Intent(getActivity(), FileShare.class);
+        } else if (view == cardKillNotification) {
+            intent = new Intent(getActivity(), KillNotification.class);
+        }
+        startActivity(intent);
     }
 }

@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/gradiant_background">
+    android:background="#F3F9FF">
 
     <androidx.appcompat.widget.Toolbar
+        android:visibility="gone"
         android:id="@+id/toolbar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,31 +16,31 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"></androidx.appcompat.widget.Toolbar>
 
-    //spacenavigation bar
 
-    <com.luseen.spacenavigation.SpaceNavigationView
-        android:id="@+id/space"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
-        app:active_item_color="@color/colorAccent"
-        app:centre_button_color="@color/colorPrimary"
-        app:centre_button_icon="@drawable/ic_baseline_home_24"
-        app:active_centre_button_background_color="#E82E2E"
-        app:inactive_centre_button_icon_color="@color/white"
-        app:inactive_item_color="?attr/primaryTitleColor"
-        app:space_background_color="?attr/primaryBackgroundColor"
-        app:space_item_icon_only_size="@dimen/space_item_icon_only_size"
-        app:space_item_icon_size="30dp"
-        app:space_item_text_size="@dimen/space_item_text_default_size" />
+    <!-- <com.luseen.spacenavigation.SpaceNavigationView
+         android:visibility="gone"
+         android:id="@+id/space"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_gravity="bottom"
+         android:layout_alignParentBottom="true"
+         app:active_item_color="@color/colorAccent"
+         app:centre_button_color="@color/colorPrimary"
+         app:centre_button_icon="@drawable/ic_baseline_home_24"
+         app:active_centre_button_background_color="#E82E2E"
+         app:inactive_centre_button_icon_color="@color/white"
+         app:inactive_item_color="?attr/primaryTitleColor"
+         app:space_background_color="?attr/primaryBackgroundColor"
+         app:space_item_icon_only_size="@dimen/space_item_icon_only_size"
+         app:space_item_icon_size="30dp"
+         app:space_item_text_size="@dimen/space_item_text_default_size" />-->
     <FrameLayout
         android:layout_below="@+id/toolbar1"
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/space"
-        />
+        android:layout_above="@id/llNavigation"
+        android:layout_marginBottom="20dp" />
 
 
    <!-- <FrameLayout
@@ -62,14 +63,157 @@
             android:background="?attr/primaryBackgroundColor">
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>-->
-    <com.google.android.material.navigation.NavigationView
-        android:visibility="gone"
-        android:background="?attr/primaryBackgroundColor"
-        android:id="@+id/navigation_view"
+    <!-- <com.google.android.material.navigation.NavigationView
+         android:visibility="gone"
+         android:background="?attr/primaryBackgroundColor"
+         android:id="@+id/navigation_view"
+         android:layout_width="wrap_content"
+         android:layout_height="match_parent"
+         android:fitsSystemWindows="true"
+         android:layout_gravity="start"
+         app:menu="@menu/menu"
+         app:headerLayout="@layout/header" />-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:layout_above="@+id/llNavigation"
+        android:background="@color/inactiveColor" />
+    />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabCleaner"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_gravity="start"
-        app:menu="@menu/menu"
-        app:headerLayout="@layout/header" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/themeColor"
+        android:src="@drawable/ic_cleaner" />
+
+    <LinearLayout
+        android:id="@+id/llNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:id="@+id/llHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/ivHome"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_baseline_home_24"
+                app:tint="@color/themeColor" />
+
+            <View
+                android:id="@+id/lineHome"
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/themeColor"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="start"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/ivCategory"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/fourdotsmenu" />
+
+            <View
+                android:id="@+id/lineCategory"
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="7dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/themeColor"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llNotification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="end"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/ivNotification"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_bottom_bell" />
+
+            <View
+                android:id="@+id/lineNotification"
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="7dp"
+                android:background="@color/themeColor"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llProfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/usernew" />
+
+            <View
+                android:id="@+id/lineProfile"
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/themeColor"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

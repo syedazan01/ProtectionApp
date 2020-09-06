@@ -35,4 +35,6 @@
     <color name="red">#EA291B</color>
     <color name="grey">#DFDFDF</color>
     <color name="hintColor">#DCDCDC</color>
+    <color name="themeColor">#004492</color>
+    <color name="inactiveColor">#B1B1B1</color>
 </resources>

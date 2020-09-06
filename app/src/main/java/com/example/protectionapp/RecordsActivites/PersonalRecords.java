@@ -1,24 +1,18 @@
 package com.example.protectionapp.RecordsActivites;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.CursorLoader;
-import androidx.viewpager.widget.ViewPager;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.adapters.DocsPagerAdapter;
@@ -36,10 +30,7 @@ import com.google.firebase.storage.UploadTask;
 import com.jaiselrahman.filepicker.activity.FilePickerActivity;
 import com.jaiselrahman.filepicker.model.MediaFile;
 
-import java.io.File;
 import java.util.ArrayList;
-
-import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class PersonalRecords extends AppCompatActivity implements SendDailog.SendDialogListener {
     Activity activity=this;
@@ -54,10 +45,6 @@ public class PersonalRecords extends AppCompatActivity implements SendDailog.Sen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* if(PrefManager.getBoolean(ISBLUELIGHT))
-          setTheme(R.style.AppTheme_Base_Night);
-        else*/
-          setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_personal_records);
         initViews();
         initActions();

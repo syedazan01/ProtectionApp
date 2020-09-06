@@ -42,6 +42,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,11 +51,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.protectionapp.R;
-import com.example.protectionapp.RecordsActivites.Adhaar;
 import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.RecordsActivites.SendDailog;
 import com.example.protectionapp.model.AdhaarBean;
@@ -112,6 +113,27 @@ public class Utils {
             activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
     }
+
+    public static void changeColor(Activity activity, String color, boolean isDark) {
+
+//        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = activity.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            if (isDark) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+            window.setStatusBarColor(Color.parseColor(color));
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+            Window window = activity.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            window.setStatusBarColor(Color.parseColor(color));
+        }
+    }
+
     public static void removeViewFormParent(View v) {
         if (v == null) return;
         ViewParent parent = v.getParent();
@@ -859,5 +881,19 @@ public class Utils {
             }
         });
         bottomSheetDialog.show();
+    }
+
+    public static int getActiveTintColor(Activity activity) {
+        return ContextCompat.getColor(activity, R.color.themeColor);
+    }
+
+    public static int getInActiveTintColor(Activity activity) {
+        return ContextCompat.getColor(activity, R.color.inactiveColor);
+    }
+
+    public static void setBlueLightTheme(Activity activity, ImageView ivBlueLightFilter) {
+        ivBlueLightFilter.setColorFilter(ContextCompat.getColor(activity, PrefManager.getBoolean(AppConstant.ISBLUELIGHT) ? R.color.black : R.color.themeColor), PorterDuff.Mode.MULTIPLY);
+        activity.startService(new Intent(activity, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
+        PrefManager.putBoolean(AppConstant.ISBLUELIGHT, !PrefManager.getBoolean(AppConstant.ISBLUELIGHT));
     }
 }

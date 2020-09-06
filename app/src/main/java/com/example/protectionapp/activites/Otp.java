@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.chaos.view.PinView;
 import com.example.protectionapp.R;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.utils.AppConstant;
@@ -23,7 +26,6 @@ import com.example.protectionapp.utils.Utils;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.goodiebag.pinview.Pinview;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -39,7 +41,7 @@ public class Otp extends AppCompatActivity {
     Button otpsubmit;
     TextView tvSentMsg, tvToolbarTitle, tvResend;
     ImageView ivBack;
-    Pinview otp_View;
+    PinView otp_View;
     PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
     String verficationId;
     PhoneAuthProvider.ForceResendingToken resendToken;
@@ -52,10 +54,29 @@ public class Otp extends AppCompatActivity {
         setContentView(R.layout.activity_otp);
         initViews();
         initActions();
-
     }
 
     private void initActions() {
+        otp_View.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (otp_View.getText().toString().length() == 6) {
+                    otpsubmit.setBackground(Utils.getThemeGradient(50F));
+                } else {
+                    Utils.makeButton(otpsubmit, getResources().getColor(R.color.grey), 50F);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         initOtpCallback();
         PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" + getIntent().getStringExtra(AppConstant.LOGIN_MOBILE), 30, TimeUnit.SECONDS, this, callbacks);
         tvResend.setVisibility(View.VISIBLE);
@@ -72,13 +93,11 @@ public class Otp extends AppCompatActivity {
         otpsubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!TextUtils.isEmpty(otp_View.getValue())) {
-                    PhoneAuthCredential credential=PhoneAuthProvider.getCredential(verficationId,otp_View.getValue());
+                if (!TextUtils.isEmpty(otp_View.getText().toString())) {
+                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verficationId, otp_View.getText().toString());
                     signInWithPhoneAuthCredential(credential);
 
-                }
-                else
-                {
+                } else {
                     Utils.showToast(activity, "Invalid Otp", AppConstant.errorColor);
                 }
             }
@@ -97,7 +116,7 @@ public class Otp extends AppCompatActivity {
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                 String otp = phoneAuthCredential.getSmsCode();
                 if (otp != null) {
-                    otp_View.setValue(otp);
+                    otp_View.setText(otp);
                     signInWithPhoneAuthCredential(phoneAuthCredential);
                 }
             }
@@ -181,14 +200,14 @@ public class Otp extends AppCompatActivity {
         tvResend = findViewById(R.id.tvResend);
         tvToolbarTitle.setText("Otp");
         tvSentMsg.setText(getResources().getString(R.string.sent_msg) + " " + getIntent().getStringExtra(AppConstant.LOGIN_MOBILE));
-        Utils.makeButton(otpsubmit, getResources().getColor(R.color.colorPrimary), 50F);
+        Utils.makeButton(otpsubmit, getResources().getColor(R.color.grey), 50F);
     }
 
     private void otpSendTimer() {
         new CountDownTimer(30 * 1000, 1000) {
             @Override
             public void onTick(long l) {
-                tvResend.setText("00: " + TimeUnit.MILLISECONDS.toSeconds(l));
+                tvResend.setText("Resend code in 00: " + TimeUnit.MILLISECONDS.toSeconds(l) + " sec.");
             }
 
             @Override

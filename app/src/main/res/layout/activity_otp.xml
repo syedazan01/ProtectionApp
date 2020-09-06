@@ -34,18 +34,24 @@
         android:fontFamily="@font/poppins_regular"
         android:textSize="14dp" />
 
-    <com.goodiebag.pinview.Pinview
+    <com.chaos.view.PinView
         android:id="@+id/otp_View"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvSentMsg"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="20dp"
-        app:cursorVisible="true"
-        app:forceKeyboard="false"
-        app:inputType="number"
-        app:pinLength="6"
-        app:splitWidth="10dp" />
+        android:layout_centerHorizontal="true"
+        android:cursorVisible="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:inputType="number"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:itemCount="6"
+        app:itemHeight="48dp"
+        app:itemWidth="48dp"
+        app:lineColor="@color/black"
+        app:lineWidth="2dp"
+        app:viewType="line" />
 
     <TextView
         android:id="@+id/tvResend"
@@ -67,7 +73,6 @@
         android:layout_marginTop="40dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/designbutton"
         android:ems="15"
         android:text="confirm"
         android:textColor="@color/white" />

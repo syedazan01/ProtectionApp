@@ -37,10 +37,6 @@ private TextView tvObject;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       /* if (PrefManager.getBoolean(ISBLUELIGHT))
-            setTheme(R.style.AppTheme_Base_Night);
-        else*/
-            setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_camera_dectector_by_r_m);
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
         symbols.setDecimalSeparator('.');
@@ -74,8 +70,8 @@ private TextView tvObject;
         toolbar = findViewById(R.id.toolbar);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
-//        ivObject=findViewById(R.id.ivObject);
-//        tvObject=findViewById(R.id.tvObject);
+        ivObject = findViewById(R.id.ivObject);
+        tvObject = findViewById(R.id.tvObject);
         meterView = findViewById(R.id.meterView);
 
         tvToolbarTitle.setText("Hidden Camera Detector");

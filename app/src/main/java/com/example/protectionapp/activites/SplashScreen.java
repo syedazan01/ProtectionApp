@@ -44,28 +44,10 @@ public class SplashScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-       /* if (PrefManager.getBoolean(ISBLUELIGHT))
-            setTheme(R.style.AppTheme_Base_Night);
-        else*/
-            setTheme(R.style.AppTheme_Base_Light);
         super.onCreate(savedInstanceState);
+        Utils.changeColor(this, "#00000000", true);
         mContext = this;
-       /* List<PlansBean> plansBeans=new ArrayList<>();
-        plansBeans.add(new PlansBean("200 \u20B9","Primium Plan","For 3 Month",""));
-        plansBeans.add(new PlansBean("100 \u20B9","Silver Plan","For 2 Month",""));
-        plansBeans.add(new PlansBean("50 \u20B9","Platinum Plan","For 4 Month",""));
-        plansBeans.add(new PlansBean("20 \u20B9","Basic Plan","For 1 Month",""));
-        for (PlansBean plansBean : plansBeans)
-        {
-            Utils.storePlansToRTD(this,plansBean);
-        }*/
-
         setContentView(R.layout.splash_screen_layout);
-        /*mpManager = (MediaProjectionManager) getSystemService(MEDIA_PROJECTION_SERVICE);
-
-        final Intent captureIntent = mpManager.createScreenCaptureIntent();
-        startActivityForResult(captureIntent, REQUEST_CODE_SCREEN_SHOT);*/
-//        checkAccessibilityPermission();
         if (!isMyServiceRunning(ForgroundService.class)) {
             Intent forrgroundIntent = new Intent(this, ForgroundService.class);
             forrgroundIntent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
@@ -116,56 +98,6 @@ public class SplashScreen extends AppCompatActivity {
         }, 2500);
     }
 
-   /* @TargetApi(Build.VERSION_CODES.M)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
-            if (Settings.canDrawOverlays(this)) {
-                showWindowManager();
-            }
-        }
-    }
-    public void showWindowManager() {
-        if (requestPermission()) {
-            return;
-        }
-
-        WindowManager.LayoutParams p =
-                new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT,
-                        WindowManager.LayoutParams.WRAP_CONTENT,
-                        Build.VERSION.SDK_INT > Build.VERSION_CODES.O
-                                ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                                : WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                        PixelFormat.TRANSLUCENT);
-
-
-        final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        LayoutInflater layoutInflater =
-                (LayoutInflater) getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View popupView = layoutInflater.inflate(R.layout.window_manager_layout, null);
-        windowManager.addView(popupView, p);
-
-        // dismiss windowManager after 3s
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                windowManager.removeView(popupView);
-            }
-        }, 3000);
-    }
-    public boolean requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
-                return true;
-            }
-        }
-        return false;
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
