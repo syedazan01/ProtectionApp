@@ -16,7 +16,7 @@
         <ImageView
             android:layout_width="285dp"
             android:layout_height="226dp"
-            android:src="@drawable/Group282"
+            android:src="@drawable/intro_screen"
             android:layout_gravity="center"/>
     </androidx.cardview.widget.CardView>
 
@@ -106,7 +106,7 @@
                 android:layout_width="10dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/Path252" />
+                android:src="@drawable/ic_right_arrow" />
         </RelativeLayout>
 
 

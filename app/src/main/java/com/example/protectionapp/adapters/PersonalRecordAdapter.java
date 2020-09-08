@@ -1,16 +1,18 @@
 package com.example.protectionapp.adapters;
-import android.graphics.Color;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.protectionapp.R;
 import com.example.protectionapp.model.PersonalRecord;
+
 import java.util.List;
-import java.util.Random;
 
 public class PersonalRecordAdapter extends RecyclerView.Adapter<PersonalRecordAdapter.PersonalRecordHolder> {
     List<PersonalRecord> recordList;
@@ -33,7 +35,8 @@ public class PersonalRecordAdapter extends RecyclerView.Adapter<PersonalRecordAd
     public void onBindViewHolder(@NonNull PersonalRecordHolder holder, int position) {
 //        int color= Color.argb(255,new Random().nextInt(100)+150,new Random().nextInt(100)+150,new Random().nextInt(100)+150);
 //        holder.llPersonal.setBackgroundColor(color);
-        holder.tvRecordName.setText(recordList.get(position).getRecordsName());
+        holder.tvDoc.setText(recordList.get(position).getRecordsName());
+        holder.ivDoc.setImageResource(recordList.get(position).getDocResId());
 
     }
 
@@ -42,20 +45,20 @@ public class PersonalRecordAdapter extends RecyclerView.Adapter<PersonalRecordAd
         return recordList.size();
     }
 
-    public class PersonalRecordHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tvRecordName;
-        LinearLayout llPersonal;
+    public class PersonalRecordHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView tvDoc;
+        ImageView ivDoc;
 
         public PersonalRecordHolder(@NonNull View itemView) {
             super(itemView);
-            tvRecordName = itemView.findViewById(R.id.tvRecordName);
-            llPersonal = itemView.findViewById(R.id.llPersonal);
+            tvDoc = itemView.findViewById(R.id.tvDoc);
+            ivDoc = itemView.findViewById(R.id.ivDoc);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            recyclerViewClickListener.onClick(view,getAdapterPosition());
+            recyclerViewClickListener.onClick(view, getAdapterPosition());
 
         }
     }

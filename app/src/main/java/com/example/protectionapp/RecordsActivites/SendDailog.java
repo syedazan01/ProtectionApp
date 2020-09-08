@@ -1,20 +1,14 @@
 package com.example.protectionapp.RecordsActivites;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.utils.AppConstant;
@@ -27,20 +21,20 @@ public class SendDailog extends BottomSheetDialog {
     Activity umActivity;
     boolean isMsgVisible;
     View bootomSheetView;
-    Button btnCancel,btnProceed;
+    Button btnCancel, btnProceed;
 
-    public SendDailog(@NonNull Context context, boolean isMsgVisible) {
-        super(context);
+    public SendDailog(@NonNull Context context, boolean isMsgVisible, int style) {
+        super(context, style);
         this.umActivity = (Activity) context;
         this.isMsgVisible = isMsgVisible;
     }
 
     @Override
     public void setContentView(View view) {
-        LayoutInflater layoutInflater = umActivity.getLayoutInflater();
-        bootomSheetView = layoutInflater.inflate(R.layout.senddailog_bottomsheet, null);
-        super.setContentView(bootomSheetView);
+        bootomSheetView = view;
+        super.setContentView(view);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +42,16 @@ public class SendDailog extends BottomSheetDialog {
         try {
             sendDialogListener = (SendDialogListener) umActivity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(umActivity.toString()+"must implement SendDialogListener");
+            throw new ClassCastException(umActivity.toString() + "must implement SendDialogListener");
         }
-        editTextmessage=bootomSheetView.findViewById(R.id.editTextmessage);
-        editTextPassword=bootomSheetView.findViewById(R.id.editTextPassword);
-        btnCancel=bootomSheetView.findViewById(R.id.btnCancel);
-        btnProceed=bootomSheetView.findViewById(R.id.btnProceed);
+        editTextmessage = bootomSheetView.findViewById(R.id.editTextmessage);
+        if (isMsgVisible)
+            editTextmessage.setVisibility(View.VISIBLE);
+        else
+            editTextmessage.setVisibility(View.GONE);
+        editTextPassword = bootomSheetView.findViewById(R.id.editTextPassword);
+        btnCancel = bootomSheetView.findViewById(R.id.btnCancel);
+        btnProceed = bootomSheetView.findViewById(R.id.btnProceed);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

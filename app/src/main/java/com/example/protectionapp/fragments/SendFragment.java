@@ -48,8 +48,6 @@ import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import org.w3c.dom.DocumentType;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,8 +112,12 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
     @Override
     public void onSelect(FileShareBean fileShareBean) {
         this.fileShareBean = fileShareBean;
-        SendDailog sendDailog = new SendDailog(getActivity(), false);
-//        //sendDailog.show(this.getChildFragmentManager(), "Send Dialog");
+        SendDailog sendDailog = new SendDailog(getActivity(), false, R.style.AppBottomSheetDialogTheme);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View bootomSheetView = layoutInflater.inflate(R.layout.senddailog_bottomsheet, null);
+        sendDailog.setContentView(bootomSheetView);
+        sendDailog.show();
+        //        //sendDailog.show(this.getChildFragmentManager(), "Send Dialog");
     }
 
     @Override

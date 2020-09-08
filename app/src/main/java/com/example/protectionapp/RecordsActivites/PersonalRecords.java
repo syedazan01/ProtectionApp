@@ -51,13 +51,13 @@ public class PersonalRecords extends AppCompatActivity implements SendDailog.Sen
     }
     private void initViews()
     {
-        docsViewPager=findViewById(R.id.docsViewPager);
-        tabDocs=findViewById(R.id.tabDocs);
-        fabDocs=findViewById(R.id.fabDocs);
-        ivBack=findViewById(R.id.ivBack);
-        tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
+//        docsViewPager=findViewById(R.id.docsViewPager);
+//        tabDocs=findViewById(R.id.tabDocs);
+//        fabDocs=findViewById(R.id.fabDocs);
+        ivBack = findViewById(R.id.ivBack);
+        tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Personal Documents");
-        uploadingDialog=new UploadingDialog(this);
+        uploadingDialog = new UploadingDialog(this);
     }
     private void initActions() {
         docsViewPager.setAdapter(new DocsPagerAdapter(getSupportFragmentManager(),2));

@@ -584,7 +584,11 @@ public class Utils {
         llSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SendDailog sendDailog = new SendDailog(activity, true);
+                SendDailog sendDailog = new SendDailog(activity, true, R.style.AppBottomSheetDialogTheme);
+                LayoutInflater layoutInflater = activity.getLayoutInflater();
+                View bootomSheetView = layoutInflater.inflate(R.layout.senddailog_bottomsheet, null);
+                sendDailog.setContentView(bootomSheetView);
+                sendDailog.show();
                 //sendDailog.show(activity.getSupportFragmentManager(), "Send Dialog");
                 dialog.dismiss();
                 ((PersonalRecords) activity).setDocumentType(docType);
@@ -865,6 +869,7 @@ public class Utils {
                         .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .galleryOnly()
                         .start();
+                bottomSheetDialog.dismiss();
             }
         });
 
@@ -877,7 +882,7 @@ public class Utils {
                         .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .cameraOnly()
                         .start();
-
+                bottomSheetDialog.dismiss();
             }
         });
         bottomSheetDialog.show();
