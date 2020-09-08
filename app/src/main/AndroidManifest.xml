@@ -37,7 +37,14 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme,android:roundIcon">
-        <activity android:name=".activites.SosActivity"></activity>
+        <activity android:name=".App_Intro2"></activity>
+        <activity android:name=".activites.Rate_us" />
+        <activity android:name=".activites.Privacy_poly" />
+        <activity android:name=".activites.Terms_Condition" />
+        <activity android:name=".activites.About_us" />
+        <activity android:name=".activites.App_intro" />
+        <activity android:name=".activites.SettingActivity" />
+        <activity android:name=".activites.SosActivity" />
         <activity android:name=".RecordsActivites.PersonalRecords" />
         <activity android:name=".RecordsActivites.DateOfBirth" />
         <activity android:name=".RecordsActivites.PassportFile" />
@@ -80,8 +87,8 @@
         </activity>
         <activity
             android:name=".activites.LogIn"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            android:label="LogIn">
+            android:label="LogIn"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

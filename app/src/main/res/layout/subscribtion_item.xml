@@ -15,9 +15,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="$25"
-        android:textColor="@color/black"
-        android:textSize="25sp" />
+        android:text="\u20B9 25"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="29sp" />
 
     <TextView
         android:id="@+id/tvPeriod"
@@ -28,8 +29,9 @@
         android:layout_marginTop="20dp"
         android:layout_toRightOf="@id/tvPrice"
         android:text="For 1 Month"
-        android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvScheme"
@@ -40,6 +42,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="10dp"
         android:text="Access Unlimited Movies, Series and Live TVs."
-        android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp" />
 </RelativeLayout>

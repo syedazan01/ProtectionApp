@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="Please Subscribe"
+        android:text="Premium Subscription"
+        android:fontFamily="@font/poppins_semibold"
         android:textColor="@color/black"
         android:textSize="18sp" />
 

@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.example.protectionapp.BuildConfig;
 import com.example.protectionapp.R;
 import com.example.protectionapp.activites.LogIn;
+import com.example.protectionapp.activites.SettingActivity;
 import com.example.protectionapp.activites.SosActivity;
 import com.example.protectionapp.adapters.AdapterSubscription;
 import com.example.protectionapp.adapters.AdapterUsers;
@@ -80,6 +81,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import theredspy15.ltecleanerfoss.SettingsActivity;
 
 import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
@@ -92,7 +94,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     GooglePaySetup googlePaySetup;
     UploadTask mUploadTask;
     List<FetchNotification> fetchNotifications = new ArrayList<>();
-    private CardView cardSubscription, cardInvite, cardLogout, cardSos, cardWallet;
+    private CardView cardSubscription, cardInvite, cardLogout, cardSos, cardWallet,cardSetting;
     String deepLink = "";
     private TextView tvMobile;
     UserBean userBean;
@@ -167,10 +169,21 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         ivProfile = view.findViewById(R.id.ivProfile);
         cardSubscription = view.findViewById(R.id.cardSubscription);
         cardWallet = view.findViewById(R.id.cardWallet);
+        cardSetting = view.findViewById(R.id.cardSetting);
         getUser();
     }
 
     private void initActions() {
+        cardSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity().getApplication(), SettingActivity.class);
+                startActivity(i);
+
+            }
+        });
+
+
         cardWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

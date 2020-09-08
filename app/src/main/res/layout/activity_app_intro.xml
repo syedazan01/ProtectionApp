@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F9FF"
+    tools:context=".activites.App_intro">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_introIV"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:layout_width="330dp"
+        android:layout_height="336dp"
+        app:cardCornerRadius="33dp">
+        <ImageView
+            android:layout_width="285dp"
+            android:layout_height="226dp"
+            android:src="@drawable/Group282"
+            android:layout_gravity="center"/>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/intro_pg_indicator"
+        android:layout_marginStart="40dp"
+        android:padding="10dp"
+        android:layout_marginTop="45dp"
+        android:layout_below="@+id/card_introIV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <view
+            android:id="@+id/intro_pg1"
+            android:layout_width="30dp"
+            android:layout_height="2dp"
+            android:backgroundTint="#0077FF"
+            />
+
+        <view
+            android:layout_marginStart="10dp"
+            android:id="@+id/intro_pg2"
+            android:layout_width="30dp"
+            android:layout_height="2dp"
+            android:background="#0077FF"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/intro_pg_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginStart="41dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome To \nProtection App"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="#000000"
+            android:textSize="27sp"/>
+
+        <TextView
+            android:layout_marginTop="18dp"
+            android:layout_marginStart="41dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lorem ipsum dolor sit amet,\n consetetur sadipscing"
+            android:fontFamily="@font/poppins_regular"
+            android:textColor="#797979"
+            android:textSize="14sp"/>
+        
+        
+        <androidx.cardview.widget.CardView
+            android:layout_gravity="end"
+            android:layout_marginEnd="40dp"
+            android:layout_width="57dp"
+            android:layout_height="57dp"
+            app:cardCornerRadius="17dp"
+            app:cardBackgroundColor="#003C80">
+            
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="25dp"
+                android:src="@drawable/Path252"
+                android:layout_gravity="center"/>
+
+            
+        </androidx.cardview.widget.CardView>
+        
+    </LinearLayout>
+
+
+
+</RelativeLayout>
