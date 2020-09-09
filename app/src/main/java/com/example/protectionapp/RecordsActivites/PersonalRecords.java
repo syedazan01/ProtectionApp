@@ -51,9 +51,9 @@ public class PersonalRecords extends AppCompatActivity implements SendDailog.Sen
     }
     private void initViews()
     {
-        docsViewPager=findViewById(R.id.docsViewPager);
+      /*  docsViewPager=findViewById(R.id.docsViewPager);
         tabDocs=findViewById(R.id.tabDocs);
-        fabDocs=findViewById(R.id.fabDocs);
+        fabDocs=findViewById(R.id.fabDocs);*/
         ivBack=findViewById(R.id.ivBack);
         tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Personal Documents");

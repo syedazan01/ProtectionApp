@@ -37,7 +37,8 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme,android:roundIcon">
-        <activity android:name=".App_Intro2"></activity>
+        <activity android:name=".activites.Wallet"></activity>
+        <activity android:name=".App_Intro2" />
         <activity android:name=".activites.Rate_us" />
         <activity android:name=".activites.Privacy_poly" />
         <activity android:name=".activites.Terms_Condition" />

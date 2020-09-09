@@ -136,7 +136,15 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:padding="10dp"
+                        android:button="@android:color/transparent"
+                        android:background="@drawable/radio_selctor"
+                        android:textColor="@drawable/radio_textcolor"
+                        android:elevation="4dp"
                         android:fontFamily="@font/poppins_regular"
+                        android:textSize="14sp"
+                        android:layout_marginHorizontal="10dp"
+                        android:ems="5"
+                        android:textAlignment="center"
                         android:text="Male" />
 
                     <RadioButton
@@ -144,7 +152,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:button="@android:color/transparent"
+                        android:background="@drawable/radio_selctor"
+                        android:textColor="@drawable/radio_textcolor"
+                        android:elevation="4dp"
                         android:fontFamily="@font/poppins_regular"
+                        android:textSize="14sp"
+                        android:layout_marginHorizontal="10dp"
+                        android:ems="5"
+                        android:textAlignment="center"
                         android:text="Female" />
 
                     <RadioButton
@@ -152,7 +168,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:button="@android:color/transparent"
+                        android:background="@drawable/radio_selctor"
+                        android:textColor="@drawable/radio_textcolor"
+                        android:elevation="4dp"
                         android:fontFamily="@font/poppins_regular"
+                        android:textSize="14sp"
+                        android:layout_marginHorizontal="10dp"
+                        android:ems="5"
+                        android:textAlignment="center"
                         android:text="Other" />
 
                 </RadioGroup>

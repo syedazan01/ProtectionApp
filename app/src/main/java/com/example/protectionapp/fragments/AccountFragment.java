@@ -32,6 +32,7 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.activites.LogIn;
 import com.example.protectionapp.activites.SettingActivity;
 import com.example.protectionapp.activites.SosActivity;
+import com.example.protectionapp.activites.Wallet;
 import com.example.protectionapp.adapters.AdapterSubscription;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.billing.GooglePaySetup;
@@ -190,6 +191,10 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                 if (!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
                     Utils.showNoSubsDialog(getContext());
                     return;
+                }
+                else{
+                    Intent intent = new Intent(getActivity(), Wallet.class);
+                    startActivity(intent);
                 }
             }
         });
