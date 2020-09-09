@@ -91,8 +91,13 @@ public class ReceivedFragment extends Fragment implements AdapterFileShare.FileS
     @Override
     public void onSelect(FileShareBean fileShareBean) {
         this.fileShareBean = fileShareBean;
-        SendDailog sendDailog = new SendDailog(getActivity(), false);
-//        //sendDailog.show(this.getChildFragmentManager(), "Send Dialog");
+        SendDailog sendDailog = new SendDailog(getActivity(), false, R.style.AppBottomSheetDialogTheme);
+
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View bootomSheetView = layoutInflater.inflate(R.layout.senddailog_bottomsheet, null);
+        sendDailog.setContentView(bootomSheetView);
+        sendDailog.show();
+        //        //sendDailog.show(this.getChildFragmentManager(), "Send Dialog");
 
     }
 

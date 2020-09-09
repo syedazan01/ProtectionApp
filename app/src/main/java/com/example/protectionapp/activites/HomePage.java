@@ -22,6 +22,8 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.fragments.AccountFragment;
 import com.example.protectionapp.fragments.HomeFragment;
+import com.example.protectionapp.fragments.PersonalRecordFragment;
+import com.example.protectionapp.fragments.SosFragment;
 import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -179,7 +181,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 lineNotification.setVisibility(View.GONE);
                 lineProfile.setVisibility(View.GONE);
 
-                fragment = new HomeFragment();
+                fragment = new PersonalRecordFragment();
 
                 break;
             case 2:
@@ -193,7 +195,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 lineHome.setVisibility(View.GONE);
                 lineProfile.setVisibility(View.GONE);
 
-                fragment = new HomeFragment();
+                fragment = new SosFragment();
                 break;
 
             case 3:
@@ -207,7 +209,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 lineNotification.setVisibility(View.GONE);
                 lineHome.setVisibility(View.GONE);
 
-                fragment = new HomeFragment();
+                fragment = new AccountFragment();
                 break;
             default:
                 throw new IllegalStateException("UnknownState");

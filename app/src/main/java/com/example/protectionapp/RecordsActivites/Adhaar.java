@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,7 +24,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.protectionapp.R;
-import com.example.protectionapp.activites.CameraDetector;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.FileShareBean;
@@ -49,7 +48,6 @@ import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.FirebaseDatabase;
@@ -157,9 +155,9 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
             public void onClick(View view) {
                 if (!validateForm())
                     return;
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(Adhaar.this, R.style.AppBottomSheetDialogTheme);
+                /*BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(Adhaar.this, R.style.AppBottomSheetDialogTheme);
                 bottomSheetDialog.setContentView(R.layout.senddailog_bottomsheet);
-                bottomSheetDialog.show();
+                bottomSheetDialog.show();*/
                 openDialog();
             }
         });
@@ -262,7 +260,11 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
     }*/
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog(this, true);
+        SendDailog sendDailog = new SendDailog(this, true, R.style.AppBottomSheetDialogTheme);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View bootomSheetView = layoutInflater.inflate(R.layout.senddailog_bottomsheet, null);
+        sendDailog.setContentView(bootomSheetView);
+        sendDailog.show();
         //sendDailog.show(getSupportFragmentManager(), "Send Dialog");
     }
 

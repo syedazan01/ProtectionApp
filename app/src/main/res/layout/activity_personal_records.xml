@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_marginTop="50dp"
-            android:text="Serivce"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Protection App"
             android:textColor="#000000"
             android:textSize="24sp" />
       <!--  &lt;!&ndash; set Banner ad position in UI layout design &ndash;&gt;

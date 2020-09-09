@@ -19,7 +19,7 @@
         <ImageView
             android:layout_width="285dp"
             android:layout_height="226dp"
-            android:src="@drawable/group282"
+            android:src="@drawable/intro_screen"
             android:layout_gravity="center"/>
     </androidx.cardview.widget.CardView>
 
@@ -88,7 +88,7 @@
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="25dp"
-                android:src="@drawable/path252"
+                android:src="@drawable/ic_right_arrow"
                 android:layout_gravity="center"/>
 
             

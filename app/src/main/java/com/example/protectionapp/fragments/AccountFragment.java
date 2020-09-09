@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +14,13 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,10 +35,8 @@ import com.example.protectionapp.adapters.AdapterSubscription;
 import com.example.protectionapp.adapters.AdapterUsers;
 import com.example.protectionapp.billing.GooglePaySetup;
 import com.example.protectionapp.model.FetchNotification;
-import com.example.protectionapp.model.NotificationBean;
 import com.example.protectionapp.model.PlansBean;
 import com.example.protectionapp.model.UserBean;
-import com.example.protectionapp.network.ApiResonse;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
@@ -65,8 +61,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,15 +71,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import theredspy15.ltecleanerfoss.SettingsActivity;
-
-import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -95,7 +80,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     GooglePaySetup googlePaySetup;
     UploadTask mUploadTask;
     List<FetchNotification> fetchNotifications = new ArrayList<>();
-    private CardView cardSubscription, cardInvite, cardLogout, cardSos, cardWallet,cardSetting;
+    private RelativeLayout rltSubscription, rltInvite, rltLogout, rltSos, rltWallet, rltSetting;
     String deepLink = "";
     private TextView tvMobile;
     UserBean userBean;
@@ -162,20 +147,20 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     }
 
     private void initViews(View view) {
-        cardInvite = view.findViewById(R.id.cardreferEarn);
-        cardLogout = view.findViewById(R.id.cardLogout);
-        cardSos = view.findViewById(R.id.cardSos);
+        rltInvite = view.findViewById(R.id.rltreferEarn);
+        rltLogout = view.findViewById(R.id.rltLogout);
+        rltSos = view.findViewById(R.id.rltSos);
         tvMobile = view.findViewById(R.id.tvMobile);
         ivEdit = view.findViewById(R.id.ivEdit);
         ivProfile = view.findViewById(R.id.ivProfile);
-        cardSubscription = view.findViewById(R.id.cardSubscription);
-        cardWallet = view.findViewById(R.id.cardWallet);
-        cardSetting = view.findViewById(R.id.cardSetting);
+        rltSubscription = view.findViewById(R.id.rltSubscription);
+        rltWallet = view.findViewById(R.id.rltWallet);
+        rltSetting = view.findViewById(R.id.rltSetting);
         getUser();
     }
 
     private void initActions() {
-        cardSetting.setOnClickListener(new View.OnClickListener() {
+        rltSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity().getApplication(), SettingActivity.class);
@@ -185,7 +170,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         });
 
 
-        cardWallet.setOnClickListener(new View.OnClickListener() {
+        rltWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
@@ -198,7 +183,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                 }
             }
         });
-        cardInvite.setOnClickListener(new View.OnClickListener() {
+        rltInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /*if(!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
@@ -209,13 +194,13 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                 shareDeepLink(deepLink.toString());
             }
         });
-        cardLogout.setOnClickListener(new View.OnClickListener() {
+        rltLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 buildSignoutDialog();
             }
         });
-        cardSos.setOnClickListener(new View.OnClickListener() {
+        rltSos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /*if(!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
@@ -312,14 +297,10 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         ivEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePicker.Companion.with(AccountFragment.this)
-                        .crop()                    //Crop image(Optional), Check Customization for more option
-                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
+                Utils.showMediaChooseBottomSheet(getActivity());
             }
         });
-        cardSubscription.setOnClickListener(new View.OnClickListener() {
+        rltSubscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Intent intent = new Intent(mActivity, Payment_premiumUser.class);

@@ -3,16 +3,18 @@ package com.example.protectionapp.model;
 public class PersonalRecord {
 
     String recordsName;
+    int docResId;
 
-    public PersonalRecord(String recordsName) {
+    public PersonalRecord(String recordsName, int docResId) {
         this.recordsName = recordsName;
+        this.docResId = docResId;
+    }
+
+    public int getDocResId() {
+        return docResId;
     }
 
     public String getRecordsName() {
         return recordsName;
-    }
-
-    public void setRecordsName(String recordsName) {
-        this.recordsName = recordsName;
     }
 }

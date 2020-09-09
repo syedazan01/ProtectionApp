@@ -147,6 +147,9 @@
                 <action android:name="android.intent.action.SCREEN_ON" />
             </intent-filter>
         </receiver>
+        <!-- <meta-data
+             android:name="com.google.android.gms.ads.APPLICATION_ID"
+             android:value="@string/google_app_id"/>-->
     </application>
 
 </manifest>

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -256,7 +257,11 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog(this, true);
+        SendDailog sendDailog = new SendDailog(this, true, R.style.AppBottomSheetDialogTheme);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View bootomSheetView = layoutInflater.inflate(R.layout.senddailog_bottomsheet, null);
+        sendDailog.setContentView(bootomSheetView);
+        sendDailog.show();
         //sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 

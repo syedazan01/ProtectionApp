@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -211,7 +211,11 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     }
 
     private void openDialog() {
-        SendDailog sendDailog = new SendDailog(this, true);
+        SendDailog sendDailog = new SendDailog(this, true, R.style.AppBottomSheetDialogTheme);
+        LayoutInflater layoutInflater = getLayoutInflater();
+        View bootomSheetView = layoutInflater.inflate(R.layout.senddailog_bottomsheet, null);
+        sendDailog.setContentView(bootomSheetView);
+        sendDailog.show();
         //sendDailog.show(getSupportFragmentManager(),"Send Dialog");
     }
 
