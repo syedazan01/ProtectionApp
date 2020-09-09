@@ -1,19 +1,14 @@
 package com.example.protectionapp.services;
+
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
-
 
 import androidx.core.app.NotificationCompat;
 
@@ -21,7 +16,6 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.activites.SplashScreen;
 import com.example.protectionapp.model.RecordingFileData;
 import com.example.protectionapp.room.AppDatabase;
-import com.example.protectionapp.room.dao.RecordeFileDao;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +24,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import static com.example.protectionapp.fragments.Recording_fragment.mRecorder;
@@ -48,7 +41,7 @@ public class RecordingService extends Service {
     Toast toast;
 
 
-    NotificationManager mgr;
+//    NotificationManager mgr;
     private long mStartingTimeMillis = 0;
     private long mElapsedMillis = 0;
     private int mElapsedSeconds = 0;
@@ -151,7 +144,7 @@ public class RecordingService extends Service {
         }
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
         mRecorder.release();
-        mgr.cancel(1);
+//        mgr.cancel(1);
         if(toast!=null)
             toast.cancel();
         toast= Toast.makeText(this, getString(R.string.toast_recording_finish) + " " + mFilePath, Toast.LENGTH_LONG);
@@ -197,12 +190,12 @@ public class RecordingService extends Service {
                 mElapsedSeconds++;
                 if (onTimerChangedListener != null)
                     onTimerChangedListener.onTimerChanged(mElapsedSeconds);
-                mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                /*mgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     NotificationChannel defaultChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
                     mgr.createNotificationChannel(defaultChannel);
                 }
-                mgr.notify(1, createNotification());
+                mgr.notify(1, createNotification());*/
 
             }
         };

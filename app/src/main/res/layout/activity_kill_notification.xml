@@ -35,8 +35,8 @@
         android:id="@+id/swAll"
         android:padding="10dp"
         android:textColor="?attr/primaryTitleColor"
-        android:buttonTint="@color/colorPrimary"
-        android:thumbTint="@color/colorAccent"
+        android:buttonTint="@color/green"
+        android:thumbTint="@color/green"
         android:layout_width="wrap_content"
         android:textSize="16dp" />
 

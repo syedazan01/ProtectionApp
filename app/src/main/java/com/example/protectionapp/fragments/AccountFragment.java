@@ -173,14 +173,16 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         rltWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
+                /*if (!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
                     Utils.showNoSubsDialog(getContext());
                     return;
                 }
                 else{
                     Intent intent = new Intent(getActivity(), Wallet.class);
                     startActivity(intent);
-                }
+                }*/
+                Intent intent = new Intent(getActivity(), Wallet.class);
+                startActivity(intent);
             }
         });
         rltInvite.setOnClickListener(new View.OnClickListener() {
