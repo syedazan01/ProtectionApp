@@ -11,13 +11,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.SendDailog;
-import com.example.protectionapp.ViewPageAdapter;
+import com.example.protectionapp.adapters.ViewPageAdapter;
 import com.example.protectionapp.fragments.ReceivedFragment;
 import com.example.protectionapp.fragments.SendFragment;
-import com.example.protectionapp.utils.PrefManager;
 import com.google.android.material.tabs.TabLayout;
-
-import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class FileShare extends AppCompatActivity implements SendDailog.SendDialogListener {
     Toolbar toolbar;

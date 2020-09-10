@@ -2,9 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llPersonal"
-    app:cardBackgroundColor="#DEEDFF"
     android:layout_width="match_parent"
-    android:layout_height="179dp"
+    android:layout_height="wrap_content"
     android:layout_margin="17dp"
     app:cardCornerRadius="14dp"
     app:cardElevation="6dp">
@@ -16,13 +15,13 @@
         android:padding="16dp">
 
         <TextView
+            android:layout_below="@id/ivDoc"
             android:id="@+id/tvDoc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:layout_marginTop="10dp"
-            android:text="ahdhfkjashfsklaj"
             android:fontFamily="@font/poppins_medium"
             android:textColor="#000000"
             android:textSize="15sp" />

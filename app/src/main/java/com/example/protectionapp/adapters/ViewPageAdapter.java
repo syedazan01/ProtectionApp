@@ -1,4 +1,4 @@
-package com.example.protectionapp;
+package com.example.protectionapp.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +29,7 @@ public class ViewPageAdapter extends FragmentStatePagerAdapter {
         return FragmentsList.size();
     }
 
-    public void addFragment(Fragment fragment,String title){
+    public void addFragment(Fragment fragment, String title) {
         FragmentsList.add(fragment);
         FragmentsTitle.add(title);
     }

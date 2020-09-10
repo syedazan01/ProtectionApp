@@ -27,13 +27,43 @@
                 android:text="Notifications"
                 android:textColor="#000000"
                 android:textSize="24sp"
-                android:fontFamily="@font/poppins_semibold"/>
+                android:fontFamily="@font/poppins_semibold" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="20dp"
                 android:id="@+id/rvSos"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
+
+            <!-- <androidx.cardview.widget.CardView
+                 android:layout_marginTop="10dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 app:cardCornerRadius="10dp"
+                 app:cardUseCompatPadding="true">
+                 <RelativeLayout
+                     android:padding="10dp"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content">
+                     <TextView
+                         android:textAllCaps="true"
+                         android:layout_marginStart="10dp"
+                         android:text="Screen shot on volume button"
+                         android:textColor="@color/black"
+                         android:textSize="15sp"
+                         android:fontFamily="@font/poppins_medium"
+                         android:layout_centerVertical="true"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"/>
+                     <Switch
+                         android:layout_marginEnd="10dp"
+                         android:layout_alignParentEnd="true"
+                         android:layout_centerVertical="true"
+                         android:id="@+id/swEnableLauncher"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"/>
+                 </RelativeLayout>
+             </androidx.cardview.widget.CardView>-->
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

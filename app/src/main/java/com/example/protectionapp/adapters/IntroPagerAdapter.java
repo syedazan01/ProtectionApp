@@ -25,7 +25,7 @@ public class IntroPagerAdapter extends PagerAdapter {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View layout = inflater.inflate(R.layout.intro_slide, collection, false);
 
-        ImageView ivImage=layout.findViewById(R.id.ivImage);
+        ImageView ivImage = layout.findViewById(R.id.ivIntroImage);
 
         Glide.with(mContext).load(intro.getLayoutResId()).into(ivImage);
         collection.addView(layout);

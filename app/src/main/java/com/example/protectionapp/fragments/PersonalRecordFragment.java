@@ -93,7 +93,7 @@ public class PersonalRecordFragment extends Fragment {
     private void initData() {
         recordList = new ArrayList<>();
         recordList.add(new PersonalRecord("PDF AND \nCAMERA", R.drawable.ic_pdf));
-        recordList.add(new PersonalRecord("ADHAAR \n Card", R.drawable.aadharlogo));
+        recordList.add(new PersonalRecord("ADHAAR \nCard", R.drawable.aadharlogo));
         recordList.add(new PersonalRecord("PAN \nCARD", R.drawable.panlogo));
         recordList.add(new PersonalRecord("DRIVING \nLICENSE", R.drawable.drivinglogo));
         recordList.add(new PersonalRecord("BANK \nACCOUNT", R.drawable.bankicon));

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".App_Intro2">
+    tools:context=".activites.App_Intro2">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_introIV"
@@ -13,6 +13,7 @@
         android:layout_width="330dp"
         android:layout_height="336dp"
         app:cardCornerRadius="33dp">
+
         <ImageView
             android:layout_width="285dp"
             android:layout_height="226dp"

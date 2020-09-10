@@ -49,7 +49,8 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">Welcome to \nProtection App</string>
+    <string name="protect_doc">Protect Your \nDocument</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
@@ -60,4 +61,6 @@
     <string name="recording_speaker_off">Recording Speaker Off</string>
     <string name="error_notification_title">Notification Error</string>
     <string name="notification_success">Notifcation Success</string>
+    <string name="welocme_desc">Lorem ipsum dolor sit amet,\n consetetur sadipscing</string>
+    <string name="protect_desc">Lorem ipsum dolor sit amet,\n consetetur sadipscing</string>
 </resources>

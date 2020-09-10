@@ -29,8 +29,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.protectionapp.R;
-import com.example.protectionapp.ViewPageAdapter;
 import com.example.protectionapp.adapters.RecordingFileAdapter;
+import com.example.protectionapp.adapters.ViewPageAdapter;
 import com.example.protectionapp.fragments.PlayerFragment;
 import com.example.protectionapp.fragments.Recording_fragment;
 import com.example.protectionapp.interfacecallbacks.onPlay;
