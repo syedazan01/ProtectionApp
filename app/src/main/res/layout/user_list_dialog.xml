@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="center">
 
+    
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardUser"
         android:layout_width="0dp"
@@ -36,9 +38,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:ems="6"
+        android:ems="10"
         android:text="Send"
+        android:textSize="20dp"
+        android:background="@drawable/activebutton"
+        android:fontFamily="@font/poppins_medium"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardUser" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

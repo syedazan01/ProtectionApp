@@ -157,7 +157,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/activebutton"
-                    android:text="SAVE"
+                    android:text="Save"
+                    android:textAllCaps="false"
                     android:fontFamily="@font/poppins_medium"
                     android:textSize="18sp"
                     android:textColor="@color/white" />
@@ -166,8 +167,13 @@
                     android:id="@+id/bank_sendBT"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="send"
-                    android:textColor="@color/white" />
+                    android:layout_marginTop="20dp"
+                    android:text="Send"
+                    android:textAllCaps="false"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/poppins_medium"
+                    android:background="@drawable/transparentbutton"
+                    android:textColor="#0054B3" />
             </LinearLayout>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

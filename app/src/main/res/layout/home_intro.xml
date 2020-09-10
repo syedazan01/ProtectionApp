@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#F3F9FF"
     android:background="#F3F9FF"
     tools:context=".fragments.HomeFragment">
 
@@ -53,7 +54,7 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_margin="21dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="#E4DEEDFF"
                 app:cardCornerRadius="17dp"
                 app:cardElevation="6dp">
 
@@ -68,7 +69,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="end"
-                        app:cardBackgroundColor="#DDEEFF"
+                        app:cardBackgroundColor="#DEEDFF"
                         app:cardCornerRadius="70dp">
 
                         <ImageView
@@ -101,7 +102,7 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_margin="21dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="#DEEDFF"
                 app:cardCornerRadius="17dp"
                 app:cardElevation="6dp">
 
@@ -149,7 +150,7 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_margin="21dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="#DEEDFF"
                 app:cardCornerRadius="17dp"
                 app:cardElevation="6dp">
 
@@ -164,7 +165,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="end"
-                        app:cardBackgroundColor="#DDEEFF"
+                        app:cardBackgroundColor="#DEEDFF"
                         app:cardCornerRadius="70dp">
 
                         <ImageView
@@ -196,7 +197,7 @@
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
                 android:layout_margin="21dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="#DEEDFF"
                 app:cardCornerRadius="17dp"
                 app:cardElevation="6dp">
 
@@ -211,7 +212,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:layout_gravity="end"
-                        app:cardBackgroundColor="#DDEEFF"
+                        app:cardBackgroundColor="#DEEDFF"
                         app:cardCornerRadius="70dp">
 
                         <ImageView

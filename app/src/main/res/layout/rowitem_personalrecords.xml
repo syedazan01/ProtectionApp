@@ -2,25 +2,18 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llPersonal"
-    android:background="?attr/primaryBackgroundColor"
+    app:cardBackgroundColor="#DEEDFF"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="179dp"
     android:layout_margin="17dp"
-    app:cardCornerRadius="17dp"
+    app:cardCornerRadius="14dp"
     app:cardElevation="6dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:orientation="vertical"
         android:padding="16dp">
-
-
-        <ImageView
-            android:id="@+id/ivDoc"
-            android:layout_width="38dp"
-            android:layout_height="43dp" />
 
         <TextView
             android:id="@+id/tvDoc"
@@ -28,11 +21,25 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textAllCaps="true"
+            android:layout_marginTop="10dp"
+            android:text="ahdhfkjashfsklaj"
+            android:fontFamily="@font/poppins_medium"
             android:textColor="#000000"
             android:textSize="15sp" />
 
-    </LinearLayout>
-</androidx.cardview.widget.CardView><!--<TextView
+
+        <ImageView
+            android:layout_alignParentEnd="true"
+            android:id="@+id/ivDoc"
+            android:layout_width="80dp"
+            android:layout_height="60dp" />
+
+
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
+
+    <!--<TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvRecordName"

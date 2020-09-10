@@ -51,13 +51,24 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:layout_width="wrap_content"
                 android:textColor="@color/black" />
-            <ToggleButton
+           <!-- <ToggleButton
                 android:layout_centerVertical="true"
                 android:id="@+id/callToggle"
                 android:layout_marginEnd="10dp"
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"/>-->
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/callToggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="19dp"
+                android:thumb="@drawable/thumb1"
+                app:track="@drawable/track1"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
         </RelativeLayout>
     <com.google.android.material.tabs.TabLayout
         app:layout_collapseMode="pin"
@@ -65,7 +76,7 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorColor="#0054B3"
         app:tabIndicatorHeight="2dp"
         app:tabMode="fixed"
         app:tabGravity="fill"
@@ -95,7 +106,7 @@
         app:cardElevation="5dp"
         >
         <RelativeLayout
-
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <SeekBar
@@ -117,6 +128,7 @@
                 />
             <TextView
                 android:id="@+id/tvMusicName"
+                android:fontFamily="@font/poppins_semibold"
                 android:layout_below="@id/sbPlayer"
                 android:layout_toLeftOf="@id/ivPlayPause"
                 android:layout_toRightOf="@id/ivMusic"
@@ -140,11 +152,11 @@
                 android:id="@+id/ivPlayPause"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_round_play"
-                android:tint="@color/colorAccent"
                 android:layout_width="40dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_height="40dp"/>
+                android:layout_height="40dp"
+                app:tint="@color/colorAccent" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

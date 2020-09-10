@@ -22,29 +22,31 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/toolbarLay"
+        app:layout_constraintTop_toBottomOf="@id/swAll"
         android:layout_width="match_parent"
         app:searchIcon="@drawable/ic_search" />
+
     <Switch
         android:text="Notification Block"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_semibold"
-        app:layout_constraintTop_toBottomOf="@id/searchApp"
+        app:layout_constraintTop_toBottomOf="@id/toolbarLay"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/swAll"
         android:padding="10dp"
         android:textColor="?attr/primaryTitleColor"
         android:buttonTint="@color/colorPrimary"
-        android:thumbTint="@color/colorAccent"
-        android:layout_width="wrap_content"
+        android:thumbTint="@color/thumb2"
+        android:layout_width="match_parent"
+        android:track="@drawable/track2"
         android:textSize="16dp" />
 
     <androidx.core.widget.NestedScrollView
         android:fillViewport="true"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/swAll"
+        app:layout_constraintTop_toBottomOf="@id/searchApp"
         app:layout_constraintBottom_toBottomOf="parent"
         >
 

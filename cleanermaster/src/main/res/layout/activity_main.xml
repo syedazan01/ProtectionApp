@@ -17,7 +17,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:id="@+id/main_layout"
-    android:background="#222222">
+    android:background="#F3F9FF">
 
     <ScrollView
         android:id="@+id/fileScrollView"
@@ -58,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         fancy:fb_borderWidth="1dp"
         fancy:fb_defaultColor="#222222"
-        fancy:fb_focusColor="#6CFF4D"
+        fancy:fb_focusColor="#00BCD4"
         fancy:fb_fontIconResource="&#xf013;"
         fancy:fb_radius="30dp"
         fancy:fb_text=""
@@ -82,13 +82,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scanProgress"
         app:layout_constraintVertical_bias="0.045"
-        fancy:fb_borderColor="#6CFF4D"
+        fancy:fb_borderColor="#2196F3"
         fancy:fb_borderWidth="3dp"
-        fancy:fb_defaultColor="#161616"
-        fancy:fb_focusColor="#6CFF4D"
+        fancy:fb_defaultColor="#fff"
+        fancy:fb_focusColor="#2196F3"
         fancy:fb_radius="30dp"
+        android:background="@drawable/transparentbutton"
         fancy:fb_text="Clean"
-        fancy:fb_textColor="#FFF" />
+        fancy:fb_textColor="#2196F3" />
 
     <ProgressBar
         android:id="@+id/scanProgress"
@@ -113,7 +114,7 @@
         android:layout_marginBottom="32dp"
         android:fontFamily="monospace"
         android:text="@string/progress_0"
-        android:textColor="#6CFF4D"
+        android:textColor="#2196F3"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="@+id/statusTextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +131,7 @@
         android:layout_marginEnd="129dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/status_idle"
-        android:textColor="#6CFF4D"
+        android:textColor="#2196F3"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
