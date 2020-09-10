@@ -51,38 +51,32 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:layout_width="wrap_content"
                 android:textColor="@color/black" />
-           <!-- <ToggleButton
+            <Switch
                 android:layout_centerVertical="true"
                 android:id="@+id/callToggle"
+                android:buttonTint="@color/green"
+                android:thumbTint="@color/green"
+                android:trackTint="@color/green"
                 android:layout_marginEnd="10dp"
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>-->
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/callToggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="19dp"
-                android:thumb="@drawable/thumb1"
-                app:track="@drawable/track1"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
+                android:layout_height="wrap_content" />
         </RelativeLayout>
-    <com.google.android.material.tabs.TabLayout
-        app:layout_collapseMode="pin"
-        android:id="@+id/tablayout_recorder"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabIndicatorColor="#0054B3"
-        app:tabIndicatorHeight="2dp"
-        app:tabMode="fixed"
-        app:tabGravity="fill"
-        >
 
-    </com.google.android.material.tabs.TabLayout>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayout_recorder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_collapseMode="pin"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/themeColor"
+            app:tabIndicatorHeight="2dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/themeColor"
+            app:tabTextColor="@color/black">
+
+        </com.google.android.material.tabs.TabLayout>
     </LinearLayout>
 </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -106,7 +100,7 @@
         app:cardElevation="5dp"
         >
         <RelativeLayout
-            android:background="@color/white"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <SeekBar
@@ -128,7 +122,6 @@
                 />
             <TextView
                 android:id="@+id/tvMusicName"
-                android:fontFamily="@font/poppins_semibold"
                 android:layout_below="@id/sbPlayer"
                 android:layout_toLeftOf="@id/ivPlayPause"
                 android:layout_toRightOf="@id/ivMusic"

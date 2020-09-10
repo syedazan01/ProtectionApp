@@ -17,9 +17,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,14 +37,10 @@ import com.example.protectionapp.interfacecallbacks.onPlay;
 import com.example.protectionapp.model.RecordingFileData;
 import com.example.protectionapp.services.CallRecorderService;
 import com.example.protectionapp.services.FloatingWindowService;
-import com.example.protectionapp.utils.PrefManager;
-import com.example.protectionapp.utils.Utils;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
 import java.io.IOException;
-
-import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 
 public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.OnSeekBarChangeListener {
 
@@ -57,7 +53,7 @@ public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.On
     private ImageView ivPlayPause;
     private MediaPlayer mMediaPlayer;
     private Handler handler;
-    private ToggleButton callToggle;
+    private Switch callToggle;
     private RelativeLayout rltCallRecording;
 
     //    private CallRecord callRecord;
