@@ -45,7 +45,6 @@ public class Recording_fragment extends Fragment {
     Toast toast;
     Chronometer mChronometer;
     ImageView mRecordButton;
-    CardView cardRecord;
     private int mRecordPromptCount = 0;
     private int timeWhenPaused = 0;
     private TextView mRecordingPrompt;
@@ -86,7 +85,6 @@ public class Recording_fragment extends Fragment {
         mChronometer = view.findViewById(R.id.chronometer);
         mRecordButton = view.findViewById(R.id.recording_button);
         mRecordingPrompt = view.findViewById(R.id.mRecordingPrompt);
-        cardRecord = view.findViewById(R.id.cardRecord);
         visualizer = view.findViewById(R.id.visualizer);
         return view;
     }
@@ -98,7 +96,7 @@ public class Recording_fragment extends Fragment {
             getActivity().setTheme(R.style.AppTheme_Base_Night);
         else*/
             getActivity().setTheme(R.style.AppTheme_Base_Light);
-        cardRecord.setOnClickListener(new View.OnClickListener() {
+        mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onRecord(mStartRecording);
@@ -117,7 +115,7 @@ public class Recording_fragment extends Fragment {
         if (start) {
             // start recording
             handler.post(updateVisualizer);
-            mRecordButton.setImageResource(R.drawable.ic_baseline_stop_24);
+            mRecordButton.setImageResource(R.drawable.ic_pause_rec);
             //mPauseButton.setVisibility(View.VISIBLE);
             if(toast!=null)
                 toast.cancel();
@@ -159,7 +157,7 @@ public class Recording_fragment extends Fragment {
             //stop recording
             handler.removeCallbacks(updateVisualizer);
             visualizer.clear();
-            mRecordButton.setImageResource(R.drawable.recording_button_icon);
+            mRecordButton.setImageResource(R.drawable.ic_start_recording);
             //mPauseButton.setVisibility(View.GONE);
             mChronometer.stop();
             mChronometer.setBase(SystemClock.elapsedRealtime());

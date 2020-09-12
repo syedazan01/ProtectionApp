@@ -58,7 +58,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     ConstraintLayout constMostUsed, constRareUsed;
     RecyclerView rvMostInstalledApps, rvRareInstalledApps;
     androidx.appcompat.widget.SearchView searchApp;
-    Switch swAll;
+    Switch swAll,swPriorApps;
     SharedPreferences pref;
     ArrayList<PInfo> pInfos = new ArrayList<>();
     ArrayList<PInfo> mostPInfos = new ArrayList<>();
@@ -163,7 +163,31 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         swAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (hasAccessGranted()) {
                     installedAppAdapter.setAllCheck(b);
+                }
+                else
+                {
+                    swAll.setOnCheckedChangeListener(null);
+                    swAll.setChecked(false);
+                    swAll.setOnCheckedChangeListener(this);
+                    Utils.showToast(KillNotification.this,"Allow Notification from device settings",AppConstant.errorColor);
+                }
+            }
+        });
+        swPriorApps.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (hasAccessGranted()) {
+                    mostInstalledAppAdapter.setAllCheck(b);
+                }
+                else
+                {
+                    swPriorApps.setOnCheckedChangeListener(null);
+                    swPriorApps.setChecked(false);
+                    swPriorApps.setOnCheckedChangeListener(this);
+                    Utils.showToast(KillNotification.this,"Allow Notification from device settings",AppConstant.errorColor);
+                }
             }
         });
         searchApp.setOnClickListener(new View.OnClickListener() {
@@ -231,6 +255,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     private void iniiViews() {
         pref = Utils.getDefaultManager(this);
         searchApp = findViewById(R.id.searchApp);
+        swPriorApps = findViewById(R.id.swPriorApps);
         swAll = findViewById(R.id.swAll);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
@@ -308,7 +333,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         }
     }
 
-    private Boolean hasAccessGranted() {
+    public Boolean hasAccessGranted() {
         ContentResolver contentResolver = this.getContentResolver();
         String enabledNotificationListeners = Settings.Secure.getString(contentResolver, AppConstant.SETTING_NOTIFICATION_LISTENER);
         String packageName = this.getPackageName();
@@ -363,4 +388,5 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         searchApp.setVisibility(View.GONE);
         Utils.showToast(activity, "No App Found", AppConstant.errorColor);
     }
+
 }

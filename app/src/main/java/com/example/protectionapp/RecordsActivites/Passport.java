@@ -47,6 +47,7 @@ import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.FirebaseStorage;
@@ -358,7 +359,7 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
         Utils.makeButton(savepassportBT, getResources().getColor(R.color.colorPrimary), 40F);
         if (getIntent().hasExtra(AppConstant.PASSPORT)) {
             savepassportBT.setText("Update");
-            PassportBean passportBean = (PassportBean) getIntent().getSerializableExtra(AppConstant.PASSPORT);
+             passportBean = (PassportBean) getIntent().getSerializableExtra(AppConstant.PASSPORT);
             passportnumber.getEditText().setText(passportBean.getPassportnumber());
             type.getEditText().setText(passportBean.getType());
             countrycode.getEditText().setText(passportBean.getCountrycode());
@@ -441,9 +442,9 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
         this.password = password;
         final ProgressDialog pd = Utils.getProgressDialog(activity);
         pd.show();
-        final Dialog dialog = Utils.getRegisteredUserList(activity);
+        final BottomSheetDialog dialog = Utils.getRegisteredUserList(activity);
         Button btnSend = dialog.findViewById(R.id.btnSend);
-        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
         final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
         rvUser.setLayoutManager(new LinearLayoutManager(activity));
         rvUser.addItemDecoration(new DividerItemDecoration(activity, RecyclerView.VERTICAL));

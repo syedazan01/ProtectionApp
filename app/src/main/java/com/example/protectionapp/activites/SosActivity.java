@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,6 +62,7 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
     private List<FetchNotification> fetchNotifications = new ArrayList<>();
     private List<String> tokenList = new ArrayList<>();
     private EditText etMsg;
+    SearchView searchContacts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,7 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
     }
 
     private void initViews() {
+        searchContacts = findViewById(R.id.searchContacts);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarText = findViewById(R.id.tvToolbarTitle);
         tvToolbarText.setText("Sos Alert");
@@ -78,9 +82,52 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
         pd = Utils.getProgressDialog(sosActivity);
         msgDialog = Utils.getMsgDialog(this);
         etMsg = msgDialog.findViewById(R.id.etMsg);
+        sosAdapter=new SosAdapter(sosActivity, sosBeanList, this);
     }
 
     private void initActions() {
+        searchContacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchContacts.setIconifiedByDefault(true);
+                searchContacts.setFocusable(true);
+                searchContacts.setIconified(false);
+                searchContacts.requestFocusFromTouch();
+            }
+        });
+        searchContacts.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                String query=s.toLowerCase(Locale.getDefault());
+                if(TextUtils.isEmpty(s))
+                {
+                    sosAdapter.updateList(sosBeanList);
+                    return false;
+                }
+                List<SosBean> sosBeans=new ArrayList<>();
+                for(int i=0;i<sosBeanList.size();i++)
+                {
+                    SosBean sosBean=sosBeanList.get(i);
+                    String name=null;
+                    if(sosBean.getName() != null)
+                    {
+                        name=sosBean.getName().toLowerCase(Locale.getDefault());
+                    }
+                    Log.e("SOS>>>",sosBean.getMobile()+" >>"+sosBean.getName()+" >>"+query);
+                    if((sosBean.getMobile() != null && sosBean.getMobile().contains(query)) || (name != null && name.contains(query)))
+                    {
+                        sosBeans.add(sosBean);
+                    }
+                }
+                sosAdapter.updateList(sosBeans);
+                return false;
+            }
+        });
         fabSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,6 +152,9 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
 
 
                                         for (FetchNotification fetchNotification : fetchNotifications) {
+                                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                                            fetchNotification.setCreated_date(dateFormat.format(new Date()));
+                                            fetchNotification.setMsg(etMsg.getText().toString());
                                             Utils.storeNotificationInRTD(fetchNotification);
                                         }
                                 msgDialog.dismiss();
@@ -153,6 +203,14 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     SosBean sosBean = snapshot.getValue(SosBean.class);
                     if (sosBean.getOwnerMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                        if(sosBean.isChecked())
+                        {
+                            FetchNotification fetchNotification = new FetchNotification();
+                            fetchNotification.setTo_mobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                            fetchNotification.setFrom_mobile(sosBean.getMobile());
+                            fetchNotification.setProfile_Pic(sosBean.getProfilePic());
+                            fetchNotifications.add(fetchNotification);
+                        }
                         sosBeanList.add(sosBean);
                         sosNumbers.add(sosBean.getMobile());
                     }
@@ -180,12 +238,21 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
                                     sosBean2.setMobile(userBean.getMobile());
                                     sosBean2.setProfilePic(userBean.getProfilePic());
                                     sosBean2.setFcmToken(userBean.getFcmToken());
+                                    if(sosBean2.isChecked())
+                                    {
+                                        FetchNotification fetchNotification = new FetchNotification();
+                                        fetchNotification.setTo_mobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                                        fetchNotification.setFrom_mobile(sosBean2.getMobile());
+                                        fetchNotification.setProfile_Pic(sosBean2.getProfilePic());
+                                        fetchNotifications.add(fetchNotification);
+                                    }
                                     sosBeanList.add(sosBean2);
                                 }
                             }
                         }
                         pd.dismiss();
-                        rvSos.setAdapter(new SosAdapter(sosActivity, sosBeanList, sosActivity));
+
+                        rvSos.setAdapter(sosAdapter);
                     }
 
                     @Override
@@ -212,11 +279,6 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
         fetchNotification.setProfile_Pic(sosBean.getProfilePic());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         fetchNotification.setCreated_date(dateFormat.format(new Date()));
-        if (isChecked) {
-
-        } else {
-
-        }
         if (isChecked) {
             showSaveNameDialog(sosBean);
             tokenList.add(sosBean.getFcmToken());
@@ -255,5 +317,13 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
                     }
                 });
         builder.create().show();
+    }
+    @Override
+    public void onBackPressed() {
+        if (!searchContacts.isIconified()) {
+            searchContacts.setIconified(true);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

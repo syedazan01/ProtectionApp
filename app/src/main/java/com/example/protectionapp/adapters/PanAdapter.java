@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,17 +34,20 @@ public class PanAdapter extends RecyclerView.Adapter<PanAdapter.AdhaarHolder> {
     @NonNull
     @Override
     public AdhaarHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.personal_document_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pan_document_item, parent, false);
         return new AdhaarHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdhaarHolder holder, final int position) {
         PanBean panBean = panBeanList.get(position);
-        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
-        holder.constMain.setBackgroundColor(color);
-        holder.tvFileName.setText(panBean.getFullName());
-        holder.constMain.setOnClickListener(new View.OnClickListener() {
+//        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
+//        holder.constMain.setBackgroundColor(color);
+        holder.panName.setText(panBean.getFullName());
+        holder.panFName.setText(panBean.getFatherName());
+        holder.panDOB.setText(panBean.getDateOfBirth());
+        holder.panNumber.setText(panBean.getPermanentAccountNumber());
+        holder.cardMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 documentClickListener.onSelectPan(panBeanList.get(position));
@@ -57,13 +61,16 @@ public class PanAdapter extends RecyclerView.Adapter<PanAdapter.AdhaarHolder> {
     }
 
     public class AdhaarHolder extends RecyclerView.ViewHolder {
-        TextView tvFileName;
-        ConstraintLayout constMain;
+        TextView panName,panFName,panDOB,panNumber;
+        CardView cardMain;
 
         public AdhaarHolder(@NonNull View itemView) {
             super(itemView);
-            tvFileName = itemView.findViewById(R.id.tvFileName);
-            constMain = itemView.findViewById(R.id.ConstrainMain);
+            panName = itemView.findViewById(R.id.panName);
+            panFName = itemView.findViewById(R.id.panFName);
+            panDOB = itemView.findViewById(R.id.panDOB);
+            panNumber = itemView.findViewById(R.id.panNumber);
+            cardMain = itemView.findViewById(R.id.cardMain);
         }
     }
 }

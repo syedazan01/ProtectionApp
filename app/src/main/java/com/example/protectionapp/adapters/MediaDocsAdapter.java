@@ -41,23 +41,23 @@ public class MediaDocsAdapter extends RecyclerView.Adapter<MediaDocsAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MediaDocBean mediaDocBean=mediaDocBeanList.get(position);
-        int redColor = new Random().nextInt(100) + 150;
+        /*int redColor = new Random().nextInt(100) + 150;
         int greenColor = new Random().nextInt(100) + 150;
         int blueColor = new Random().nextInt(100) + 150;
         int startcolor = Color.argb(255, redColor, greenColor, blueColor);
         int endcolor = Color.argb(200, redColor, greenColor, blueColor);
 
-        holder.cardFileShare.setBackground(Utils.getColoredDrawable(startcolor, endcolor));
+        holder.cardFileShare.setBackground(Utils.getColoredDrawable(startcolor, endcolor));*/
         holder.tvSentTo.setText(mediaDocBean.getFileName());
         if(mediaDocBean.getDocType().equals(AppConstant.DOC_IMAGE))
-            holder.ivType.setImageResource(R.drawable.ic_media);
+            holder.ivType.setImageResource(R.drawable.cameradetector_logo);
         else
-            holder.ivType.setImageResource(R.drawable.ic_pdf);
+            holder.ivType.setImageResource(R.drawable.file);
         holder.cardFileShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mediaDocsClickListener.onClick(mediaDocBeanList.get(position));
-            }
+        }
         });
     }
 

@@ -50,59 +50,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/cardRecord"
+            android:layout_below="@id/recording_button"
             android:layout_centerHorizontal="true"
             android:alpha="0.50"
             android:fontFamily="@font/poppins_regular"
             android:text="Press The Button To Record"
             android:textColor="@color/black"
             android:textSize="13sp" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardRecord"
+        <ImageView
+            android:src="@drawable/ic_start_recording"
+            android:id="@+id/recording_button"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_below="@+id/visualizer"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            app:cardBackgroundColor="?attr/primaryBackgroundColor"
+            android:layout_centerInParent="true" />
 
-            app:cardCornerRadius="70dp"
-            app:cardElevation="0dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="71dp"
-                    android:layout_height="71dp"
-                    app:cardBackgroundColor="@color/red"
-                    app:cardCornerRadius="30dp">
-
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:layout_gravity="center"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="30dp">
-
-                        <ImageView
-                            android:id="@+id/recording_button"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_centerInParent="true" />
-
-
-                    </androidx.cardview.widget.CardView>
-                </androidx.cardview.widget.CardView>
-
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 </FrameLayout>

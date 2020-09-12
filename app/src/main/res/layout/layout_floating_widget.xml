@@ -33,12 +33,12 @@
 
         <!--View while view is expanded-->
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/expanded_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp"
-            android:visibility="gone">
+            android:padding="8dp">
 
             <!--Album image for the song currently playing.-->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -61,17 +61,33 @@
                 android:tint="@color/white"
                 app:fabSize="mini"
                 tools:ignore="ContentDescription" />
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginStart="80dp"
+    android:layout_marginBottom="10dp"
+    >
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_search"
-                android:tint="@color/white"
-                app:fabSize="mini"
-                tools:ignore="ContentDescription" />
+        android:src="@drawable/ic_search"
+        android:tint="@color/white"
+        app:fabSize="mini"
+        tools:ignore="ContentDescription" />
+    <EditText
+        android:visibility="gone"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/search_round_border"
+        android:id="@+id/etSearchQuery"
+        android:hint="Search Everything"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
+
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabScreenShot"

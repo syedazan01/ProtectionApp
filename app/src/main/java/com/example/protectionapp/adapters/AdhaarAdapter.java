@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,17 +34,19 @@ public class AdhaarAdapter extends RecyclerView.Adapter<AdhaarAdapter.AdhaarHold
     @NonNull
     @Override
     public AdhaarHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.personal_document_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adhaar_document_item, parent, false);
         return new AdhaarHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdhaarHolder holder, int position) {
         AdhaarBean adhaarBean = adhaarBeanList.get(position);
-        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
-        holder.constMain.setBackgroundColor(color);
-        holder.tvFileName.setText(adhaarBean.getFullname());
-        holder.constMain.setOnClickListener(new View.OnClickListener() {
+//        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
+//        holder.constMain.setBackgroundColor(color);
+        holder.adhaarName.setText(adhaarBean.getFullname());
+        holder.adhaarDOB.setText(adhaarBean.getDateofbirth());
+        holder.adhaarNumber.setText(adhaarBean.getAadharNumber());
+        holder.cardMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 documentClickListener.onSelectAdhaar(adhaarBeanList.get(position));
@@ -57,13 +60,15 @@ public class AdhaarAdapter extends RecyclerView.Adapter<AdhaarAdapter.AdhaarHold
     }
 
     public class AdhaarHolder extends RecyclerView.ViewHolder {
-        TextView tvFileName;
-        ConstraintLayout constMain;
+        TextView adhaarName,adhaarDOB,adhaarNumber;
+        CardView cardMain;
 
         public AdhaarHolder(@NonNull View itemView) {
             super(itemView);
-            tvFileName = itemView.findViewById(R.id.tvFileName);
-            constMain = itemView.findViewById(R.id.ConstrainMain);
+            adhaarName = itemView.findViewById(R.id.adhaarName);
+            adhaarDOB = itemView.findViewById(R.id.adhaarDOB);
+            adhaarNumber = itemView.findViewById(R.id.adhaarNumber);
+            cardMain = itemView.findViewById(R.id.cardMain);
         }
     }
 }

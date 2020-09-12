@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.activites.KillNotification;
 import com.example.protectionapp.interfacecallbacks.OnNotificationChecked;
 import com.example.protectionapp.model.PInfo;
 import com.example.protectionapp.utils.AppConstant;
@@ -57,7 +58,17 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
         holder.swOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                notificationChecked.onCheckboxAppChecked(position, b, typeOfList);
+                KillNotification killNotification=(KillNotification)activity;
+                if (killNotification.hasAccessGranted()) {
+                    notificationChecked.onCheckboxAppChecked(position, b, typeOfList);
+                }
+                else
+                {
+                    holder.swOnOff.setOnCheckedChangeListener(null);
+                    holder.swOnOff.setChecked(false);
+                    Utils.showToast(activity,"Allow Notification from device settings",AppConstant.errorColor);
+                    holder.swOnOff.setOnCheckedChangeListener(this);
+                }
             }
         });
         holder.swOnOff.setChecked(isAllCheck);

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,17 +34,20 @@ public class BirthCertificateAdapter extends RecyclerView.Adapter<BirthCertifica
     @NonNull
     @Override
     public BirthCertificateAdapter.BirthCerificateHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.personal_document_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.birth_document_item, parent, false);
         return new BirthCerificateHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BirthCertificateAdapter.BirthCerificateHolder holder, int position) {
         BirthCertificateBean birthCertificateBean = birthCertificateBeanList.get(position);
-        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
-        holder.constMain.setBackgroundColor(color);
-        holder.tvFileName.setText(birthCertificateBean.getFathername());
-        holder.constMain.setOnClickListener(new View.OnClickListener() {
+//        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
+//        holder.constMain.setBackgroundColor(color);
+        holder.birthName.setText(birthCertificateBean.getChildname());
+        holder.birthFName.setText(birthCertificateBean.getFathername());
+        holder.dobDate.setText(birthCertificateBean.getDateofbirth());
+        holder.motherName.setText(birthCertificateBean.getMothername());
+        holder.cardMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 documentClickListener.onSelectBirthCertificate(birthCertificateBeanList.get(position));
@@ -58,11 +62,16 @@ public class BirthCertificateAdapter extends RecyclerView.Adapter<BirthCertifica
     }
 
     public class BirthCerificateHolder extends RecyclerView.ViewHolder {
-        ConstraintLayout constMain;
-        TextView tvFileName;
+        CardView cardMain;
+        TextView birthName,birthFName,motherName,dobDate;
 
         public BirthCerificateHolder(@NonNull View itemView) {
             super(itemView);
+            cardMain=itemView.findViewById(R.id.cardMain);
+            birthName=itemView.findViewById(R.id.birthName);
+            birthFName=itemView.findViewById(R.id.birthFName);
+            motherName=itemView.findViewById(R.id.motherName);
+            dobDate=itemView.findViewById(R.id.dobDate);
         }
     }
 }

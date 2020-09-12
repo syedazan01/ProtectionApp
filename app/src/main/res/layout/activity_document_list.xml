@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,22 +19,49 @@
             android:layout_height="wrap_content" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
             android:id="@+id/rvDocument"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbarLay" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabInsertDoc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:src="@drawable/ic_baseline_add_24"
-            android:tint="#0077FF"
-            android:backgroundTint="#0077FF"
-            android:background="#0077FF"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/ivInsertDoc"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_add"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+        <LinearLayout
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/glTop20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/llNoData"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <ImageView
+                android:id="@+id/ivDocType"
+                android:layout_gravity="center"
+                android:layout_width="100dp"
+                android:layout_height="100dp"/>
+            <TextView
+                android:id="@+id/tvDocName"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glTop20"
+            app:layout_constraintGuide_percent="0.20"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

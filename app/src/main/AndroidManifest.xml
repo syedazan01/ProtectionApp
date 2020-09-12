@@ -37,7 +37,8 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme,android:roundIcon">
-        <activity android:name=".activites.Wallet"></activity>
+        <activity android:name=".activites.CallRecordingList"></activity>
+        <activity android:name=".activites.Wallet" />
         <activity android:name=".activites.App_Intro2" />
         <activity android:name=".activites.Rate_us" />
         <activity android:name=".activites.Privacy_poly" />
@@ -147,9 +148,6 @@
                 <action android:name="android.intent.action.SCREEN_ON" />
             </intent-filter>
         </receiver>
-        <!-- <meta-data
-             android:name="com.google.android.gms.ads.APPLICATION_ID"
-             android:value="@string/google_app_id"/>-->
     </application>
 
 </manifest>

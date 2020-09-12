@@ -67,7 +67,7 @@ public class AdapterFileShare extends RecyclerView.Adapter<AdapterFileShare.File
                 holder.ivType.setImageResource(R.drawable.drivinglicenselogo);
                 break;
             case AppConstant.BANK:
-                holder.ivType.setImageResource(R.drawable.bankicon);
+                holder.ivType.setImageResource(R.drawable.banknew);
                 break;
             case AppConstant.VOTER_ID:
                 holder.ivType.setImageResource(R.drawable.voteridlogo);
@@ -82,10 +82,10 @@ public class AdapterFileShare extends RecyclerView.Adapter<AdapterFileShare.File
                 holder.ivType.setImageResource(R.drawable.birthlogo);
                 break;
             case AppConstant.PDF_DOC:
-                holder.ivType.setImageResource(R.drawable.ic_pdf);
+                holder.ivType.setImageResource(R.drawable.file);
                 break;
             case AppConstant.DOC_IMAGE:
-                holder.ivType.setImageResource(R.drawable.ic_media);
+                holder.ivType.setImageResource(R.drawable.cameradetector_logo);
                 break;
         }
         holder.cardFileShare.setOnClickListener(new View.OnClickListener() {

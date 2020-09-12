@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -16,9 +17,9 @@ import java.util.List;
 import java.util.Random;
 
 public class VisualizerView extends View {
-    int rndColor[]={Color.WHITE,Color.BLUE};
-    private static final int LINE_WIDTH = 1; // width of visualizer lines
-    private static final int LINE_SCALE = 75; // scales visualizer lines
+    int rndColor[]={Color.WHITE,Color.parseColor("#757575")};
+    private static final int LINE_WIDTH = 3; // width of visualizer lines
+    private static final int LINE_SCALE = 30; // scales visualizer lines
     private List<Float> amplitudes; // amplitudes for line lengths
     private int width; // width of this View
     private int height; // height of this View

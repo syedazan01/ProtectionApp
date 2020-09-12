@@ -2,6 +2,8 @@ package com.example.protectionapp.RecordsActivites;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -52,6 +54,8 @@ public class SendDailog extends BottomSheetDialog {
         editTextPassword = bootomSheetView.findViewById(R.id.editTextPassword);
         btnCancel = bootomSheetView.findViewById(R.id.btnCancel);
         btnProceed = bootomSheetView.findViewById(R.id.btnProceed);
+        btnProceed.setBackground(Utils.getThemeGradient(50F));
+        btnCancel.setBackground(Utils.getColoredDrawable(umActivity.getResources().getColor(R.color.black),umActivity.getResources().getColor(R.color.black), GradientDrawable.RECTANGLE,50F));
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

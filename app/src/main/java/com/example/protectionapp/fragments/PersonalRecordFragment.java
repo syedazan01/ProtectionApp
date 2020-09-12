@@ -55,7 +55,9 @@ public class PersonalRecordFragment extends Fragment {
             @Override
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getActivity(), DocumentList.class);
-                if (position == 1) {
+                if (position == 0) {
+                    intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.MEDIA_DOC);
+                } else if (position == 1) {
 //                    intent = new Intent(getActivity(), Adhaar.class);
                     intent.putExtra(AppConstant.PERSONAL_DOCUMENT, AppConstant.ADHAAR);
                 } else if (position == 2)

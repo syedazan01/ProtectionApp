@@ -18,6 +18,7 @@ import com.example.protectionapp.room.AppDatabase;
 import java.io.File;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class RecordingFileAdapter extends RecyclerView.Adapter<RecordingFileAdapter.ViewHolder> {
     public static com.example.protectionapp.interfacecallbacks.onPlay onPlay=null;
@@ -45,6 +46,21 @@ public class RecordingFileAdapter extends RecyclerView.Adapter<RecordingFileAdap
     public void onBindViewHolder(@NonNull final RecordingFileAdapter.ViewHolder holder, final int position) {
        final RecordingFileData recordingFileData=recordingFileDataList.get(position);
         holder.tvFileName.setText(recordingFileData.getFileName());
+
+        Long Seconds = recordingFileData.getEllipseMillis() / 1000 % 60;
+        Long Minutes = recordingFileData.getEllipseMillis() / (60 * 1000) % 60;
+        String minuteString=Minutes+"";
+        String secondString=Seconds+"";
+        if(Minutes<10L)
+        {
+            minuteString="0"+Minutes;
+        }
+        if(Seconds<10L)
+        {
+            secondString="0"+Seconds;
+        }
+        String total=minuteString+" : "+secondString;
+        holder.tvDuration.setText(total);
         holder.llMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,17 +70,17 @@ public class RecordingFileAdapter extends RecyclerView.Adapter<RecordingFileAdap
                 }
             }
         });
-        holder.llMain.setOnLongClickListener(new View.OnLongClickListener() {
+        /*holder.llMain.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 if (holder.ivDelete.getVisibility()== View.GONE) {
-                    holder.ivPlay.setVisibility(View.GONE);
+//                    holder.ivPlay.setVisibility(View.GONE);
                     holder.ivDelete.setVisibility(View.VISIBLE);
                     return true;
                 }
               return false;
             }
-        });
+        });*/
         holder.ivDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +97,7 @@ public class RecordingFileAdapter extends RecyclerView.Adapter<RecordingFileAdap
                                     mFile.delete();
                                 recordingFileDataList.remove(recordingFileData);
                                 holder.ivDelete.setVisibility(View.GONE);
-                                holder.ivPlay.setVisibility(View.VISIBLE);
+//                                holder.ivPlay.setVisibility(View.VISIBLE);
                                 notifyItemRemoved(position);
                             }
                         });
@@ -97,15 +113,16 @@ public class RecordingFileAdapter extends RecyclerView.Adapter<RecordingFileAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvFileName;
+        TextView tvFileName,tvDuration;
         LinearLayout llMain;
-        ImageView ivPlay,ivDelete;
+        ImageView ivDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            tvDuration = itemView.findViewById(R.id.tvDuration);
             tvFileName = itemView.findViewById(R.id.tvFileName);
             llMain = itemView.findViewById(R.id.llMain);
-            ivPlay = itemView.findViewById(R.id.ivPlay);
+//            ivPlay = itemView.findViewById(R.id.ivPlay);
             ivDelete = itemView.findViewById(R.id.ivDelete);
         }
     }

@@ -135,4 +135,8 @@ dependencies {
     //Pattern Lock
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
 
+
+    //SwipeLayout
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+
 }

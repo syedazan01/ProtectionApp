@@ -36,6 +36,7 @@ import com.example.protectionapp.utils.Utils;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -173,9 +174,9 @@ public void setOnSendDialog(String documentType, String message, String password
         this.password = password;
 
         pd.show();
-        final Dialog dialog = Utils.getRegisteredUserList(getActivity());
+        final BottomSheetDialog dialog = Utils.getRegisteredUserList(getActivity());
         Button btnSend = dialog.findViewById(R.id.btnSend);
-        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
         final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
         rvUser.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvUser.addItemDecoration(new DividerItemDecoration(getActivity(), RecyclerView.VERTICAL));

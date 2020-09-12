@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardMain"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="10dp"
+    android:elevation="0dp"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="14dp"
+    app:cardBackgroundColor="#DEEDFF"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_margin="10dp"
+        >
+        <TextView
+            android:id="@+id/birthName"
+            android:layout_marginStart="10dp"
+            android:text="John Deo"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/birthFName"
+            app:layout_constraintTop_toBottomOf="@id/birthName"
+            android:layout_marginStart="10dp"
+            android:text="John Smith"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:id="@+id/motherName"
+            app:layout_constraintTop_toBottomOf="@id/birthFName"
+            android:layout_marginStart="10dp"
+            android:text="Jeny Smith"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_marginTop="20dp"
+            android:id="@+id/dobDate"
+            app:layout_constraintTop_toBottomOf="@id/motherName"
+            android:layout_marginStart="10dp"
+            android:text="12 AUG 2018"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/ivDocType"
+            android:src="@drawable/birthlogo"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="60dp"
+            android:layout_height="60dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

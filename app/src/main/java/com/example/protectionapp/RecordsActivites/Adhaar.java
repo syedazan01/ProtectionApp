@@ -48,6 +48,7 @@ import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.FirebaseDatabase;
@@ -290,7 +291,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         Utils.makeButton(addharsavebt, getResources().getColor(R.color.colorPrimary), 40F);
         if (getIntent().hasExtra(AppConstant.ADHAAR)) {
             addharsavebt.setText("Update");
-            AdhaarBean adhaarBean = (AdhaarBean) getIntent().getSerializableExtra(AppConstant.ADHAAR);
+            adhaarBean = (AdhaarBean) getIntent().getSerializableExtra(AppConstant.ADHAAR);
             adhharfullname.getEditText().setText(adhaarBean.getFullname());
             adharaddres.getEditText().setText(adhaarBean.getAddress());
             adharnumber.getEditText().setText(adhaarBean.getAadharNumber());
@@ -343,9 +344,9 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         this.password = password;
         final ProgressDialog pd = Utils.getProgressDialog(activity);
         pd.show();
-        final Dialog dialog = Utils.getRegisteredUserList(activity);
+        final BottomSheetDialog dialog = Utils.getRegisteredUserList(activity);
         Button btnSend = dialog.findViewById(R.id.btnSend);
-        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
         final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
         rvUser.setLayoutManager(new LinearLayoutManager(activity));
         rvUser.addItemDecoration(new DividerItemDecoration(activity, RecyclerView.VERTICAL));

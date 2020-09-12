@@ -1,6 +1,7 @@
 package com.example.protectionapp.adapters;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.UserHolder> 
         this.activity = activity;
         this.userBeans = userBeans;
         this.recyclerViewListener = recyclerViewListener;
+        Log.e("xcvdvbdf",userBeans.size()+"");
     }
 
     @NonNull

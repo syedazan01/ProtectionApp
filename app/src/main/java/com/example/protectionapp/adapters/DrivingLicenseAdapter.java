@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.interfacecallbacks.DocumentClickListener;
 import com.example.protectionapp.model.DlicenceBean;
-import com.example.protectionapp.model.PanBean;
 
 import java.util.List;
 import java.util.Random;
@@ -34,17 +34,19 @@ public class DrivingLicenseAdapter extends RecyclerView.Adapter<DrivingLicenseAd
     @NonNull
     @Override
     public AdhaarHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.personal_document_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.dl_document_item, parent, false);
         return new AdhaarHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdhaarHolder holder, final int position) {
         DlicenceBean dlicenceBean = dlicenceBeans.get(position);
-        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
-        holder.constMain.setBackgroundColor(color);
-        holder.tvFileName.setText(dlicenceBean.getFullname());
-        holder.constMain.setOnClickListener(new View.OnClickListener() {
+//        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
+//        holder.constMain.setBackgroundColor(color);
+        holder.dlName.setText(dlicenceBean.getFullname());
+        holder.dlFName.setText(dlicenceBean.getSon_of());
+        holder.dlNumber.setText(dlicenceBean.getLicenceNumber());
+        holder.cardMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 documentClickListener.onSelectDL(dlicenceBeans.get(position));
@@ -58,13 +60,15 @@ public class DrivingLicenseAdapter extends RecyclerView.Adapter<DrivingLicenseAd
     }
 
     public class AdhaarHolder extends RecyclerView.ViewHolder {
-        TextView tvFileName;
-        ConstraintLayout constMain;
+        TextView dlName,dlFName,dlNumber;
+        CardView cardMain;
 
         public AdhaarHolder(@NonNull View itemView) {
             super(itemView);
-            tvFileName = itemView.findViewById(R.id.tvFileName);
-            constMain = itemView.findViewById(R.id.ConstrainMain);
+            dlName = itemView.findViewById(R.id.dlName);
+            dlFName = itemView.findViewById(R.id.dlFName);
+            dlNumber = itemView.findViewById(R.id.dlNumber);
+            cardMain = itemView.findViewById(R.id.cardMain);
         }
     }
 }

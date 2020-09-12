@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,17 +34,19 @@ public class AtmAdapter extends RecyclerView.Adapter<AtmAdapter.AdhaarHolder> {
     @NonNull
     @Override
     public AdhaarHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.personal_document_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.atm_document_item, parent, false);
         return new AdhaarHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdhaarHolder holder, final int position) {
         AtmBean atmBean = atmBeanList.get(position);
-        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
-        holder.constMain.setBackgroundColor(color);
-        holder.tvFileName.setText(atmBean.getNameoncard());
-        holder.constMain.setOnClickListener(new View.OnClickListener() {
+//        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
+//        holder.constMain.setBackgroundColor(color);
+        holder.atmHolderName.setText(atmBean.getNameoncard());
+        holder.atmDate.setText(atmBean.getCardVailidity());
+        holder.atmAccountNumber.setText(atmBean.getAtmnumber());
+        holder.cardMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 documentClickListener.onSelectAtm(atmBeanList.get(position));
@@ -57,14 +60,16 @@ public class AtmAdapter extends RecyclerView.Adapter<AtmAdapter.AdhaarHolder> {
     }
 
     public class AdhaarHolder extends RecyclerView.ViewHolder {
-        ConstraintLayout constMain;
-        TextView tvFileName;
+        CardView cardMain;
+        TextView atmHolderName,atmDate,atmAccountNumber;
 
 
         public AdhaarHolder(@NonNull View itemView) {
             super(itemView);
-            tvFileName = itemView.findViewById(R.id.tvFileName);
-            constMain = itemView.findViewById(R.id.ConstrainMain);
+            atmHolderName = itemView.findViewById(R.id.atmHolderName);
+            atmDate = itemView.findViewById(R.id.atmDate);
+            atmAccountNumber = itemView.findViewById(R.id.atmAccountNumber);
+            cardMain = itemView.findViewById(R.id.cardMain);
         }
     }
 }

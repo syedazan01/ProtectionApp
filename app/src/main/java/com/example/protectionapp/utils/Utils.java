@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -395,13 +396,21 @@ public class Utils {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static Dialog getRegisteredUserList(Activity activity) {
-        Dialog dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.user_list_dialog);
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        dialog.getWindow().setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-        return dialog;
+    public static BottomSheetDialog getRegisteredUserList(Activity activity) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity,R.style.AppBottomSheetDialogTheme);
+//        bottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        bottomSheetDialog.setContentView(R.layout.user_list_dialog);
+//        bottomSheetDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height = metrics.heightPixels;
+
+        bottomSheetDialog.getWindow().setLayout(width,height);
+        bottomSheetDialog.findViewById(R.id.btnSend).setBackground(Utils.getThemeGradient(50F));
+        return bottomSheetDialog;
     }
 
     public static Dialog getMsgDialog(Activity activity) {
@@ -591,7 +600,7 @@ public class Utils {
                 sendDailog.show();
                 //sendDailog.show(activity.getSupportFragmentManager(), "Send Dialog");
                 dialog.dismiss();
-                ((PersonalRecords) activity).setDocumentType(docType);
+//                ((PersonalRecords) activity).setDocumentType(docType);
             }
         });
         dialog.show();

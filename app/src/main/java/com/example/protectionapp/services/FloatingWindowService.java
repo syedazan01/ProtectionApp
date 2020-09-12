@@ -17,11 +17,16 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
@@ -32,12 +37,15 @@ import com.example.protectionapp.activites.FileShare;
 import com.example.protectionapp.receivers.BootCompleteReceiver;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
+import com.example.protectionapp.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +63,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     private WindowManager mWindowManager, blueLightWindowManager, patternLockWindowManager;
     private View mFloatingView, blue_filter_container, pattern_lock_container;
     private FloatingActionButton collapsed_iv, fabFileShare, fabVoice, fabSearch, fabScreenShot, fabClose;
+    private EditText etSearchQuery;
 
     public FloatingWindowService() {
     }
@@ -154,6 +163,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         fabFileShare = mFloatingView.findViewById(R.id.fabFileShare);
         fabVoice = mFloatingView.findViewById(R.id.fabVoice);
         fabSearch = mFloatingView.findViewById(R.id.fabSearch);
+        etSearchQuery = mFloatingView.findViewById(R.id.etSearchQuery);
         fabScreenShot = mFloatingView.findViewById(R.id.fabScreenShot);
         fabClose = mFloatingView.findViewById(R.id.fabClose);
 
@@ -162,6 +172,32 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         fabSearch.setOnClickListener(this);
         fabScreenShot.setOnClickListener(this);
         fabClose.setOnClickListener(this);
+        etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH
+                        || i == EditorInfo.IME_ACTION_DONE
+                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                        && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    Utils.hideKeyboardFrom(FloatingWindowService.this,etSearchQuery);
+                    String escapedQuery = null;
+                    try {
+                        escapedQuery = URLEncoder.encode(etSearchQuery.getText().toString(), "UTF-8");
+                        Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                        etSearchQuery.setVisibility(View.GONE);
+                        mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        Toast.makeText(FloatingWindowService.this, "Invalid text", Toast.LENGTH_SHORT).show();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
         //Add the view to the window.
         flaotingParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -169,7 +205,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                         ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
                         WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 PixelFormat.TRANSLUCENT);
 
         //Specify the view position
@@ -289,6 +325,12 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                     storeImage(takescreenshotOfView(mFloatingView));
                 }
             });
+
+        }
+        else if(view==fabSearch)
+        {
+            etSearchQuery.setVisibility(View.VISIBLE);
+            setAlphaAnimation(etSearchQuery);
 
         }
         else if(view==fabClose)

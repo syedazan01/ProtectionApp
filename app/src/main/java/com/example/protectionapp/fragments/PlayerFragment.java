@@ -1,5 +1,6 @@
 package com.example.protectionapp.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.protectionapp.R;
+import com.example.protectionapp.activites.CallRecordingList;
 import com.example.protectionapp.adapters.RecordingFileAdapter;
 import com.example.protectionapp.interfacecallbacks.onRecordFileSave;
 import com.example.protectionapp.model.RecordingFileData;
@@ -31,6 +34,7 @@ import static com.example.protectionapp.utils.AppConstant.ISBLUELIGHT;
 public class PlayerFragment extends Fragment implements onRecordFileSave {
 
 RecyclerView rvRecordFiles;
+RelativeLayout rltCallRecording;
     List<RecordingFileData> recordingFileData=new ArrayList<>();
 RecordingFileAdapter recordingFileAdapter;
     public PlayerFragment() {
@@ -42,6 +46,7 @@ RecordingFileAdapter recordingFileAdapter;
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_player, container, false);
+        rltCallRecording=view.findViewById(R.id.rltCallRecording);
         rvRecordFiles=view.findViewById(R.id.rvRecordFiles);
         return view;
     }
@@ -54,6 +59,12 @@ RecordingFileAdapter recordingFileAdapter;
         else*/
             getActivity().setTheme(R.style.AppTheme_Base_Light);
         Recording_fragment.onRecordFileSave=this;
+        rltCallRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), CallRecordingList.class));
+            }
+        });
         recordingFileAdapter =new RecordingFileAdapter(recordingFileData,getActivity());
        /* rvRecordFiles.addOnItemTouchListener(new RecyclerTouchListener(getContext(), rvRecordFiles, new RecyclerTouchListener.ClickListener() {
             @Override

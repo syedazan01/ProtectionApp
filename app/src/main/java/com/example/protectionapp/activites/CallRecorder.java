@@ -37,6 +37,8 @@ import com.example.protectionapp.interfacecallbacks.onPlay;
 import com.example.protectionapp.model.RecordingFileData;
 import com.example.protectionapp.services.CallRecorderService;
 import com.example.protectionapp.services.FloatingWindowService;
+import com.example.protectionapp.utils.AppConstant;
+import com.example.protectionapp.utils.Utils;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
@@ -222,14 +224,11 @@ private void initActions()
 
         if(mMediaPlayer!=null)
         {
-            if(mMediaPlayer.isPlaying())
-            {
                 mMediaPlayer.stop();
                 mMediaPlayer.release();
-                mMediaPlayer.reset();
+                mMediaPlayer=null;
+//                mMediaPlayer.reset();
                 handler.removeCallbacks(run);
-            }
-
         }
         else
            mMediaPlayer=new MediaPlayer();
@@ -242,8 +241,9 @@ private void initActions()
             mMediaPlayer.start();
             ivPlayPause.setImageResource(R.drawable.ic_media_pause);
             handler.post(run);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            Utils.showToast(this,"IncorrectFile", AppConstant.errorColor);
         }
     }
 

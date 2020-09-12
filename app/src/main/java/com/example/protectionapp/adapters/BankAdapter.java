@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.interfacecallbacks.DocumentClickListener;
 import com.example.protectionapp.model.BankBean;
-import com.example.protectionapp.model.DlicenceBean;
 
 import java.util.List;
 import java.util.Random;
@@ -34,17 +34,19 @@ public class BankAdapter extends RecyclerView.Adapter<BankAdapter.AdhaarHolder> 
     @NonNull
     @Override
     public AdhaarHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.personal_document_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.bank_document_item, parent, false);
         return new AdhaarHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdhaarHolder holder, final int position) {
         BankBean bankBean = bankBeanList.get(position);
-        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
-        holder.constMain.setBackgroundColor(color);
-        holder.tvFileName.setText(bankBean.getAccountHolderName());
-        holder.constMain.setOnClickListener(new View.OnClickListener() {
+//        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
+//        holder.constMain.setBackgroundColor(color);
+        holder.bankHolderName.setText(bankBean.getAccountHolderName());
+        holder.bankIfscNumber.setText(bankBean.getIfscCode());
+        holder.bankAccountNumber.setText(bankBean.getAccountNumber());
+        holder.cardMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 documentClickListener.onSelectBank(bankBeanList.get(position));
@@ -58,13 +60,15 @@ public class BankAdapter extends RecyclerView.Adapter<BankAdapter.AdhaarHolder> 
     }
 
     public class AdhaarHolder extends RecyclerView.ViewHolder {
-        TextView tvFileName;
-        ConstraintLayout constMain;
+        TextView bankHolderName,bankIfscNumber,bankAccountNumber;
+        CardView cardMain;
 
         public AdhaarHolder(@NonNull View itemView) {
             super(itemView);
-            tvFileName = itemView.findViewById(R.id.tvFileName);
-            constMain = itemView.findViewById(R.id.ConstrainMain);
+            bankHolderName = itemView.findViewById(R.id.bankHolderName);
+            bankIfscNumber = itemView.findViewById(R.id.bankIfscNumber);
+            bankAccountNumber = itemView.findViewById(R.id.bankAccountNumber);
+            cardMain = itemView.findViewById(R.id.cardMain);
         }
     }
 }

@@ -45,6 +45,7 @@ import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.storage.UploadTask;
@@ -251,7 +252,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
         Utils.makeButton(btnAtmSave, getResources().getColor(R.color.colorPrimary), 40F);
         if (getIntent().hasExtra(AppConstant.ATM)) {
             btnAtmSave.setText("Update");
-            AtmBean atmBean = (AtmBean) getIntent().getSerializableExtra(AppConstant.ATM);
+            atmBean = (AtmBean) getIntent().getSerializableExtra(AppConstant.ATM);
             bankname.getEditText().setText(atmBean.getBankname());
             atmnumber.getEditText().setText(atmBean.getAtmnumber());
             nameoncard.getEditText().setText(atmBean.getNameoncard());
@@ -297,12 +298,12 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
         this.password = password;
         final ProgressDialog pd = Utils.getProgressDialog(activity);
         pd.show();
-        final Dialog dialog = Utils.getRegisteredUserList(activity);
+        final BottomSheetDialog dialog = Utils.getRegisteredUserList(activity);
         Button btnSend = dialog.findViewById(R.id.btnSend);
-        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnSend, getResources().getColor(R.color.colorAccent), 40F);
         final RecyclerView rvUser = dialog.findViewById(R.id.rvUser);
         rvUser.setLayoutManager(new LinearLayoutManager(activity));
-        rvUser.addItemDecoration(new DividerItemDecoration(activity, RecyclerView.VERTICAL));
+//        rvUser.addItemDecoration(new DividerItemDecoration(activity, RecyclerView.VERTICAL));
         Utils.getUserReference().addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

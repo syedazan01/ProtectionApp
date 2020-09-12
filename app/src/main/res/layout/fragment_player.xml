@@ -6,11 +6,64 @@
     tools:context=".fragments.PlayerFragment"
     android:background="#F3F9FF"
     >
+  <RelativeLayout
+      android:layout_marginTop="?attr/actionBarSize"
+      android:id="@+id/rltCallRecording"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="10dp"
+      android:clickable="true"
+      android:focusable="true"
+      android:background="?attr/selectableItemBackground"
+      >
+    <TextView
+        android:layout_centerVertical="true"
+        android:text="Call Recording"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:fontFamily="@font/poppins_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
 
+        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+  </RelativeLayout>
+  <RelativeLayout
+      android:layout_marginTop="10dp"
+      android:layout_below="@id/rltCallRecording"
+      android:id="@+id/rltVoiceRecording"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="10dp"
+      android:clickable="true"
+      android:focusable="true"
+      android:background="?attr/selectableItemBackground"
+      >
+    <TextView
+        android:layout_centerVertical="true"
+        android:text="Voice Recording"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:fontFamily="@font/poppins_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
 
+        android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+        android:layout_centerVertical="true"
+        android:rotation="90"
+        android:layout_alignParentEnd="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+  </RelativeLayout>
   <androidx.recyclerview.widget.RecyclerView
+      android:layout_below="@id/rltVoiceRecording"
       android:id="@+id/rvRecordFiles"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"/>
+      android:layout_height="match_parent"/>
 
 </RelativeLayout>

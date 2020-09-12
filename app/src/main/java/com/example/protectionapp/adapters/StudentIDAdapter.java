@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.protectionapp.R;
 import com.example.protectionapp.interfacecallbacks.DocumentClickListener;
 import com.example.protectionapp.model.StudentIdBean;
-import com.example.protectionapp.model.VoteridBean;
 
 import java.util.List;
 import java.util.Random;
@@ -34,17 +34,20 @@ public class StudentIDAdapter extends RecyclerView.Adapter<StudentIDAdapter.Adha
     @NonNull
     @Override
     public AdhaarHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.personal_document_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.student_id_document_item, parent, false);
         return new AdhaarHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdhaarHolder holder, final int position) {
         StudentIdBean studentIdBean = studentIdBeanList.get(position);
-        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
-        holder.constMain.setBackgroundColor(color);
-        holder.tvFileName.setText(studentIdBean.getFullname());
-        holder.constMain.setOnClickListener(new View.OnClickListener() {
+//        int color = Color.argb(200, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150, new Random().nextInt(100) + 150);
+//        holder.constMain.setBackgroundColor(color);
+        holder.studentIdName.setText(studentIdBean.getFullname());
+        holder.studentIdFName.setText(studentIdBean.getFathername());
+        holder.studentStd.setText(studentIdBean.getBranch());
+        holder.studentIdNum.setText(studentIdBean.getEnroll());
+        holder.cardMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 documentClickListener.onSelectStudentID(studentIdBeanList.get(position));
@@ -58,13 +61,16 @@ public class StudentIDAdapter extends RecyclerView.Adapter<StudentIDAdapter.Adha
     }
 
     public class AdhaarHolder extends RecyclerView.ViewHolder {
-        TextView tvFileName;
-        ConstraintLayout constMain;
+        TextView studentIdName,studentIdFName,studentStd,studentIdNum;
+        CardView cardMain;
 
         public AdhaarHolder(@NonNull View itemView) {
             super(itemView);
-            tvFileName = itemView.findViewById(R.id.tvFileName);
-            constMain = itemView.findViewById(R.id.ConstrainMain);
+            studentIdName = itemView.findViewById(R.id.studentIdName);
+            studentIdFName = itemView.findViewById(R.id.studentIdFName);
+            studentStd = itemView.findViewById(R.id.studentStd);
+            studentIdNum = itemView.findViewById(R.id.studentIdNum);
+            cardMain = itemView.findViewById(R.id.cardMain);
         }
     }
 }

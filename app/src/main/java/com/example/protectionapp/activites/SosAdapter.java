@@ -57,6 +57,11 @@ public class SosAdapter extends RecyclerView.Adapter<SosAdapter.SosHolder> {
         return sosBeanList.size();
     }
 
+    public void updateList(List<SosBean> sosBeans) {
+    sosBeanList=sosBeans;
+    notifyDataSetChanged();
+    }
+
     public class SosHolder extends RecyclerView.ViewHolder {
         CheckBox cbNum;
         ConstraintLayout constrainMain;
