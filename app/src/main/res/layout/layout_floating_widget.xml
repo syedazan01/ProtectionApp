@@ -83,6 +83,8 @@
         android:background="@drawable/search_round_border"
         android:id="@+id/etSearchQuery"
         android:hint="Search Everything"
+        android:imeOptions="actionSearch"
+        android:singleLine="true"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

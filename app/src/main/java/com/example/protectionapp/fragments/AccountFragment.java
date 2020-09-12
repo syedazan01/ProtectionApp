@@ -30,6 +30,7 @@ import com.example.protectionapp.R;
 import com.example.protectionapp.activites.LogIn;
 import com.example.protectionapp.activites.SettingActivity;
 import com.example.protectionapp.activites.SosActivity;
+import com.example.protectionapp.activites.SubscriptionPlan;
 import com.example.protectionapp.activites.Wallet;
 import com.example.protectionapp.adapters.AdapterSubscription;
 import com.example.protectionapp.adapters.AdapterUsers;
@@ -305,9 +306,9 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         rltSubscription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(mActivity, Payment_premiumUser.class);
-//                startActivity(intent);
-                openBottomSheet();
+                Intent intent = new Intent(mActivity, SubscriptionPlan.class);
+                startActivity(intent);
+//                openBottomSheet();
             }
         });
     }

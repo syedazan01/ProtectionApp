@@ -17,6 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.balram.locker.utils.Locker;
+import com.balram.locker.view.AppLocker;
+import com.balram.locker.view.LockActivity;
 import com.example.protectionapp.R;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;

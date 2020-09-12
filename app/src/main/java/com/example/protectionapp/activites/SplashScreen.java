@@ -13,12 +13,15 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.balram.locker.utils.Locker;
+import com.balram.locker.view.LockActivity;
 import com.example.protectionapp.R;
 import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.services.ForgroundService;
@@ -33,7 +36,7 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import static com.example.protectionapp.utils.AppConstant.REQUEST_OVERLAY_PERMISSION;
 
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends LockActivity {
     private static final int REQUEST_CODE_SCREEN_SHOT = 1001;
     private MediaProjectionManager mpManager;
     private static final int APP_PERMISSION_REQUEST = 212;
@@ -102,6 +105,7 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == Activity.RESULT_OK && (requestCode == REQUEST_OVERLAY_PERMISSION || requestCode == APP_PERMISSION_REQUEST)) {
 //            startService(new Intent(this, FloatingWindowService.class));
         } else {

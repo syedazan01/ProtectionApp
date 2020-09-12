@@ -5,19 +5,32 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="20dp"
     android:layout_marginTop="10dp"
-    android:background="@drawable/round_border"
-    android:backgroundTint="#0077FF"
+    android:background="@drawable/subscription_box"
     android:padding="10dp">
 
+
     <TextView
+        android:id="@+id/tvScheme"
+        android:layout_width="match_parent"
+        android:layout_toStartOf="@id/tvPrice"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Access Unlimited Movies, Series and Live TVs."
+        android:textColor="@color/black"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="20sp" />
+    <TextView
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true"
         android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:text="\u20B9 25"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:fontFamily="@font/poppins_semibold"
         android:textSize="29sp" />
 
@@ -26,24 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@id/tvPrice"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tvScheme"
         android:text="For 1 Month"
-        android:textColor="@color/white"
-        android:fontFamily="@font/poppins_semibold"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/tvScheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvPrice"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="10dp"
-        android:text="Access Unlimited Movies, Series and Live TVs."
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:fontFamily="@font/poppins_regular"
         android:textSize="14sp" />
 </RelativeLayout>

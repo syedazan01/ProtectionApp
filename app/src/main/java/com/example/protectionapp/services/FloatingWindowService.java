@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
+import android.app.SearchManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,7 +17,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -172,7 +176,26 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         fabSearch.setOnClickListener(this);
         fabScreenShot.setOnClickListener(this);
         fabClose.setOnClickListener(this);
-        etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        etSearchQuery.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    Utils.hideKeyboardFrom(FloatingWindowService.this,etSearchQuery);
+                    flaotingParams.flags=WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+                    mWindowManager.updateViewLayout(mFloatingView,flaotingParams);
+                    mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
+                    fadAniamtion();
+                    Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(SearchManager.QUERY, etSearchQuery.getText().toString()); // query contains search string
+                    startActivity(intent);
+
+                    return true;
+                }
+                return false;
+            }
+        });
+       /* etSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_SEARCH
@@ -185,6 +208,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                         escapedQuery = URLEncoder.encode(etSearchQuery.getText().toString(), "UTF-8");
                         Uri uri = Uri.parse("http://www.google.com/#q=" + escapedQuery);
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
                         etSearchQuery.setVisibility(View.GONE);
                         mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
@@ -197,7 +221,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                 }
                 return false;
             }
-        });
+        });*/
         //Add the view to the window.
         flaotingParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -205,7 +229,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                         ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
                         WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
         //Specify the view position
@@ -317,20 +341,23 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         }
         else if(view==fabScreenShot)
         {
-            ViewTreeObserver vto = mFloatingView.getViewTreeObserver();
-            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    view.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    storeImage(takescreenshotOfView(mFloatingView));
-                }
-            });
-
+            /*Display display = mWindowManager.getDefaultDisplay();
+            DisplayMetrics metrics = new DisplayMetrics();
+            display.getMetrics(metrics);
+            int width = metrics.widthPixels;
+            int height = metrics.heightPixels;
+            Bitmap bitmap = Bitmap.createBitmap(width,
+                    height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bitmap);
+            view.draw(canvas);
+            storeImage(bitmap);*/
         }
         else if(view==fabSearch)
         {
             etSearchQuery.setVisibility(View.VISIBLE);
             setAlphaAnimation(etSearchQuery);
+            flaotingParams.flags=0;
+            mWindowManager.updateViewLayout(mFloatingView,flaotingParams);
 
         }
         else if(view==fabClose)
@@ -352,6 +379,8 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     setAlphaAnimation(fabVoice);
     setAlphaAnimation(fabSearch);
     setAlphaAnimation(fabClose);
+    flaotingParams.flags=WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+    mWindowManager.updateViewLayout(mFloatingView,flaotingParams);
     }
     public static void setAlphaAnimation(View v) {
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, "alpha",  1f, .8f);
@@ -408,6 +437,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+pictureFile.getAbsolutePath())));
         }
         sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(pictureFile)));
+        Toast.makeText(this, "Save Screenshot into gallery", Toast.LENGTH_SHORT).show();
     }
     private  File getOutputMediaFile(){
         // To be safe, you should check that the SDCard is mounted

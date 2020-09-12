@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.balram.locker.utils.Locker;
 import com.example.protectionapp.R;
 import com.example.protectionapp.activites.CallRecorder;
 import com.example.protectionapp.activites.CameraDetector;
@@ -32,6 +35,8 @@ import com.example.protectionapp.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class HomeFragment extends Fragment implements View.OnClickListener, ServiceAdapter.RecyclerViewOnClick, CompoundButton.OnCheckedChangeListener {
     //    private CardView cardLauncherWidget;
@@ -39,6 +44,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
     private ImageView ivBluelightFilter;
     private ServiceAdapter serviceAdapter;
     private RecyclerView rvService;
+    private CardView cardAppLock;
     private List<ServiceBean> serviceBeanList = new ArrayList<>();
 
     @Override
@@ -50,6 +56,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
        /* cardCameraDetector = view.findViewById(R.id.cardCameraDetector);
         cardFileShare = view.findViewById(R.id.cardFileShare);
         cardKillNotification = view.findViewById(R.id.cardKillNotification);*/
+        cardAppLock = view.findViewById(R.id.cardAppLock);
         swEnableLauncher = view.findViewById(R.id.swEnableLauncher);
         ivBluelightFilter = view.findViewById(R.id.ivBluelightFilter);
         rvService = view.findViewById(R.id.rvService);
@@ -68,6 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
         cardKillNotification.setOnClickListener(this);*/
         swEnableLauncher.setOnCheckedChangeListener(this);
         ivBluelightFilter.setOnClickListener(this);
+        cardAppLock.setOnClickListener(this);
     }
 
     private void initData() {
@@ -88,6 +96,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
         if (view == ivBluelightFilter) {
             Utils.setBlueLightTheme(getActivity(), ivBluelightFilter);
 //            return;
+        }
+        else if(view==cardAppLock)
+        {
+            Utils.showAppLockDialog(getActivity());
         }
         /*Intent intent = null;
         if (view == cardCallRecorder) {
@@ -116,6 +128,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
             intent = new Intent(getActivity(), KillNotification.class);
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case Locker.DISABLE_PASSLOCK:
+                return;
+            case Locker.ENABLE_PASSLOCK:
+            case Locker.CHANGE_PASSWORD:
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(getActivity(), getString(R.string.setup_passcode),
+                            Toast.LENGTH_SHORT).show();
+                }
+                return;
+            default:
+                break;
+        }
     }
 
     @Override

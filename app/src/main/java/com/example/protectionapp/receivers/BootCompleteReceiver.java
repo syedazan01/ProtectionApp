@@ -15,7 +15,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
         Log.e("SCREEN>>>", intent.getAction());
 
         Intent forrgroundIntent = new Intent(context, FloatingWindowService.class);
-        forrgroundIntent.setAction(FloatingWindowService.SCREEN_ON);
+//        forrgroundIntent.setAction(FloatingWindowService.SCREEN_ON);
         context.startService(forrgroundIntent);
     }
 }

@@ -37,7 +37,7 @@
         android:textColor="?attr/primaryTitleColor"
         android:buttonTint="@color/green"
         android:thumbTint="@color/green"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:textSize="16dp" />
     <Switch
         android:text="Priority App's Notification Block"
@@ -51,7 +51,7 @@
         android:textColor="?attr/primaryTitleColor"
         android:buttonTint="@color/green"
         android:thumbTint="@color/green"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:textSize="16dp" />
 
     <androidx.core.widget.NestedScrollView

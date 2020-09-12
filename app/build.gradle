@@ -130,7 +130,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     //Lock Screen
-    implementation project(':lockscreen')
+//    implementation project(':lockscreen')
 
     //Pattern Lock
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
@@ -138,5 +138,9 @@ dependencies {
 
     //SwipeLayout
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+
+    //AppLock
+    implementation 'com.github.balrampandey19:AppLocker:1.0.1'
+
 
 }

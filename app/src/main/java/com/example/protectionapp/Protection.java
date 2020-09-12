@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.multidex.MultiDexApplication;
 
+import com.balram.locker.view.AppLocker;
 import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.PrefManager;
 import com.firebase.client.Firebase;
@@ -19,6 +20,8 @@ public class Protection extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         mInstance=this;
+         AppLocker.getInstance().enableAppLock(this);
+
         Firebase.setAndroidContext(this);
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
@@ -34,4 +37,5 @@ public class Protection extends MultiDexApplication {
             mInstance=new Protection();
         return mInstance;
     }
+
 }

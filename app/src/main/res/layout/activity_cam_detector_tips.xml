@@ -32,17 +32,21 @@
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <RadioButton
+            android:buttonTint="@color/themeColor"
             android:id="@+id/bedroom_tips"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:padding="15dp"
+
             android:text="Bedroom" />
 
         <RadioButton
+            android:buttonTint="@color/themeColor"
             android:id="@+id/bathroom_tips"
             android:fontFamily="@font/poppins_medium"
             android:layout_width="wrap_content"
@@ -51,6 +55,7 @@
             android:text="Bathroom" />
 
         <RadioButton
+            android:buttonTint="@color/themeColor"
             android:id="@+id/changingroom_tips"
             android:fontFamily="@font/poppins_medium"
             android:layout_width="wrap_content"
@@ -59,6 +64,7 @@
             android:text="Changing room" />
 
         <RadioButton
+            android:buttonTint="@color/themeColor"
             android:id="@+id/outside_tips"
             android:fontFamily="@font/poppins_medium"
             android:layout_width="wrap_content"

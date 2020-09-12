@@ -136,17 +136,17 @@ private TextView tvObject;
 
     private void setupMeter() {
         Range range3 = new Range();
-        range3.setColor(Color.parseColor("#ce0000"));
+        range3.setColor(Color.parseColor("#FF1F1F"));
         range3.setFrom(100.0);
         range3.setTo(150.0);
 
         Range range2 = new Range();
-        range2.setColor(Color.parseColor("#E3E500"));
+        range2.setColor(Color.parseColor("#FFB60C"));
         range2.setFrom(50.0);
         range2.setTo(100.0);
 
         Range range = new Range();
-        range.setColor(Color.parseColor("#00b20b"));
+        range.setColor(Color.parseColor("#28A30F"));
 
         range.setFrom(0.0);
         range.setTo(50.0);

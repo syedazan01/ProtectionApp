@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.balram.locker.view.AppLocker;
+import com.balram.locker.view.LockActivity;
 import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.fragments.AccountFragment;
@@ -30,6 +32,8 @@ import com.example.protectionapp.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.luseen.spacenavigation.SpaceNavigationView;
+
+import java.util.concurrent.locks.LockSupport;
 
 import theredspy15.ltecleanerfoss.MainActivity;
 
@@ -339,4 +343,5 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             startActivity(new Intent(HomePage.this, MainActivity.class));
         }
     }
+
 }

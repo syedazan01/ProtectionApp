@@ -42,9 +42,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +58,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.balram.locker.utils.Locker;
+import com.balram.locker.view.AppLocker;
+import com.balram.locker.view.LockActivity;
 import com.example.protectionapp.R;
 import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.RecordsActivites.SendDailog;
@@ -859,7 +864,6 @@ public class Utils {
         }
         return false;
     }
-
     public static void showMediaChooseBottomSheet(Activity activity) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
         bottomSheetDialog.setContentView(R.layout.imagepicker_layout);
@@ -909,5 +913,54 @@ public class Utils {
         ivBlueLightFilter.setColorFilter(ContextCompat.getColor(activity, PrefManager.getBoolean(AppConstant.ISBLUELIGHT) ? R.color.black : R.color.themeColor), PorterDuff.Mode.MULTIPLY);
         activity.startService(new Intent(activity, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
         PrefManager.putBoolean(AppConstant.ISBLUELIGHT, !PrefManager.getBoolean(AppConstant.ISBLUELIGHT));
+    }
+
+    public static void showAppLockDialog(Activity activity)
+    {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.applock_dialog);
+        Switch swAppLock=bottomSheetDialog.findViewById(R.id.swEnableApplock);
+        CardView cardAppLock=bottomSheetDialog.findViewById(R.id.cardAppLock);
+        Button btnPin=bottomSheetDialog.findViewById(R.id.btnPin);
+        btnPin.setBackground(getThemeGradient(50F));
+        if (AppLocker.getInstance().getAppLock().isPasscodeSet()) {
+            btnPin.setText("Change Passcode PIN");
+            cardAppLock.setVisibility(View.VISIBLE);
+            swAppLock.setChecked(true);
+        }
+        swAppLock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                int type = AppLocker.getInstance().getAppLock().isPasscodeSet() ? Locker.DISABLE_PASSLOCK
+                        : Locker.ENABLE_PASSLOCK;
+                Intent intent = new Intent(activity, LockActivity.class);
+                intent.putExtra(Locker.TYPE, type);
+                activity.startActivityForResult(intent, type);
+                bottomSheetDialog.dismiss();
+            }
+        });
+        btnPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (AppLocker.getInstance().getAppLock().isPasscodeSet()) {
+                    Intent intent = new Intent(activity, LockActivity.class);
+                    intent.putExtra(Locker.TYPE, Locker.CHANGE_PASSWORD);
+                    intent.putExtra(Locker.MESSAGE,
+                            "Enter Old Passcode PIN");
+                    activity.startActivityForResult(intent, Locker.CHANGE_PASSWORD);
+
+                }
+                else
+                {
+                    int type = Locker.ENABLE_PASSLOCK;
+                    Intent intent = new Intent(activity, LockActivity.class);
+                    intent.putExtra(Locker.TYPE, type);
+                    activity.startActivityForResult(intent, type);
+                    bottomSheetDialog.dismiss();
+                }
+            }
+        });
+        bottomSheetDialog.show();
+
     }
 }
