@@ -142,5 +142,11 @@ dependencies {
     //AppLock
     implementation 'com.github.balrampandey19:AppLocker:1.0.1'
 
+    //AdMob
+    implementation 'com.google.android.gms:play-services-ads:19.4.0'
+
+
+    //LifeCycle
+    implementation "android.arch.lifecycle:extensions:1.1.1"
 
 }

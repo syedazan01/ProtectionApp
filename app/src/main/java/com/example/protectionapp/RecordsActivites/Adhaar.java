@@ -72,6 +72,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private TextInputEditText dobinput;
     public URL imgaeurl;
@@ -287,8 +289,10 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Adhaar Form");
-        Utils.makeButton(opencam, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(addharsavebt, getResources().getColor(R.color.colorPrimary), 40F);
+//        Utils.makeButton(opencam, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(addharsavebt, getResources().getColor(R.color.colorPrimary), 40F);
+        opencam.setBackground(getThemeGradient(50F));
+        addharsavebt.setBackground(getThemeGradient(50F));
         if (getIntent().hasExtra(AppConstant.ADHAAR)) {
             addharsavebt.setText("Update");
             adhaarBean = (AdhaarBean) getIntent().getSerializableExtra(AppConstant.ADHAAR);

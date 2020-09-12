@@ -65,6 +65,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class ATM extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnAtmScan, btnAtmSave, btnatmsend;
     List<FileShareBean> fileShareBeans = new ArrayList<>();
@@ -248,8 +250,10 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
         tvToolbarTitle.setText("ATM Detail Form");
         ivatmscan = findViewById(R.id.atm_imageView1);
         ivatmscan2 = findViewById(R.id.atm_imageView2);
-        Utils.makeButton(btnAtmScan, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(btnAtmSave, getResources().getColor(R.color.colorPrimary), 40F);
+//        Utils.makeButton(btnAtmScan, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnAtmSave, getResources().getColor(R.color.colorPrimary), 40F);
+        btnAtmSave.setBackground(getThemeGradient(50F));
+        btnAtmScan.setBackground(getThemeGradient(50F));
         if (getIntent().hasExtra(AppConstant.ATM)) {
             btnAtmSave.setText("Update");
             atmBean = (AtmBean) getIntent().getSerializableExtra(AppConstant.ATM);

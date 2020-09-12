@@ -3,6 +3,7 @@ package com.example.protectionapp.activites;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,6 +30,13 @@ import com.example.protectionapp.fragments.SosFragment;
 import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.luseen.spacenavigation.SpaceNavigationView;
@@ -54,12 +62,18 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     private View lineHome, lineCategory, lineNotification, lineProfile;
 
     private FloatingActionButton fabCleaner;
+    AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.changeColor(this, "#00000000", true);
         setContentView(R.layout.activity_home_page);
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
         initViews();
         initActions();
        /* //set up id of spacenavigaton
@@ -130,6 +144,40 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void initActions() {
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+              Log.e("LOADED","YESS");
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
         llHome.setOnClickListener(this);
         llCategory.setOnClickListener(this);
         llNotification.setOnClickListener(this);
@@ -140,6 +188,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
     private void initViews() {
 
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
         fabCleaner = findViewById(R.id.fabCleaner);
 
         llHome = findViewById(R.id.llHome);

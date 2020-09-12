@@ -61,6 +61,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class StudentID extends AppCompatActivity implements AdapterUsers.RecyclerViewListener, SendDailog.SendDialogListener {
     TextInputLayout institutionname, enroll, rollno, fullname, fathername, branch;
     UploadingDialog uploadingDialog = new UploadingDialog(StudentID.this);
@@ -325,9 +327,10 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Student Detail Form");
         ivBack = findViewById(R.id.ivBack);
-        Utils.makeButton(btnSTDScan, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(btnSTDSave, getResources().getColor(R.color.colorPrimary), 40F);
-
+//        Utils.makeButton(btnSTDScan, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnSTDSave, getResources().getColor(R.color.colorPrimary), 40F);
+btnSTDSave.setBackground(getThemeGradient(50F));
+btnSTDScan.setBackground(getThemeGradient(50F));
         //filling view document
         if (getIntent().hasExtra(AppConstant.STUDENT_ID)) {
             btnSTDSave.setText("Update");

@@ -98,7 +98,7 @@ public class PersonalRecordFragment extends Fragment {
         recordList.add(new PersonalRecord("ADHAAR \nCard", R.drawable.aadharlogo));
         recordList.add(new PersonalRecord("PAN \nCARD", R.drawable.panlogo));
         recordList.add(new PersonalRecord("DRIVING \nLICENSE", R.drawable.drivinglogo));
-        recordList.add(new PersonalRecord("BANK \nACCOUNT", R.drawable.bankicon));
+        recordList.add(new PersonalRecord("BANK \nACCOUNT", R.drawable.banknew));
         recordList.add(new PersonalRecord("DEBIT \nCARD", R.drawable.atmlogo));
         recordList.add(new PersonalRecord("VOTER \nID", R.drawable.voteridlogo));
         recordList.add(new PersonalRecord("STUDENT \nID", R.drawable.student_id));

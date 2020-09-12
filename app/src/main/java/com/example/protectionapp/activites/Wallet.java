@@ -3,6 +3,7 @@ package com.example.protectionapp.activites;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -34,6 +35,8 @@ public class Wallet extends AppCompatActivity {
         walletHistoryAdapter = new WalletHistoryAdapter();
         rvWalletHistory.setAdapter(walletHistoryAdapter);
         cardMyWallet.setBackground(Utils.getThemeGradient(50F));
+        TextView tvToolbarTitle=findViewById(R.id.tvToolbarTitle);
+        tvToolbarTitle.setText("Wallet");
     }
 
     private void initActions() {

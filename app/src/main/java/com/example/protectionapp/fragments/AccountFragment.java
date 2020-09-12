@@ -422,7 +422,8 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     }
 
     private void buildSignoutDialog() {
-        final Dialog dialog = new Dialog(mActivity, R.style.DialogFragmentTheme);
+        Utils.showSignOutDialog(getActivity());
+        /*final Dialog dialog = new Dialog(mActivity, R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.logout_dialog);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -446,7 +447,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                 dialog.dismiss();
             }
         });
-        dialog.show();
+        dialog.show();*/
     }
 
     private void getUser() {

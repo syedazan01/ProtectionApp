@@ -67,6 +67,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class VoterID extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnVoteridscan, btnVoteridsave, btnVoteridsend;
     String password, msg;
@@ -270,8 +272,10 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Voter id Detail Form");
         ivVid = findViewById(R.id.ivBack);
-        Utils.makeButton(btnVoteridscan, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(btnVoteridsave, getResources().getColor(R.color.colorPrimary), 40F);
+//        Utils.makeButton(btnVoteridscan, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnVoteridsave, getResources().getColor(R.color.colorPrimary), 40F);
+        btnVoteridsave.setBackground(getThemeGradient(50F));
+        btnVoteridscan.setBackground(getThemeGradient(50F));
         if (getIntent().hasExtra(AppConstant.VOTER_ID)) {
             btnVoteridsave.setText("Update");
              voteridBean = (VoteridBean) getIntent().getSerializableExtra(AppConstant.VOTER_ID);

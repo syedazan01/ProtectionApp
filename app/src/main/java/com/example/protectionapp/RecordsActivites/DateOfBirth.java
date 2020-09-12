@@ -65,6 +65,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     TextInputEditText dateofbirth;
     TextInputLayout fathername, mothername, childname, hospitalname;
@@ -253,8 +255,10 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Birth Certificate Form");
-        Utils.makeButton(scanbirthBT, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(savebirthBT, getResources().getColor(R.color.colorPrimary), 40F);
+//        Utils.makeButton(scanbirthBT, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(savebirthBT, getResources().getColor(R.color.colorPrimary), 40F);
+       scanbirthBT.setBackground(getThemeGradient(50F));
+       savebirthBT.setBackground(getThemeGradient(50F));
         if (getIntent().hasExtra(AppConstant.BIRTH_CERTIFICATE)) {
             savebirthBT.setText("Update");
              birthCertificateBean = (BirthCertificateBean) getIntent().getSerializableExtra(AppConstant.BIRTH_CERTIFICATE);

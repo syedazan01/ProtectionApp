@@ -61,6 +61,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class Bank extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnBankScan, btnBankSave, btnbankSend;
     String msg, password;
@@ -235,8 +237,10 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Bank Detail Form");
         ivBank = findViewById(R.id.ivBack);
-        Utils.makeButton(btnBankScan, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(btnBankSave, getResources().getColor(R.color.colorPrimary), 40F);
+//        Utils.makeButton(btnBankScan, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnBankSave, getResources().getColor(R.color.colorPrimary), 40F);
+       btnBankSave.setBackground(getThemeGradient(50F));
+       btnBankScan.setBackground(getThemeGradient(50F));
         if (getIntent().hasExtra(AppConstant.BANK)) {
             btnBankSave.setText("Update");
             bankBean = (BankBean) getIntent().getSerializableExtra(AppConstant.BANK);

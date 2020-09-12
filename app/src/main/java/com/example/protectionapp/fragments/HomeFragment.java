@@ -24,6 +24,7 @@ import com.example.protectionapp.activites.CallRecorder;
 import com.example.protectionapp.activites.CameraDetector;
 import com.example.protectionapp.activites.FileShare;
 import com.example.protectionapp.activites.KillNotification;
+import com.example.protectionapp.activites.SpamActivity;
 import com.example.protectionapp.adapters.ServiceAdapter;
 import com.example.protectionapp.model.ServiceBean;
 import com.example.protectionapp.services.FloatingWindowService;
@@ -57,6 +58,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
         cardFileShare = view.findViewById(R.id.cardFileShare);
         cardKillNotification = view.findViewById(R.id.cardKillNotification);*/
         cardAppLock = view.findViewById(R.id.cardAppLock);
+        cardAppLock.setVisibility(View.GONE);
         swEnableLauncher = view.findViewById(R.id.swEnableLauncher);
         ivBluelightFilter = view.findViewById(R.id.ivBluelightFilter);
         rvService = view.findViewById(R.id.rvService);
@@ -83,6 +85,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
         serviceBeanList.add(new ServiceBean("Camera \nDetector", R.drawable.cameradetector_logo));
         serviceBeanList.add(new ServiceBean("File \nShare", R.drawable.filesshare));
         serviceBeanList.add(new ServiceBean("Kill \nNotification", R.drawable.ic_bell_icon));
+        serviceBeanList.add(new ServiceBean("App Lock", R.drawable.ic_applock));
+        serviceBeanList.add(new ServiceBean("Spam Call", R.drawable.spam));
     }
 
     private void setupRv() {
@@ -126,6 +130,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
             intent = new Intent(getActivity(), FileShare.class);
         } else if (position == 3) {
             intent = new Intent(getActivity(), KillNotification.class);
+        }
+        else if(position==4)
+        {
+            Utils.showAppLockDialog(getActivity());
+            return;
+        }
+        else if(position==5)
+        {
+            intent=new Intent(getActivity(), SpamActivity.class);
         }
         startActivity(intent);
     }

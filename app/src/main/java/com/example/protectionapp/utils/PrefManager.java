@@ -39,5 +39,8 @@ public class PrefManager {
         return sharedPreferences.getBoolean(key,false);
     }
 
-
+public static void clear()
+{
+    sharedPreferences.edit().clear().apply();
+}
 }

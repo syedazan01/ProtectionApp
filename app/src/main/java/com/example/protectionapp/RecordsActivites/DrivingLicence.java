@@ -66,6 +66,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class DrivingLicence extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnDLscan, btnDLsave, btnDLSend;
     private ImageView ivDL, ivDLscan, ivDlscan2;
@@ -289,8 +291,10 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Bank Detail Form");
         ivDL = findViewById(R.id.ivBack);
-        Utils.makeButton(btnDLscan, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(btnDLsave, getResources().getColor(R.color.colorPrimary), 40F);
+//        Utils.makeButton(btnDLscan, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnDLsave, getResources().getColor(R.color.colorPrimary), 40F);
+        btnDLsave.setBackground(getThemeGradient(50F));
+        btnDLscan.setBackground(getThemeGradient(50F));
         if (getIntent().hasExtra(AppConstant.DRIVING_LICENSE)) {
             btnDLsave.setText("Update");
              dlicenceBean = (DlicenceBean) getIntent().getSerializableExtra(AppConstant.DRIVING_LICENSE);

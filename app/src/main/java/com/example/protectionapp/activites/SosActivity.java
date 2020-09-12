@@ -47,6 +47,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class SosActivity extends AppCompatActivity implements SosAdapter.RecyclerViewHandleOnCheck {
     private ImageView ivBack;
     private TextView tvToolbarText;
@@ -141,7 +143,8 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
                 else {
                     msgDialog.show();
                     Button btnProceed = msgDialog.findViewById(R.id.btnProceed);
-                    Utils.makeButton(btnProceed, getResources().getColor(R.color.colorAccent), 40F);
+//                    Utils.makeButton(btnProceed, getResources().getColor(R.color.colorAccent), 40F);
+                    btnProceed.setBackground(getThemeGradient(50F));
                     btnProceed.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

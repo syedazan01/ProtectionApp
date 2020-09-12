@@ -43,14 +43,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
             <ImageView
                 android:id="@+id/ivEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="70dp"
-                android:src="@drawable/ic_baseline_edit_24"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="80dp"
+                android:src="@drawable/ic_edit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ivProfile" />
@@ -118,7 +116,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Buy Premium Subscription"
+                        android:text="Premium Subscription"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
@@ -130,15 +128,15 @@
                         android:layout_centerInParent="true"
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
                 </RelativeLayout>
-
                 <RelativeLayout
-                    android:id="@+id/rltreferEarn"
+                    android:id="@+id/rltWallet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="10dp"
                     android:background="?attr/selectableItemBackground"
                     android:padding="10dp">
+
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="50dp"
@@ -150,7 +148,7 @@
                             android:layout_width="30dp"
                             android:layout_height="35dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/invite_logo" />
+                            android:src="@drawable/ic_wallet" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -160,20 +158,18 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Invite  and Earn"
+                        android:text="Wallet"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
                     <ImageView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
+
                         android:layout_centerInParent="true"
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
                 </RelativeLayout>
-
-
                 <RelativeLayout
                     android:id="@+id/rltSos"
                     android:layout_width="match_parent"
@@ -216,16 +212,14 @@
                         android:layout_centerInParent="true"
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
                 </RelativeLayout>
-
                 <RelativeLayout
-                    android:id="@+id/rltWallet"
+                    android:id="@+id/rltreferEarn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="10dp"
                     android:background="?attr/selectableItemBackground"
                     android:padding="10dp">
-
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="50dp"
@@ -237,7 +231,7 @@
                             android:layout_width="30dp"
                             android:layout_height="35dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/gem" />
+                            android:src="@drawable/invite_logo" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -247,20 +241,18 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Wallet"
+                        android:text="Invite  and Earn"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
 
                     <ImageView
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-
                         android:layout_centerInParent="true"
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
                 </RelativeLayout>
-
-
                 <RelativeLayout
                     android:id="@+id/rltSetting"
                     android:layout_width="match_parent"

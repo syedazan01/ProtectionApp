@@ -65,6 +65,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class PAN extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     private Button btnPANscan, btnPANsave, btnPANsend;
     Uri fileUri, fileUri2;
@@ -113,8 +115,10 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("PAN Detail Form");
         ivPAN = findViewById(R.id.ivBack);
-        Utils.makeButton(btnPANscan, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(btnPANsave, getResources().getColor(R.color.colorPrimary), 40F);
+//        Utils.makeButton(btnPANscan, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(btnPANsave, getResources().getColor(R.color.colorPrimary), 40F);
+        btnPANsave.setBackground(getThemeGradient(50F));
+        btnPANscan.setBackground(getThemeGradient(50F));
         if (getIntent().hasExtra(AppConstant.PAN)) {
             btnPANsave.setText("Update");
              panBean = (PanBean) getIntent().getSerializableExtra(AppConstant.PAN);

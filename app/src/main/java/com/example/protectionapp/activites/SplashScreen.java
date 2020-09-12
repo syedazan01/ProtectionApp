@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.balram.locker.utils.Locker;
+import com.balram.locker.view.AppLocker;
 import com.balram.locker.view.LockActivity;
 import com.example.protectionapp.R;
 import com.example.protectionapp.services.FloatingWindowService;
@@ -29,6 +30,11 @@ import com.example.protectionapp.utils.AppConstant;
 import com.example.protectionapp.utils.MIUIUtils;
 import com.example.protectionapp.utils.PrefManager;
 import com.example.protectionapp.utils.Utils;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
@@ -36,7 +42,7 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import static com.example.protectionapp.utils.AppConstant.REQUEST_OVERLAY_PERMISSION;
 
-public class SplashScreen extends LockActivity {
+public class SplashScreen extends AppCompatActivity {
     private static final int REQUEST_CODE_SCREEN_SHOT = 1001;
     private MediaProjectionManager mpManager;
     private static final int APP_PERMISSION_REQUEST = 212;
@@ -44,6 +50,7 @@ public class SplashScreen extends LockActivity {
     TextView tvSplashTitle;
     //HoverView hoverView;
     public static Activity mContext;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +58,9 @@ public class SplashScreen extends LockActivity {
         Utils.changeColor(this, "#00000000", true);
         mContext = this;
         setContentView(R.layout.splash_screen_layout);
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitalId));
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
         if (!isMyServiceRunning(ForgroundService.class)) {
             Intent forrgroundIntent = new Intent(this, ForgroundService.class);
             forrgroundIntent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
@@ -71,7 +81,16 @@ public class SplashScreen extends LockActivity {
             startActivityForResult(intent, APP_PERMISSION_REQUEST);
         } else {
 //            startService(new Intent(this, FloatingWindowService.class));
-            startHandler();
+
+            if (!AppLocker.getInstance().getAppLock().isPasscodeSet()) {
+                startHandler();
+            }
+            else {
+                int type =Locker.UNLOCK_PASSWORD;
+                Intent intent = new Intent(this, LockActivity.class);
+                intent.putExtra(Locker.TYPE, type);
+                startActivityForResult(intent, type);
+            }
             handleDeepLink();
         }
         animation = findViewById(R.id.animation);
@@ -96,6 +115,10 @@ public class SplashScreen extends LockActivity {
                     Intent intent = new Intent(SplashScreen.this, App_intro.class);
                     startActivity(intent);
                 }
+                if(mInterstitialAd.isLoaded())
+                {
+                    mInterstitialAd.show();
+                }
             }
 
         }, 2500);
@@ -114,7 +137,6 @@ public class SplashScreen extends LockActivity {
         handleDeepLink();
         startHandler();
     }
-
     private void handleDeepLink() {
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())

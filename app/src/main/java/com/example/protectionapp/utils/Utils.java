@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -43,6 +44,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,8 +64,9 @@ import com.balram.locker.utils.Locker;
 import com.balram.locker.view.AppLocker;
 import com.balram.locker.view.LockActivity;
 import com.example.protectionapp.R;
-import com.example.protectionapp.RecordsActivites.PersonalRecords;
 import com.example.protectionapp.RecordsActivites.SendDailog;
+import com.example.protectionapp.activites.LogIn;
+import com.example.protectionapp.interfacecallbacks.SpamCallsListener;
 import com.example.protectionapp.model.AdhaarBean;
 import com.example.protectionapp.model.AtmBean;
 import com.example.protectionapp.model.BankBean;
@@ -76,9 +79,11 @@ import com.example.protectionapp.model.PanBean;
 import com.example.protectionapp.model.PassportBean;
 import com.example.protectionapp.model.PlansBean;
 import com.example.protectionapp.model.SosBean;
+import com.example.protectionapp.model.SpamBean;
 import com.example.protectionapp.model.StudentIdBean;
 import com.example.protectionapp.model.UserBean;
 import com.example.protectionapp.model.VoteridBean;
+import com.example.protectionapp.room.AppDatabase;
 import com.example.protectionapp.services.FloatingWindowService;
 import com.example.protectionapp.utils.views.RoundView;
 import com.firebase.client.Firebase;
@@ -88,6 +93,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
@@ -101,6 +107,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
@@ -271,15 +278,17 @@ public class Utils {
         Firebase reference;
 
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.SOS + "/");
-            sosBean.setPushKey(reference.push().getKey());
+        sosBean.setPushKey(reference.push().getKey());
         reference.child(sosBean.getPushKey()).setValue(sosBean);
     }
+
     public static void removeSosNumbersInRTD(String pushKey) {
         Firebase reference;
 
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.SOS + "/");
         reference.child(pushKey).removeValue();
     }
+
     public static <T> String toJson(T value, Class<T> model) {
         return new Gson().toJson(value, model);
     }
@@ -325,6 +334,7 @@ public class Utils {
                     0);
         }
     }
+
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -402,7 +412,7 @@ public class Utils {
     }
 
     public static BottomSheetDialog getRegisteredUserList(Activity activity) {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity,R.style.AppBottomSheetDialogTheme);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
 //        bottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         bottomSheetDialog.setContentView(R.layout.user_list_dialog);
 //        bottomSheetDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -413,11 +423,116 @@ public class Utils {
         int width = metrics.widthPixels;
         int height = metrics.heightPixels;
 
-        bottomSheetDialog.getWindow().setLayout(width,height);
+        bottomSheetDialog.getWindow().setLayout(width, height);
         bottomSheetDialog.findViewById(R.id.btnSend).setBackground(Utils.getThemeGradient(50F));
         return bottomSheetDialog;
     }
 
+    public static void showSpamCallDialog(Activity activity) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.spam_call_dialog);
+        Button btnSaveSpamCalls = bottomSheetDialog.findViewById(R.id.btnSaveSpamCalls);
+        EditText etCallerName, etCallerNumber;
+        etCallerName = bottomSheetDialog.findViewById(R.id.etCallerName);
+        etCallerNumber = bottomSheetDialog.findViewById(R.id.etCallerNumber);
+        btnSaveSpamCalls.setBackground(getThemeGradient(50F));
+        btnSaveSpamCalls.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(etCallerName.getText())) {
+                    showToast(activity, "Enter Caller Name", AppConstant.errorColor);
+                    return;
+                }
+                if (TextUtils.isEmpty(etCallerNumber.getText())) {
+                    showToast(activity, "Enter Caller Number", AppConstant.errorColor);
+                    return;
+                }
+                Executors.newSingleThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        SpamBean spamBean = new SpamBean();
+                        spamBean.setChecked(true);
+                        spamBean.setCallName(etCallerName.getText().toString().trim());
+                        spamBean.setCallerNumber(etCallerNumber.getText().toString().trim());
+                        AppDatabase.getAppDataBase(activity).getSpamCallDao().insertCalls(spamBean);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SpamCallsListener spamCallsListener = (SpamCallsListener) activity;
+                                spamCallsListener.onSaved(spamBean);
+                            }
+                        });
+                    }
+                });
+                bottomSheetDialog.dismiss();
+            }
+        });
+        bottomSheetDialog.show();
+    }
+
+    public static void showSpamCallDeleteDialog(Activity activity, int id, int position) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.spam_call_delete_dialog);
+        Button btnOk = bottomSheetDialog.findViewById(R.id.btnOK);
+        Button btnCancel = bottomSheetDialog.findViewById(R.id.btnCancel);
+        btnOk.setBackground(getThemeGradient(50F));
+        btnCancel.setBackground(getColoredDrawable(activity.getResources().getColor(R.color.black), activity.getResources().getColor(R.color.black), GradientDrawable.RECTANGLE, 50F));
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Executors.newSingleThreadExecutor().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase.getAppDataBase(activity).getSpamCallDao().deleteSpamCall(id);
+
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                SpamCallsListener spamCallsListener = (SpamCallsListener) activity;
+                                spamCallsListener.onDeleted(position);
+                            }
+                        });
+                    }
+                });
+                bottomSheetDialog.dismiss();
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+        bottomSheetDialog.show();
+    }
+    public static void showSignOutDialog(Activity activity) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.logout_dialog);
+        Button btnOk = bottomSheetDialog.findViewById(R.id.btnOK);
+        Button btnCancel = bottomSheetDialog.findViewById(R.id.btnCancel);
+        btnOk.setBackground(getThemeGradient(50F));
+        btnCancel.setBackground(getColoredDrawable(activity.getResources().getColor(R.color.black), activity.getResources().getColor(R.color.black), GradientDrawable.RECTANGLE, 50F));
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                PrefManager.clear();
+                Utils.getDefaultManager(activity).edit().clear().apply();
+                bottomSheetDialog.dismiss();
+                activity.finishAffinity();
+                activity.startActivity(new Intent(activity, LogIn.class));
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+        bottomSheetDialog.show();
+    }
     public static Dialog getMsgDialog(Activity activity) {
         Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -480,7 +595,7 @@ public class Utils {
     }
 
     public static void showNoSubsDialog(Context context) {
-        Dialog dialog = new Dialog(context,R.style.DialogFragmentTheme);
+        Dialog dialog = new Dialog(context, R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.no_subscribe_dialog);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -496,7 +611,7 @@ public class Utils {
     }
 
     public static void showCongratsDialog(Context context) {
-        Dialog dialog = new Dialog(context,R.style.DialogFragmentTheme);
+        Dialog dialog = new Dialog(context, R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.earned_dialog);
         dialog.setCanceledOnTouchOutside(true);
@@ -515,7 +630,7 @@ public class Utils {
     }
 
     public static void showDocsDialog(Activity activity) {
-        Dialog dialog = new Dialog(activity,R.style.DialogFragmentTheme);
+        Dialog dialog = new Dialog(activity, R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.media_picker_dialog);
         dialog.setCanceledOnTouchOutside(true);
@@ -561,7 +676,7 @@ public class Utils {
     }
 
     public static void showMediaChooseDialog(String docType, String docUrl, AppCompatActivity activity) {
-        Dialog dialog = new Dialog(activity,R.style.DialogFragmentTheme);
+        Dialog dialog = new Dialog(activity, R.style.DialogFragmentTheme);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.media_send_view_dialog);
         dialog.setCanceledOnTouchOutside(true);
@@ -610,6 +725,7 @@ public class Utils {
         });
         dialog.show();
     }
+
     public static double getStatusBarHeight(Context context) {
         int statusBarHeight = 0;
         //获取status_bar_height资源的ID
@@ -855,6 +971,7 @@ public class Utils {
         }
         return result;
     }
+
     public static boolean isMyFloatingServiceRunning(Activity activity) {
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -864,15 +981,17 @@ public class Utils {
         }
         return false;
     }
+
     public static void showMediaChooseBottomSheet(Activity activity) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
         bottomSheetDialog.setContentView(R.layout.imagepicker_layout);
 
 
-        CardView cardViewCam,cardViewGall;
+        CardView cardViewCam, cardViewGall;
         cardViewCam = bottomSheetDialog.findViewById(R.id.cardviewCAm);
         cardViewGall = bottomSheetDialog.findViewById(R.id.cardviewGallery);
-
+        cardViewCam.setBackground(getThemeGradient(150F));
+        cardViewGall.setBackground(getThemeGradient(150F));
         cardViewGall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -915,13 +1034,12 @@ public class Utils {
         PrefManager.putBoolean(AppConstant.ISBLUELIGHT, !PrefManager.getBoolean(AppConstant.ISBLUELIGHT));
     }
 
-    public static void showAppLockDialog(Activity activity)
-    {
+    public static void showAppLockDialog(Activity activity) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
         bottomSheetDialog.setContentView(R.layout.applock_dialog);
-        Switch swAppLock=bottomSheetDialog.findViewById(R.id.swEnableApplock);
-        CardView cardAppLock=bottomSheetDialog.findViewById(R.id.cardAppLock);
-        Button btnPin=bottomSheetDialog.findViewById(R.id.btnPin);
+        Switch swAppLock = bottomSheetDialog.findViewById(R.id.swEnableApplock);
+        CardView cardAppLock = bottomSheetDialog.findViewById(R.id.cardAppLock);
+        Button btnPin = bottomSheetDialog.findViewById(R.id.btnPin);
         btnPin.setBackground(getThemeGradient(50F));
         if (AppLocker.getInstance().getAppLock().isPasscodeSet()) {
             btnPin.setText("Change Passcode PIN");
@@ -949,9 +1067,7 @@ public class Utils {
                             "Enter Old Passcode PIN");
                     activity.startActivityForResult(intent, Locker.CHANGE_PASSWORD);
 
-                }
-                else
-                {
+                } else {
                     int type = Locker.ENABLE_PASSLOCK;
                     Intent intent = new Intent(activity, LockActivity.class);
                     intent.putExtra(Locker.TYPE, type);

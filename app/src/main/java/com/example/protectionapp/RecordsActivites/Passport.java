@@ -69,6 +69,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.protectionapp.utils.Utils.getThemeGradient;
+
 public class Passport extends AppCompatActivity implements SendDailog.SendDialogListener, AdapterUsers.RecyclerViewListener {
     TextInputEditText dobinput, dateofissue, dateofexpiry;
     TextInputLayout passportnumber, type, countrycode, nationality, fullname, placeofissue, placeofbirth;
@@ -355,8 +357,10 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Passport Form");
-        Utils.makeButton(scanpassportBT, getResources().getColor(R.color.colorAccent), 40F);
-        Utils.makeButton(savepassportBT, getResources().getColor(R.color.colorPrimary), 40F);
+//        Utils.makeButton(scanpassportBT, getResources().getColor(R.color.colorAccent), 40F);
+//        Utils.makeButton(savepassportBT, getResources().getColor(R.color.colorPrimary), 40F);
+        scanpassportBT.setBackground(getThemeGradient(50F));
+        savepassportBT.setBackground(getThemeGradient(50F));
         if (getIntent().hasExtra(AppConstant.PASSPORT)) {
             savepassportBT.setText("Update");
              passportBean = (PassportBean) getIntent().getSerializableExtra(AppConstant.PASSPORT);
