@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/profilelayout"
-    tools:context=".activites.SettingActivity">
+    tools:context="atoz.protection.activites.SettingActivity">
 
     <include
         android:id="@+id/toolbarLay"

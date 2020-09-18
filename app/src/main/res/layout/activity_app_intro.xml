@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F3F9FF"
-    tools:context=".activites.App_intro">
+    tools:context="atoz.protection.activites.App_intro">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/introViewPager"

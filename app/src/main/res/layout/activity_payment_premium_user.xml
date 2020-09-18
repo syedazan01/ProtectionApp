@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/primaryBackgroundColor"
-    tools:context=".activites.Payment_premiumUser">
+    tools:context="atoz.protection.activites.Payment_premiumUser">
 
     <include
         android:id="@+id/toolbarLay"

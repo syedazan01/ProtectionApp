@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F3F9FF"
-    tools:context=".fragments.SosFragment">
+    tools:context="atoz.protection.fragments.SosFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.core.widget.NestedScrollView

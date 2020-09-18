@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.protectionapp.cameraDetector.OutsideTips">
+    tools:context="atoz.protection.atoz.example.protectionapp.cameraDetector.OutsideTips">
 
     <include layout="@layout/custum_toolbar" />
 

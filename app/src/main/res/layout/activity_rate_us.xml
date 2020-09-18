@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activites.Rate_us">
+    tools:context="atoz.protection.activites.Rate_us">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@
     android:layoutDirection="ltr"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context="com.example.protectionapp.cameraDetector.CamDetector_tips">
+    tools:context="atoz.protection.atoz.example.protectionapp.cameraDetector.CamDetector_tips">
 
 
     <View

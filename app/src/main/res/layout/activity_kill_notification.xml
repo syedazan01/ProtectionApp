@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/primaryBackgroundColor"
     android:fitsSystemWindows="true"
-    tools:context=".activites.KillNotification">
+    tools:context="atoz.protection.activites.KillNotification">
 
     <include
         android:id="@+id/toolbarLay"

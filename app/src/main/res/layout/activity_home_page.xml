@@ -4,7 +4,9 @@
     android:id="@+id/drawerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:background="#DEEDFF"
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:visibility="gone"
@@ -37,8 +39,8 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/llNavigation"
-        android:layout_marginBottom="10dp" />
+        android:layout_above="@id/adView"
+        android:layout_marginBottom="20dp" />
 
 
    <!-- <FrameLayout
@@ -246,7 +248,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/llNavigation"
-        android:layout_marginBottom="30dp"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="20dp"
         ads:adSize="BANNER"
         ads:adUnitId="@string/banner_id">
     </com.google.android.gms.ads.AdView>

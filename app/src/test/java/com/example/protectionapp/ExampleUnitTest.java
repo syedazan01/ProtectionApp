@@ -1,4 +1,4 @@
-package com.example.protectionapp;
+package atoz.protection;
 
 import org.junit.Test;
 

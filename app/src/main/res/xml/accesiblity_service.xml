@@ -6,5 +6,5 @@
     android:canRequestFilterKeyEvents="true"
     android:canRetrieveWindowContent="true"
     android:notificationTimeout="100"
-    android:packageNames="com.example.protectionApp"
+    android:packageNames="atoz.protection"
     android:settingsActivity="" />

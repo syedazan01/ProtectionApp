@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activites.SosActivity">
+    tools:context="atoz.protection.activites.SosActivity">
 <include layout="@layout/custum_toolbar"
     android:id="@+id/toolbarLay"
     android:layout_width="match_parent"
