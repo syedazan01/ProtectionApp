@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.chaos.view.PinView;
+
 import atoz.protection.R;
 import atoz.protection.model.UserBean;
 import atoz.protection.utils.AppConstant;
@@ -63,6 +64,7 @@ public class Otp extends AppCompatActivity {
         initViews();
         initActions();
     }
+
     private void handleDeepLink() {
         FirebaseDynamicLinks.getInstance()
                 .getDynamicLink(getIntent())
@@ -88,6 +90,7 @@ public class Otp extends AppCompatActivity {
                     }
                 });
     }
+
     private void initActions() {
         otp_View.addTextChangedListener(new TextWatcher() {
             @Override
@@ -188,12 +191,15 @@ public class Otp extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     pd.dismiss();
                                     UserBean userBean = dataSnapshot.getValue(UserBean.class);
+
+                                    if (userBean == null)
+                                        userBean = new UserBean();
                                     PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, userBean.isSubscribe());
-                                    PrefManager.putBoolean(AppConstant.ISREFERED, userBean.isRefer());
                                     userBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
-                                    if (userBean.getReferBy()!=null && userBean.getReferBy().isEmpty()) {
-                                        PrefManager.putBoolean(AppConstant.ISREFERED,true);
+                                    if (!PrefManager.getString(AppConstant.INVITED_BY).isEmpty() && (userBean.getReferBy() != null && userBean.getReferBy().isEmpty()) {
+                                        PrefManager.putBoolean(AppConstant.ISREFERED, true);
                                         userBean.setReferBy(PrefManager.getString(AppConstant.INVITED_BY));
+                                        userBean.setWalletAmount(userBean.getWalletAmount() + 10F);
                                     }
                                     userBean.setFcmToken(PrefManager.getString(AppConstant.FCMTOKEN));
                                     Utils.storeUserDetailsToRTD(userBean);
@@ -204,7 +210,7 @@ public class Otp extends AppCompatActivity {
 
                                 @Override
                                 public void onCancelled(FirebaseError firebaseError) {
-
+                                    pd.dismiss();
                                 }
                             });
 

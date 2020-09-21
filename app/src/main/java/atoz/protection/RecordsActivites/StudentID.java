@@ -196,7 +196,7 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
         btnSend.setOnClickListener(new View.OnClickListener() {

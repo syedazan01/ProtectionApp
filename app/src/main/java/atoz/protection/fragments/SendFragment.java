@@ -142,7 +142,7 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
     }

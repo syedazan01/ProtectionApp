@@ -498,7 +498,7 @@ public class DocumentList extends AppCompatActivity implements DocumentClickList
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
         btnSend.setOnClickListener(new View.OnClickListener() {

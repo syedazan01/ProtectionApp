@@ -198,7 +198,7 @@ public void setOnSendDialog(String documentType, String message, String password
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
         btnSend.setOnClickListener(new View.OnClickListener() {

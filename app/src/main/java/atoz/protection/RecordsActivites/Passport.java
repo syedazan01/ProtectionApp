@@ -471,7 +471,7 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
         sendpassportBT.setOnClickListener(new View.OnClickListener() {

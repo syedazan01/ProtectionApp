@@ -37,7 +37,7 @@ public class SplashScreen extends AppCompatActivity {
     private static final int REQUEST_CODE_SCREEN_SHOT = 1001;
     private MediaProjectionManager mpManager;
     private static final int APP_PERMISSION_REQUEST = 212;
-    LottieAnimationView animation;
+//    LottieAnimationView animation;
     TextView tvSplashTitle;
     //HoverView hoverView;
     public static Activity mContext;
@@ -52,11 +52,11 @@ public class SplashScreen extends AppCompatActivity {
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitalId));
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        if (!isMyServiceRunning(ForgroundService.class)) {
+       /* if (!isMyServiceRunning(ForgroundService.class)) {
             Intent forrgroundIntent = new Intent(this, ForgroundService.class);
             forrgroundIntent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
             startService(forrgroundIntent);
-        }
+        }*/
         if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
             if(Utils.isMyFloatingServiceRunning(this))
                 stopService(new Intent(this, FloatingWindowService.class));
@@ -83,10 +83,10 @@ public class SplashScreen extends AppCompatActivity {
                 startActivityForResult(intent, type);
             }
         }
-        animation = findViewById(R.id.animation);
+//        animation = findViewById(R.id.animation);
         tvSplashTitle = findViewById(R.id.tvSplashTitle);
 
-        animation.playAnimation();
+//        animation.playAnimation();
         Utils.setShader(Color.BLUE, Color.GREEN, tvSplashTitle);
     }
 
@@ -96,7 +96,7 @@ public class SplashScreen extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                animation.clearAnimation();
+//                animation.clearAnimation();
                 finish();
                 if (PrefManager.getBoolean(AppConstant.ISLOGGEDIN)) {
                     Intent intent = new Intent(SplashScreen.this, HomePage.class);

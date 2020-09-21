@@ -17,22 +17,24 @@ android:background="?attr/primaryBackgroundColor"
         android:textStyle="bold"
         android:fontFamily="monospace"
         android:layout_centerInParent="true"
-        android:layout_above="@+id/animation"
+        android:layout_above="@+id/ivLogo"
         >
 
     </TextView>
-
-<com.airbnb.lottie.LottieAnimationView
-    android:id="@+id/animation"
-    android:layout_width="220dp"
-    android:layout_height="220dp"
+<ImageView
+    android:id="@+id/ivLogo"
     android:layout_centerInParent="true"
-    app:lottie_autoPlay="true"
-    app:lottie_loop="true"
-    app:lottie_colorFilter="@color/colorAccent"
-    app:lottie_fileName="loading_animation.json"
+    android:src="@drawable/login_logo"
+    android:layout_width="200dp"
+    android:layout_height="200dp"/>
+<ProgressBar
+    android:id="@+id/progressBar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/ivLogo"
+    android:layout_centerHorizontal="true"
     >
-</com.airbnb.lottie.LottieAnimationView>
+</ProgressBar>
 
     <ImageView
         android:visibility="gone"

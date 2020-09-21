@@ -4,27 +4,58 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
+import android.hardware.display.DisplayManager;
+import android.hardware.display.VirtualDisplay;
+import android.media.Image;
+import android.media.ImageReader;
+import android.media.MediaRecorder;
+import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.TaskStackBuilder;
 
 import com.andrognito.patternlockview.PatternLockView;
 import com.andrognito.patternlockview.listener.PatternLockViewListener;
@@ -32,101 +63,65 @@ import atoz.protection.Protection;
 import atoz.protection.R;
 import atoz.protection.activites.CallRecorder;
 import atoz.protection.activites.FileShare;
+import atoz.protection.activites.SplashScreen;
+import atoz.protection.fragments.HomeFragment;
 import atoz.protection.receivers.BootCompleteReceiver;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 import atoz.protection.fragments.UtilityFeaturesFragment;
 
+import static android.app.Activity.RESULT_OK;
+import static android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION;
+import static atoz.protection.activites.HomePage.mProjection;
 import static atoz.protection.utils.AppConstant.ISBLUELIGHT;
 
 public class FloatingWindowService extends Service implements View.OnClickListener {
+
+    //Screenshot variable
+    private Intent mediaProjectionIntent;
+    private boolean isGetUserPermission;
+
+    private static final String TAG = "RECORDERSERVICE";
+    private static final String EXTRA_RESULT_CODE = "resultcode";
+    private static final String EXTRA_DATA = "data";
+
+
     public static final String LAUNCHER_WIDGET = "action.floating.launcher";
-    private BootCompleteReceiver bootBroadCast;
     public static final String BLUE_LIGHT_FILTER = "action.bluelight";
     public static final String SCREEN_ON = "action.screenOn";
-    WindowManager.LayoutParams flaotingParams, blueLightparams, patternLockParams;
+    WindowManager.LayoutParams flaotingParams, blueLightparams;
     private int bluelightFilterCode = Color.parseColor("#4DF7E6B4");
-    private WindowManager mWindowManager, blueLightWindowManager, patternLockWindowManager;
-    private View mFloatingView, blue_filter_container, pattern_lock_container;
+    private WindowManager mWindowManager, blueLightWindowManager;
+    private View mFloatingView, blue_filter_container;
     private FloatingActionButton collapsed_iv, fabFileShare, fabVoice, fabSearch, fabScreenShot, fabClose;
     private EditText etSearchQuery;
+    private LinearLayout llExpandView;
 
     public FloatingWindowService() {
     }
 
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public void onCreate() {
+        super.onCreate();
+        startForegroundService();
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        IntentFilter filter2 = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-        bootBroadCast = new BootCompleteReceiver();
-        registerReceiver(bootBroadCast, filter);
-        setTheme(R.style.AppTheme_Base_Light);
-
-
-        initPatterLockWidget();
-
-
-    }
-
-    private void initPatterLockWidget() {
-        pattern_lock_container = LayoutInflater.from(this).inflate(R.layout.pattern_lock_view, null);
-        //Add the view to the blueLight window.
-        patternLockParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.MATCH_PARENT,
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                        ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY :
-                        WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                PixelFormat.TRANSLUCENT);
-
-        //Specify the view position
-        patternLockParams.gravity = Gravity.TOP | Gravity.START;        //Initially view will be added to top-left corner
-        patternLockParams.x = 0;
-        patternLockParams.y = 0;
-        //Add the view to the window
-        patternLockWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        pattern_lock_container.setVisibility(View.GONE);
-        patternLockWindowManager.addView(pattern_lock_container, patternLockParams);
-        PatternLockView patternLockView = pattern_lock_container.findViewById(R.id.patterLockView);
-        patternLockView.addPatternLockListener(new PatternLockViewListener() {
-            @Override
-            public void onStarted() {
-
-            }
-
-            @Override
-            public void onProgress(List<PatternLockView.Dot> progressPattern) {
-
-            }
-
-            @Override
-            public void onComplete(List<PatternLockView.Dot> pattern) {
-//                patternLockView.setPattern(PatternLockView.PatternViewMode.CORRECT,pattern);
-            }
-
-            @Override
-            public void onCleared() {
-
-            }
-        });
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     private void initBlueLightFilterWidget() {
@@ -154,9 +149,10 @@ public class FloatingWindowService extends Service implements View.OnClickListen
 
     private void initFloatingWidget() {
         //Inflate the floating view layout we created
-
+        setTheme(R.style.AppTheme_Base_Light);
         mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
         collapsed_iv = mFloatingView.findViewById(R.id.collapsed_iv);
+        llExpandView = mFloatingView.findViewById(R.id.expanded_container);
         fabFileShare = mFloatingView.findViewById(R.id.fabFileShare);
         fabVoice = mFloatingView.findViewById(R.id.fabVoice);
         fabSearch = mFloatingView.findViewById(R.id.fabSearch);
@@ -176,7 +172,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                     Utils.hideKeyboardFrom(FloatingWindowService.this,etSearchQuery);
                     flaotingParams.flags=WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
                     mWindowManager.updateViewLayout(mFloatingView,flaotingParams);
-                    mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
+                    collapseView();
                     fadAniamtion();
                     Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -263,9 +259,9 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                                 //visibility of the collapsed layout will be changed to "View.GONE"
                                 //and expanded view will become visible.
 //                                collapsedView.setVisibility(View.GONE);
-                                mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.VISIBLE);
+                                llExpandView.setVisibility(View.VISIBLE);
                             } else {
-                                mFloatingView.findViewById(R.id.expanded_container).setVisibility(View.GONE);
+                                llExpandView.setVisibility(View.GONE);
                             }
                             fadAniamtion();
                         }
@@ -283,20 +279,18 @@ public class FloatingWindowService extends Service implements View.OnClickListen
             }
         });
     }
-
     /**
      * Detect if the floating view is collapsed or expanded.
      *
      * @return true if the floating view is collapsed.
      */
     private boolean isViewCollapsed() {
-        return mFloatingView == null || mFloatingView.findViewById(R.id.expanded_container).getVisibility() == View.GONE;
+        return mFloatingView == null || llExpandView.getVisibility() == View.GONE;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(bootBroadCast);
         if (mFloatingView != null) mWindowManager.removeView(mFloatingView);
     }
 
@@ -304,7 +298,9 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getAction() != null && intent.getAction().equals(LAUNCHER_WIDGET)) {
             if (PrefManager.getBoolean(AppConstant.OVERLAY))
+            {
                 initFloatingWidget();
+            }
             else
                 stopSelf();
         } else if (intent.getAction() != null && intent.getAction().equals(BLUE_LIGHT_FILTER)) {
@@ -317,8 +313,8 @@ public class FloatingWindowService extends Service implements View.OnClickListen
                     blue_filter_container.setBackgroundColor(0);
             }
 
-        } else if (intent.getAction() != null && intent.getAction().equals(SCREEN_ON))
-            pattern_lock_container.setVisibility(View.VISIBLE);
+        } /*else if (intent.getAction() != null && intent.getAction().equals(SCREEN_ON))
+            pattern_lock_container.setVisibility(View.VISIBLE);*/
         return START_STICKY;
     }
 
@@ -326,14 +322,24 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     public void onClick(View view) {
         if(view==fabFileShare)
         {
+            collapseView();
             startActivity(new Intent(Protection.getInstance(), FileShare.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
         else if(view==fabVoice)
         {
+            collapseView();
             startActivity(new Intent(Protection.getInstance(), CallRecorder.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
         else if(view==fabScreenShot)
         {
+            collapseView();
+            if(PrefManager.getBoolean(AppConstant.CAPTURE_SCREEN))
+            {
+
+                captureScreen();
+            }
+            else
+                Toast.makeText(this, "Allow Screen Capture Permission", Toast.LENGTH_SHORT).show();
             /*Display display = mWindowManager.getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
             display.getMetrics(metrics);
@@ -355,12 +361,64 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         }
         else if(view==fabClose)
         {
+            collapseView();
             PrefManager.putBoolean(AppConstant.OVERLAY,false);
-            if (UtilityFeaturesFragment.onFabClick!=null) {
-                UtilityFeaturesFragment.onFabClick.onClose();
+            if (HomeFragment.onFabClick!=null) {
+                HomeFragment.onFabClick.onClose();
             }
             stopSelf();
         }
+    }
+
+    private void collapseView() {
+        llExpandView.setVisibility(View.GONE);
+        etSearchQuery.setVisibility(View.GONE);
+
+    }
+
+    @SuppressLint("WrongConstant")
+    private void captureScreen() {
+       Display display = mWindowManager.getDefaultDisplay();
+        final DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        Point size = new Point();
+        display.getRealSize(size);
+        final int mWidth = size.x;
+        final int mHeight = size.y;
+        int mDensity = metrics.densityDpi;
+
+        final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
+
+        final Handler handler = new Handler();
+
+        int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
+        mProjection.createVirtualDisplay("screen-mirror", mWidth, mHeight, mDensity, flags, mImageReader.getSurface(), null, handler);
+
+        mImageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
+            @Override
+            public void onImageAvailable(ImageReader reader) {
+                reader.setOnImageAvailableListener(null, handler);
+                Image image = reader.acquireLatestImage();
+
+                final Image.Plane[] planes = image.getPlanes();
+                final ByteBuffer buffer = planes[0].getBuffer();
+
+                int pixelStride = planes[0].getPixelStride();
+                int rowStride = planes[0].getRowStride();
+                int rowPadding = rowStride - pixelStride * metrics.widthPixels;
+                // create bitmap
+                Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
+                bmp.copyPixelsFromBuffer(buffer);
+
+                image.close();
+                reader.close();
+
+                Bitmap realSizeBitmap = Bitmap.createBitmap(bmp, 0, 0, metrics.widthPixels, bmp.getHeight());
+                bmp.recycle();
+                storeImage(realSizeBitmap);
+                /* do something with [realSizeBitmap] */
+            }
+        }, handler);
     }
 
     public interface OnFabClick {
@@ -377,7 +435,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     }
     public static void setAlphaAnimation(View v) {
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(v, "alpha",  1f, .8f);
-        fadeOut.setDuration(200);
+        fadeOut.setDuration(100);
         ObjectAnimator fadeIn = ObjectAnimator.ofFloat(v, "alpha", .8f, 1f);
         fadeIn.setDuration(100);
 
@@ -454,4 +512,95 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
         return mediaFile;
     }
+    private void startForegroundService() {
+        Log.d("TAG_FOREGROUND_SERVICE", "Start foreground service.");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel("my_service", "My Background Service");
+        } else {
+
+            // Create notification default intent.
+            Intent intent = new Intent();
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            // Create notification builder.
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+            // Make notification show big text.
+            NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+            bigTextStyle.setBigContentTitle("Call Recording implemented by foreground service.");
+            bigTextStyle.bigText("Android foreground service is a android service which can run in foreground always, it can be controlled by user via notification.");
+            // Set big text style.
+            builder.setStyle(bigTextStyle);
+
+            builder.setWhen(System.currentTimeMillis());
+            builder.setSmallIcon(R.drawable.login_logo);
+            Bitmap largeIconBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.login_logo);
+            builder.setLargeIcon(largeIconBitmap);
+            // Make the notification max priority.
+            builder.setPriority(Notification.PRIORITY_MAX);
+            // Make head-up notification.
+            builder.setFullScreenIntent(pendingIntent, true);
+
+       /*     // Add Play button intent in notification.
+            Intent playIntent = new Intent(this, ForgroundService.class);
+            playIntent.setAction(ACTION_PLAY);
+            PendingIntent pendingPlayIntent = PendingIntent.getService(this, 0, playIntent, 0);
+            NotificationCompat.Action playAction = new NotificationCompat.Action(android.R.drawable.ic_media_play, "Play", pendingPlayIntent);
+            builder.addAction(playAction);
+
+            // Add Pause button intent in notification.
+            Intent pauseIntent = new Intent(this, ForgroundService.class);
+            pauseIntent.setAction(ACTION_PAUSE);
+            PendingIntent pendingPrevIntent = PendingIntent.getService(this, 0, pauseIntent, 0);
+            NotificationCompat.Action prevAction = new NotificationCompat.Action(android.R.drawable.ic_media_pause, "Pause", pendingPrevIntent);
+            builder.addAction(prevAction);*/
+
+            // Build the notification.
+            Notification notification = builder.build();
+
+            // Start foreground service.
+            startForeground(1, notification);
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void createNotificationChannel(String channelId, String channelName) {
+        Intent resultIntent = new Intent(this, SplashScreen.class);
+// Create the TaskStackBuilder and add the intent, which inflates the back stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationChannel chan = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
+        chan.setLightColor(Color.BLUE);
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId);
+        Notification notification = notificationBuilder.setOngoing(true)
+                .setSmallIcon(R.drawable.login_logo)
+                .setContentTitle("App is running in background")
+                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setContentIntent(resultPendingIntent) //intent
+                .build();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, notificationBuilder.build());
+        startForeground(1, notification);
+    }
+
+
+    private void stopForegroundService() {
+        Log.d("TAG_FOREGROUND_SERVICE", "Stop foreground service.");
+
+        // Stop foreground service and remove the notification.
+        stopForeground(true);
+
+        // Stop the foreground service.
+        stopSelf();
+    }
+
 }

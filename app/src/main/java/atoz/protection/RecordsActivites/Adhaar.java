@@ -373,7 +373,7 @@ public class Adhaar extends AppCompatActivity implements SendDailog.SendDialogLi
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
         btnSend.setOnClickListener(new View.OnClickListener() {

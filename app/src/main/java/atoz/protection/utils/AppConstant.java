@@ -67,4 +67,7 @@ public interface AppConstant {
 
 
     int CHOOSE_PDF_REQUESTCODE = 666;
+    int SCREEN_SHOT = 1000;
+    String CAPTURE_SCREEN = "capture_screen";
+    String MEDIAPROJECTION ="media_projection_object";
 }

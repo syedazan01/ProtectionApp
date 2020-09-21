@@ -312,7 +312,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
         btnSend.setOnClickListener(new View.OnClickListener() {

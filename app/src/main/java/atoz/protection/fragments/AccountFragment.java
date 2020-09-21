@@ -475,14 +475,19 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
                                     }
                                 });
                     }
+                    else
+                    {
+                        pd.dismiss();
+                    }
                 } catch (Exception e) {
+                    pd.dismiss();
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
     }

@@ -39,7 +39,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 
-public class HomeFragment extends Fragment implements View.OnClickListener, ServiceAdapter.RecyclerViewOnClick, CompoundButton.OnCheckedChangeListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, ServiceAdapter.RecyclerViewOnClick, CompoundButton.OnCheckedChangeListener, FloatingWindowService.OnFabClick {
     //    private CardView cardLauncherWidget;
     private Switch swEnableLauncher;
     private ImageView ivBluelightFilter;
@@ -47,6 +47,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
     private RecyclerView rvService;
     private CardView cardAppLock;
     private List<ServiceBean> serviceBeanList = new ArrayList<>();
+    public static FloatingWindowService.OnFabClick onFabClick = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +69,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        onFabClick = this;
         swEnableLauncher.setChecked(PrefManager.getBoolean(AppConstant.OVERLAY));
         initData();
         setupRv();
@@ -182,5 +184,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
 
         }
         PrefManager.putBoolean(AppConstant.OVERLAY, b);
+    }
+
+    @Override
+    public void onClose() {
+        swEnableLauncher.setChecked(PrefManager.getBoolean(AppConstant.OVERLAY));
     }
 }

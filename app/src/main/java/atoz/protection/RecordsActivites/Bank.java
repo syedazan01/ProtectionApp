@@ -315,7 +315,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
         btnSend.setOnClickListener(new View.OnClickListener() {

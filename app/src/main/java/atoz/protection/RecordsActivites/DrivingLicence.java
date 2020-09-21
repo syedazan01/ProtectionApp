@@ -397,7 +397,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
         btnSend.setOnClickListener(new View.OnClickListener() {

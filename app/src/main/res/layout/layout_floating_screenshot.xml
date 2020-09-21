@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<SurfaceView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/msurfaceView"
     android:background="@android:color/transparent"
     >
-    <FrameLayout
+    <!--<FrameLayout
         android:visibility="gone"
         android:id="@+id/screen_frame"
         android:background="@drawable/frame_border"
@@ -18,5 +19,5 @@
         android:scaleType="fitXY"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    </FrameLayout>
-</FrameLayout>
+    </FrameLayout>-->
+</SurfaceView>

@@ -1,8 +1,11 @@
 package atoz.protection.activites;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.graphics.PorterDuff;
-import android.net.Uri;
+import android.media.projection.MediaProjection;
+import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +30,7 @@ import atoz.protection.fragments.HomeFragment;
 import atoz.protection.fragments.PersonalRecordFragment;
 import atoz.protection.fragments.SosFragment;
 import atoz.protection.services.FloatingWindowService;
+import atoz.protection.services.ForgroundService;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
@@ -37,12 +41,9 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.gson.Gson;
 import com.luseen.spacenavigation.SpaceNavigationView;
 
 import theredspy15.ltecleanerfoss.MainActivity;
@@ -65,12 +66,16 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
     private FloatingActionButton fabCleaner;
     AdView adView;
+    private MediaProjectionManager mProjectionManager;
+    public static MediaProjection  mProjection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.changeColor(this, "#00000000", true);
         setContentView(R.layout.activity_home_page);
+        mProjectionManager = (MediaProjectionManager) getSystemService (Context.MEDIA_PROJECTION_SERVICE);
+
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -146,6 +151,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void initActions() {
+        if(!Utils.isMyFloatingServiceRunning(this))
+            startService(new Intent(this, FloatingWindowService.class));
+        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), AppConstant.SCREEN_SHOT);
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -325,41 +333,6 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void setUpToolBar() {
-//        drawerLayout = findViewById(R.id.drawerlayout);
-        toolbar = findViewById(R.id.toolbar1);
-        setSupportActionBar(toolbar);
-//        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.app_name,R.string.app_name);
-//        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-//        actionBarDrawerToggle.syncState();
-
-    }
-
-    /*@Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Fragment selectedFragment = null;
-        switch (menuItem.getItemId()){
-            case R.id.home:
-                selectedFragment = new HomeFragment();
-                break;
-            case R.id.personalRecords:
-                selectedFragment = new PersonalRecordFragment();
-                break;
-            case R.id.applock:
-                selectedFragment = new AppLockFragment();
-                break;
-                case R.id.account:
-                    selectedFragment = new AccountFragment();
-                    break;
-            default:
-                return false;
-        }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,selectedFragment).commit();
-        return true;
-    }*/
-
-
     @Override
     public void onBackPressed() {
         if (backLong + 2000 >= System.currentTimeMillis()) {
@@ -375,11 +348,21 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             if (fragment instanceof AccountFragment) {
                 fragment.onActivityResult(requestCode, resultCode, data);
                 break;
             }
+        }
+        if (resultCode == RESULT_OK && requestCode==AppConstant.SCREEN_SHOT) {
+            PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN,true);
+             mProjection = mProjectionManager.getMediaProjection(resultCode, data);
+            /*String jsonString=new Gson().toJson(mProjection);
+            PrefManager.putString(AppConstant.MEDIAPROJECTION,jsonString);*/
+        }else{
+            PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN,false);
+            Toast.makeText(this, "Screen Cast Permission Denied", Toast.LENGTH_SHORT).show();
         }
     }
 

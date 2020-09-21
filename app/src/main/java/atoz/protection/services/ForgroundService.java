@@ -21,6 +21,7 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -46,6 +47,7 @@ public class ForgroundService extends Service {
     private FrameLayout screen_frame;
     private ImageView ivScreenShot;
     private WindowManager mWindowManager;
+    private SurfaceView msurfaceView;
     private View mFloatingWidget;
     private static final String TAG_FOREGROUND_SERVICE = "FOREGROUND_SERVICE";
 
@@ -74,6 +76,7 @@ public class ForgroundService extends Service {
             setTheme(R.style.AppTheme_Base_Light);
 
         mFloatingWidget = LayoutInflater.from(this).inflate(R.layout.layout_floating_screenshot, null);
+
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, Build.VERSION.SDK_INT > Build.VERSION_CODES.O
                 ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                 : WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
@@ -86,8 +89,9 @@ public class ForgroundService extends Service {
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mFloatingWidget, params);
         Log.e(TAG_FOREGROUND_SERVICE, "My foreground service onCreate().");
-      screen_frame=mFloatingWidget.findViewById(R.id.screen_frame);
-      ivScreenShot=mFloatingWidget.findViewById(R.id.ivScreenShot);
+//      screen_frame=mFloatingWidget.findViewById(R.id.screen_frame);
+//      ivScreenShot=mFloatingWidget.findViewById(R.id.ivScreenShot);
+        msurfaceView=mFloatingWidget.findViewById(R.id.msurfaceView);
     }
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

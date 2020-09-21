@@ -260,14 +260,14 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
 
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
-
+                        pd.dismiss();
                     }
                 });
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                pd.dismiss();
             }
         });
 
