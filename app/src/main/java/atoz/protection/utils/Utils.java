@@ -83,6 +83,7 @@ import atoz.protection.model.SpamBean;
 import atoz.protection.model.StudentIdBean;
 import atoz.protection.model.UserBean;
 import atoz.protection.model.VoteridBean;
+import atoz.protection.model.WalletHistory;
 import atoz.protection.room.AppDatabase;
 import atoz.protection.services.FloatingWindowService;
 import atoz.protection.utils.views.RoundView;
@@ -346,12 +347,18 @@ public class Utils {
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.USER_DETAIL + "/");
         reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userBean);
     }
-
-    public static void storeMyWallet(UserBean userBean) {
+    public static void storeRewardedUserDetailsToRTD(UserBean userBean) {
         Firebase reference;
 
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.USER_DETAIL + "/");
-        reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).setValue(userBean);
+        reference.child(userBean.getMobile()).setValue(userBean);
+    }
+
+    public static void storeWalletHistory(WalletHistory walletHistory) {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.WALLET_HISTORY + "/");
+        reference.push().setValue(walletHistory);
     }
 
     public static void storeFileShareToRTD(FileShareBean fileShareBean) {
@@ -372,6 +379,12 @@ public class Utils {
         Firebase reference;
 
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.USER_DETAIL + "/");
+        return reference;
+    }
+    public static Firebase getMyWalletHistoryReference() {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.WALLET_HISTORY + "/");
         return reference;
     }
 

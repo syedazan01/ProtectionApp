@@ -2,7 +2,6 @@ package atoz.protection.activites;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ServiceInfo;
 import android.graphics.PorterDuff;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
@@ -29,11 +28,17 @@ import atoz.protection.fragments.AccountFragment;
 import atoz.protection.fragments.HomeFragment;
 import atoz.protection.fragments.PersonalRecordFragment;
 import atoz.protection.fragments.SosFragment;
+import atoz.protection.model.UserBean;
+import atoz.protection.model.WalletHistory;
 import atoz.protection.services.FloatingWindowService;
-import atoz.protection.services.ForgroundService;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -43,16 +48,22 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
 import com.luseen.spacenavigation.SpaceNavigationView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import theredspy15.ltecleanerfoss.MainActivity;
 
 import static atoz.protection.utils.AppConstant.ISBLUELIGHT;
 
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
+    enum FirebaseEnum{
+        FIRSTTIME,SECONDTIME
+    }
     //    DrawerLayout drawerLayout;
     Toolbar toolbar;
+    FirebaseEnum firebaseEnum=FirebaseEnum.FIRSTTIME;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
     // BottomNavigationView bottomNavigationView;
@@ -198,6 +209,37 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void initViews() {
+        if (PrefManager.getBoolean(AppConstant.ISREFERED))
+        {
+            Firebase reference=Utils.getUserReference();
+            reference.child(PrefManager.getString(AppConstant.INVITED_BY)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (firebaseEnum==FirebaseEnum.FIRSTTIME) {
+                        firebaseEnum=FirebaseEnum.SECONDTIME;
+                        UserBean rewardedUser=dataSnapshot.getValue(UserBean.class);
+//                        reference.addValueEventListener(null);
+                        rewardedUser.setWalletAmount(rewardedUser.getWalletAmount()+20);
+                        Log.e("REWARD>>>",rewardedUser.getWalletAmount()+"");
+
+                        Utils.storeRewardedUserDetailsToRTD(rewardedUser);
+                        WalletHistory walletHistory=new WalletHistory();
+                        walletHistory.setWalletmobile(PrefManager.getString(AppConstant.INVITED_BY));
+                        walletHistory.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                        walletHistory.setAmount(20);
+                        walletHistory.setStatus(AppConstant.WALLET_STATUS_REFERED);
+                        walletHistory.setCreated(new SimpleDateFormat("dd MMM yyyy").format(new Date()));
+                        Utils.storeWalletHistory(walletHistory);
+                    }
+
+                }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+            Utils.showCongratsDialog(this);
+        }
 
         adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();

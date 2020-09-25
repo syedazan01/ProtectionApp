@@ -3,7 +3,6 @@ package atoz.protection.activites;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -22,17 +21,16 @@ import com.chaos.view.PinView;
 
 import atoz.protection.R;
 import atoz.protection.model.UserBean;
+import atoz.protection.model.WalletHistory;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
-import okhttp3.internal.Util;
 
 import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
@@ -40,12 +38,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class Otp extends AppCompatActivity {
+public class Otp extends AppCompatActivity implements ValueEventListener {
+
+    Firebase reference;
     Button otpsubmit;
     TextView tvSentMsg, tvToolbarTitle, tvResend;
     ImageView ivBack;
@@ -55,41 +55,16 @@ public class Otp extends AppCompatActivity {
     PhoneAuthProvider.ForceResendingToken resendToken;
     FirebaseAuth mAuth;
     Activity activity = Otp.this;
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
-        handleDeepLink();
         initViews();
         initActions();
     }
 
-    private void handleDeepLink() {
-        FirebaseDynamicLinks.getInstance()
-                .getDynamicLink(getIntent())
-                .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
-                    @Override
-                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
-                        Uri deepLink = null;
-                        if (pendingDynamicLinkData != null) {
-                            deepLink = pendingDynamicLinkData.getLink();
-                            String id = deepLink.getQueryParameter(AppConstant.INVITED_BY);
-                            Log.e("LINK>>>", deepLink.getPath());
-                            Log.e("LINK>>>", "" + id);
-                            if (id != null) {
-                                PrefManager.putString(AppConstant.INVITED_BY, id);
-                            }
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("LINK>>>", "getDynamicLink:onFailure", e);
-                    }
-                });
-    }
 
     private void initActions() {
         otp_View.addTextChangedListener(new TextWatcher() {
@@ -101,6 +76,7 @@ public class Otp extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (otp_View.getText().toString().length() == 6) {
+                    Utils.hideKeyboardFrom(activity,otp_View);
                     otpsubmit.setBackground(Utils.getThemeGradient(50F));
                 } else {
                     Utils.makeButton(otpsubmit, getResources().getColor(R.color.grey), 50F);
@@ -129,8 +105,15 @@ public class Otp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!TextUtils.isEmpty(otp_View.getText().toString())) {
-                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verficationId, otp_View.getText().toString());
-                    signInWithPhoneAuthCredential(credential);
+                    PhoneAuthCredential credential = null;
+                    try {
+                        credential = PhoneAuthProvider.getCredential(verficationId, otp_View.getText().toString());
+
+                        signInWithPhoneAuthCredential(credential);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Utils.showToast(activity,"Try Again",AppConstant.errorColor);
+                    }
 
                 } else {
                     Utils.showToast(activity, "Invalid Otp", AppConstant.errorColor);
@@ -180,39 +163,14 @@ public class Otp extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            final ProgressDialog pd = Utils.getProgressDialog(activity);
+
                             pd.show();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Otp Screen>>>", "signInWithCredential:success");
                             PrefManager.putString(AppConstant.USER_MOBILE, "+91" + getIntent().getStringExtra(AppConstant.LOGIN_MOBILE));
                             PrefManager.putBoolean(AppConstant.ISLOGGEDIN, true);
-                            Utils.getUserReference().child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    pd.dismiss();
-                                    UserBean userBean = dataSnapshot.getValue(UserBean.class);
 
-                                    if (userBean == null)
-                                        userBean = new UserBean();
-                                    PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, userBean.isSubscribe());
-                                    userBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
-                                    if (!PrefManager.getString(AppConstant.INVITED_BY).isEmpty() && (userBean.getReferBy() != null && userBean.getReferBy().isEmpty()) {
-                                        PrefManager.putBoolean(AppConstant.ISREFERED, true);
-                                        userBean.setReferBy(PrefManager.getString(AppConstant.INVITED_BY));
-                                        userBean.setWalletAmount(userBean.getWalletAmount() + 10F);
-                                    }
-                                    userBean.setFcmToken(PrefManager.getString(AppConstant.FCMTOKEN));
-                                    Utils.storeUserDetailsToRTD(userBean);
-                                    finishAffinity();
-                                    Intent intent = new Intent(activity, HomePage.class);
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void onCancelled(FirebaseError firebaseError) {
-                                    pd.dismiss();
-                                }
-                            });
+                            reference.child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(Otp.this);
 
 //                            FirebaseUser user = task.getResult().getUser();
                             // ...
@@ -229,6 +187,8 @@ public class Otp extends AppCompatActivity {
     }
 
     private void initViews() {
+        reference = Utils.getUserReference();
+        pd = Utils.getProgressDialog(activity);
         otpsubmit = findViewById(R.id.otpsubmitbtn);
         tvSentMsg = findViewById(R.id.tvSentMsg);
         ivBack = findViewById(R.id.ivBack);
@@ -254,5 +214,40 @@ public class Otp extends AppCompatActivity {
                 tvResend.setText("Resend");
             }
         }.start();
+    }
+
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        pd.dismiss();
+        UserBean userBean=dataSnapshot.getValue(UserBean.class);
+        if (userBean==null) {
+            userBean=new UserBean();
+            if (!PrefManager.getString(AppConstant.INVITED_BY).isEmpty()) {
+                PrefManager.putBoolean(AppConstant.ISREFERED, true);
+                userBean.setReferBy(PrefManager.getString(AppConstant.INVITED_BY));
+                userBean.setWalletAmount(userBean.getWalletAmount() + 10);
+                WalletHistory walletHistory=new WalletHistory();
+                walletHistory.setWalletmobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                walletHistory.setMobile(PrefManager.getString(AppConstant.INVITED_BY));
+                walletHistory.setAmount(10);
+                walletHistory.setStatus(AppConstant.WALLET_STATUS_RECIEVED);
+                walletHistory.setCreated(new SimpleDateFormat("dd MMM yyyy").format(new Date()));
+                Utils.storeWalletHistory(walletHistory);
+            }
+        }
+        PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, userBean.isSubscribe());
+        userBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
+
+        userBean.setFcmToken(PrefManager.getString(AppConstant.FCMTOKEN));
+        Utils.storeUserDetailsToRTD(userBean);
+        reference.onDisconnect();
+        finishAffinity();
+        Intent intent = new Intent(activity, HomePage.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+        pd.dismiss();
     }
 }

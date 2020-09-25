@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -30,10 +31,15 @@ import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import static atoz.protection.utils.AppConstant.REQUEST_OVERLAY_PERMISSION;
 
 public class SplashScreen extends AppCompatActivity {
+
     private static final int REQUEST_CODE_SCREEN_SHOT = 1001;
     private MediaProjectionManager mpManager;
     private static final int APP_PERMISSION_REQUEST = 212;
@@ -48,6 +54,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Utils.changeColor(this, "#00000000", true);
         mContext = this;
+        handleDeepLink();
         setContentView(R.layout.splash_screen_layout);
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitalId));
@@ -155,5 +162,30 @@ public class SplashScreen extends AppCompatActivity {
         } else {
             return true;
         }
+    }
+    private void handleDeepLink() {
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                            String id = deepLink.getQueryParameter(AppConstant.INVITED_BY);
+                            Log.e("LINK>>>", deepLink.getPath());
+                            Log.e("LINK>>>", "" + id);
+                            if (id != null) {
+                                PrefManager.putString(AppConstant.INVITED_BY, "+"+id.trim());
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("LINK>>>", "getDynamicLink:onFailure", e);
+                    }
+                });
     }
 }

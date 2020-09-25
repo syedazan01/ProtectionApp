@@ -2,14 +2,14 @@ package atoz.protection.model;
 
 public class UserBean {
     String mobile, profilePic, fcmToken, referBy;
-    float walletAmount;
+    int walletAmount;
     boolean isSubscribe, isRefer;
 
-    public float getWalletAmount() {
+    public int getWalletAmount() {
         return walletAmount;
     }
 
-    public void setWalletAmount(float walletAmount) {
+    public void setWalletAmount(int walletAmount) {
         this.walletAmount = walletAmount;
     }
 

@@ -44,6 +44,7 @@ public interface AppConstant {
     String PDF_DOC = "Pdf";
     String MEDIA_DOC = "Media Docs";
     String SOS = "Sos";
+    String WALLET_HISTORY = "Wallet History";
 
     //Runtime Permissions Constant
     int REQUEST_OVERLAY_PERMISSION = 900;
@@ -70,4 +71,9 @@ public interface AppConstant {
     int SCREEN_SHOT = 1000;
     String CAPTURE_SCREEN = "capture_screen";
     String MEDIAPROJECTION ="media_projection_object";
+
+    //Wallet History Status
+    String WALLET_STATUS_RECIEVED="Recieved";
+    String WALLET_STATUS_WITHDRAWAL="Withdrawal";
+    String WALLET_STATUS_REFERED="By Refered";
 }

@@ -136,6 +136,16 @@
         <activity android:name="atoz.protection.activites.HomePage"
             android:screenOrientation="portrait"
             >
+
+        </activity>
+        <activity android:name="atoz.protection.activites.SplashScreen"
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -145,15 +155,6 @@
                 <data
                     android:host="a2zprotection.page.link"
                     android:scheme="https" />
-            </intent-filter>
-        </activity>
-        <activity android:name="atoz.protection.activites.SplashScreen"
-            android:screenOrientation="portrait"
-            >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
