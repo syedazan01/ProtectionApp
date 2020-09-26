@@ -1,9 +1,33 @@
 package atoz.protection.model;
 
 public class UserBean {
-    String mobile, profilePic, fcmToken, referBy;
-    int walletAmount;
+    String mobile, profilePic, fcmToken, referBy,schemeName,planPurchaseDate;
+    int walletAmount,planPrice;
     boolean isSubscribe, isRefer;
+
+    public String getSchemeName() {
+        return schemeName;
+    }
+
+    public void setSchemeName(String schemeName) {
+        this.schemeName = schemeName;
+    }
+
+    public String getPlanPurchaseDate() {
+        return planPurchaseDate;
+    }
+
+    public void setPlanPurchaseDate(String planPurchaseDate) {
+        this.planPurchaseDate = planPurchaseDate;
+    }
+
+    public int getPlanPrice() {
+        return planPrice;
+    }
+
+    public void setPlanPrice(int planPrice) {
+        this.planPrice = planPrice;
+    }
 
     public int getWalletAmount() {
         return walletAmount;

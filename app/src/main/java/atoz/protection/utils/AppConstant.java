@@ -45,6 +45,7 @@ public interface AppConstant {
     String MEDIA_DOC = "Media Docs";
     String SOS = "Sos";
     String WALLET_HISTORY = "Wallet History";
+    String PAY_REQUEST = "WITHDRAWAL REQUEST";
 
     //Runtime Permissions Constant
     int REQUEST_OVERLAY_PERMISSION = 900;
@@ -74,6 +75,8 @@ public interface AppConstant {
 
     //Wallet History Status
     String WALLET_STATUS_RECIEVED="Recieved";
-    String WALLET_STATUS_WITHDRAWAL="Withdrawal";
+    String WALLET_STATUS_WITHDRAWAL="Withdrawal Request";
     String WALLET_STATUS_REFERED="By Refered";
+    String WORK_TAG = "Subscribe";
+    int UPI_PAYMENT = 41000;
 }

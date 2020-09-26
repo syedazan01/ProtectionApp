@@ -30,9 +30,7 @@ import atoz.protection.activites.SettingActivity;
 import atoz.protection.activites.SosActivity;
 import atoz.protection.activites.SubscriptionPlan;
 import atoz.protection.activites.Wallet;
-import atoz.protection.adapters.AdapterSubscription;
 import atoz.protection.adapters.AdapterUsers;
-import atoz.protection.billing.GooglePaySetup;
 import atoz.protection.model.FetchNotification;
 import atoz.protection.model.PlansBean;
 import atoz.protection.model.UserBean;
@@ -43,19 +41,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.appinvite.AppInvite;
-import com.google.android.gms.appinvite.AppInviteInvitationResult;
-import com.google.android.gms.appinvite.AppInviteReferral;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wallet.AutoResolveHelper;
-import com.google.android.gms.wallet.PaymentData;
-import com.google.android.gms.wallet.PaymentDataRequest;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.storage.UploadTask;
@@ -72,10 +59,9 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AccountFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, AdapterUsers.RecyclerViewListener, AdapterSubscription.RecyclerViewClickListener {
+public class AccountFragment extends Fragment{
     private static final int LOAD_PAYMENT_DATA_REQUEST_CODE = 300;
     private static final String DEEP_LINK_URL = "https://a2zprotection.page.link/Go1D";
-    GooglePaySetup googlePaySetup;
     UploadTask mUploadTask;
     List<FetchNotification> fetchNotifications = new ArrayList<>();
     private RelativeLayout rltSubscription, rltInvite, rltLogout, rltSos, rltWallet, rltSetting;
@@ -122,21 +108,6 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
             mActivity.setTheme(R.style.AppTheme_Base_Night);
         else*/
             mActivity.setTheme(R.style.AppTheme_Base_Light);
-        googlePaySetup = new GooglePaySetup(getContext());
-        try {
-            Task<Boolean> task = googlePaySetup.readyToPay();
-            task.addOnCompleteListener(new OnCompleteListener<Boolean>() {
-                @Override
-                public void onComplete(@NonNull Task<Boolean> task) {
-                    if (task.isSuccessful()) {
-//Utils.showToast(getActivity(),"Success",AppConstant.succeedColor);
-                    }
-                }
-            });
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         deepLink = generateContentLink().toString();
         tvMobile.setText(PrefManager.getString(AppConstant.USER_MOBILE));
         msgDialog = Utils.getMsgDialog(mActivity);
@@ -310,7 +281,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         });
     }
 
-    private void openBottomSheet() {
+    /*private void openBottomSheet() {
         ProgressDialog pd = Utils.getProgressDialog(getActivity());
         pd.show();
         final List<PlansBean> plansBeans = new ArrayList<>();
@@ -335,7 +306,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
             }
         });
         bottomSheetDialog.show();
-    }
+    }*/
 
     public static Uri generateContentLink() {
         Uri baseUrl = Uri.parse("https://www.protectionapp.com/?currentPage=1");
@@ -369,25 +340,6 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         return link.getUri();
     }
 
-    private void generateDeepLink() {
-        GoogleApiClient googleApiClient = Utils.createGoogleClient((FragmentActivity) mActivity, this);
-        AppInvite.AppInviteApi.getInvitation(googleApiClient, mActivity, true)
-                .setResultCallback(
-                        new ResultCallback<AppInviteInvitationResult>() {
-                            @Override
-                            public void onResult(@NonNull AppInviteInvitationResult result) {
-                                if (result.getStatus().isSuccess()) {
-                                    Intent intent = result.getInvitationIntent();
-                                    deepLink = AppInviteReferral.getDeepLink(intent);
-                                    // Handloe the deep link
-                                } else {
-                                    Log.e("Account", "Oops, looks like there was no deep link found!");
-                                }
-                            }
-                        });
-
-    }
-
     private void shareDeepLink(String deepLink) {
         //Uri imageUri = Uri.parse("android.resource://" + getPackageName() + "/drawable/" + "ic_refer");
 /*        Bitmap bitmap= BitmapFactory.decodeResource(getResources(),R.drawable.ic_refer);
@@ -414,10 +366,6 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
         Log.e("DEEPLINK>>>",deepLink);
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 
     private void buildSignoutDialog() {
         Utils.showSignOutDialog(getActivity());
@@ -495,26 +443,6 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Utils.showToast(mActivity, resultCode + "", AppConstant.errorColor);
-        if (resultCode == Activity.RESULT_OK && requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE) {
-            PaymentData paymentData = PaymentData.getFromIntent(data);
-//                String json = data.toJSon()
-            try {
-                JSONObject paymentMethodData = new JSONObject(paymentData.toJson())
-                        .getJSONObject("paymentMethodData");
-                String paymentToken = paymentMethodData
-                        .getJSONObject("tokenizationData")
-                        .getString("token");
-                Log.e("payment??>>", paymentToken);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return;
-        } else if (resultCode == 1 && requestCode == LOAD_PAYMENT_DATA_REQUEST_CODE) {
-            Status status = AutoResolveHelper.getStatusFromIntent(data);
-            Log.e("dfvbdfbdfbn", status.getStatusMessage());
-            return;
-        }
         if (resultCode == Activity.RESULT_OK) {
             //Image Uri will not be null for RESULT_OK
             final Uri fileUri = data.getData();
@@ -549,7 +477,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
 
     }
 
-    @Override
+   /* @Override
     public void onCheck(int position, UserBean userBean, boolean isChecked) {
         FetchNotification fetchNotification = new FetchNotification();
         fetchNotification.setMsg(etMsg.getText().toString());
@@ -566,28 +494,7 @@ public class AccountFragment extends Fragment implements GoogleApiClient.OnConne
             tokenList.remove(userBean.getFcmToken());
         }
 
-    }
+    }*/
 
-    @Override
-    public void onSelectPlan(PlansBean plansBean) {
-        try {
-            final JSONObject paymentRequestJson = googlePaySetup.baseConfigurationJson();
-            paymentRequestJson.put("transactionInfo", new JSONObject()
-                    .put("totalPrice", plansBean.getPlanPrice().replace("\u20B9", ""))
-                    .put("totalPriceStatus", "FINAL")
-                    .put("currencyCode", "INR")
-            );
-            paymentRequestJson.put("merchantInfo", new JSONObject()
-                    .put("merchantId", "01234567890123456789")
-                    .put("merchantName", "Example Merchant")
-
-            );
-            final PaymentDataRequest request = PaymentDataRequest.fromJson(paymentRequestJson.toString());
-            AutoResolveHelper.resolveTask(googlePaySetup.paymentsClient.loadPaymentData(request), getActivity(), LOAD_PAYMENT_DATA_REQUEST_CODE
-            );
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

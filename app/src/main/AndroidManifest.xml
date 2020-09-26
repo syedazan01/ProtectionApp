@@ -3,22 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="atoz.protection">
 
-        <uses-permission android:name="android.permission.CALL_PHONE" />
-        <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-        <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-        <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-        <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-<!--    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />-->
-    <!--<uses-permission
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" /> -->
+    <!--
+<uses-permission
         android:name="android.permission.CLEAR_APP_CACHE"
-        tools:ignore="ProtectedPermissions" />-->
+        tools:ignore="ProtectedPermissions" />
+    -->
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -29,7 +30,7 @@
         android:required="false" />
 
     <application
-        android:name="atoz.protection.Protection"
+        android:name=".Protection"
         android:allowBackup="true"
         android:icon="@mipmap/protectionapp"
         android:label="@string/app_name"
@@ -39,108 +40,149 @@
         android:theme="@style/AppTheme.Base.Light"
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme,android:roundIcon">
-        <activity android:name="atoz.protection.activites.SpamActivity"
-            android:screenOrientation="portrait"
-            >
+        <activity android:name=".activites.WithdrawalRequest"></activity>
+        <activity
+            android:name=".activites.SpamActivity"
+            android:screenOrientation="portrait">
             <intent-filter android:priority="1000">
-            <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </activity>
-        <activity android:name="atoz.protection.activites.SubscriptionPlan"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name="atoz.protection.activites.CallRecordingList"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.Wallet"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.App_Intro2"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.Rate_us"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.Privacy_poly"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.Terms_Condition"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.About_us"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.App_intro"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.SettingActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.SosActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.PersonalRecords"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.DateOfBirth"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.PassportFile"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.Passport"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.StudentIDFile"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.VoterIDFile"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.ATMFile"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.BankFile"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.DrivingLicenseFile"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.StudentID"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.PanFile"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.AdhaarFile"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.DocumentList"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.cameraDetector.OutsideTips"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.cameraDetector.Changingroom"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.cameraDetector.BathroomTips"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.cameraDetector.BedroomTips"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.cameraDetector.CamDetector_tips"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.cameraDetector.CameraDectectorByRM"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.Payment_premiumUser"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.KillNotification"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.Otp"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.VoterID"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.ATM"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.Bank"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.DrivingLicence"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.PAN"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.RecordsActivites.Adhaar"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.CameraDetector"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.FileShare"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.CacheCleaner"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.CallRecorder"
-            android:screenOrientation="portrait"/>
-        <activity android:name="atoz.protection.activites.HomePage"
-            android:screenOrientation="portrait"
-            >
-
-        </activity>
-        <activity android:name="atoz.protection.activites.SplashScreen"
-            android:screenOrientation="portrait"
-            >
+        <activity
+            android:name=".activites.SubscriptionPlan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.CallRecordingList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.Wallet"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.App_Intro2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.Rate_us"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.Privacy_poly"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.Terms_Condition"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.About_us"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.App_intro"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.SosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.PersonalRecords"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.DateOfBirth"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.PassportFile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.Passport"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.StudentIDFile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.VoterIDFile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.ATMFile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.BankFile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.DrivingLicenseFile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.StudentID"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.PanFile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.AdhaarFile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.DocumentList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cameraDetector.OutsideTips"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cameraDetector.Changingroom"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cameraDetector.BathroomTips"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cameraDetector.BedroomTips"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cameraDetector.CamDetector_tips"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cameraDetector.CameraDectectorByRM"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.Payment_premiumUser"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.KillNotification"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.Otp"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.VoterID"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.ATM"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.Bank"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.DrivingLicence"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.PAN"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RecordsActivites.Adhaar"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.CameraDetector"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.FileShare"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.CacheCleaner"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.CallRecorder"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.HomePage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activites.SplashScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -158,10 +200,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="atoz.protection.activites.LogIn"
-            android:screenOrientation="portrait"
+            android:name=".activites.LogIn"
             android:label="LogIn"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -180,25 +222,35 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <service android:name="atoz.protection.services.RecordingService" /> <!-- <service android:name=".hoverwindow.HoverService" /> -->
-       <!-- <service
+        <receiver android:name=".receivers.NetworkConnectionReciever">
+            <intent-filter>
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.RecordingService" /> <!-- <service android:name=".hoverwindow.HoverService" /> -->
+        <!--
+ <service
             android:name="atoz.protection.services.ForgroundService"
             android:enabled="true"
-            android:exported="true" />-->
+            android:exported="true" />
+        -->
         <service
-            android:name="atoz.protection.services.BlockListener"
+            android:name=".services.BlockListener"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
         <service
-            android:name="atoz.protection.services.FloatingWindowService"
+            android:name=".services.FloatingWindowService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="mediaProjection"
-            />
-        <service android:name="atoz.protection.services.NotificationsMessagingService"
+            android:foregroundServiceType="mediaProjection" />
+        <service
+            android:name=".services.NotificationsMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -207,7 +259,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/app_id"/>
+            android:value="@string/app_id" />
     </application>
 
 </manifest>

@@ -35,8 +35,8 @@ public class AdapterSubscription extends RecyclerView.Adapter<AdapterSubscriptio
     @Override
     public void onBindViewHolder(@NonNull AdapterSubscription.SubscribeHolder holder, int position) {
         PlansBean plansBean = plansBeans.get(position);
-        holder.tvPrice.setText(plansBean.getPlanPrice());
-        holder.tvPeriod.setText(plansBean.getPlan_duration());
+        holder.tvPrice.setText("\u20B9 "+plansBean.getPlanPrice());
+        holder.tvPeriod.setText("For "+plansBean.getPlan_duration()+" Months");
         holder.tvScheme.setText(plansBean.getPlan_name());
     }
 

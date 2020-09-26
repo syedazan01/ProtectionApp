@@ -21,6 +21,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import atoz.protection.R;
 import atoz.protection.RecordsActivites.PersonalRecords;
@@ -33,6 +38,7 @@ import atoz.protection.model.WalletHistory;
 import atoz.protection.services.FloatingWindowService;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
+import atoz.protection.utils.SubscriptionCheckService;
 import atoz.protection.utils.Utils;
 
 import com.firebase.client.DataSnapshot;
@@ -52,18 +58,21 @@ import com.luseen.spacenavigation.SpaceNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import theredspy15.ltecleanerfoss.MainActivity;
 
 import static atoz.protection.utils.AppConstant.ISBLUELIGHT;
+import static java.util.concurrent.TimeUnit.HOURS;
 
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
-    enum FirebaseEnum{
-        FIRSTTIME,SECONDTIME
+    enum FirebaseEnum {
+        FIRSTTIME, SECONDTIME
     }
+
     //    DrawerLayout drawerLayout;
     Toolbar toolbar;
-    FirebaseEnum firebaseEnum=FirebaseEnum.FIRSTTIME;
+    FirebaseEnum firebaseEnum = FirebaseEnum.FIRSTTIME;
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
     // BottomNavigationView bottomNavigationView;
@@ -78,14 +87,15 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     private FloatingActionButton fabCleaner;
     AdView adView;
     private MediaProjectionManager mProjectionManager;
-    public static MediaProjection  mProjection;
+    public static MediaProjection mProjection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.changeColor(this, "#00000000", true);
+        startWorkManager();
         setContentView(R.layout.activity_home_page);
-        mProjectionManager = (MediaProjectionManager) getSystemService (Context.MEDIA_PROJECTION_SERVICE);
+        mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -162,13 +172,13 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void initActions() {
-        if(!Utils.isMyFloatingServiceRunning(this))
+        if (!Utils.isMyFloatingServiceRunning(this))
             startService(new Intent(this, FloatingWindowService.class));
         startActivityForResult(mProjectionManager.createScreenCaptureIntent(), AppConstant.SCREEN_SHOT);
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
-              Log.e("LOADED","YESS");
+                Log.e("LOADED", "YESS");
                 // Code to be executed when an ad finishes loading.
             }
 
@@ -209,21 +219,20 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void initViews() {
-        if (PrefManager.getBoolean(AppConstant.ISREFERED))
-        {
-            Firebase reference=Utils.getUserReference();
+        if (PrefManager.getBoolean(AppConstant.ISREFERED)) {
+            Firebase reference = Utils.getUserReference();
             reference.child(PrefManager.getString(AppConstant.INVITED_BY)).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (firebaseEnum==FirebaseEnum.FIRSTTIME) {
-                        firebaseEnum=FirebaseEnum.SECONDTIME;
-                        UserBean rewardedUser=dataSnapshot.getValue(UserBean.class);
+                    if (firebaseEnum == FirebaseEnum.FIRSTTIME) {
+                        firebaseEnum = FirebaseEnum.SECONDTIME;
+                        UserBean rewardedUser = dataSnapshot.getValue(UserBean.class);
 //                        reference.addValueEventListener(null);
-                        rewardedUser.setWalletAmount(rewardedUser.getWalletAmount()+20);
-                        Log.e("REWARD>>>",rewardedUser.getWalletAmount()+"");
+                        rewardedUser.setWalletAmount(rewardedUser.getWalletAmount() + 20);
+                        Log.e("REWARD>>>", rewardedUser.getWalletAmount() + "");
 
                         Utils.storeRewardedUserDetailsToRTD(rewardedUser);
-                        WalletHistory walletHistory=new WalletHistory();
+                        WalletHistory walletHistory = new WalletHistory();
                         walletHistory.setWalletmobile(PrefManager.getString(AppConstant.INVITED_BY));
                         walletHistory.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
                         walletHistory.setAmount(20);
@@ -233,6 +242,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                     }
 
                 }
+
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
 
@@ -375,6 +385,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         }
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onBackPressed() {
         if (backLong + 2000 >= System.currentTimeMillis()) {
@@ -397,13 +408,13 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 break;
             }
         }
-        if (resultCode == RESULT_OK && requestCode==AppConstant.SCREEN_SHOT) {
-            PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN,true);
-             mProjection = mProjectionManager.getMediaProjection(resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == AppConstant.SCREEN_SHOT) {
+            PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN, true);
+            mProjection = mProjectionManager.getMediaProjection(resultCode, data);
             /*String jsonString=new Gson().toJson(mProjection);
             PrefManager.putString(AppConstant.MEDIAPROJECTION,jsonString);*/
-        }else{
-            PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN,false);
+        } else {
+            PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN, false);
             Toast.makeText(this, "Screen Cast Permission Denied", Toast.LENGTH_SHORT).show();
         }
     }
@@ -423,4 +434,14 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
+    private void startWorkManager() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        PeriodicWorkRequest work = new PeriodicWorkRequest.Builder(SubscriptionCheckService.class, 1, HOURS)
+                .setConstraints(constraints)
+                .build();
+        WorkManager workManager = WorkManager.getInstance(this);
+        workManager.enqueueUniquePeriodicWork(AppConstant.WORK_TAG, ExistingPeriodicWorkPolicy.REPLACE, work);
+    }
 }

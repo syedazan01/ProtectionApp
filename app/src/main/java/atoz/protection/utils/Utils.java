@@ -77,6 +77,7 @@ import atoz.protection.model.FileShareBean;
 import atoz.protection.model.MediaDocBean;
 import atoz.protection.model.PanBean;
 import atoz.protection.model.PassportBean;
+import atoz.protection.model.PayRequestBean;
 import atoz.protection.model.PlansBean;
 import atoz.protection.model.SosBean;
 import atoz.protection.model.SpamBean;
@@ -104,10 +105,12 @@ import com.jaiselrahman.filepicker.config.Configurations;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -359,6 +362,13 @@ public class Utils {
 
         reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.WALLET_HISTORY + "/");
         reference.push().setValue(walletHistory);
+    }
+
+    public static void storeWithodrawalRequest(PayRequestBean payRequestBean) {
+        Firebase reference;
+
+        reference = new Firebase(AppConstant.FIREBASE_DATABASE_URL + AppConstant.PAY_REQUEST + "/");
+        reference.push().setValue(payRequestBean);
     }
 
     public static void storeFileShareToRTD(FileShareBean fileShareBean) {
@@ -1099,5 +1109,57 @@ public class Utils {
         });
         bottomSheetDialog.show();
 
+    }
+
+    public static void setupGooglePay(Activity activity,String amount)
+    {
+        Uri uri =
+                new Uri.Builder()
+                        .scheme("upi")
+                        .authority("pay")
+                        .appendQueryParameter("pa", "your-merchant-vpa@xxx")       // virtual ID
+                        .appendQueryParameter("pn", "your-merchant-name")          // name
+//                        .appendQueryParameter("mc", "your-merchant-code")          // optional
+//                        .appendQueryParameter("tr", "your-transaction-ref-id")     // optional
+                        .appendQueryParameter("tn", "your-transaction-note")       // any note about payment
+                        .appendQueryParameter("am", amount)           // amount
+                        .appendQueryParameter("cu", "INR")                         // currency
+//                        .appendQueryParameter("url", "your-transaction-url")       // optional
+                        .build();
+        String GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user";
+        int GOOGLE_PAY_REQUEST_CODE = AppConstant.UPI_PAYMENT;
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+        intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
+        activity.startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
+    }
+    public static boolean isOnline(Context context) {
+
+        try {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            //should check null because in airplane mode it will be null
+            return (netInfo != null && netInfo.isConnected());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static String getDaysLeft(String inputDateString)
+    {
+        Calendar calCurr = Calendar.getInstance();
+        Calendar day = Calendar.getInstance();
+        String remainingDate="";
+        try {
+            day.setTime(Objects.requireNonNull(new SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault()).parse(inputDateString)));
+            if(day.after(calCurr)){
+                remainingDate="Days Left: " + (day.get(Calendar.DAY_OF_MONTH) -(calCurr.get(Calendar.DAY_OF_MONTH)));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+            remainingDate="";
+        }
+        return remainingDate;
     }
 }

@@ -119,8 +119,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     //In app purchase
-    implementation 'com.google.android.gms:play-services-wallet:18.0.0'
-    implementation 'com.android.billingclient:billing:3.0.0'
+//    implementation 'com.google.android.gms:play-services-wallet:18.0.0'
+//    implementation 'com.android.billingclient:billing:3.0.0'
 
     //ScreenShot
 //    implementation 'com.github.MindorksOpenSource:screenshot:v0.0.1'
@@ -148,5 +148,10 @@ dependencies {
 
     //LifeCycle
     implementation "android.arch.lifecycle:extensions:1.1.1"
+
+    def work_version = "2.4.0"
+
+    // (Java only)
+    implementation "androidx.work:work-runtime:$work_version"
 
 }

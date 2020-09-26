@@ -1,6 +1,10 @@
 package atoz.protection;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,8 +15,11 @@ import androidx.lifecycle.ProcessLifecycleOwner;
 import androidx.multidex.MultiDexApplication;
 
 import com.balram.locker.view.AppLocker;
+
+import atoz.protection.receivers.NetworkConnectionReciever;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
+
 import com.firebase.client.Firebase;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +30,7 @@ import com.google.firebase.iid.InstanceIdResult;
 public class Protection extends MultiDexApplication implements LifecycleObserver {
     private static Context mInstance;
     private InterstitialAd mInterstitialAd=null;
+    private BroadcastReceiver mNetworkReceiver;
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onEnterForeground() {
@@ -34,9 +42,6 @@ public class Protection extends MultiDexApplication implements LifecycleObserver
         Log.d("AppController", "Background");
         isAppInBackground(true);
     }
-///////////////////////////////////////////////
-
-
 
     // Adding some callbacks for test and log
     public interface ValueChangeListener {
@@ -47,6 +52,16 @@ public class Protection extends MultiDexApplication implements LifecycleObserver
         this.visibilityChangeListener = listener;
     }
     private void isAppInBackground(Boolean isBackground) {
+        mNetworkReceiver=new NetworkConnectionReciever();
+            if (isBackground) {
+                unregisterReceiver(mNetworkReceiver);
+            }
+            else
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+                }
+            }
         /*if (mInterstitialAd==null) {
             mInterstitialAd = new InterstitialAd(this);
             mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitalId));
@@ -65,9 +80,10 @@ public class Protection extends MultiDexApplication implements LifecycleObserver
     public void onCreate() {
         super.onCreate();
         mInstance=this;
-         AppLocker.getInstance().enableAppLock(this);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-        
+
+         AppLocker.getInstance().enableAppLock(this);
+
         Firebase.setAndroidContext(this);
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override

@@ -1,7 +1,10 @@
 package atoz.protection.activites;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +33,7 @@ import atoz.protection.utils.Utils;
 
 public class Wallet extends AppCompatActivity implements ValueEventListener {
     private ProgressDialog pd;
+    private Activity activity=this;
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -65,7 +69,7 @@ public class Wallet extends AppCompatActivity implements ValueEventListener {
     private RecyclerView rvWalletHistory;
     private CardView cardMyWallet;
     private WalletHistoryAdapter walletHistoryAdapter;
-    TextView tvNoData, tvWalletHistory,tvCurrentAmount;
+    TextView tvNoData, tvWalletHistory,tvCurrentAmount,tvWithdrawal;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MyWalletFirebase myWalletFirebase=MyWalletFirebase.FIRST_TIME;
     private WalletHistoryFirebase walletHistoryFirebase=WalletHistoryFirebase.LOAD;
@@ -75,6 +79,7 @@ public class Wallet extends AppCompatActivity implements ValueEventListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wallet);
+
         initViews();
         initActions();
     }
@@ -83,6 +88,7 @@ public class Wallet extends AppCompatActivity implements ValueEventListener {
     private void initViews() {
 
         pd = Utils.getProgressDialog(this);
+        tvWithdrawal = findViewById(R.id.tvWithdrawal);
         ivBack = findViewById(R.id.ivBack);
         tvCurrentAmount = findViewById(R.id.tvCurrentAmount);
         tvNoData = findViewById(R.id.tvNoData);
@@ -141,6 +147,21 @@ public class Wallet extends AppCompatActivity implements ValueEventListener {
     }
 
     private void initActions() {
+        tvWithdrawal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int amount=Integer.parseInt(tvCurrentAmount.getText().toString().trim().replaceAll("[\u20B9 ]",""));
+                Log.e("AMOUNT>>>",amount+"");
+                if(amount<100)
+                    Utils.showToast(activity,"Amount should be equal or greater than \u20B9 100",AppConstant.errorColor);
+                else
+                {
+                    Intent intent=new Intent(activity,WithdrawalRequest.class);
+                    intent.putExtra("walletAmount",amount);
+                    startActivity(intent);
+                }
+            }
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
