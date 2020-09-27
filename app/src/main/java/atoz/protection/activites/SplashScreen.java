@@ -84,10 +84,14 @@ public class SplashScreen extends AppCompatActivity {
                 startHandler();
             }
             else {
-                int type =Locker.UNLOCK_PASSWORD;
-                Intent intent = new Intent(this, LockActivity.class);
-                intent.putExtra(Locker.TYPE, type);
-                startActivityForResult(intent, type);
+                if (PrefManager.getBoolean(AppConstant.ISLOGGEDIN)) {
+                    int type =Locker.UNLOCK_PASSWORD;
+                    Intent intent = new Intent(this, LockActivity.class);
+                    intent.putExtra(Locker.TYPE, type);
+                    startActivityForResult(intent, type);
+                }
+                else
+                    startHandler();
             }
         }
 //        animation = findViewById(R.id.animation);

@@ -37,7 +37,9 @@
                 android:id="@+id/termsCondition_contect"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center" />
+                android:layout_marginHorizontal="10dp"
+                android:justificationMode="inter_word"
+                tools:ignore="UnusedAttribute" />
 
         </RelativeLayout>
 

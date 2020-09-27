@@ -47,6 +47,7 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroupOverlay;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -80,23 +81,32 @@ import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import atoz.protection.fragments.UtilityFeaturesFragment;
 
 import static android.app.Activity.RESULT_OK;
 import static android.hardware.display.DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION;
-import static atoz.protection.activites.HomePage.mProjection;
 import static atoz.protection.utils.AppConstant.ISBLUELIGHT;
 
 public class FloatingWindowService extends Service implements View.OnClickListener {
+    private ImageReader mImageReader;
 
+    private int windowWidth;
+    private int windowHeight;
+    private int mScreenDensity;
+
+    public static int mResultCode;
+    public static Intent mResultData;
     //Screenshot variable
     private Intent mediaProjectionIntent;
     private boolean isGetUserPermission;
+    public  MediaProjection mProjection;
 
     private static final String TAG = "RECORDERSERVICE";
     private static final String EXTRA_RESULT_CODE = "resultcode";
     private static final String EXTRA_DATA = "data";
+    private Intent intent;
 
 
     public static final String LAUNCHER_WIDGET = "action.floating.launcher";
@@ -109,6 +119,8 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     private FloatingActionButton collapsed_iv, fabFileShare, fabVoice, fabSearch, fabScreenShot, fabClose;
     private EditText etSearchQuery;
     private LinearLayout llExpandView;
+    private MediaProjectionManager mProjectionManager;
+    private VirtualDisplay mVirtualDisplay;
 
     public FloatingWindowService() {
     }
@@ -117,6 +129,10 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     public void onCreate() {
         super.onCreate();
         startForegroundService();
+      createVirtualEnvironment();
+//        startActivity(mProjectionManager.createScreenCaptureIntent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        initFloatingWidget();
+        initBlueLightFilterWidget();
     }
 
     @Override
@@ -151,6 +167,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         //Inflate the floating view layout we created
         setTheme(R.style.AppTheme_Base_Light);
         mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
+        mFloatingView.setVisibility(View.GONE);
         collapsed_iv = mFloatingView.findViewById(R.id.collapsed_iv);
         llExpandView = mFloatingView.findViewById(R.id.expanded_container);
         fabFileShare = mFloatingView.findViewById(R.id.fabFileShare);
@@ -291,6 +308,8 @@ public class FloatingWindowService extends Service implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy()");
+        tearDownMediaProjection();
         if (mFloatingView != null) mWindowManager.removeView(mFloatingView);
     }
 
@@ -299,14 +318,17 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         if (intent.getAction() != null && intent.getAction().equals(LAUNCHER_WIDGET)) {
             if (PrefManager.getBoolean(AppConstant.OVERLAY))
             {
-                initFloatingWidget();
+                this.intent=intent;
+                mFloatingView.setVisibility(View.VISIBLE);
             }
             else
-                stopSelf();
+            {
+                mFloatingView.setVisibility(View.GONE);
+            }
         } else if (intent.getAction() != null && intent.getAction().equals(BLUE_LIGHT_FILTER)) {
 
             if (PrefManager.getBoolean(ISBLUELIGHT)) {
-                initBlueLightFilterWidget();
+
                 blue_filter_container.setBackgroundColor(bluelightFilterCode);
             } else {
                 if (blue_filter_container != null)
@@ -366,7 +388,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
             if (HomeFragment.onFabClick!=null) {
                 HomeFragment.onFabClick.onClose();
             }
-            stopSelf();
+            mFloatingView.setVisibility(View.GONE);
         }
     }
 
@@ -375,50 +397,121 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         etSearchQuery.setVisibility(View.GONE);
 
     }
+    private void startToShot() {
+        Handler start = new Handler();
+        start.postDelayed(new Runnable() {
+            public void run() {
+                startCapture();
+                stopScreenCapture();
+            }
+        }, 800);
 
+    }
+    @SuppressLint("WrongConstant")
+    private void setUpVirtualDisplay() {
+        Log.i(TAG, "Setting up a VirtualDisplay: " +
+                windowWidth + "x" + windowHeight +
+                " (" + mScreenDensity + ")");
+        mImageReader = ImageReader.newInstance(windowWidth, windowHeight, PixelFormat.RGBA_8888, 2); //ImageFormat.RGB_565
+        mVirtualDisplay = mProjection.createVirtualDisplay("ScreenCapture",
+                windowWidth, windowHeight, mScreenDensity,
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                mImageReader.getSurface(), null, null);
+    }
+    private void setUpMediaProjection() {
+        mResultData = ((Protection) getApplication()).getIntent();
+        mResultCode = ((Protection) getApplication()).getResult();
+        Log.i(TAG, "mResultData=" + mResultData);
+        Log.i(TAG, "mResultCode=" + mResultCode);
+        mProjectionManager = ((Protection) getApplication()).getMediaProjectionManager();
+        mProjection = mProjectionManager.getMediaProjection(mResultCode, mResultData);
+        Log.i(TAG, "mMediaProjection defined");
+    }
+    private void startCapture() {
+
+        Image image = mImageReader.acquireLatestImage();
+        int width = image.getWidth();
+        int height = image.getHeight();
+        final Image.Plane[] planes = image.getPlanes();
+        final ByteBuffer buffer = planes[0].getBuffer();
+        int pixelStride = planes[0].getPixelStride();
+        int rowStride = planes[0].getRowStride();
+        int rowPadding = rowStride - pixelStride * width;
+        Bitmap bitmap = Bitmap.createBitmap(width + rowPadding / pixelStride, height, Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(buffer);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
+        image.close();
+        storeImage(bitmap);
+    }
     @SuppressLint("WrongConstant")
     private void captureScreen() {
-       Display display = mWindowManager.getDefaultDisplay();
-        final DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        Point size = new Point();
-        display.getRealSize(size);
-        final int mWidth = size.x;
-        final int mHeight = size.y;
-        int mDensity = metrics.densityDpi;
 
-        final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
-
-        final Handler handler = new Handler();
-
-        int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
-        mProjection.createVirtualDisplay("screen-mirror", mWidth, mHeight, mDensity, flags, mImageReader.getSurface(), null, handler);
-
-        mImageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-            @Override
-            public void onImageAvailable(ImageReader reader) {
-                reader.setOnImageAvailableListener(null, handler);
-                Image image = reader.acquireLatestImage();
-
-                final Image.Plane[] planes = image.getPlanes();
-                final ByteBuffer buffer = planes[0].getBuffer();
-
-                int pixelStride = planes[0].getPixelStride();
-                int rowStride = planes[0].getRowStride();
-                int rowPadding = rowStride - pixelStride * metrics.widthPixels;
-                // create bitmap
-                Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
-                bmp.copyPixelsFromBuffer(buffer);
-
-                image.close();
-                reader.close();
-
-                Bitmap realSizeBitmap = Bitmap.createBitmap(bmp, 0, 0, metrics.widthPixels, bmp.getHeight());
-                bmp.recycle();
-                storeImage(realSizeBitmap);
-                /* do something with [realSizeBitmap] */
+            if (mProjection != null) {
+                Log.i(TAG, "exec startShot()/setUpVirtualDisplay()");
+                setUpVirtualDisplay();
+            } else {
+                Log.i(TAG, "exec startShot()/setUpVirtualDisplay()/setUpMediaProjection()");
+                setUpMediaProjection();
+                setUpVirtualDisplay();
             }
-        }, handler);
+            mFloatingView.setVisibility(View.GONE);
+            startToShot();
+         /* try {  Display display = mWindowManager.getDefaultDisplay();
+            final DisplayMetrics metrics = new DisplayMetrics();
+            display.getMetrics(metrics);
+            Point size = new Point();
+            display.getRealSize(size);
+            final int mWidth = size.x;
+            final int mHeight = size.y;
+            int mDensity = metrics.densityDpi;
+
+            final ImageReader mImageReader = ImageReader.newInstance(mWidth, mHeight, PixelFormat.RGBA_8888, 2);
+
+            final Handler handler = new Handler();
+//            MediaProjectionManager mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+//             int resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, 0);
+//            MediaProjection mProjection=mProjectionManager.getMediaProjection(RESULT_OK,intent);
+//            int flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY | DisplayManager.VIRTUAL_DISPLAY_FLAG_PUBLIC;
+            int flags=DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR;
+//            mProjection=(MediaProjection) mProjectionManager.getMediaProjection(RESULT_OK,intent);
+            mResultData = ((Protection) getApplication()).getIntent();
+            mResultCode = ((Protection) getApplication()).getResult();
+            Log.i(TAG, "mResultData=" + mResultData);
+            Log.i(TAG, "mResultCode=" + mResultCode);
+            mProjectionManager = ((Protection) getApplication()).getMediaProjectionManager();
+            mProjection = mProjectionManager.getMediaProjection(mResultCode, mResultData);
+            mVirtualDisplay=mProjection.createVirtualDisplay("screen-mirror", mWidth, mHeight, mDensity, flags, mImageReader.getSurface(), null, handler);
+            mFloatingView.setVisibility(View.GONE);
+            mImageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
+                @Override
+                public void onImageAvailable(ImageReader reader) {
+                    reader.setOnImageAvailableListener(null, handler);
+                    Image image = reader.acquireLatestImage();
+
+                    final Image.Plane[] planes = image.getPlanes();
+                    final ByteBuffer buffer = planes[0].getBuffer();
+
+                    int pixelStride = planes[0].getPixelStride();
+                    int rowStride = planes[0].getRowStride();
+                    int rowPadding = rowStride - pixelStride * metrics.widthPixels;
+                    // create bitmap
+                    Bitmap bmp = Bitmap.createBitmap(metrics.widthPixels + (int) ((float) rowPadding / (float) pixelStride), metrics.heightPixels, Bitmap.Config.ARGB_8888);
+                    bmp.copyPixelsFromBuffer(buffer);
+
+                    image.close();
+                    reader.close();
+
+                    Bitmap realSizeBitmap = Bitmap.createBitmap(bmp, 0, 0, metrics.widthPixels, bmp.getHeight());
+                    bmp.recycle();
+
+                    storeImage(realSizeBitmap);
+                    *//* do something with [realSizeBitmap] *//*
+                }
+            }, handler);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Try Again", Toast.LENGTH_SHORT).show();
+        }*/
     }
 
     public interface OnFabClick {
@@ -488,6 +581,7 @@ public class FloatingWindowService extends Service implements View.OnClickListen
             sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+pictureFile.getAbsolutePath())));
         }
         sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(pictureFile)));
+        mFloatingView.setVisibility(View.VISIBLE);
         Toast.makeText(this, "Save Screenshot into gallery", Toast.LENGTH_SHORT).show();
     }
     private  File getOutputMediaFile(){
@@ -603,4 +697,48 @@ public class FloatingWindowService extends Service implements View.OnClickListen
         stopSelf();
     }
 
+    private void tearDownMediaProjection() {
+        if (mProjection != null) {
+            mProjection.stop();
+            mProjection = null;
+        }
+        Log.i(TAG, "mMediaProjection undefined");
+    }
+
+    private void stopScreenCapture() {
+        if (mVirtualDisplay == null) {
+            return;
+        }
+        mVirtualDisplay.release();
+        mVirtualDisplay = null;
+        Log.i(TAG, "virtual display stopped");
+    }
+    private void createVirtualEnvironment() {
+        windowWidth = getScreenWidth(this);
+        windowHeight = getScreenHeight(this);
+        mScreenDensity = getScreenDensity(this);
+        mProjectionManager = (MediaProjectionManager) getApplication().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+    }
+    public static int getScreenWidth(Context context) {
+        WindowManager wm = (WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.widthPixels;
+    }
+    /**
+     * 获得屏幕宽度
+     * @param context
+     * @return
+     */
+    public  int getScreenHeight(Context context) {
+        WindowManager wm = (WindowManager) context
+                .getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(outMetrics);
+        return outMetrics.heightPixels;
+    }
+    public  int getScreenDensity(Context context) {
+        return (int)context.getResources().getDisplayMetrics().density;
+    }
 }

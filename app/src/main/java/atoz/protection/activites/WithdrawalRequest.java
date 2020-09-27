@@ -3,6 +3,7 @@ package atoz.protection.activites;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,12 +12,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import atoz.protection.R;
 import atoz.protection.model.PayRequestBean;
+import atoz.protection.model.UserBean;
 import atoz.protection.model.WalletHistory;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
@@ -29,6 +35,7 @@ public class WithdrawalRequest extends AppCompatActivity {
     private Button payRequest;
     private Activity activity=this;
     private int walletAmount=0;
+    private boolean isStored=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +82,28 @@ public class WithdrawalRequest extends AppCompatActivity {
             payRequestBean.setUpiId(etUpiId.getText().toString());
             payRequestBean.setPayrequestDateAndTime(new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault()).format(new Date()));
             Utils.storeWithodrawalRequest(payRequestBean);
-            finish();
+            Utils.getUserReference().child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (!isStored) {
+                        isStored=true;
+                        UserBean userBean=dataSnapshot.getValue(UserBean.class);
+                        if(userBean!=null)
+                        {
+                         userBean.setWalletAmount(0);
+                         Utils.storeUserDetailsToRTD(userBean);
+
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+            finishAffinity();
+            startActivity(new Intent(activity,HomePage.class));
         }
     });
     }
@@ -87,7 +115,7 @@ public class WithdrawalRequest extends AppCompatActivity {
         etUpiId = findViewById(R.id.etUpi);
         etAmount = findViewById(R.id.etAmount);
         payRequest = findViewById(R.id.payRequest);
-
+        etAmount.setText(""+walletAmount);
         tvToolbarTitle.setText("Withdrawal Request");
 
         payRequest.setBackground(Utils.getThemeGradient(50F));

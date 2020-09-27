@@ -57,6 +57,7 @@ public interface AppConstant {
     String LOGIN_MOBILE = "login_mobile";
 
     //Toast Color Code
+    int infoColor = Color.BLUE;
     int errorColor = Color.parseColor("#e81224");
     int succeedColor = Color.parseColor("#41B400");
 
@@ -76,7 +77,10 @@ public interface AppConstant {
     //Wallet History Status
     String WALLET_STATUS_RECIEVED="Recieved";
     String WALLET_STATUS_WITHDRAWAL="Withdrawal Request";
+    String WALLET_STATUS_PLAN_PURCHASE="PLAN PURCHASE";
     String WALLET_STATUS_REFERED="By Refered";
     String WORK_TAG = "Subscribe";
     int UPI_PAYMENT = 41000;
+    String  MOST_NOTIFICATION = "most_notify";
+    String  RARE_NOTIFICATION = "rare_notify";
 }

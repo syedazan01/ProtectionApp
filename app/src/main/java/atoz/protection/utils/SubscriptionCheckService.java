@@ -42,7 +42,7 @@ public class SubscriptionCheckService extends Worker {
                         if(userBean!=null)
                         {
                             String dateTime=userBean.getPlanPurchaseDate();
-                            if (!dateTime.isEmpty()) {
+                            if (dateTime!=null && dateTime.isEmpty()) {
                                 String dayzLeft=Utils.getDaysLeft(dateTime);
                                 if(!dayzLeft.equalsIgnoreCase(""))
                                 {

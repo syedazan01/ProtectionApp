@@ -178,7 +178,11 @@ public class AccountFragment extends Fragment{
                     Utils.showNoSubsDialog(getContext());
                 return;
                 }*/
-                startActivity(new Intent(mActivity, SosActivity.class));
+                if (PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
+                    startActivity(new Intent(mActivity, SosActivity.class));
+                }
+                else
+                    Utils.showToast(mActivity,"Purchase Plan to use this feature",AppConstant.infoColor);
                /* msgDialog.show();
                 Button btnProceed = msgDialog.findViewById(R.id.btnProceed);
                 Utils.makeButton(btnProceed, getResources().getColor(R.color.colorAccent), 40F);

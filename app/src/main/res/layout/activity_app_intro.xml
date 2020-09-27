@@ -89,7 +89,7 @@
             android:layout_marginStart="41dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lorem ipsum dolor sit amet,\n consetetur sadipscing"
+            android:text="@string/app_intro1"
             android:fontFamily="@font/poppins_regular"
             android:textColor="#797979"
             android:textSize="14sp"/>

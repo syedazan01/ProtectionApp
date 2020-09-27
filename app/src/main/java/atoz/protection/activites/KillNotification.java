@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.provider.Telephony;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import atoz.protection.adapters.InstalledApps;
 import atoz.protection.interfacecallbacks.OnNotificationChecked;
 import atoz.protection.model.PInfo;
 import atoz.protection.utils.AppConstant;
+import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -53,6 +55,39 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     Activity activity = KillNotification.this;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private ProgressDialog pd;
+    private CompoundButton.OnCheckedChangeListener swAllListener=new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            if (hasAccessGranted()) {
+                installedAppAdapter.setAllCheck(b,true);
+            }
+            else
+            {
+                swAll.setOnCheckedChangeListener(null);
+                swAll.setChecked(false);
+                swAll.setOnCheckedChangeListener(this);
+                Utils.showToast(KillNotification.this,"Allow Notification from device settings",AppConstant.errorColor);
+            }
+            PrefManager.putBoolean(AppConstant.RARE_NOTIFICATION,b);
+        }
+    };
+    private CompoundButton.OnCheckedChangeListener swPriorListener=new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            if (hasAccessGranted()) {
+                mostInstalledAppAdapter.setAllCheck(b,true);
+            }
+            else
+            {
+                swPriorApps.setOnCheckedChangeListener(null);
+                swPriorApps.setChecked(false);
+                swPriorApps.setOnCheckedChangeListener(this);
+                Utils.showToast(KillNotification.this,"Allow Notification from device settings",AppConstant.errorColor);
+            }
+            PrefManager.putBoolean(AppConstant.MOST_NOTIFICATION,b);
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +97,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         else*/
             setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_kill_notification);
-        iniiViews();
-        initActions();
+
     }
 
     private void getInstalledAppsList() {
@@ -147,36 +181,8 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                 onBackPressed();
             }
         });
-        swAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (hasAccessGranted()) {
-                    installedAppAdapter.setAllCheck(b);
-                }
-                else
-                {
-                    swAll.setOnCheckedChangeListener(null);
-                    swAll.setChecked(false);
-                    swAll.setOnCheckedChangeListener(this);
-                    Utils.showToast(KillNotification.this,"Allow Notification from device settings",AppConstant.errorColor);
-                }
-            }
-        });
-        swPriorApps.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (hasAccessGranted()) {
-                    mostInstalledAppAdapter.setAllCheck(b);
-                }
-                else
-                {
-                    swPriorApps.setOnCheckedChangeListener(null);
-                    swPriorApps.setChecked(false);
-                    swPriorApps.setOnCheckedChangeListener(this);
-                    Utils.showToast(KillNotification.this,"Allow Notification from device settings",AppConstant.errorColor);
-                }
-            }
-        });
+        swAll.setOnCheckedChangeListener(swAllListener);
+        swPriorApps.setOnCheckedChangeListener(swPriorListener);
         searchApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -253,6 +259,10 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         tvToolbarTitle.setText("Kill Notifications");
         rvMostInstalledApps.setLayoutManager(new LinearLayoutManager(this));
         rvRareInstalledApps.setLayoutManager(new LinearLayoutManager(this));
+        installedAppAdapter = new InstalledApps(activity, pInfos, KillNotification.this, AppConstant.RAREUSED);
+        mostInstalledAppAdapter = new InstalledApps(activity, mostPInfos, KillNotification.this, AppConstant.MOSTUSED);
+        rvMostInstalledApps.setAdapter(mostInstalledAppAdapter);
+        rvRareInstalledApps.setAdapter(installedAppAdapter);
         pd = Utils.getProgressDialog(this);
 //        getInstalledAppsList();
 //        final ProgressDialog dialog = Utils.getProgressDialog(activity);
@@ -284,27 +294,38 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                         if (mostPInfos.size() < 0) {
                             constMostUsed.setVisibility(View.GONE);
                         }
-                        installedAppAdapter = new InstalledApps(activity, pInfos, KillNotification.this, AppConstant.RAREUSED);
-                        mostInstalledAppAdapter = new InstalledApps(activity, mostPInfos, KillNotification.this, AppConstant.MOSTUSED);
-                        rvMostInstalledApps.setAdapter(mostInstalledAppAdapter);
-                        rvRareInstalledApps.setAdapter(installedAppAdapter);
+                   mostInstalledAppAdapter.notifyList(mostPInfos);
+                        installedAppAdapter.notifyList(pInfos);
                         pd.dismiss();
                     }
                 });
 
             }
         });
-
-
-        swAll.setChecked(pref.getBoolean(AppConstant.NOTIFICATION_ENABLE, false));
     }
 
     @Override
     public void onCheckboxAppChecked(int position, boolean isChecked, String typeOfList) {
         String pkg = null;
         if (typeOfList.equals(AppConstant.RAREUSED)) {
+            if(!isChecked)
+            {
+                Log.e("CHECKED>>>","RARE");
+                PrefManager.putBoolean(AppConstant.RARE_NOTIFICATION,false);
+                swAll.setOnCheckedChangeListener(null);
+                swAll.setChecked(false);
+                swAll.setOnCheckedChangeListener(swAllListener);
+            }
             pkg = installedAppAdapter.getItem(position).getPname();
         } else {
+            if(!isChecked)
+            {
+                Log.e("CHECKED>>>","MOST");
+                PrefManager.putBoolean(AppConstant.MOST_NOTIFICATION,false);
+                swPriorApps.setOnCheckedChangeListener(null);
+                swPriorApps.setChecked(false);
+                swPriorApps.setOnCheckedChangeListener(swPriorListener);
+            }
             pkg = mostInstalledAppAdapter.getItem(position).getPname();
         }
         if (pref.contains(AppConstant.PREF_PACKAGES_BLOCKED)) {
@@ -340,6 +361,8 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     @Override
     protected void onResume() {
         super.onResume();
+        iniiViews();
+        initActions();
         if (!hasAccessGranted()) {
             pref.edit().remove(AppConstant.NOTIFICATION_ENABLE).apply();
             Snackbar.make(findViewById(android.R.id.content), R.string.snackbar_not_allowed_title, Snackbar.LENGTH_INDEFINITE)
@@ -366,6 +389,13 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         rvMostInstalledApps.setVisibility(View.VISIBLE);
         rvRareInstalledApps.setVisibility(View.VISIBLE);
         searchApp.setVisibility(View.VISIBLE);
+        pref.edit().putBoolean(AppConstant.NOTIFICATION_ENABLE,true).apply();
+        if (PrefManager.getBoolean(AppConstant.RARE_NOTIFICATION)) {
+            swAll.setChecked(true);
+        }
+        if (PrefManager.getBoolean(AppConstant.MOST_NOTIFICATION)) {
+            swPriorApps.setChecked(true);
+        }
 //        Utils.showToast(activity,"No App Found",AppConstant.errorColor);
     }
 

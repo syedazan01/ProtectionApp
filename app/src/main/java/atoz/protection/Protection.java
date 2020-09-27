@@ -2,7 +2,9 @@ package atoz.protection;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.projection.MediaProjectionManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.util.Log;
@@ -31,6 +33,10 @@ public class Protection extends MultiDexApplication implements LifecycleObserver
     private static Context mInstance;
     private InterstitialAd mInterstitialAd=null;
     private BroadcastReceiver mNetworkReceiver;
+    private int result;
+    private Intent intent;
+    private MediaProjectionManager mMediaProjectionManager;
+
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void onEnterForeground() {
@@ -52,16 +58,22 @@ public class Protection extends MultiDexApplication implements LifecycleObserver
         this.visibilityChangeListener = listener;
     }
     private void isAppInBackground(Boolean isBackground) {
-        mNetworkReceiver=new NetworkConnectionReciever();
-            if (isBackground) {
-                unregisterReceiver(mNetworkReceiver);
-            }
-            else
-            {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+        try {
+            if (mNetworkReceiver!=null) {
+                if (isBackground) {
+                        unregisterReceiver(mNetworkReceiver);
+                }
+                else
+                {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+                    }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         /*if (mInterstitialAd==null) {
             mInterstitialAd = new InterstitialAd(this);
             mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitalId));
@@ -80,6 +92,7 @@ public class Protection extends MultiDexApplication implements LifecycleObserver
     public void onCreate() {
         super.onCreate();
         mInstance=this;
+        mNetworkReceiver=new NetworkConnectionReciever();
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
          AppLocker.getInstance().enableAppLock(this);
@@ -99,5 +112,27 @@ public class Protection extends MultiDexApplication implements LifecycleObserver
             mInstance=new Protection();
         return mInstance;
     }
+    public int getResult(){
+        return result;
+    }
 
+    public Intent getIntent(){
+        return intent;
+    }
+
+    public MediaProjectionManager getMediaProjectionManager(){
+        return mMediaProjectionManager;
+    }
+
+    public void setResult(int result1){
+        this.result = result1;
+    }
+
+    public void setIntent(Intent intent1){
+        this.intent = intent1;
+    }
+
+    public void setMediaProjectionManager(MediaProjectionManager mMediaProjectionManager){
+        this.mMediaProjectionManager = mMediaProjectionManager;
+    }
 }

@@ -2,6 +2,7 @@ package atoz.protection.adapters;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
     private SharedPreferences pref;
     private String typeOfList;
     private boolean isAllCheck = false;
+    HashSet blocked;
+    private boolean  actionPerform=false;
 
     public InstalledApps(Activity activity, ArrayList<PInfo> pInfos, OnNotificationChecked notificationChecked, String typeOfList) {
         this.activity = activity;
@@ -39,6 +42,8 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
         this.notificationChecked = notificationChecked;
         this.typeOfList = typeOfList;
         pref = Utils.getDefaultManager(activity);
+        blocked = new HashSet(Arrays.asList(pref.getString(AppConstant.PREF_PACKAGES_BLOCKED, "").split(";")));
+
     }
 
     @NonNull
@@ -51,8 +56,8 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
     @Override
     public void onBindViewHolder(@NonNull InstalledHolder holder, final int position) {
         PInfo pinfo = pInfos.get(position);
-        HashSet blocked = new HashSet(Arrays.asList(pref.getString(AppConstant.PREF_PACKAGES_BLOCKED, "").split(";")));
         holder.appIcon.setImageDrawable(pinfo.getIcon());
+        Log.e("BLOCKED>>>",blocked.contains(pinfo.getPname())+"");
         holder.swOnOff.setChecked(blocked.contains(pinfo.getPname()));
         holder.tvAppName.setText(pInfos.get(position).getAppname());
         holder.swOnOff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -71,7 +76,9 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
                 }
             }
         });
-        holder.swOnOff.setChecked(isAllCheck);
+        if (actionPerform) {
+            holder.swOnOff.setChecked(isAllCheck);
+        }
     }
 
     @Override
@@ -88,10 +95,12 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
         return pInfos.get(position);
     }
 
-    public void setAllCheck(boolean isAllCheck) {
+    public void setAllCheck(boolean isAllCheck,boolean actionPerform) {
         this.isAllCheck = isAllCheck;
+        this.actionPerform = actionPerform;
         notifyDataSetChanged();
     }
+
 
     public class InstalledHolder extends RecyclerView.ViewHolder {
         TextView tvAppName;

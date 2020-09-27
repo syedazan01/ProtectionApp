@@ -12,19 +12,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import atoz.protection.R;
 import atoz.protection.model.PlansBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterSubscription extends RecyclerView.Adapter<AdapterSubscription.SubscribeHolder> {
     private Activity activity;
-    private List<PlansBean> plansBeans;
+    private List<PlansBean> plansBeans=new ArrayList<>();
     private RecyclerViewClickListener recyclerViewClickListener;
 
-    public AdapterSubscription(Activity activity, List<PlansBean> plansBeans, RecyclerViewClickListener recyclerViewClickListener) {
+    public AdapterSubscription(Activity activity, RecyclerViewClickListener recyclerViewClickListener) {
         this.activity = activity;
-        this.plansBeans = plansBeans;
         this.recyclerViewClickListener = recyclerViewClickListener;
     }
-
+public void submitList(List<PlansBean> plansBeans)
+{
+    this.plansBeans=plansBeans;
+    notifyDataSetChanged();
+}
     @NonNull
     @Override
     public AdapterSubscription.SubscribeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

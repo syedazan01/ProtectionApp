@@ -58,13 +58,13 @@ public class App_intro extends AppCompatActivity implements View.OnClickListener
                 switch (position) {
                     case 0:
                         tvIntro.setText(getResources().getString(R.string.welcome));
-                        tvDesc.setText(getResources().getString(R.string.welocme_desc));
+                        tvDesc.setText(getResources().getString(R.string.app_intro1));
                         cardArrow.setVisibility(View.VISIBLE);
                         cardGetStarted.setVisibility(View.GONE);
                         break;
                     case 1:
                         tvIntro.setText(getResources().getString(R.string.protect_doc));
-                        tvDesc.setText(getResources().getString(R.string.protect_desc));
+                        tvDesc.setText(getResources().getString(R.string.app_intro2));
                         cardArrow.setVisibility(View.GONE);
                         cardGetStarted.setVisibility(View.VISIBLE);
                         break;

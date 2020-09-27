@@ -29,7 +29,7 @@ public class WalletHistoryAdapter extends RecyclerView.Adapter<WalletHistoryAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WalletHistory walletHistory=walletHistoryList.get(position);
         holder.tvMobile.setText(walletHistory.getMobile());
-        if(walletHistory.getStatus().equals(AppConstant.WALLET_STATUS_WITHDRAWAL))
+        if(walletHistory.getStatus().equals(AppConstant.WALLET_STATUS_WITHDRAWAL) || walletHistory.getStatus().equals(AppConstant.WALLET_STATUS_PLAN_PURCHASE))
             holder.tvAmount.setTextColor(Color.RED);
         else
             holder.tvAmount.setTextColor(Color.GREEN);

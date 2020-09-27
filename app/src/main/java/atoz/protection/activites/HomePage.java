@@ -27,12 +27,14 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import atoz.protection.Protection;
 import atoz.protection.R;
 import atoz.protection.RecordsActivites.PersonalRecords;
 import atoz.protection.fragments.AccountFragment;
 import atoz.protection.fragments.HomeFragment;
 import atoz.protection.fragments.PersonalRecordFragment;
 import atoz.protection.fragments.SosFragment;
+import atoz.protection.model.PlansBean;
 import atoz.protection.model.UserBean;
 import atoz.protection.model.WalletHistory;
 import atoz.protection.services.FloatingWindowService;
@@ -57,19 +59,25 @@ import com.google.android.material.navigation.NavigationView;
 import com.luseen.spacenavigation.SpaceNavigationView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import theredspy15.ltecleanerfoss.MainActivity;
 
 import static atoz.protection.utils.AppConstant.ISBLUELIGHT;
+import static atoz.protection.utils.AppConstant.SCREEN_SHOT;
 import static java.util.concurrent.TimeUnit.HOURS;
 
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
     enum FirebaseEnum {
         FIRSTTIME, SECONDTIME
     }
-
+    private static final String STATE_RESULT_CODE = "RESULT_CODE";
+    private static final String STATE_RESULT_DATA = "RESULT_DATA";
+    private Intent mResultData;
+    private int mResultCode;
     //    DrawerLayout drawerLayout;
     Toolbar toolbar;
     FirebaseEnum firebaseEnum = FirebaseEnum.FIRSTTIME;
@@ -87,7 +95,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     private FloatingActionButton fabCleaner;
     AdView adView;
     private MediaProjectionManager mProjectionManager;
-    public static MediaProjection mProjection;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +110,45 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
+        /*List<PlansBean> plansBeanList=new ArrayList<>();
+        PlansBean plansBean=new PlansBean();
+        plansBean.setPlan_name("Silver Plan");
+        plansBean.setPlanPrice(200);
+        plansBean.setPlan_duration(1);
+        plansBean.setPlan_description("Premium Access");
+        plansBeanList.add(plansBean);
+
+        PlansBean plansBean2=new PlansBean();
+        plansBean2.setPlan_name("Primium Plan");
+        plansBean2.setPlanPrice(500);
+        plansBean2.setPlan_duration(2);
+        plansBean2.setPlan_description("Premium Access");
+        plansBeanList.add(plansBean2);
+
+        PlansBean plansBean3=new PlansBean();
+        plansBean3.setPlan_name("Gold Plan");
+        plansBean3.setPlanPrice(600);
+        plansBean3.setPlan_duration(3);
+        plansBean3.setPlan_description("Premium Access");
+        plansBeanList.add(plansBean3);
+
+        PlansBean plansBean4=new PlansBean();
+        plansBean4.setPlan_name("Special Plan");
+        plansBean4.setPlanPrice(800);
+        plansBean.setPlan_duration(4);
+        plansBean4.setPlan_description("Premium Access");
+        plansBeanList.add(plansBean);
+
+        PlansBean plansBean5=new PlansBean();
+        plansBean5.setPlan_name("Silver Plan");
+        plansBean5.setPlanPrice(1000);
+        plansBean5.setPlan_duration(6);
+        plansBean5.setPlan_description("Mega Access");
+        plansBeanList.add(plansBean5);
+
+        for (PlansBean plans:plansBeanList) {
+            Utils.storePlansToRTD(plans);
+        }*/
         initViews();
         initActions();
        /* //set up id of spacenavigaton
@@ -174,7 +221,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     private void initActions() {
         if (!Utils.isMyFloatingServiceRunning(this))
             startService(new Intent(this, FloatingWindowService.class));
-        startActivityForResult(mProjectionManager.createScreenCaptureIntent(), AppConstant.SCREEN_SHOT);
+        prepareToShot();
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -410,7 +457,10 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         }
         if (resultCode == RESULT_OK && requestCode == AppConstant.SCREEN_SHOT) {
             PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN, true);
-            mProjection = mProjectionManager.getMediaProjection(resultCode, data);
+            mResultCode = resultCode;
+            mResultData = data;
+            prepareToShot();
+//            FloatingWindowService.mProjection = mProjectionManager.getMediaProjection(resultCode, data);
             /*String jsonString=new Gson().toJson(mProjection);
             PrefManager.putString(AppConstant.MEDIAPROJECTION,jsonString);*/
         } else {
@@ -443,5 +493,24 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 .build();
         WorkManager workManager = WorkManager.getInstance(this);
         workManager.enqueueUniquePeriodicWork(AppConstant.WORK_TAG, ExistingPeriodicWorkPolicy.REPLACE, work);
+    }
+    private void prepareToShot() {
+        if(mResultData != null && mResultCode != 0){
+            ((Protection)getApplication()).setResult(mResultCode);
+            ((Protection)getApplication()).setIntent(mResultData);
+//            onClickCustomNotification();
+        }else{
+            startActivityForResult(mProjectionManager.createScreenCaptureIntent(), SCREEN_SHOT);
+            ((Protection)getApplication()).setMediaProjectionManager(mProjectionManager);
+        }
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mResultData != null) {
+            Log.e("TAG", "onSaveInstanceState()");
+            outState.putInt(STATE_RESULT_CODE, mResultCode);
+            outState.putParcelable(STATE_RESULT_DATA, mResultData);
+        }
     }
 }

@@ -36,12 +36,15 @@
 
             <TextView
                 android:id="@+id/about_us_content"
-
+                android:justificationMode="inter_word"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:layout_marginHorizontal="10dp"
+                android:lineSpacingExtra="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:gravity="center" />
+                tools:ignore="UnusedAttribute" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -546,6 +546,10 @@ public class Utils {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(isMyFloatingServiceRunning(activity))
+                {
+                    activity.stopService(new Intent(activity,FloatingWindowService.class));
+                }
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
                 mAuth.signOut();
                 PrefManager.clear();
@@ -1061,8 +1065,8 @@ public class Utils {
 
     public static void setBlueLightTheme(Activity activity, ImageView ivBlueLightFilter) {
         ivBlueLightFilter.setColorFilter(ContextCompat.getColor(activity, PrefManager.getBoolean(AppConstant.ISBLUELIGHT) ? R.color.black : R.color.themeColor), PorterDuff.Mode.MULTIPLY);
-        activity.startService(new Intent(activity, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
         PrefManager.putBoolean(AppConstant.ISBLUELIGHT, !PrefManager.getBoolean(AppConstant.ISBLUELIGHT));
+        activity.startService(new Intent(activity, FloatingWindowService.class).setAction(FloatingWindowService.BLUE_LIGHT_FILTER));
     }
 
     public static void showAppLockDialog(Activity activity) {
@@ -1117,11 +1121,11 @@ public class Utils {
                 new Uri.Builder()
                         .scheme("upi")
                         .authority("pay")
-                        .appendQueryParameter("pa", "your-merchant-vpa@xxx")       // virtual ID
-                        .appendQueryParameter("pn", "your-merchant-name")          // name
+                        .appendQueryParameter("pa", "8529112711@kotak")       // virtual ID
+                        .appendQueryParameter("pn", "A2zCreation")          // name
 //                        .appendQueryParameter("mc", "your-merchant-code")          // optional
 //                        .appendQueryParameter("tr", "your-transaction-ref-id")     // optional
-                        .appendQueryParameter("tn", "your-transaction-note")       // any note about payment
+                        .appendQueryParameter("tn", "Purchase plans")       // any note about payment
                         .appendQueryParameter("am", amount)           // amount
                         .appendQueryParameter("cu", "INR")                         // currency
 //                        .appendQueryParameter("url", "your-transaction-url")       // optional
@@ -1132,7 +1136,12 @@ public class Utils {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
         intent.setPackage(GOOGLE_PAY_PACKAGE_NAME);
-        activity.startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
+        try {
+            activity.startActivityForResult(intent, GOOGLE_PAY_REQUEST_CODE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showToast(activity,"Please Install Google Pay First",AppConstant.errorColor);
+        }
     }
     public static boolean isOnline(Context context) {
 
@@ -1153,9 +1162,13 @@ public class Utils {
         String remainingDate="";
         try {
             day.setTime(Objects.requireNonNull(new SimpleDateFormat("dd/MMM/yyyy", Locale.getDefault()).parse(inputDateString)));
-            if(day.after(calCurr)){
-                remainingDate="Days Left: " + (day.get(Calendar.DAY_OF_MONTH) -(calCurr.get(Calendar.DAY_OF_MONTH)));
+            long diff=day.getTimeInMillis()-calCurr.getTimeInMillis();
+            long daysLeft=TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS);
+            if (daysLeft>0) {
+                remainingDate="Days Left: "+daysLeft;
             }
+            else
+                remainingDate="";
         } catch (ParseException e) {
             e.printStackTrace();
             remainingDate="";
