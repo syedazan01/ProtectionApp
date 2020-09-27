@@ -7,6 +7,7 @@
     android:background="#F3F9FF"
     >
   <RelativeLayout
+      android:visibility="gone"
       android:layout_marginTop="?attr/actionBarSize"
       android:id="@+id/rltCallRecording"
       android:layout_width="match_parent"

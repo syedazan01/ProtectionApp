@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
         serviceBeanList.add(new ServiceBean("File \nShare", R.drawable.filesshare));
         serviceBeanList.add(new ServiceBean("Kill \nNotification", R.drawable.ic_bell_icon));
         serviceBeanList.add(new ServiceBean("App Lock", R.drawable.ic_applock));
-        serviceBeanList.add(new ServiceBean("Spam Call", R.drawable.spam));
+//        serviceBeanList.add(new ServiceBean("Spam Call", R.drawable.spam));
     }
 
     private void setupRv() {

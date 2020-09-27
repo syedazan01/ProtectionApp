@@ -92,7 +92,7 @@ EditText et_phone_number;
         et_phone_number=findViewById(R.id.et_phone_number);
         et_phone_number.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
         et_phone_number.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECORD_AUDIO,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},400);
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.RECORD_AUDIO,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.CAMERA},400);
 
         OtpButton = findViewById(R.id.otp_button);
         Utils.makeButton(OtpButton, getResources().getColor(R.color.grey), 50F);

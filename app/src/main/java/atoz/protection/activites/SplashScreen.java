@@ -133,7 +133,7 @@ public class SplashScreen extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK && (requestCode == REQUEST_OVERLAY_PERMISSION || requestCode == APP_PERMISSION_REQUEST)) {
 //            startService(new Intent(this, FloatingWindowService.class));
         } else {
-            Utils.showToast(this, "Draw over other app permission not enable.", AppConstant.errorColor);
+//            Utils.showToast(this, "Draw over other app permission not enable.", AppConstant.errorColor);
         }
         startHandler();
     }

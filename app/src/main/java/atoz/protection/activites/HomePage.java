@@ -221,6 +221,8 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     private void initActions() {
         if (!Utils.isMyFloatingServiceRunning(this))
             startService(new Intent(this, FloatingWindowService.class));
+        mResultCode=((Protection)getApplication()).getResult();
+        mResultData=((Protection)getApplication()).getIntent();
         prepareToShot();
         adView.setAdListener(new AdListener() {
             @Override
