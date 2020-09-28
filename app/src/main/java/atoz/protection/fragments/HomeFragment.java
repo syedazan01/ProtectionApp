@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
     }
 
     private void initData() {
-        serviceBeanList.add(new ServiceBean("Call \nrecorder", R.drawable.ic_call_recorder));
+        serviceBeanList.add(new ServiceBean("Voice \nrecorder", R.drawable.ic_call_recorder));
         serviceBeanList.add(new ServiceBean("Camera \nDetector", R.drawable.cameradetector_logo));
         serviceBeanList.add(new ServiceBean("File \nShare", R.drawable.filesshare));
         serviceBeanList.add(new ServiceBean("Kill \nNotification", R.drawable.ic_bell_icon));

@@ -56,6 +56,26 @@ public class Otp extends AppCompatActivity implements ValueEventListener {
     FirebaseAuth mAuth;
     Activity activity = Otp.this;
     ProgressDialog pd;
+    private View.OnClickListener otpSubmitListener=new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (!TextUtils.isEmpty(otp_View.getText().toString())) {
+                PhoneAuthCredential credential = null;
+                try {
+                    credential = PhoneAuthProvider.getCredential(verficationId, otp_View.getText().toString());
+                    otpsubmit.setOnClickListener(null);
+                    signInWithPhoneAuthCredential(credential);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    otpsubmit.setOnClickListener(otpSubmitListener);
+                    Utils.showToast(activity,"Try Again",AppConstant.errorColor);
+                }
+
+            } else {
+                Utils.showToast(activity, "Invalid Otp", AppConstant.errorColor);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,25 +121,7 @@ public class Otp extends AppCompatActivity implements ValueEventListener {
                 otpSendTimer();
             }
         });
-        otpsubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!TextUtils.isEmpty(otp_View.getText().toString())) {
-                    PhoneAuthCredential credential = null;
-                    try {
-                        credential = PhoneAuthProvider.getCredential(verficationId, otp_View.getText().toString());
-
-                        signInWithPhoneAuthCredential(credential);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Utils.showToast(activity,"Try Again",AppConstant.errorColor);
-                    }
-
-                } else {
-                    Utils.showToast(activity, "Invalid Otp", AppConstant.errorColor);
-                }
-            }
-        });
+        otpsubmit.setOnClickListener(otpSubmitListener);
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,6 +160,7 @@ public class Otp extends AppCompatActivity implements ValueEventListener {
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth = FirebaseAuth.getInstance();
+        otpsubmit.setOnClickListener(null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -175,6 +178,7 @@ public class Otp extends AppCompatActivity implements ValueEventListener {
 //                            FirebaseUser user = task.getResult().getUser();
                             // ...
                         } else {
+                            otpsubmit.setOnClickListener(otpSubmitListener);
                             // Sign in failed, display a message and update the UI
                             Log.w("Otp Screen>>>", "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -219,6 +223,7 @@ public class Otp extends AppCompatActivity implements ValueEventListener {
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         pd.dismiss();
+        otpsubmit.setOnClickListener(otpSubmitListener);
         UserBean userBean=dataSnapshot.getValue(UserBean.class);
         if (userBean==null) {
             userBean=new UserBean();

@@ -48,6 +48,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -115,6 +116,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class Utils {
+    private static int[] getScreenResolution(Context context)
+    {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        int width = metrics.widthPixels;
+        int height = (int)(metrics.heightPixels*0.60);
+
+        return new int[]{width,height};
+    }
     public static void transparentStatusBar(Activity activity) {
 
 //        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
@@ -443,17 +455,10 @@ public class Utils {
 
     public static BottomSheetDialog getRegisteredUserList(Activity activity) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity, R.style.AppBottomSheetDialogTheme);
-//        bottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        bottomSheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         bottomSheetDialog.setContentView(R.layout.user_list_dialog);
 //        bottomSheetDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        WindowManager wm = (WindowManager) activity.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        display.getMetrics(metrics);
-        int width = metrics.widthPixels;
-        int height = metrics.heightPixels;
-
-        bottomSheetDialog.getWindow().setLayout(width, height);
+        bottomSheetDialog.findViewById(R.id.scrollView).setLayoutParams(new LinearLayout.LayoutParams(Utils.getScreenResolution(activity)[0],Utils.getScreenResolution(activity)[1]));
         bottomSheetDialog.findViewById(R.id.btnSend).setBackground(Utils.getThemeGradient(50F));
         return bottomSheetDialog;
     }
