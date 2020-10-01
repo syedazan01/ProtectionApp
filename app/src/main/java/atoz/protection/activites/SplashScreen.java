@@ -17,17 +17,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.balram.locker.utils.Locker;
 import com.balram.locker.view.AppLocker;
 import com.balram.locker.view.LockActivity;
+
+import atoz.protection.Protection;
 import atoz.protection.R;
 import atoz.protection.services.FloatingWindowService;
 import atoz.protection.services.ForgroundService;
 import atoz.protection.utils.AppConstant;
+import atoz.protection.utils.DatabaseService;
 import atoz.protection.utils.MIUIUtils;
 import atoz.protection.utils.PrefManager;
+import atoz.protection.utils.SubscriptionCheckService;
 import atoz.protection.utils.Utils;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
@@ -37,8 +49,15 @@ import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 import static atoz.protection.utils.AppConstant.REQUEST_OVERLAY_PERMISSION;
+import static atoz.protection.utils.AppConstant.SCREEN_SHOT;
+import static java.util.concurrent.TimeUnit.HOURS;
 
 public class SplashScreen extends AppCompatActivity {
+    private static final String STATE_RESULT_CODE = "RESULT_CODE";
+    private static final String STATE_RESULT_DATA = "RESULT_DATA";
+    private Intent mResultData;
+    private int mResultCode;
+    private MediaProjectionManager mProjectionManager;
 
     private static final int REQUEST_CODE_SCREEN_SHOT = 1001;
     private MediaProjectionManager mpManager;
@@ -55,7 +74,12 @@ public class SplashScreen extends AppCompatActivity {
         Utils.changeColor(this, "#00000000", true);
         mContext = this;
         handleDeepLink();
+        startWorkManager();
         setContentView(R.layout.splash_screen_layout);
+        mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        mResultCode=FloatingWindowService.getResult();
+        mResultData=FloatingWindowService.getIntent();
+        prepareToShot();
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitalId));
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
@@ -65,8 +89,8 @@ public class SplashScreen extends AppCompatActivity {
             startService(forrgroundIntent);
         }*/
         if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
-            if(Utils.isMyFloatingServiceRunning(this))
-                stopService(new Intent(this, FloatingWindowService.class));
+//            if(Utils.isMyFloatingServiceRunning(this))
+//                stopService(new Intent(this, FloatingWindowService.class));
             startService(new Intent(this, FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
         }
 
@@ -129,7 +153,16 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if (resultCode == RESULT_OK && requestCode == AppConstant.SCREEN_SHOT) {
+            PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN, true);
+            mResultCode = resultCode;
+            mResultData = data;
+            prepareToShot();
+            return;
+//            FloatingWindowService.mProjection = mProjectionManager.getMediaProjection(resultCode, data);
+            /*String jsonString=new Gson().toJson(mProjection);
+            PrefManager.putString(AppConstant.MEDIAPROJECTION,jsonString);*/
+        }
         if (resultCode == Activity.RESULT_OK && (requestCode == REQUEST_OVERLAY_PERMISSION || requestCode == APP_PERMISSION_REQUEST)) {
 //            startService(new Intent(this, FloatingWindowService.class));
         } else {
@@ -192,4 +225,39 @@ public class SplashScreen extends AppCompatActivity {
                     }
                 });
     }
+    private void startWorkManager() {
+
+        OneTimeWorkRequest workRequest= OneTimeWorkRequest.from(DatabaseService.class);
+        WorkManager workManager1 = WorkManager.getInstance(this);
+        workManager1.enqueueUniqueWork(AppConstant.DATABASE_WORK_TAG, ExistingWorkPolicy.REPLACE,workRequest);
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        PeriodicWorkRequest work = new PeriodicWorkRequest.Builder(SubscriptionCheckService.class, 1, HOURS)
+                .setConstraints(constraints)
+                .build();
+        WorkManager workManager = WorkManager.getInstance(this);
+        workManager.enqueueUniquePeriodicWork(AppConstant.WORK_TAG, ExistingPeriodicWorkPolicy.REPLACE, work);
+    }
+    private void prepareToShot() {
+        if(mResultData != null && mResultCode != 0){
+            FloatingWindowService.setResult(mResultCode);
+            FloatingWindowService.setIntent(mResultData);
+//            onClickCustomNotification();
+        }else{
+            startActivityForResult(mProjectionManager.createScreenCaptureIntent(), SCREEN_SHOT);
+            FloatingWindowService.setMediaProjectionManager(mProjectionManager);
+        }
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mResultData != null) {
+            Log.e("TAG", "onSaveInstanceState()");
+            outState.putInt(STATE_RESULT_CODE, mResultCode);
+            outState.putParcelable(STATE_RESULT_DATA, mResultData);
+        }
+    }
+
 }

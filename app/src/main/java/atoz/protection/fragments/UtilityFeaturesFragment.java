@@ -113,14 +113,14 @@ public class UtilityFeaturesFragment extends Fragment implements FloatingWindowS
 
                     } else {
                         PrefManager.putBoolean(AppConstant.OVERLAY, b);
-                        if(Utils.isMyFloatingServiceRunning(getActivity()))
-                            getActivity().stopService(new Intent(getActivity(),FloatingWindowService.class));
+//                        if(Utils.isMyFloatingServiceRunning(getActivity()))
+//                            getActivity().stopService(new Intent(getActivity(),FloatingWindowService.class));
                         getActivity().startService(new Intent(getActivity(), FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
                     }
                 } else {
-                    if (getActivity() != null) {
-                        getActivity().stopService(new Intent(getActivity(), FloatingWindowService.class));
-                    }
+//                    if (getActivity() != null) {
+//                        getActivity().stopService(new Intent(getActivity(), FloatingWindowService.class));
+//                    }
                     PrefManager.putBoolean(AppConstant.OVERLAY, b);
                 }
             }

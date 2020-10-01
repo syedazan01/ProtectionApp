@@ -28,14 +28,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.gson.Gson;
 
 public class Protection extends MultiDexApplication implements LifecycleObserver {
     private static Context mInstance;
     private InterstitialAd mInterstitialAd=null;
     private BroadcastReceiver mNetworkReceiver;
-    private int result;
-    private Intent intent;
-    private MediaProjectionManager mMediaProjectionManager;
+
 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -112,27 +111,5 @@ public class Protection extends MultiDexApplication implements LifecycleObserver
             mInstance=new Protection();
         return mInstance;
     }
-    public int getResult(){
-        return result;
-    }
 
-    public Intent getIntent(){
-        return intent;
-    }
-
-    public MediaProjectionManager getMediaProjectionManager(){
-        return mMediaProjectionManager;
-    }
-
-    public void setResult(int result1){
-        this.result = result1;
-    }
-
-    public void setIntent(Intent intent1){
-        this.intent = intent1;
-    }
-
-    public void setMediaProjectionManager(MediaProjectionManager mMediaProjectionManager){
-        this.mMediaProjectionManager = mMediaProjectionManager;
-    }
 }

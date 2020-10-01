@@ -43,4 +43,15 @@ public static void clear()
 {
     sharedPreferences.edit().clear().apply();
 }
+
+    public static void putInt(String key, int value) {
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putInt(key,value);
+        editor.apply();
+    }
+
+    public static int getInt(String key)
+    {
+        return sharedPreferences.getInt(key,0);
+    }
 }

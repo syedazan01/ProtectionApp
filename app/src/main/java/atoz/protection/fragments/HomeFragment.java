@@ -166,21 +166,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Serv
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         PrefManager.putBoolean(AppConstant.OVERLAY, b);
-        if (b) {
-            if (Build.VERSION.SDK_INT >= 19 && MIUIUtils.isMIUI() && !MIUIUtils.isFloatWindowOptionAllowed(getContext())) {
-                Utils.showToast(getActivity(), "Draw over other app permission not enable.", AppConstant.errorColor);
+        if (getActivity()!=null) {
+            if (b) {
+                if (Build.VERSION.SDK_INT >= 19 && MIUIUtils.isMIUI() && !MIUIUtils.isFloatWindowOptionAllowed(getActivity())) {
+                    Utils.showToast(getActivity(), "Draw over other app permission not enable.", AppConstant.errorColor);
 
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getContext())) {
-                Utils.showToast(getActivity(), "Draw over other app permission not enable.", AppConstant.errorColor);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getContext())) {
+                    Utils.showToast(getActivity(), "Draw over other app permission not enable.", AppConstant.errorColor);
 
+                } else {
+                          getActivity().startService(new Intent(getActivity(), FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
+                }
             } else {
-                if (Utils.isMyFloatingServiceRunning(getActivity()))
-                    getActivity().stopService(new Intent(getActivity(), FloatingWindowService.class));
                 getActivity().startService(new Intent(getActivity(), FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
-            }
-        } else {
-            getActivity().startService(new Intent(getActivity(), FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
 
+            }
         }
 
     }

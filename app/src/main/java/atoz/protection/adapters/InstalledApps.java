@@ -2,6 +2,9 @@ package atoz.protection.adapters;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +48,6 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
         blocked = new HashSet(Arrays.asList(pref.getString(AppConstant.PREF_PACKAGES_BLOCKED, "").split(";")));
 
     }
-
     @NonNull
     @Override
     public InstalledHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -56,7 +58,7 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
     @Override
     public void onBindViewHolder(@NonNull InstalledHolder holder, final int position) {
         PInfo pinfo = pInfos.get(position);
-        holder.appIcon.setImageDrawable(pinfo.getIcon());
+        holder.appIcon.setImageBitmap(pinfo.stringToBitmap(pinfo.getIcon()));
         Log.e("BLOCKED>>>",blocked.contains(pinfo.getPname())+"");
         holder.swOnOff.setChecked(blocked.contains(pinfo.getPname()));
         holder.tvAppName.setText(pInfos.get(position).getAppname());

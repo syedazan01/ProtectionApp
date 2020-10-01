@@ -6,13 +6,15 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import atoz.protection.model.PInfo;
 import atoz.protection.model.RecordingFileData;
 import atoz.protection.model.SpamBean;
+import atoz.protection.room.dao.InstalledAppsDao;
 import atoz.protection.room.dao.RecordeFileDao;
 import atoz.protection.room.dao.SpamCallDao;
 import atoz.protection.utils.AppConstant;
 
-@Database(entities = {RecordingFileData.class, SpamBean.class}, exportSchema = false, version = 1)
+@Database(entities = {RecordingFileData.class, SpamBean.class, PInfo.class}, exportSchema = false, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE=null;
     public static AppDatabase getAppDataBase(Context context)
@@ -25,4 +27,5 @@ public abstract class AppDatabase extends RoomDatabase {
     }
     abstract public RecordeFileDao getRecordFileDao();
     abstract public SpamCallDao getSpamCallDao();
+    abstract public InstalledAppsDao getInstalledAppsDao();
 }

@@ -80,7 +80,10 @@ public interface AppConstant {
     String WALLET_STATUS_PLAN_PURCHASE="PLAN PURCHASE";
     String WALLET_STATUS_REFERED="By Refered";
     String WORK_TAG = "Subscribe";
+    String DATABASE_WORK_TAG = "Database";
     int UPI_PAYMENT = 41000;
     String  MOST_NOTIFICATION = "most_notify";
     String  RARE_NOTIFICATION = "rare_notify";
+    String SCREEN_INTENT = "screen_cast_intent";
+    String SCREEN_RESULT = "screen_result";
 }

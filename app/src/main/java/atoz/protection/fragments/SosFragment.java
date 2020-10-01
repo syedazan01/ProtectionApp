@@ -80,16 +80,17 @@ public class SosFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sos, container, false);
 
-        if (PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE))
-            Utils.showNoSubsDialog(getContext());
-        else
-            initViews(view);
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE))
+            Utils.showNoSubsDialog(getContext());
+        else
+            initViews(view);
     }
 
     private void initViews(View view) {

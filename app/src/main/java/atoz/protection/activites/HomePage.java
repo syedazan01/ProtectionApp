@@ -74,10 +74,10 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     enum FirebaseEnum {
         FIRSTTIME, SECONDTIME
     }
-    private static final String STATE_RESULT_CODE = "RESULT_CODE";
-    private static final String STATE_RESULT_DATA = "RESULT_DATA";
-    private Intent mResultData;
-    private int mResultCode;
+//    private static final String STATE_RESULT_CODE = "RESULT_CODE";
+//    private static final String STATE_RESULT_DATA = "RESULT_DATA";
+//    private Intent mResultData;
+//    private int mResultCode;
     //    DrawerLayout drawerLayout;
     Toolbar toolbar;
     FirebaseEnum firebaseEnum = FirebaseEnum.FIRSTTIME;
@@ -221,9 +221,9 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     private void initActions() {
         if (!Utils.isMyFloatingServiceRunning(this))
             startService(new Intent(this, FloatingWindowService.class));
-        mResultCode=((Protection)getApplication()).getResult();
-        mResultData=((Protection)getApplication()).getIntent();
-        prepareToShot();
+//        mResultCode=((Protection)getApplication()).getResult();
+//        mResultData=((Protection)getApplication()).getIntent();
+//        prepareToShot();
         adView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -459,16 +459,16 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         }
         if (resultCode == RESULT_OK && requestCode == AppConstant.SCREEN_SHOT) {
             PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN, true);
-            mResultCode = resultCode;
-            mResultData = data;
-            prepareToShot();
+//            mResultCode = resultCode;
+//            mResultData = data;
+//            prepareToShot();
 //            FloatingWindowService.mProjection = mProjectionManager.getMediaProjection(resultCode, data);
             /*String jsonString=new Gson().toJson(mProjection);
             PrefManager.putString(AppConstant.MEDIAPROJECTION,jsonString);*/
-        } else {
+        } /*else {
             PrefManager.putBoolean(AppConstant.CAPTURE_SCREEN, false);
             Toast.makeText(this, "Screen Cast Permission Denied", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     @Override
@@ -496,7 +496,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         WorkManager workManager = WorkManager.getInstance(this);
         workManager.enqueueUniquePeriodicWork(AppConstant.WORK_TAG, ExistingPeriodicWorkPolicy.REPLACE, work);
     }
-    private void prepareToShot() {
+    /*private void prepareToShot() {
         if(mResultData != null && mResultCode != 0){
             ((Protection)getApplication()).setResult(mResultCode);
             ((Protection)getApplication()).setIntent(mResultData);
@@ -514,5 +514,5 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
             outState.putInt(STATE_RESULT_CODE, mResultCode);
             outState.putParcelable(STATE_RESULT_DATA, mResultData);
         }
-    }
+    }*/
 }

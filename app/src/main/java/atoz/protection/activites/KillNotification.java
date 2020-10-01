@@ -27,6 +27,7 @@ import atoz.protection.R;
 import atoz.protection.adapters.InstalledApps;
 import atoz.protection.interfacecallbacks.OnNotificationChecked;
 import atoz.protection.model.PInfo;
+import atoz.protection.room.AppDatabase;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
@@ -276,7 +277,8 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                         pd.show();
                     }
                 });
-                pInfos = new PInfo(activity).getInstalledApps(false);
+//                pInfos = new PInfo(activity).getInstalledApps(false);
+                pInfos = (ArrayList<PInfo>) AppDatabase.getAppDataBase(KillNotification.this).getInstalledAppsDao().getInstallsApps();
                 List<PInfo> tempPInfos = new ArrayList<>(pInfos);
                 for (int i = 0; i < tempPInfos.size(); i++) {
                     PInfo pInfo = tempPInfos.get(i);
