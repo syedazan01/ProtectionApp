@@ -24,7 +24,7 @@ public class ATMFile extends AppCompatActivity {
     TextInputEditText cardvaliET;
     TextInputLayout bankname, atmnumber, nameoncard, cardVailidity, cvvcode;
     private TextView tvToolbarTitle;
-    private ImageView ivATM, ivatmscan;
+    private ImageView ivATM, ivatmscan,ivatmscan2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class ATMFile extends AppCompatActivity {
     }
 
     private void initViews() {
-        bankname = findViewById(R.id.Bank_name);
+        bankname = findViewById(R.id.branchET);
         atmnumber = findViewById(R.id.atmnumberET);
         nameoncard = findViewById(R.id.cardnameET);
         cardVailidity = findViewById(R.id.cardvaliTxtIL);
@@ -51,6 +51,7 @@ public class ATMFile extends AppCompatActivity {
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("ATM Detail Form");
         ivatmscan = findViewById(R.id.atm_imageView1);
+        ivatmscan2 = findViewById(R.id.atm_imageView2);
         if (getIntent().hasExtra(AppConstant.ATM)) {
 
             AtmBean atmBean = (AtmBean) getIntent().getSerializableExtra(AppConstant.ATM);
@@ -65,12 +66,24 @@ public class ATMFile extends AppCompatActivity {
             Utils.getStorageReference().child(AppConstant.ATM + "/" + atmBean.getAtmimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         Glide.with(ATMFile.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(ivatmscan);
+                    }
+                }
+            });
+
+            Utils.getStorageReference().child(AppConstant.ATM + "/" + atmBean.getAtmimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        Glide.with(ATMFile.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivatmscan2);
                     }
                 }
             });

@@ -26,6 +26,7 @@ import atoz.protection.adapters.AdapterSubscription;
 import atoz.protection.model.PlansBean;
 import atoz.protection.model.UserBean;
 import atoz.protection.model.WalletHistory;
+import atoz.protection.room.AppDatabase;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
@@ -129,13 +130,21 @@ public class SubscriptionPlan extends AppCompatActivity implements AdapterSubscr
 
                                 tvScheme.setText(userBean.getSchemeName());
                                 tvPrice.setText("\u20B9 " + userBean.getPlanPrice());
-                                if (!userBean.getPlanPurchaseDate().isEmpty()) {
+                                if (userBean.getPlanPurchaseDate()!=null && !userBean.getPlanPurchaseDate().isEmpty()) {
                                     if (!Utils.getDaysLeft(userBean.getPlanPurchaseDate()).equalsIgnoreCase("")) {
                                         tvPeriod.setText(Utils.getDaysLeft(userBean.getPlanPurchaseDate()));
                                     } else {
+                                        PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE,false);
                                         cardMyPlan.setVisibility(View.GONE);
                                     }
                                 }
+                                else
+                                {
+                                    PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE,false);
+                                    cardMyPlan.setVisibility(View.GONE);
+                                }
+                                userBean.setSubscribe(PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE));
+                                Utils.storeUserDetailsToRTD(userBean);
                             }
                         }
                     }
@@ -223,6 +232,8 @@ public class SubscriptionPlan extends AppCompatActivity implements AdapterSubscr
         if (!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
             int planvalidity=plansBean.getPlan_duration();
             Date planDate= new Date();
+            if((planDate.getMonth()-1)+planvalidity>12)
+                planDate.setYear(planDate.getYear()+1);
             planDate.setMonth((planDate.getMonth() - 1 + planvalidity) % 12 + 1);
             remainingDate=new SimpleDateFormat("dd/MMM/yyyy",Locale.getDefault()).format(planDate);
             planPrice=plansBean.getPlanPrice();
@@ -308,6 +319,26 @@ public class SubscriptionPlan extends AppCompatActivity implements AdapterSubscr
                             userBean.setPlanPurchaseDate(remainingDate);
                             userBean.setSchemeName(planName);
                             userBean.setPlanPurchaseDate(remainingDate);
+
+                            walletAmount = userBean.getWalletAmount();
+                            if(PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
+                                cardMyPlan.setVisibility(View.VISIBLE);
+
+                                tvScheme.setText(userBean.getSchemeName());
+                                tvPrice.setText("\u20B9 " + userBean.getPlanPrice());
+                                if (userBean.getPlanPurchaseDate() != null && !userBean.getPlanPurchaseDate().isEmpty()) {
+                                    if (!Utils.getDaysLeft(userBean.getPlanPurchaseDate()).equalsIgnoreCase("")) {
+                                        tvPeriod.setText(Utils.getDaysLeft(userBean.getPlanPurchaseDate()));
+                                    } else {
+                                        PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, false);
+                                        cardMyPlan.setVisibility(View.GONE);
+                                    }
+                                } else {
+                                    PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, false);
+                                    cardMyPlan.setVisibility(View.GONE);
+                                }
+                                userBean.setSubscribe(PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE));
+                            }
                             Utils.storeUserDetailsToRTD(userBean);
 
                             WalletHistory walletHistory = new WalletHistory();
@@ -363,30 +394,52 @@ public class SubscriptionPlan extends AppCompatActivity implements AdapterSubscr
                 }
                 else
                 {
+                    myPlan=MyPlan.Load;
                     payAmount=walletAmount-planPrice;
                     Utils.getUserReference().child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            UserBean userBean=dataSnapshot.getValue(UserBean.class);
-                            if(userBean!=null)
-                            {
-                                userBean.setSubscribe(true);
-                                PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE,true);
-                                userBean.setPlanPrice(planPrice);
-                                userBean.setWalletAmount(payAmount);
-                                userBean.setPlanPurchaseDate(remainingDate);
-                                userBean.setSchemeName(planName);
-                                userBean.setPlanPurchaseDate(remainingDate);
-                                Utils.storeUserDetailsToRTD(userBean);
-                                Utils.showToast(activity,"Transaction successful.",AppConstant.succeedColor);
+                            if(myPlan==MyPlan.Load) {
+                                myPlan=MyPlan.Loaded;
+                                UserBean userBean = dataSnapshot.getValue(UserBean.class);
+                                if (userBean != null) {
+                                    userBean.setSubscribe(true);
+                                    PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, true);
+                                    userBean.setPlanPrice(planPrice);
+                                    userBean.setWalletAmount(payAmount);
+                                    userBean.setPlanPurchaseDate(remainingDate);
+                                    userBean.setSchemeName(planName);
+                                    userBean.setPlanPurchaseDate(remainingDate);
+                                    walletAmount = userBean.getWalletAmount();
+                                    if(PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
+                                        cardMyPlan.setVisibility(View.VISIBLE);
 
-                                WalletHistory walletHistory = new WalletHistory();
-                                walletHistory.setWalletmobile(PrefManager.getString(AppConstant.USER_MOBILE));
-                                walletHistory.setMobile("Plan Purchase");
-                                walletHistory.setAmount(planPrice);
-                                walletHistory.setStatus(AppConstant.WALLET_STATUS_PLAN_PURCHASE);
-                                walletHistory.setCreated(new SimpleDateFormat("dd MMM yyyy").format(new Date()));
-                                Utils.storeWalletHistory(walletHistory);
+                                        tvScheme.setText(userBean.getSchemeName());
+                                        tvPrice.setText("\u20B9 " + userBean.getPlanPrice());
+                                        if (userBean.getPlanPurchaseDate() != null && !userBean.getPlanPurchaseDate().isEmpty()) {
+                                            if (!Utils.getDaysLeft(userBean.getPlanPurchaseDate()).equalsIgnoreCase("")) {
+                                                tvPeriod.setText(Utils.getDaysLeft(userBean.getPlanPurchaseDate()));
+                                            } else {
+                                                PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, false);
+                                                cardMyPlan.setVisibility(View.GONE);
+                                            }
+                                        } else {
+                                            PrefManager.putBoolean(AppConstant.IS_SUBSCRIBE, false);
+                                            cardMyPlan.setVisibility(View.GONE);
+                                        }
+                                        userBean.setSubscribe(PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE));
+                                    }
+                                    Utils.storeUserDetailsToRTD(userBean);
+                                    Utils.showToast(activity, "Transaction successful.", AppConstant.succeedColor);
+
+                                    WalletHistory walletHistory = new WalletHistory();
+                                    walletHistory.setWalletmobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                                    walletHistory.setMobile("Plan Purchase");
+                                    walletHistory.setAmount(planPrice);
+                                    walletHistory.setStatus(AppConstant.WALLET_STATUS_PLAN_PURCHASE);
+                                    walletHistory.setCreated(new SimpleDateFormat("dd MMM yyyy").format(new Date()));
+                                    Utils.storeWalletHistory(walletHistory);
+                                }
                             }
                         }
 
@@ -396,6 +449,7 @@ public class SubscriptionPlan extends AppCompatActivity implements AdapterSubscr
                         }
                     });
                 }
+                bottomSheetDialog.dismiss();
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {

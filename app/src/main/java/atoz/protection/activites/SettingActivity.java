@@ -3,6 +3,7 @@ package atoz.protection.activites;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -61,7 +62,7 @@ public class SettingActivity extends AppCompatActivity {
         rltRateus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 Uri uri= Uri.parse("market://details?id"+BuildConfig.APPLICATION_ID);
+                /* Uri uri= Uri.parse("market://details?id"+BuildConfig.APPLICATION_ID);
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                 // To count with Play market backstack, After pressing back button,
                 // to taken back to our application, we need to add following flags to intent.
@@ -73,11 +74,41 @@ public class SettingActivity extends AppCompatActivity {
                 } catch (ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW,
                             Uri.parse("http://play.google.com/store/apps/details?id="+BuildConfig.APPLICATION_ID)));
-                }
+                }*/
+                rateApp();
             }
         });
     }
+    public void rateApp()
+    {
+        try
+        {
+            Intent rateIntent = rateIntentForUrl("market://details");
+            startActivity(rateIntent);
+        }
+        catch (ActivityNotFoundException e)
+        {
+            Intent rateIntent = rateIntentForUrl("https://play.google.com/store/apps/details");
+            startActivity(rateIntent);
+        }
+    }
 
+    private Intent rateIntentForUrl(String url)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("%s?id=%s", url, getPackageName())));
+        int flags = Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_MULTIPLE_TASK;
+        if (Build.VERSION.SDK_INT >= 21)
+        {
+            flags |= Intent.FLAG_ACTIVITY_NEW_DOCUMENT;
+        }
+        else
+        {
+            //noinspection deprecation
+            flags |= Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET;
+        }
+        intent.addFlags(flags);
+        return intent;
+    }
     private void initViews() {
         rltAboutus = findViewById(R.id.rltAboutUs);
         rltTermsCon = findViewById(R.id.rltTandC);

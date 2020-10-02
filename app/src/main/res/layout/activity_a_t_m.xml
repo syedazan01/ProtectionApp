@@ -111,6 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="CVV Code"
+                        android:maxLength="3"
                         android:fontFamily="@font/poppins_regular"
                         android:inputType="phone"
                         android:padding="10dp"
@@ -141,10 +142,9 @@
                         android:textSize="13sp" />
 
                     <ImageView
-                        android:id="@+id/atm_imageView2"
+                        android:id="@+id/atm_imageView1"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_height="match_parent"
                         android:scaleType="fitXY" />
 
                 </RelativeLayout>
@@ -173,10 +173,9 @@
                         android:textSize="13sp" />
 
                     <ImageView
-                        android:id="@+id/atm_imageView1"
+                        android:id="@+id/atm_imageView2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_height="match_parent"
                         android:scaleType="fitXY" />
 
                 </RelativeLayout>

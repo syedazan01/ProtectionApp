@@ -84,7 +84,7 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(VoterID.this);
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
-    private Boolean imagepicker;
+    private boolean imagepicker;
     private VoteridBean voteridBean;
 
     @Override
@@ -110,14 +110,14 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (imagepicker == false) {
+            if (!imagepicker) {
                 //Image Uri will not be null for RESULT_OK
                 fileUri = data.getData();
                 ivVoterid.setImageURI(fileUri);
                 //You can get File object from intent
                 File file = ImagePicker.Companion.getFile(data);
                 imagepicker = true;
-            } else if (imagepicker == true) {
+            } else if (imagepicker) {
                 fileUri2 = data.getData();
                 ivVoterid2.setImageURI(fileUri2);
                 //You can get File object from intent
@@ -294,13 +294,25 @@ public class VoterID extends AppCompatActivity implements SendDailog.SendDialogL
             Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + voteridBean.getVoterImage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
                         Glide.with(VoterID.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(ivVoterid);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + voteridBean.getVoterImage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        fileUri2 = task.getResult();
+                        Glide.with(VoterID.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivVoterid2);
                     }
                 }
             });

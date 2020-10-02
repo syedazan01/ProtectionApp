@@ -40,6 +40,7 @@
                      >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
@@ -57,6 +58,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
+                        android:enabled="false"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="Father Name"
@@ -76,6 +78,7 @@
 
 
                 <RadioGroup
+                    android:enabled="false"
                     android:id="@+id/VoteridGradio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -141,6 +144,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/voteriddob_calender"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
@@ -158,6 +162,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
+                        android:enabled="false"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="Address"
@@ -174,6 +179,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
+                        android:enabled="false"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="Assembly Constituency No. Name"
@@ -182,20 +188,68 @@
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/ivVoterid_1"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                   
-                    android:scaleType="fitXY" />
+                    android:layout_height="179dp"
+                    android:background="@drawable/imageview">
 
-                <ImageView
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/ivVoterid_2"
+                    <ImageView
+                        android:id="@+id/camloc"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your atm front side"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/ivVoterid_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                   
-                    android:scaleType="fitXY" />
+                    android:layout_height="179dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/imageview">
+
+                    <ImageView
+                        android:id="@+id/camloc1"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your atm front side"
+                        android:textSize="13sp" />
+
+
+                    <ImageView
+                        android:id="@+id/ivVoterid_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY" />
+
+                </RelativeLayout>
 
 
             </LinearLayout>

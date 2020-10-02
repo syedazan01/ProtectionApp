@@ -62,6 +62,9 @@ public class PassportFile extends AppCompatActivity {
         imageView = findViewById(R.id.passport_imageView1);
         imageView2 = findViewById(R.id.passport_imageView2);
         ivBack = findViewById(R.id.ivBack);
+        radioMale = findViewById(R.id.Gen_male);
+        radioFemale = findViewById(R.id.Gen_female);
+        radioOther = findViewById(R.id.Gen_other);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Passport Form");
         if (getIntent().hasExtra(AppConstant.PASSPORT)) {
@@ -72,6 +75,10 @@ public class PassportFile extends AppCompatActivity {
             nationality.getEditText().setText(passportBean.getNationalty());
             fullname.getEditText().setText(passportBean.getFullname());
             dobinput.setText(passportBean.getDateofbirth());
+            placeofbirth.getEditText().setText(passportBean.getPlaceofbirth());
+            placeofissue.getEditText().setText(passportBean.getPlaceofissue());
+            dateofissue.setText(passportBean.getDateofissue());
+            dateofexpiry.setText(passportBean.getDateofexpiry());
             if (passportBean.getSex().equals("Male"))
                 radioMale.setChecked(true);
             else if (passportBean.getSex().equals("Female"))

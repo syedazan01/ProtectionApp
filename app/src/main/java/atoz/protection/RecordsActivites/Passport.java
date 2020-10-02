@@ -87,7 +87,7 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
     Activity activity = this;
     List<FileShareBean> fileShareBeans = new ArrayList<>();
     List<String> tokenList = new ArrayList<>();
-    Boolean imagepick = true;
+    boolean imagepick;
     private Uri fileUri, fileUri2;
     private PassportBean passportBean;
 
@@ -320,7 +320,7 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-        fileShareBean.setDocument_type(AppConstant.ADHAAR);
+        fileShareBean.setDocument_type(AppConstant.PASSPORT);
         fileShareBean.setPassword(password);
         fileShareBean.setMsg(msg);
         if (isChecked) {
@@ -369,6 +369,10 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
             nationality.getEditText().setText(passportBean.getNationalty());
             fullname.getEditText().setText(passportBean.getFullname());
             dobinput.setText(passportBean.getDateofbirth());
+            placeofbirth.getEditText().setText(passportBean.getPlaceofbirth());
+            placeofissue.getEditText().setText(passportBean.getPlaceofissue());
+            dateofissue.setText(passportBean.getDateofissue());
+            dateofexpiry.setText(passportBean.getDateofexpiry());
             if (passportBean.getSex().equals("Male"))
                 radioMale.setChecked(true);
             else if (passportBean.getSex().equals("Female"))
@@ -416,18 +420,18 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             //Image Uri will not be null for RESULT_OK
-            if (imagepick == true) {
+            if (!imagepick) {
                 fileUri = data.getData();
                 imageView.setImageURI(fileUri);
                 //You can get File object from intent
                 File file = ImagePicker.Companion.getFile(data);
-                imagepick = false;
-            } else if (imagepick == false) {
+                imagepick = true;
+            } else if (imagepick) {
                 fileUri2 = data.getData();
                 imageView2.setImageURI(fileUri2);
                 //You can get File object from intent
                 File file2 = ImagePicker.Companion.getFile(data);
-                imagepick = true;
+                imagepick = false;
 
             }
 
@@ -474,7 +478,7 @@ public class Passport extends AppCompatActivity implements SendDailog.SendDialog
                 pd.dismiss();
             }
         });
-        sendpassportBT.setOnClickListener(new View.OnClickListener() {
+        btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();

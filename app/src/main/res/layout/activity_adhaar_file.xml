@@ -39,8 +39,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"
                         android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Full Name"
                         android:inputType="textPersonName"
                         android:padding="10dp"
@@ -57,9 +57,9 @@
                         android:id="@+id/dob_calender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"
                         android:enabled="false"
                         android:focusable="false"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Date Of Birth"
                         android:padding="10dp"
                         android:textSize="14sp" />
@@ -87,55 +87,55 @@
                         android:id="@+id/Gen_male"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:fontFamily="@font/poppins_regular"
-                        android:enabled="false"
-                        android:padding="10dp"
-                        android:button="@android:color/transparent"
-                        android:background="@drawable/radio_selctor"
-                        android:textColor="@drawable/radio_textcolor"
-                        android:elevation="4dp"
-                        android:textSize="14sp"
                         android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/radio_selctor"
+                        android:button="@android:color/transparent"
+                        android:checked="true"
+                        android:elevation="4dp"
                         android:ems="5"
+                        android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:padding="10dp"
+                        android:text="Male"
                         android:textAlignment="center"
-                        android:text="Male" />
+                        android:textColor="@drawable/radio_textcolor"
+                        android:textSize="14sp" />
 
                     <RadioButton
 
                         android:id="@+id/Gen_female"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:padding="10dp"
-                        android:button="@android:color/transparent"
-                        android:background="@drawable/radio_selctor"
-                        android:textColor="@drawable/radio_textcolor"
-                        android:elevation="4dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textSize="14sp"
                         android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/radio_selctor"
+                        android:button="@android:color/transparent"
+                        android:elevation="4dp"
                         android:ems="5"
+                        android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:padding="10dp"
+                        android:text="Female"
                         android:textAlignment="center"
-                        android:text="Female" />
+                        android:textColor="@drawable/radio_textcolor"
+                        android:textSize="14sp" />
 
                     <RadioButton
 
                         android:id="@+id/Gen_other"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:padding="10dp"
-                        android:button="@android:color/transparent"
-                        android:background="@drawable/radio_selctor"
-                        android:textColor="@drawable/radio_textcolor"
-                        android:elevation="4dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textSize="14sp"
                         android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/radio_selctor"
+                        android:button="@android:color/transparent"
+                        android:elevation="4dp"
                         android:ems="5"
+                        android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:padding="10dp"
+                        android:text="Other"
                         android:textAlignment="center"
-                        android:text="Other" />
+                        android:textColor="@drawable/radio_textcolor"
+                        android:textSize="14sp" />
 
                 </RadioGroup>
 
@@ -151,8 +151,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"
                         android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Aadhar Number"
                         android:inputType="number"
                         android:padding="10dp"
@@ -170,26 +170,75 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"
                         android:enabled="false"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="Address"
                         android:inputType="textPostalAddress"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:id="@+id/adhar_imageView1"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scaleType="fitXY" />
+                    android:layout_height="179dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/imageview">
 
-                <ImageView
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/adhar_imageView2"
+                    <ImageView
+                        android:id="@+id/camloc"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your atm back side"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/adhar_imageView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scaleType="fitXY" />
+                    android:layout_height="179dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/imageview">
+
+                    <ImageView
+                        android:id="@+id/camloc1"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your atm back side"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:id="@+id/adhar_imageView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY" />
+
+                </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>

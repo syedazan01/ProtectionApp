@@ -79,7 +79,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
     private ImageView ivATM, ivatmscan, ivatmscan2;
     private String password, msg;
     private List<String> tokenList = new ArrayList<>();
-    private Boolean imagepicker = false;
+    private boolean imagepicker;
     private AtmBean atmBean;
 
     @Override
@@ -106,11 +106,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, 100);*/
 
-                ImagePicker.Companion.with(ATM.this)
-                        .crop()                    //Crop image(Optional), Check Customization for more option
-                        .compress(1024)            //Final image size will be less than 1 MB(Optional)
-                        .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
-                        .start();
+                Utils.showMediaChooseBottomSheet(ATM.this);
             }
         });
 
@@ -144,7 +140,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                     return;
                 }
                 if (atmnumber.getEditText().getText().toString().length() < 16) {
-                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                    Utils.showToast(activity, "Invalid ATM No.", AppConstant.errorColor);
                     atmnumber.getEditText().requestFocus();
                     return;
                 }
@@ -161,8 +157,8 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
                     Utils.showToast(activity, getResources().getString(R.string.atm_scan_error), AppConstant.errorColor);
                     return;
                 }
-                if (cvvcode.getEditText().getText().toString().length() < 16) {
-                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                if (cvvcode.getEditText().getText().toString().length()!=3) {
+                    Utils.showToast(activity, "Invalid Cvv No.", AppConstant.errorColor);
                     cvvcode.getEditText().requestFocus();
                     return;
                 }
@@ -234,7 +230,7 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
 
 
     private void initViews() {
-        bankname = findViewById(R.id.Bank_name);
+        bankname = findViewById(R.id.branchET);
         atmnumber = findViewById(R.id.atmnumberET);
         nameoncard = findViewById(R.id.cardnameET);
         cardVailidity = findViewById(R.id.cardvaliTxtIL);
@@ -378,14 +374,14 @@ public class ATM extends AppCompatActivity implements SendDailog.SendDialogListe
             imageView.setImageBitmap(captureImage);
         }*/
         if (resultCode == Activity.RESULT_OK) {
-            if (imagepicker == false) {
+            if (!imagepicker) {
                 //Image Uri will not be null for RESULT_OK
                 fileUri = data.getData();
                 ivatmscan.setImageURI(fileUri);
                 //You can get File object from intent
                 File file = ImagePicker.Companion.getFile(data);
                 imagepicker = true;
-            } else if (imagepicker == true) {
+            } else if (imagepicker) {
                 fileUri2 = data.getData();
                 ivatmscan2.setImageURI(fileUri2);
                 //You can get File object from intent

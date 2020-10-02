@@ -26,7 +26,7 @@ public class VoterIDFile extends AppCompatActivity {
     RadioGroup radioGender;
     RadioButton radioMale, radioFemale, radioOther;
     private TextView tvToolbarTitle;
-    private ImageView ivVid, ivVoterid;
+    private ImageView ivVid, ivVoterid,ivVoterid2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class VoterIDFile extends AppCompatActivity {
         FatherName = findViewById(R.id.voteridFathername);
         dob = findViewById(R.id.voterid_dob);
         ivVoterid = findViewById(R.id.ivVoterid_1);
+        ivVoterid2 = findViewById(R.id.ivVoterid_2);
         Address = findViewById(R.id.voterid_addres);
         AssemblyName = findViewById(R.id.elction_constituency);
         radioGender = findViewById(R.id.VoteridGradio);
@@ -76,12 +77,24 @@ public class VoterIDFile extends AppCompatActivity {
             Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + voteridBean.getVoterImage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-                    pd.dismiss();
                     if (task.isSuccessful()) {
                         Glide.with(VoterIDFile.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(ivVoterid);
+                    }
+                }
+            });
+
+            Utils.getStorageReference().child(AppConstant.VOTER_ID + "/" + voteridBean.getVoterImage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        Glide.with(VoterIDFile.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivVoterid2);
                     }
                 }
             });

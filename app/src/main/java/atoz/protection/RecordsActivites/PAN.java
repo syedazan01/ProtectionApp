@@ -80,7 +80,7 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
     private String msg, password;
     List<String> tokenList = new ArrayList<>();
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
-    private Boolean imagepicker;
+    private boolean imagepicker;
     PanBean panBean;
 
     @Override
@@ -362,14 +362,14 @@ public class PAN extends AppCompatActivity implements SendDailog.SendDialogListe
             imageView.setImageBitmap(captureImage);
         }*/
         if (resultCode == Activity.RESULT_OK) {
-            if (imagepicker == false) {
+            if (!imagepicker) {
                 //Image Uri will not be null for RESULT_OK
                 fileUri = data.getData();
                 pan_imageview.setImageURI(fileUri);
                 //You can get File object from intent
                 File file = ImagePicker.Companion.getFile(data);
                 imagepicker = true;
-            } else if (imagepicker == true) {
+            } else if (imagepicker) {
                 fileUri2 = data.getData();
                 pan_imageview2.setImageURI(fileUri2);
                 //You can get File object from intent

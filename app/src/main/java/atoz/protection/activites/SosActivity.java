@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -176,11 +177,14 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
                                         call.enqueue(new Callback<NotificationBean>() {
                                             @Override
                                             public void onResponse(Call<NotificationBean> call, Response<NotificationBean> response) {
+                                                Toast.makeText(SosActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
+                                              finish();
                                                 Log.e("vdfbdbedtbher", String.valueOf(response.body().getSuccess()));
                                             }
 
                                             @Override
                                             public void onFailure(Call<NotificationBean> call, Throwable t) {
+                                                finish();
                                                 Log.e("vdfbdbedtbher", t.getMessage());
                                             }
                                         });
@@ -233,23 +237,25 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
                         }
                         for (DataSnapshot postShot : dataSnapshot.getChildren()) {
                             UserBean userBean = postShot.getValue(UserBean.class);
-                            if (!userBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
+                            if (userBean.getMobile()!=null) {
+                                if (!userBean.getMobile().equals(PrefManager.getString(AppConstant.USER_MOBILE))) {
 
-                                SosBean sosBean2 = new SosBean();
-                                if (sosBeanList.size() == 0 || sosNumbers.indexOf(userBean.getMobile()) == -1) {
+                                    SosBean sosBean2 = new SosBean();
+                                    if (sosBeanList.size() == 0 || sosNumbers.indexOf(userBean.getMobile()) == -1) {
 
-                                    sosBean2.setMobile(userBean.getMobile());
-                                    sosBean2.setProfilePic(userBean.getProfilePic());
-                                    sosBean2.setFcmToken(userBean.getFcmToken());
-                                    if(sosBean2.isChecked())
-                                    {
-                                        FetchNotification fetchNotification = new FetchNotification();
-                                        fetchNotification.setTo_mobile(PrefManager.getString(AppConstant.USER_MOBILE));
-                                        fetchNotification.setFrom_mobile(sosBean2.getMobile());
-                                        fetchNotification.setProfile_Pic(sosBean2.getProfilePic());
-                                        fetchNotifications.add(fetchNotification);
+                                        sosBean2.setMobile(userBean.getMobile());
+                                        sosBean2.setProfilePic(userBean.getProfilePic());
+                                        sosBean2.setFcmToken(userBean.getFcmToken());
+                                        if(sosBean2.isChecked())
+                                        {
+                                            FetchNotification fetchNotification = new FetchNotification();
+                                            fetchNotification.setTo_mobile(PrefManager.getString(AppConstant.USER_MOBILE));
+                                            fetchNotification.setFrom_mobile(sosBean2.getMobile());
+                                            fetchNotification.setProfile_Pic(sosBean2.getProfilePic());
+                                            fetchNotifications.add(fetchNotification);
+                                        }
+                                        sosBeanList.add(sosBean2);
                                     }
-                                    sosBeanList.add(sosBean2);
                                 }
                             }
                         }

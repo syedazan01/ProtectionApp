@@ -74,7 +74,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     List<String> tokenList = new ArrayList<>();
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(Bank.this);
-    private Boolean imagepicker;
+    private boolean imagepicker;
     private BankBean bankBean;
 
     @Override
@@ -102,20 +102,18 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (imagepicker == false) {
                 //Image Uri will not be null for RESULT_OK
                 fileUri = data.getData();
                 ivbankscan.setImageURI(fileUri);
                 //You can get File object from intent
                 File file = ImagePicker.Companion.getFile(data);
-                imagepicker = true;
-            } else if (imagepicker == true) {
+                /*} else if (imagepicker) {
                 fileUri2 = data.getData();
                 ivbankscan2.setImageURI(fileUri2);
                 //You can get File object from intent
                 File file2 = ImagePicker.Companion.getFile(data);
                 imagepicker = false;
-            }
+            }*/
 
 
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
@@ -152,12 +150,12 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                 }
 
                 if (accountNumber.getEditText().getText().toString().length() < 16) {
-                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                    Utils.showToast(activity, "Invalid Account No.", AppConstant.errorColor);
                     accountNumber.getEditText().requestFocus();
                     return;
                 }
-                if (ifscCode.getEditText().getText().toString().length() < 11) {
-                    Utils.showToast(activity, getResources().getString(R.string.adhaar_error), AppConstant.errorColor);
+                if (TextUtils.isEmpty(ifscCode.getEditText().getText())) {
+                    Utils.showToast(activity,"Invalid Ifsc Code", AppConstant.errorColor);
                     ifscCode.getEditText().requestFocus();
                     return;
                 }
@@ -175,10 +173,10 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                     Utils.showToast(activity, getResources().getString(R.string.bank_scan_error), AppConstant.errorColor);
                     return;
                 }
-                if (fileUri2 == null) {
+              /*  if (fileUri2 == null) {
                     Utils.showToast(activity, getResources().getString(R.string.bank_scan_error), AppConstant.errorColor);
                     return;
-                }
+                }*/
                 // get all the values
                 String accountHoldernames = accountHolderName.getEditText().getText().toString();
                 String accountNumbers = accountNumber.getEditText().getText().toString();
@@ -196,10 +194,10 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                 bankBean.setBranchName(branchNames);
                 bankBean.setBankName(banknames);
                 bankBean.setBankimage(fileUri.getLastPathSegment());
-                bankBean.setBankimage2(fileUri2.getLastPathSegment());
+//                bankBean.setBankimage2(fileUri2.getLastPathSegment());
                 bankBean.setMobile(PrefManager.getString(AppConstant.USER_MOBILE));
-                Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
+                UploadTask uploadTask= Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+//                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.BANK + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -231,7 +229,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
         branchName = findViewById(R.id.branch_name);
         bankName = findViewById(R.id.Bank_name);
         ivbankscan = findViewById(R.id.bank_imageview1);
-        ivbankscan2 = findViewById(R.id.bank_imageview2);
+//        ivbankscan2 = findViewById(R.id.bank_imageview2);
 
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Bank Detail Form");
@@ -255,6 +253,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
             Utils.getStorageReference().child(AppConstant.BANK + "/" + bankBean.getBankimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
                         Glide.with(Bank.this).load(task.getResult())
@@ -264,7 +263,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                     }
                 }
             });
-            Utils.getStorageReference().child(AppConstant.BANK + "/" + bankBean.getBankimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            /*Utils.getStorageReference().child(AppConstant.BANK + "/" + bankBean.getBankimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     pd.dismiss();
@@ -276,7 +275,7 @@ public class Bank extends AppCompatActivity implements SendDailog.SendDialogList
                                 .into(ivbankscan2);
                     }
                 }
-            });
+            });*/
         } else {
             btnBankSave.setText("Save");
             btnbankSend.setVisibility(View.GONE);

@@ -73,7 +73,7 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
     int yearofdob, monthofdob, dayofdob;
     RadioGroup radioGender;
     RadioButton radioMale, radioFemale, radioOther;
-    ImageView imageView, imageView2;
+    ImageView imageView;
     String msg = "", password = "";
     //initilizing progress dialog
     UploadingDialog uploadingDialog = new UploadingDialog(DateOfBirth.this);
@@ -83,8 +83,8 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
     Activity activity = this;
     List<FileShareBean> fileShareBeans = new ArrayList<>();
     List<String> tokenList = new ArrayList<>();
-    private Uri fileUri, fileUri2;
-    private Boolean imagepicker = false;
+    private Uri fileUri;
+    private boolean imagepicker = false;
     private BirthCertificateBean birthCertificateBean;
 
     @Override
@@ -142,14 +142,14 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
                 birthCertificateBean.setMothername(Mothersname);
                 birthCertificateBean.setChildname(Childname);
                 birthCertificateBean.setSex(gender);
+                birthCertificateBean.setDocumentType(AppConstant.BIRTH_CERTIFICATE);
                 birthCertificateBean.setDateofbirth(Dateofbirth);
                 birthCertificateBean.setHospitalname(Hosptialname);
                 birthCertificateBean.setImageview1(fileUri.getLastPathSegment());
-                birthCertificateBean.setImageview2(fileUri2.getLastPathSegment());
                 birthCertificateBean.setMoblilenumber(PrefManager.getString(AppConstant.USER_MOBILE));
-                Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
-                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.PAN + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
-                Utils.storeDocumentsInRTD(AppConstant.PAN, Utils.toJson(birthCertificateBean, BirthCertificateBean.class));
+                UploadTask uploadTask=  Utils.getStorageReference().child(AppConstant.BIRTH_CERTIFICATE + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
+//                UploadTask uploadTask = Utils.getStorageReference().child(AppConstant.BIRTH_CERTIFICATE + "/" + fileUri2.getLastPathSegment()).putFile(fileUri2);
+                Utils.storeDocumentsInRTD(AppConstant.BIRTH_CERTIFICATE, Utils.toJson(birthCertificateBean, BirthCertificateBean.class));
                 uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -228,10 +228,10 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
             return false;
 
         }
-        if (fileUri2 == null) {
+        /*if (fileUri2 == null) {
             Utils.showToast(activity, getResources().getString(R.string.birth_scan_error), AppConstant.errorColor);
             return false;
-        }
+        }*/
         return true;
     }
 
@@ -249,7 +249,6 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
         radioFemale = findViewById(R.id.Gen_female);
         radioOther = findViewById(R.id.Gen_other);
         imageView = findViewById(R.id.birth_imageview1);
-        imageView2 = findViewById(R.id.birth_imageView2);
         radioOther = findViewById(R.id.Gen_other);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
@@ -276,9 +275,10 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
             final ProgressDialog pd = Utils.getProgressDialog(DateOfBirth.this);
             pd.show();
 
-            Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + birthCertificateBean.getImageview1()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.BIRTH_CERTIFICATE + "/" + birthCertificateBean.getImageview1()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
                     if (task.isSuccessful()) {
                         fileUri = task.getResult();
                         Glide.with(DateOfBirth.this).load(task.getResult())
@@ -289,7 +289,7 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
                 }
 
             });
-            Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + birthCertificateBean.getImageview2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+           /* Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + birthCertificateBean.getImageview2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     pd.dismiss();
@@ -302,7 +302,7 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
                     }
                 }
 
-            });
+            });*/
         } else {
             savebirthBT.setText("Save");
             sendbirthBT.setVisibility(View.GONE);
@@ -391,7 +391,7 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
         fileShareBean.setSentTo(userBean.getMobile());
         fileShareBean.setSentFrom(PrefManager.getString(AppConstant.USER_MOBILE));
         fileShareBean.setCreatedDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-        fileShareBean.setDocument_type(AppConstant.ADHAAR);
+        fileShareBean.setDocument_type(AppConstant.BIRTH_CERTIFICATE);
         fileShareBean.setPassword(password);
         fileShareBean.setMsg(msg);
         if (isChecked) {
@@ -408,22 +408,11 @@ public class DateOfBirth extends AppCompatActivity implements SendDailog.SendDia
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (imagepicker == false) {
                 //Image Uri will not be null for RESULT_OK
                 fileUri = data.getData();
                 imageView.setImageURI(fileUri);
                 //You can get File object from intent
                 File file = ImagePicker.Companion.getFile(data);
-                imagepicker = true;
-            } else if (imagepicker == true) {
-                fileUri2 = data.getData();
-                imageView2.setImageURI(fileUri2);
-                //You can get File object from intent
-                File file2 = ImagePicker.Companion.getFile(data);
-                imagepicker = false;
-            }
-
-
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
         } else {

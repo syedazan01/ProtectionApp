@@ -205,7 +205,9 @@
                     <ImageView
                         android:id="@+id/ivVoterid_1"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp" />
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        />
 
                 </RelativeLayout>
 
@@ -236,8 +238,9 @@
                     <ImageView
                         android:id="@+id/ivVoterid_2"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="10dp" />
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        />
 
                 </RelativeLayout>
 

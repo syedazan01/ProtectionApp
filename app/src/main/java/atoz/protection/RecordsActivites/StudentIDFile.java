@@ -3,6 +3,7 @@ package atoz.protection.RecordsActivites;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +21,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public class StudentIDFile extends AppCompatActivity {
     TextInputLayout institutionname, enroll, rollno, fullname, fathername, branch;
-    private ImageView ivBack, imageViewstid;
+    private ImageView ivBack, imageViewstid,imageViewstid2;
     private TextView tvToolbarTitle;
 
     @Override
@@ -28,6 +29,12 @@ public class StudentIDFile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_i_d_file);
         initViws();
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initViws() {
@@ -38,6 +45,7 @@ public class StudentIDFile extends AppCompatActivity {
         fathername = findViewById(R.id.fathername_IL);
         branch = findViewById(R.id.branch_name_IL);
         imageViewstid = findViewById(R.id.ivStudentid_1);
+        imageViewstid2 = findViewById(R.id.ivStudentid_2);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Student Detail Form");
         ivBack = findViewById(R.id.ivBack);
@@ -53,7 +61,7 @@ public class StudentIDFile extends AppCompatActivity {
             branch.getEditText().setText(studentIdBean.getBranch());
             final ProgressDialog pd = Utils.getProgressDialog(StudentIDFile.this);
             pd.show();
-            Utils.getStorageReference().child(AppConstant.PAN + "/" + studentIdBean.getStudntidimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.STUDENT_ID + "/" + studentIdBean.getStudntidimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     pd.dismiss();
@@ -62,6 +70,18 @@ public class StudentIDFile extends AppCompatActivity {
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(imageViewstid);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.STUDENT_ID + "/" + studentIdBean.getStudntidimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        Glide.with(StudentIDFile.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(imageViewstid2);
                     }
                 }
             });

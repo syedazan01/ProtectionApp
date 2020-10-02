@@ -12,7 +12,15 @@ public class BirthCertificateBean implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
-    String moblilenumber, fathername, mothername, childname, sex, dateofbirth, hospitalname, imageview1, imageview2;
+    String moblilenumber, fathername, mothername, childname, sex, dateofbirth, hospitalname, imageview1, imageview2,documentType;
+
+    public String getDocumentType() {
+        return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
+    }
 
     public String getMoblilenumber() {
         return moblilenumber;

@@ -174,11 +174,14 @@
                     <ImageView
                         android:id="@+id/dl_imageview1"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp" />
+                        android:layout_height="179dp"
+                        android:scaleType="fitXY"
+                        />
 
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="179dp"
                     android:background="@drawable/imageview">
@@ -203,8 +206,9 @@
                     <ImageView
                         android:id="@+id/dl_imageview2"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="10dp" />
+                        android:layout_height="179dp"
+                        android:scaleType="fitXY"
+                        />
 
                 </RelativeLayout>
 

@@ -81,7 +81,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
     private String password, msg;
     List<String> tokenList = new ArrayList<>();
-    private Boolean imagepicker;
+    private boolean imagepicker;
     private DlicenceBean dlicenceBean;
 
 
@@ -174,6 +174,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                 dlicenceBean.setDateOfBirth(DLdob);
                 dlicenceBean.setDateOfIssue(dateofIssue);
                 dlicenceBean.setValidity(DLvaliditys);
+                dlicenceBean.setMobileno(PrefManager.getString(AppConstant.USER_MOBILE));
                 dlicenceBean.setDLimage(fileUri.getLastPathSegment());
                 dlicenceBean.setDLimage2(fileUri2.getLastPathSegment());
                Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + fileUri.getLastPathSegment()).putFile(fileUri);
@@ -288,7 +289,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
 
 
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
-        tvToolbarTitle.setText("Bank Detail Form");
+        tvToolbarTitle.setText("Driving License Form");
         ivDL = findViewById(R.id.ivBack);
 //        Utils.makeButton(btnDLscan, getResources().getColor(R.color.colorAccent), 40F);
 //        Utils.makeButton(btnDLsave, getResources().getColor(R.color.colorPrimary), 40F);
@@ -307,7 +308,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
 
             final ProgressDialog pd = Utils.getProgressDialog(DrivingLicence.this);
             pd.show();
-            Utils.getStorageReference().child(AppConstant.ATM + "/" + dlicenceBean.getDLimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + dlicenceBean.getDLimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
@@ -319,7 +320,7 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
                     }
                 }
             });
-            Utils.getStorageReference().child(AppConstant.ATM + "/" + dlicenceBean.getDLimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + dlicenceBean.getDLimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     pd.dismiss();
@@ -342,14 +343,14 @@ public class DrivingLicence extends AppCompatActivity implements SendDailog.Send
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (imagepicker == false) {
+            if (!imagepicker) {
                 //Image Uri will not be null for RESULT_OK
                 fileUri = data.getData();
                 ivDLscan.setImageURI(fileUri);
                 //You can get File object from intent
                 File file = ImagePicker.Companion.getFile(data);
                 imagepicker = true;
-            } else if (imagepicker == true) {
+            } else if (imagepicker) {
                 fileUri2 = data.getData();
                 ivDlscan2.setImageURI(fileUri2);
                 //You can get File object from intent

@@ -364,7 +364,7 @@ public class AccountFragment extends Fragment{
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         //intent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-        intent.putExtra(Intent.EXTRA_TEXT, deepLink + "\n\nJoin me on ProtectionApp & Earn Cash, an Amazing Utility App.!");
+        intent.putExtra(Intent.EXTRA_TEXT, deepLink + "\n\nJoin me on ProtectionApp & Earn \u20B910 Cash, an Amazing Utility App.!");
         //intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
         Log.e("DEEPLINK>>>",deepLink);
@@ -401,8 +401,8 @@ public class AccountFragment extends Fragment{
     }
 
     private void getUser() {
-        final ProgressDialog pd = Utils.getProgressDialog(mActivity);
-        pd.show();
+//        final ProgressDialog pd = Utils.getProgressDialog(mActivity);
+//        pd.show();
         Utils.getUserReference().child(PrefManager.getString(AppConstant.USER_MOBILE)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -423,23 +423,23 @@ public class AccountFragment extends Fragment{
                                                         .into(ivProfile);
                                             }
                                         }
-                                        pd.dismiss();
+//                                        pd.dismiss();
                                     }
                                 });
                     }
                     else
                     {
-                        pd.dismiss();
+//                        pd.dismiss();
                     }
                 } catch (Exception e) {
-                    pd.dismiss();
+//                    pd.dismiss();
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                pd.dismiss();
+//                pd.dismiss();
             }
         });
     }

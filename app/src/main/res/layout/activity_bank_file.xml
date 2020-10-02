@@ -37,6 +37,7 @@
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
@@ -54,6 +55,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
+                        android:enabled="false"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="Account Number"
@@ -73,6 +75,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="IFSC Code"
+                        android:enabled="false"
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textSize="14sp" />
@@ -89,6 +92,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="Branch Name"
+                        android:enabled="false"
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textSize="14sp" />
@@ -105,26 +109,43 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_regular"
                         android:hint="Bank Name"
+                        android:enabled="false"
                         android:inputType="textPersonName"
                         android:padding="10dp"
                         android:textSize="14sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <ImageView
-                    android:id="@+id/bank_imageview1"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                   
-                    android:scaleType="fitXY" />
+                    android:layout_height="179dp"
+                    android:background="@drawable/imageview">
 
-                <ImageView
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/bank_imageview2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                   
-                    android:scaleType="fitXY" />
+                    <ImageView
+                        android:id="@+id/camloc"
+                        android:layout_width="42dp"
+                        android:layout_height="32dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_baseline_camera_alt_24" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/camloc"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Upload your bank passbook"
+                        android:textSize="13sp" />
+
+
+                    <ImageView
+                        android:id="@+id/bank_imageview1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        />
+                </RelativeLayout>
 
             </LinearLayout>
         </RelativeLayout>

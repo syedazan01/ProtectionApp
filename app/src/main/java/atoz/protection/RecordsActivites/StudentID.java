@@ -73,7 +73,7 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
     private String password, msg;
     List<String> tokenList = new ArrayList<>();
-    private Boolean imagepicker;
+    private boolean imagepicker;
     private StudentIdBean studentIdBean;
 
     @Override
@@ -246,22 +246,20 @@ public class StudentID extends AppCompatActivity implements AdapterUsers.Recycle
             imageView.setImageBitmap(captureImage);
         }*/
         if (resultCode == Activity.RESULT_OK) {
-            if (imagepicker == false) {
+            if (!imagepicker) {
                 //Image Uri will not be null for RESULT_OK
                 fileUri = data.getData();
                 imageViewstid.setImageURI(fileUri);
                 //You can get File object from intent
                 File file = ImagePicker.Companion.getFile(data);
                 imagepicker = true;
-            } else if (imagepicker == true) {
+            } else if (imagepicker) {
                 fileUri2 = data.getData();
                 imageViewstid2.setImageURI(fileUri2);
                 //You can get File object from intent
                 File file2 = ImagePicker.Companion.getFile(data);
                 imagepicker = false;
             }
-
-
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Toast.makeText(this, ImagePicker.Companion.getError(data), Toast.LENGTH_SHORT).show();
         } else {
@@ -342,7 +340,7 @@ btnSTDScan.setBackground(getThemeGradient(50F));
             branch.getEditText().setText(studentIdBean.getBranch());
             final ProgressDialog pd = Utils.getProgressDialog(StudentID.this);
             pd.show();
-            Utils.getStorageReference().child(AppConstant.PAN + "/" + studentIdBean.getStudntidimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.STUDENT_ID + "/" + studentIdBean.getStudntidimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()) {
@@ -354,7 +352,7 @@ btnSTDScan.setBackground(getThemeGradient(50F));
                     }
                 }
             });
-            Utils.getStorageReference().child(AppConstant.PAN + "/" + studentIdBean.getStudntidimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.STUDENT_ID + "/" + studentIdBean.getStudntidimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     pd.dismiss();

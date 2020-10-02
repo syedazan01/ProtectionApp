@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -24,12 +25,11 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class DateOfBirth_File extends AppCompatActivity {
-    TextInputEditText dateofbirth;
-    TextInputLayout fathername, mothername, childname, hospitalname;
-    Button savebirthBT;
+
+    TextInputLayout dateofbirth,fathername, mothername, childname, hospitalname;
     RadioGroup radioGender;
     RadioButton radioMale, radioFemale, radioOther;
-    ImageView imageView, imageView2;
+    ImageView imageView;
     ImageView ivBack;
     TextView tvToolbarTitle;
     Activity activity = this;
@@ -39,6 +39,12 @@ public class DateOfBirth_File extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_of_birth__file);
         initViews();
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initViews() {
@@ -47,19 +53,16 @@ public class DateOfBirth_File extends AppCompatActivity {
         childname = findViewById(R.id.birth_childname);
         dateofbirth = findViewById(R.id.birth_dob);
         hospitalname = findViewById(R.id.birth_hospitalname);
-        savebirthBT = findViewById(R.id.birth_savebt);
         radioGender = findViewById(R.id.Gradio);
         radioMale = findViewById(R.id.Gen_male);
         radioFemale = findViewById(R.id.Gen_female);
         radioOther = findViewById(R.id.Gen_other);
         imageView = findViewById(R.id.birth_imageview1);
-        imageView2 = findViewById(R.id.birth_imageView2);
         radioOther = findViewById(R.id.Gen_other);
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("Passport Form");
         if (getIntent().hasExtra(AppConstant.BIRTH_CERTIFICATE)) {
-            savebirthBT.setText("Update");
             BirthCertificateBean birthCertificateBean = (BirthCertificateBean) getIntent().getSerializableExtra(AppConstant.BIRTH_CERTIFICATE);
             fathername.getEditText().setText(birthCertificateBean.getFathername());
             mothername.getEditText().setText(birthCertificateBean.getMothername());
@@ -70,15 +73,16 @@ public class DateOfBirth_File extends AppCompatActivity {
                 radioFemale.setChecked(true);
             else
                 radioOther.setChecked(true);
-            dateofbirth.setText(birthCertificateBean.getDateofbirth());
+            dateofbirth.getEditText().setText(birthCertificateBean.getDateofbirth());
             hospitalname.getEditText().setText(birthCertificateBean.getHospitalname());
 
             final ProgressDialog pd = Utils.getProgressDialog(DateOfBirth_File.this);
             pd.show();
 
-            Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + birthCertificateBean.getImageview1()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.BIRTH_CERTIFICATE + "/" + birthCertificateBean.getImageview1()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
                     if (task.isSuccessful()) {
                         Glide.with(DateOfBirth_File.this).load(task.getResult())
                                 .error(R.drawable.login_logo)
@@ -88,7 +92,7 @@ public class DateOfBirth_File extends AppCompatActivity {
                 }
 
             });
-            Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + birthCertificateBean.getImageview2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+           /* Utils.getStorageReference().child(AppConstant.PASSPORT + "/" + birthCertificateBean.getImageview2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     pd.dismiss();
@@ -100,7 +104,7 @@ public class DateOfBirth_File extends AppCompatActivity {
                     }
                 }
 
-            });
+            });*/
         }
     }
 }

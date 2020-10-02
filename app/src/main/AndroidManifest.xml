@@ -35,7 +35,8 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:allowBackup,android:icon,android:name,android:theme,android:roundIcon"
         tools:ignore="HardcodedDebugMode">
-        <activity android:name=".activites.WithdrawalRequest"></activity>
+        <activity android:name=".RecordsActivites.DateOfBirth_File"/>
+        <activity android:name=".activites.WithdrawalRequest"/>
         <activity
             android:name=".activites.SpamActivity"
             android:screenOrientation="portrait">

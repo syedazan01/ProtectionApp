@@ -101,7 +101,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Utils.changeColor(this, "#00000000", true);
-        startWorkManager();
+//        startWorkManager();
         setContentView(R.layout.activity_home_page);
         mProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
 

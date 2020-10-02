@@ -62,10 +62,13 @@ public class AdapterFileShare extends RecyclerView.Adapter<AdapterFileShare.File
                 holder.ivType.setImageResource(R.drawable.panlogo);
                 break;
             case AppConstant.DRIVING_LICENSE:
-                holder.ivType.setImageResource(R.drawable.drivinglicenselogo);
+                holder.ivType.setImageResource(R.drawable.drivinglogo);
                 break;
             case AppConstant.BANK:
                 holder.ivType.setImageResource(R.drawable.banknew);
+                break;
+            case AppConstant.ATM:
+                holder.ivType.setImageResource(R.drawable.atmlogo);
                 break;
             case AppConstant.VOTER_ID:
                 holder.ivType.setImageResource(R.drawable.voteridlogo);

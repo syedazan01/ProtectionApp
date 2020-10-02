@@ -3,6 +3,7 @@ package atoz.protection.RecordsActivites;
 import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +24,7 @@ public class DrivingLicenseFile extends AppCompatActivity {
 
     TextInputLayout FullName, sonOf, LicenceNumber, BloodGroup, dob, dateofissue, validity;
     TextInputEditText dobET, dateOfIssueET, ValidityET;
-    private ImageView ivDL, ivDLscan;
+    private ImageView ivBack, ivDLscan,ivDLscan2;
     private TextView tvToolbarTitle;
 
     @Override
@@ -31,10 +32,16 @@ public class DrivingLicenseFile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drivinglicence_file);
         initViews();
-
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initViews() {
+        ivBack = findViewById(R.id.ivBack);
         FullName = findViewById(R.id.drivingFullname);
         sonOf = findViewById(R.id.drivingFathersname);
         LicenceNumber = findViewById(R.id.LicenceNumber);
@@ -43,7 +50,7 @@ public class DrivingLicenseFile extends AppCompatActivity {
         dateofissue = findViewById(R.id.Drivingdofissue);
         validity = findViewById(R.id.licence_validity);
         ivDLscan = findViewById(R.id.dl_imageview1);
-
+        ivDLscan2 = findViewById(R.id.dl_imageview2);
 
         dobET = findViewById(R.id.Drivingdob_calender);
         dateOfIssueET = findViewById(R.id.dofissue_calender);
@@ -51,8 +58,7 @@ public class DrivingLicenseFile extends AppCompatActivity {
 
 
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
-        tvToolbarTitle.setText("Bank Detail Form");
-        ivDL = findViewById(R.id.ivBack);
+        tvToolbarTitle.setText("Driving License Form");
         if (getIntent().hasExtra(AppConstant.DRIVING_LICENSE)) {
             DlicenceBean dlicenceBean = (DlicenceBean) getIntent().getSerializableExtra(AppConstant.DRIVING_LICENSE);
             FullName.getEditText().setText(dlicenceBean.getFullname());
@@ -65,7 +71,7 @@ public class DrivingLicenseFile extends AppCompatActivity {
 
             final ProgressDialog pd = Utils.getProgressDialog(DrivingLicenseFile.this);
             pd.show();
-            Utils.getStorageReference().child(AppConstant.ATM + "/" + dlicenceBean.getDLimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + dlicenceBean.getDLimage()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
                     pd.dismiss();
@@ -74,6 +80,18 @@ public class DrivingLicenseFile extends AppCompatActivity {
                                 .error(R.drawable.login_logo)
                                 .placeholder(R.drawable.login_logo)
                                 .into(ivDLscan);
+                    }
+                }
+            });
+            Utils.getStorageReference().child(AppConstant.DRIVING_LICENSE + "/" + dlicenceBean.getDLimage2()).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    pd.dismiss();
+                    if (task.isSuccessful()) {
+                        Glide.with(DrivingLicenseFile.this).load(task.getResult())
+                                .error(R.drawable.login_logo)
+                                .placeholder(R.drawable.login_logo)
+                                .into(ivDLscan2);
                     }
                 }
             });

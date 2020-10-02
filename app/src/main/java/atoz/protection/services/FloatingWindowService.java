@@ -315,28 +315,29 @@ public class FloatingWindowService extends Service implements View.OnClickListen
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent.getAction() != null && intent.getAction().equals(LAUNCHER_WIDGET)) {
-            if (PrefManager.getBoolean(AppConstant.OVERLAY))
-            {
-                this.intent=intent;
-                mFloatingView.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                mFloatingView.setVisibility(View.GONE);
-            }
-        } else if (intent.getAction() != null && intent.getAction().equals(BLUE_LIGHT_FILTER)) {
+        if (intent.getAction() != null) {
+            if (intent.getAction().equals(LAUNCHER_WIDGET)) {
+                if (PrefManager.getBoolean(AppConstant.OVERLAY))
+                {
+                    mFloatingView.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    mFloatingView.setVisibility(View.GONE);
+                }
+            } else if (intent.getAction() != null && intent.getAction().equals(BLUE_LIGHT_FILTER)) {
 
-            if (PrefManager.getBoolean(ISBLUELIGHT)) {
+                if (PrefManager.getBoolean(ISBLUELIGHT)) {
 
-                blue_filter_container.setBackgroundColor(bluelightFilterCode);
-            } else {
-                if (blue_filter_container != null)
-                    blue_filter_container.setBackgroundColor(0);
-            }
+                    blue_filter_container.setBackgroundColor(bluelightFilterCode);
+                } else {
+                    if (blue_filter_container != null)
+                        blue_filter_container.setBackgroundColor(0);
+                }
 
-        } /*else if (intent.getAction() != null && intent.getAction().equals(SCREEN_ON))
-            pattern_lock_container.setVisibility(View.VISIBLE);*/
+            } /*else if (intent.getAction() != null && intent.getAction().equals(SCREEN_ON))
+                pattern_lock_container.setVisibility(View.VISIBLE);*/
+        }
         return START_STICKY;
     }
 
