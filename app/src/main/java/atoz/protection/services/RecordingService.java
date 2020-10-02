@@ -120,9 +120,9 @@ public class RecordingService extends Service {
                     do {
                         count++;
                         final int mCount;
-                        mCount = AppDatabase.getAppDataBase(RecordingService.this).getRecordFileDao().getCount();
+//                        mCount = AppDatabase.getAppDataBase(RecordingService.this).getRecordFileDao().getCount();
                         mFileName = getString(R.string.default_file_name)
-                                + "_" + (mCount+count) + ".mp4";
+                                + "_" + System.currentTimeMillis() + ".mp4";
                         mFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
                         mFilePath += "/SoundRecorder/" + mFileName;
 

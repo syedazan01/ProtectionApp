@@ -219,10 +219,12 @@ private void initActions()
         }
         JcAudio jcAudio=JcAudio.createFromFilePath(recordingFileData.getFilePath());
         jcAudio.setTitle(recordingFileData.getFileName());
+        jcAudio.setPosition(0);
         if (!jcAudios.contains(jcAudio)) {
             jcAudios.add(jcAudio);
+            jcPlayerView.initPlaylist(jcAudios,null);
         }
-            jcPlayerView.initPlaylist(jcAudios, null);
+
         /*tvMusicName.setText(recordingFileData.getFileName());
 
         if(mMediaPlayer!=null)
