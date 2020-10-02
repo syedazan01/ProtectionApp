@@ -39,20 +39,27 @@ import atoz.protection.services.CallRecorderService;
 import atoz.protection.services.FloatingWindowService;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.Utils;
+
+import com.example.jean.jcplayer.model.JcAudio;
+import com.example.jean.jcplayer.view.JcPlayerView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
+import java.util.ArrayList;
 
-public class CallRecorder extends AppCompatActivity implements onPlay,SeekBar.OnSeekBarChangeListener {
+public class CallRecorder extends AppCompatActivity implements onPlay {
 
     private Toolbar toolbar_recorder;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    ArrayList<JcAudio> jcAudios = new ArrayList<>();
     private CardView cardPlayer;
-    private SeekBar sbPlayer;
-    private TextView tvMusicName;
-    private ImageView ivPlayPause;
-    private MediaPlayer mMediaPlayer;
+    private boolean isSetPlayer;
+//    private SeekBar sbPlayer;
+//    private TextView tvMusicName;
+//    private ImageView ivPlayPause;
+//    private MediaPlayer mMediaPlayer;
+    private JcPlayerView jcPlayerView;
     private Handler handler;
     private Switch callToggle;
     private RelativeLayout rltCallRecording;
@@ -94,7 +101,7 @@ private void initActions()
             }
                 }
     });
-    ivPlayPause.setOnClickListener(new View.OnClickListener() {
+    /*ivPlayPause.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if(mMediaPlayer!=null)
@@ -116,7 +123,7 @@ private void initActions()
                 }
                     }
         }
-    });
+    });*/
 }
 
     @Override
@@ -157,16 +164,17 @@ private void initActions()
     }
 
     private void initViews() {
+        jcPlayerView=findViewById(R.id.jcPlayerView);
         toolbar_recorder = findViewById(R.id.toolbar_recorder);
         tabLayout = findViewById(R.id.tablayout_recorder);
         viewPager = findViewById(R.id.viewpager_recorder);
         cardPlayer = findViewById(R.id.cardPlayer);
-        tvMusicName = findViewById(R.id.tvMusicName);
+       /* tvMusicName = findViewById(R.id.tvMusicName);
         ivPlayPause = findViewById(R.id.ivPlayPause);
-        sbPlayer = findViewById(R.id.sbPlayer);
+        sbPlayer = findViewById(R.id.sbPlayer);*/
         rltCallRecording = findViewById(R.id.rltCallRecording);
         callToggle = findViewById(R.id.callToggle);
-        sbPlayer.setOnSeekBarChangeListener(this);
+//        sbPlayer.setOnSeekBarChangeListener(this);
         handler = new Handler();
         RecordingFileAdapter.onPlay = this;
 
@@ -209,7 +217,13 @@ private void initActions()
             cardPlayer.setVisibility(View.VISIBLE);
             cardPlayer.startAnimation(AnimationUtils.loadAnimation(this,R.anim.in_from_bottom));
         }
-        tvMusicName.setText(recordingFileData.getFileName());
+        JcAudio jcAudio=JcAudio.createFromFilePath(recordingFileData.getFilePath());
+        jcAudio.setTitle(recordingFileData.getFileName());
+        if (!jcAudios.contains(jcAudio)) {
+            jcAudios.add(jcAudio);
+        }
+            jcPlayerView.initPlaylist(jcAudios, null);
+        /*tvMusicName.setText(recordingFileData.getFileName());
 
         if(mMediaPlayer!=null)
         {
@@ -233,10 +247,10 @@ private void initActions()
         } catch (Exception e) {
             e.printStackTrace();
             Utils.showToast(this,"IncorrectFile", AppConstant.errorColor);
-        }
+        }*/
     }
 
-    @Override
+   /* @Override
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
     }
@@ -249,12 +263,16 @@ private void initActions()
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
-    }
+    }*/
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mMediaPlayer!=null)
+        if(jcPlayerView.isPlaying())
+        {
+            jcPlayerView.pause();
+        }
+        /*if(mMediaPlayer!=null)
         {
             if(mMediaPlayer.isPlaying())
             {
@@ -263,14 +281,14 @@ private void initActions()
                 mMediaPlayer.reset();
                 handler.removeCallbacks(run);
             }
-        }
+        }*/
     }
-    Runnable run = new Runnable() { @Override public void run() { seekUpdation(); } };
+   /* Runnable run = new Runnable() { @Override public void run() { seekUpdation(); } };
 
     public void seekUpdation() {
         sbPlayer.setProgress(mMediaPlayer.getCurrentPosition());
         handler.postDelayed(run, 1000);
-    }
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -293,5 +311,13 @@ private void initActions()
             }
         }
         return false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (jcPlayerView.isPlaying()) {
+            jcPlayerView.pause();
+        }
     }
 }

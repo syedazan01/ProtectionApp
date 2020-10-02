@@ -1104,7 +1104,7 @@ public class Utils {
                     Intent intent = new Intent(activity, LockActivity.class);
                     intent.putExtra(Locker.TYPE, Locker.CHANGE_PASSWORD);
                     intent.putExtra(Locker.MESSAGE,
-                            "Enter Old Passcode PIN");
+                            "Enter PIN");
                     activity.startActivityForResult(intent, Locker.CHANGE_PASSWORD);
 
                 } else {

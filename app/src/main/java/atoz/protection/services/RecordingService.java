@@ -138,7 +138,7 @@ public class RecordingService extends Service {
     public void stopRecording() {
         try {
             Recording_fragment.mRecorder.stop();
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);

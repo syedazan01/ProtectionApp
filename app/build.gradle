@@ -157,4 +157,8 @@ dependencies {
     // (Java only)
     implementation "androidx.work:work-runtime:$work_version"
 
+
+    //Player
+    implementation 'com.github.jeancsanchez:JcPlayer:2.6.16'
+
 }
