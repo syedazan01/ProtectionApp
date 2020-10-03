@@ -161,4 +161,7 @@ dependencies {
     //Player
     implementation 'com.github.jeancsanchez:JcPlayer:2.6.16'
 
+    //Load More RecyclerView
+    implementation 'me.solidev.library:auto-loadmore:1.0.3'
+
 }

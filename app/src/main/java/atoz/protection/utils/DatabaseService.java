@@ -2,7 +2,12 @@ package atoz.protection.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.provider.Telephony;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -36,20 +41,37 @@ public class DatabaseService extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        List<PackageInfo> packs = mContext.getPackageManager().getInstalledPackages(0);
+        database.getInstalledAppsDao().delete();
+        int flags = PackageManager.GET_META_DATA |
+                PackageManager.GET_SHARED_LIBRARY_FILES |
+                PackageManager.GET_UNINSTALLED_PACKAGES;
+        List<PackageInfo> packs = mContext.getPackageManager().getInstalledPackages(flags);
         for (int i = 0; i < packs.size(); i++) {
-            PackageInfo p = packs.get(i);
-            if ((p.versionName == null)) {
+            PackageInfo appInfo = packs.get(i);
+            String appName=appInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString().toLowerCase();
+            if ((isSystemPackage(appInfo) && (!appName.equals("youtube")))) {
                 continue;
             }
-            PInfo newInfo = new PInfo(mContext);
-            newInfo.setAppname(p.applicationInfo.loadLabel(mContext.getPackageManager()).toString());
-            newInfo.setPname(p.packageName);
-            newInfo.setVersionName(p.versionName);
-            newInfo.setVersionCode(p.versionCode);
-            newInfo.setIcon(newInfo.drawableToString(p.applicationInfo.loadIcon(mContext.getPackageManager())));
-            database.getInstalledAppsDao().insertAppsInfo(newInfo);
-        }
+            /*if (appInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString().toLowerCase().equals("youtube") && ((isSystemPackage(appInfo)) || (appInfo.versionName == null))) {
+                // System application
+            } else {*/
+                // Installed by user
+                if (!mContext.getPackageName().equals(appInfo.packageName)) {
+                    PInfo newInfo = new PInfo(mContext);
+                    newInfo.setAppname(appName);
+                    newInfo.setPname(appInfo.packageName);
+                    newInfo.setVersionName(appInfo.versionName);
+                    newInfo.setVersionCode(appInfo.versionCode);
+                    newInfo.setIcon(newInfo.drawableToString(appInfo.applicationInfo.loadIcon(mContext.getPackageManager())));
+                    database.getInstalledAppsDao().insertAppsInfo(newInfo);
+
+                }
+            }
+//        Toast.makeText(mContext, "Running", Toast.LENGTH_SHORT).show();
         return Result.success();
+    }
+    private boolean isSystemPackage(PackageInfo pkgInfo) {
+        Log.e("APPNAME>>>",Telephony.Sms.getDefaultSmsPackage(mContext).toLowerCase());
+        return ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
     }
 }

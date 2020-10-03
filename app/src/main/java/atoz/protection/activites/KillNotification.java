@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -16,7 +17,9 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -41,6 +44,8 @@ import java.util.Locale;
 import java.util.concurrent.Executors;
 
 import io.reactivex.disposables.CompositeDisposable;
+import me.solidev.loadmore.AutoLoadMoreAdapter;
+import me.solidev.loadmore.AutoLoadMoreConfig;
 
 public class KillNotification extends AppCompatActivity implements OnNotificationChecked {
     ImageView ivBack;
@@ -89,6 +94,9 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
 
         }
     };
+    private AutoLoadMoreAdapter mAutoLoadMoreAdapter;
+    private int loadCount=1;
+    private boolean isLoad=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,52 +203,41 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         });
         searchApp.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
+            public boolean onQueryTextSubmit(String s)
+            {
+                if (TextUtils.isEmpty(s)) {
+                    installedAppAdapter.notifyList(pInfos);
+                    mostInstalledAppAdapter.notifyList(mostPInfos);
+                }
+
+                String query = s.toLowerCase(Locale.getDefault());
+                ArrayList<PInfo> filteredPInfo = new ArrayList<>();
+                ArrayList<PInfo> mostFilteredPInfo = new ArrayList<>();
+
+                for (PInfo pInfo : mostPInfos) {
+                    String label = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                    if (label.contains(query)) {
+                        mostFilteredPInfo.add(pInfo);
+                    }
+                }
+                for (PInfo pInfo : pInfos) {
+                    String label = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                    if (label.contains(query)) {
+                        filteredPInfo.add(pInfo);
+                    }
+                }
+                installedAppAdapter.notifyList(filteredPInfo);
+                mostInstalledAppAdapter.notifyList(mostFilteredPInfo);
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                Executors.newSingleThreadExecutor().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (TextUtils.isEmpty(s)) {
-                                    installedAppAdapter.notifyList(pInfos);
-                                    mostInstalledAppAdapter.notifyList(mostPInfos);
-                                }
-                            }
-                        });
-
-                        String query = s.toLowerCase(Locale.getDefault());
-                        ArrayList<PInfo> filteredPInfo = new ArrayList<>();
-                        ArrayList<PInfo> mostFilteredPInfo = new ArrayList<>();
-
-                        for (PInfo pInfo : mostPInfos) {
-                            String label = pInfo.getAppname().toLowerCase(Locale.getDefault());
-                            if (label.contains(query)) {
-                                mostFilteredPInfo.add(pInfo);
-                            }
-                        }
-                        for (PInfo pInfo : pInfos) {
-                            String label = pInfo.getAppname().toLowerCase(Locale.getDefault());
-                            if (label.contains(query)) {
-                                filteredPInfo.add(pInfo);
-                            }
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                installedAppAdapter.notifyList(filteredPInfo);
-                                mostInstalledAppAdapter.notifyList(mostFilteredPInfo);
-                            }
-                        });
-
-                    }
-                });
-
+                if (TextUtils.isEmpty(s)) {
+                    installedAppAdapter.notifyList(pInfos);
+                    mostInstalledAppAdapter.notifyList(mostPInfos);
+                }
                 return false;
             }
         });
@@ -263,22 +260,55 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         installedAppAdapter = new InstalledApps(activity, pInfos, KillNotification.this, AppConstant.RAREUSED);
         mostInstalledAppAdapter = new InstalledApps(activity, mostPInfos, KillNotification.this, AppConstant.MOSTUSED);
         rvMostInstalledApps.setAdapter(mostInstalledAppAdapter);
+        mAutoLoadMoreAdapter = new AutoLoadMoreAdapter(this, installedAppAdapter);
+        mAutoLoadMoreAdapter.setOnLoadListener(new AutoLoadMoreAdapter.OnLoadListener() {
+            @Override
+            public void onRetry() {
+                //do retry
+                new InstalledAppsAsyncTask().execute();
+            }
+
+            @Override
+            public void onLoadMore() {
+                //do load more
+                new InstalledAppsAsyncTask().execute();
+            }
+        });
+        /*mAutoLoadMoreAdapter.setConfig(new AutoLoadMoreConfig
+                .Builder()
+                .loadingView(R.layout.custom_loading)
+                .loadFailedView(R.layout.custom_load_failed)
+                .create());*/
         rvRareInstalledApps.setAdapter(installedAppAdapter);
+        rvRareInstalledApps.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
+                    mAutoLoadMoreAdapter.showLoadMore();
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+            }
+        });
         pd = Utils.getProgressDialog(this);
 //        getInstalledAppsList();
 //        final ProgressDialog dialog = Utils.getProgressDialog(activity);
-
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
+//        pd.show();
+        /*Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
+                pInfos = (ArrayList<PInfo>) AppDatabase.getAppDataBase(KillNotification.this).getInstalledAppsDao().getList();
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        pd.show();
-                    }
-                });
+
+
 //                pInfos = new PInfo(activity).getInstalledApps(false);
-                pInfos = (ArrayList<PInfo>) AppDatabase.getAppDataBase(KillNotification.this).getInstalledAppsDao().getInstallsApps();
                 List<PInfo> tempPInfos = new ArrayList<>(pInfos);
                 for (int i = 0; i < tempPInfos.size(); i++) {
                     PInfo pInfo = tempPInfos.get(i);
@@ -288,10 +318,6 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                         pInfos.remove(pInfo);
                     }
                 }
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
 
                         if (mostPInfos.size() < 0) {
                             constMostUsed.setVisibility(View.GONE);
@@ -299,11 +325,13 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                    mostInstalledAppAdapter.notifyList(mostPInfos);
                         installedAppAdapter.notifyList(pInfos);
                         pd.dismiss();
+
                     }
                 });
-
             }
-        });
+        });*/
+        new MostInstalledAppsAsyncTask().execute();
+        new InstalledAppsAsyncTask().execute();
     }
 
     @Override
@@ -407,5 +435,77 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         searchApp.setVisibility(View.GONE);
         Utils.showToast(activity, "No App Found", AppConstant.errorColor);
     }
+class InstalledAppsAsyncTask extends AsyncTask<Void,Void,List<PInfo>>{
+    @Override
+    protected List<PInfo> doInBackground(Void... voids) {
 
+        return AppDatabase.getAppDataBase(KillNotification.this).getInstalledAppsDao().getInstallsApps(Telephony.Sms.getDefaultSmsPackage(KillNotification.this).toLowerCase(),loadCount);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        pd.show();
+    }
+
+    @Override
+    protected void onPostExecute(List<PInfo> pInfos) {
+        super.onPostExecute(pInfos);
+
+        /*if (isLoad) {
+            mostPInfos.clear();
+            isLoad=false;
+            List<PInfo> tempPInfos = new ArrayList<>(pInfos);
+            for (int i = 0; i < tempPInfos.size(); i++) {
+                PInfo pInfo = tempPInfos.get(i);
+                String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                if (pInfo.getPname().equals(Telephony.Sms.getDefaultSmsPackage(KillNotification.this)) || appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
+                    mostPInfos.add(pInfo);
+                    pInfos.remove(pInfo);
+                }
+            }
+            if (mostPInfos.size()== 0) {
+                constMostUsed.setVisibility(View.GONE);
+            }
+            mostInstalledAppAdapter.notifyList(mostPInfos);
+        }*/
+        KillNotification.this.pInfos.addAll(pInfos);
+        installedAppAdapter.notifyList((ArrayList<PInfo>) pInfos);
+        pd.dismiss();
+        mAutoLoadMoreAdapter.finishLoading();
+        if (isLoad) {
+            isLoad=false;
+            loadCount=0;
+        }
+        loadCount+=10;
+    }
+}
+    class MostInstalledAppsAsyncTask extends AsyncTask<Void,Void,List<PInfo>>{
+        @Override
+        protected List<PInfo> doInBackground(Void... voids) {
+
+            return AppDatabase.getAppDataBase(KillNotification.this).getInstalledAppsDao().getMostInstalledApps(Telephony.Sms.getDefaultSmsPackage(KillNotification.this).toLowerCase());
+        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(List<PInfo> pInfos) {
+            super.onPostExecute(pInfos);
+            if (pInfos.size()== 0) {
+                constMostUsed.setVisibility(View.GONE);
+                swPriorApps.setVisibility(View.GONE);
+            }
+            else
+            {
+                swPriorApps.setVisibility(View.VISIBLE);
+                constMostUsed.setVisibility(View.VISIBLE);
+                mostPInfos=(ArrayList<PInfo>) pInfos;
+                mostInstalledAppAdapter.notifyList((ArrayList<PInfo>) pInfos);
+            }
+
+        }
+    }
 }
