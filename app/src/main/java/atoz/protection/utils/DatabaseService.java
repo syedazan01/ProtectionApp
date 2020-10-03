@@ -49,7 +49,7 @@ public class DatabaseService extends Worker {
         for (int i = 0; i < packs.size(); i++) {
             PackageInfo appInfo = packs.get(i);
             String appName=appInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString().toLowerCase();
-            if ((isSystemPackage(appInfo) && (!appName.equals("youtube")))) {
+            if ((isSystemPackage(appInfo) && !(appName.equals("youtube") || appInfo.packageName.toLowerCase().equals(Telephony.Sms.getDefaultSmsPackage(mContext).toLowerCase())))) {
                 continue;
             }
             /*if (appInfo.applicationInfo.loadLabel(mContext.getPackageManager()).toString().toLowerCase().equals("youtube") && ((isSystemPackage(appInfo)) || (appInfo.versionName == null))) {

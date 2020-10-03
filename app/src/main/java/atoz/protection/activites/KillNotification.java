@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,18 +41,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.Executors;
-
-import io.reactivex.disposables.CompositeDisposable;
-import me.solidev.loadmore.AutoLoadMoreAdapter;
-import me.solidev.loadmore.AutoLoadMoreConfig;
 
 public class KillNotification extends AppCompatActivity implements OnNotificationChecked {
     ImageView ivBack;
     TextView tvToolbarTitle;
     ConstraintLayout constMostUsed, constRareUsed;
     RecyclerView rvMostInstalledApps, rvRareInstalledApps;
+    LinearLayoutManager linearLayoutManager;
     androidx.appcompat.widget.SearchView searchApp;
     Switch swAll,swPriorApps;
     SharedPreferences pref;
@@ -59,7 +55,6 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     ArrayList<PInfo> mostPInfos = new ArrayList<>();
     InstalledApps installedAppAdapter, mostInstalledAppAdapter;
     Activity activity = KillNotification.this;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private ProgressDialog pd;
     private CompoundButton.OnCheckedChangeListener swAllListener=new CompoundButton.OnCheckedChangeListener() {
         @Override
@@ -94,9 +89,11 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
 
         }
     };
-    private AutoLoadMoreAdapter mAutoLoadMoreAdapter;
     private int loadCount=1;
     private boolean isLoad=true;
+    private boolean isLoading=true;
+    private boolean isLastPage=false;
+    private ProgressBar pbScroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +101,9 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
       /*  if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
         else*/
-            setTheme(R.style.AppTheme_Base_Light);
+            //setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_kill_notification);
-
+        iniiViews();
     }
 
     private void getInstalledAppsList() {
@@ -116,7 +113,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
             List<PInfo> tempPInfos = new ArrayList<>(pInfos);
             for (int i = 0; i < tempPInfos.size(); i++) {
                 PInfo pInfo = tempPInfos.get(i);
-                String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                String appName = pInfo.getAppname().toLowerCase();
                 if (appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
                     mostPInfos.add(pInfo);
                     pInfos.remove(pInfo);
@@ -145,7 +142,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                         List<PInfo> tempPInfos = new ArrayList<>(pInfos);
                         for (int i = 0; i < tempPInfos.size(); i++) {
                             PInfo pInfo = tempPInfos.get(i);
-                            String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                            String appName = pInfo.getAppname().toLowerCase();
                             if (appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
                                 mostPInfos.add(pInfo);
                                 pInfos.remove(pInfo);
@@ -206,28 +203,32 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
             public boolean onQueryTextSubmit(String s)
             {
                 if (TextUtils.isEmpty(s)) {
-                    installedAppAdapter.notifyList(pInfos);
-                    mostInstalledAppAdapter.notifyList(mostPInfos);
+                    installedAppAdapter.submitList(pInfos);
+                    mostInstalledAppAdapter.submitList(mostPInfos);
                 }
 
-                String query = s.toLowerCase(Locale.getDefault());
+                String query = s.toLowerCase();
                 ArrayList<PInfo> filteredPInfo = new ArrayList<>();
                 ArrayList<PInfo> mostFilteredPInfo = new ArrayList<>();
 
                 for (PInfo pInfo : mostPInfos) {
-                    String label = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                    String label = pInfo.getAppname().toLowerCase();
+                Log.e("KILLNOTI>>>>",label+" "+query);
                     if (label.contains(query)) {
+                        Log.e("KILLNOTI>>>>",label+" "+query+" F");
                         mostFilteredPInfo.add(pInfo);
+                        Log.e("KILLNOTI>>>>",pInfo.getAppname()+" I");
                     }
                 }
                 for (PInfo pInfo : pInfos) {
-                    String label = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                    String label = pInfo.getAppname().toLowerCase();
                     if (label.contains(query)) {
                         filteredPInfo.add(pInfo);
                     }
                 }
-                installedAppAdapter.notifyList(filteredPInfo);
-                mostInstalledAppAdapter.notifyList(mostFilteredPInfo);
+                Log.e("KILLNOTI>>>>",mostFilteredPInfo.get(0).getAppname()+" L");
+                installedAppAdapter.submitList(filteredPInfo);
+                mostInstalledAppAdapter.submitList(mostFilteredPInfo);
 
                 return false;
             }
@@ -235,8 +236,8 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
             @Override
             public boolean onQueryTextChange(String s) {
                 if (TextUtils.isEmpty(s)) {
-                    installedAppAdapter.notifyList(pInfos);
-                    mostInstalledAppAdapter.notifyList(mostPInfos);
+                    installedAppAdapter.submitList(pInfos);
+                    mostInstalledAppAdapter.submitList(mostPInfos);
                 }
                 return false;
             }
@@ -245,6 +246,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
 
     private void iniiViews() {
         pref = Utils.getDefaultManager(this);
+        pbScroll = findViewById(R.id.pbScroll);
         searchApp = findViewById(R.id.searchApp);
         swPriorApps = findViewById(R.id.swPriorApps);
         swAll = findViewById(R.id.swAll);
@@ -256,11 +258,12 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
         rvRareInstalledApps = findViewById(R.id.rvRareInstalledApps);
         tvToolbarTitle.setText("Kill Notifications");
         rvMostInstalledApps.setLayoutManager(new LinearLayoutManager(this));
-        rvRareInstalledApps.setLayoutManager(new LinearLayoutManager(this));
+        linearLayoutManager=new LinearLayoutManager(this);
+        rvRareInstalledApps.setLayoutManager(linearLayoutManager);
         installedAppAdapter = new InstalledApps(activity, pInfos, KillNotification.this, AppConstant.RAREUSED);
         mostInstalledAppAdapter = new InstalledApps(activity, mostPInfos, KillNotification.this, AppConstant.MOSTUSED);
         rvMostInstalledApps.setAdapter(mostInstalledAppAdapter);
-        mAutoLoadMoreAdapter = new AutoLoadMoreAdapter(this, installedAppAdapter);
+       /* mAutoLoadMoreAdapter = new AutoLoadMoreAdapter(this, installedAppAdapter);
         mAutoLoadMoreAdapter.setOnLoadListener(new AutoLoadMoreAdapter.OnLoadListener() {
             @Override
             public void onRetry() {
@@ -273,7 +276,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                 //do load more
                 new InstalledAppsAsyncTask().execute();
             }
-        });
+        });*/
         /*mAutoLoadMoreAdapter.setConfig(new AutoLoadMoreConfig
                 .Builder()
                 .loadingView(R.layout.custom_loading)
@@ -284,8 +287,18 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(newState==RecyclerView.SCROLL_STATE_DRAGGING)
-                    mAutoLoadMoreAdapter.showLoadMore();
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                int totalItemCount = linearLayoutManager.getItemCount();
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+
+                if (!isLoading && !recyclerView.canScrollHorizontally(1)) {
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0
+                            && totalItemCount >= 10) {
+
+                        new InstalledAppsAsyncTask().execute();
+                    }
+                }
             }
 
             @Override
@@ -312,7 +325,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                 List<PInfo> tempPInfos = new ArrayList<>(pInfos);
                 for (int i = 0; i < tempPInfos.size(); i++) {
                     PInfo pInfo = tempPInfos.get(i);
-                    String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                    String appName = pInfo.getAppname().toLowerCase();
                     if (pInfo.getPname().equals(Telephony.Sms.getDefaultSmsPackage(KillNotification.this)) || appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
                         mostPInfos.add(pInfo);
                         pInfos.remove(pInfo);
@@ -391,7 +404,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     @Override
     protected void onResume() {
         super.onResume();
-        iniiViews();
+
         initActions();
         if (!hasAccessGranted()) {
             pref.edit().remove(AppConstant.NOTIFICATION_ENABLE).apply();
@@ -445,7 +458,7 @@ class InstalledAppsAsyncTask extends AsyncTask<Void,Void,List<PInfo>>{
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        pd.show();
+        pbScroll.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -458,7 +471,7 @@ class InstalledAppsAsyncTask extends AsyncTask<Void,Void,List<PInfo>>{
             List<PInfo> tempPInfos = new ArrayList<>(pInfos);
             for (int i = 0; i < tempPInfos.size(); i++) {
                 PInfo pInfo = tempPInfos.get(i);
-                String appName = pInfo.getAppname().toLowerCase(Locale.getDefault());
+                String appName = pInfo.getAppname().toLowerCase();
                 if (pInfo.getPname().equals(Telephony.Sms.getDefaultSmsPackage(KillNotification.this)) || appName.equals("whatsapp") || appName.equals("instagram") || appName.equals("facebook") || appName.equals("telegram") || appName.equals("youtube")) {
                     mostPInfos.add(pInfo);
                     pInfos.remove(pInfo);
@@ -470,14 +483,21 @@ class InstalledAppsAsyncTask extends AsyncTask<Void,Void,List<PInfo>>{
             mostInstalledAppAdapter.notifyList(mostPInfos);
         }*/
         KillNotification.this.pInfos.addAll(pInfos);
-        installedAppAdapter.notifyList((ArrayList<PInfo>) pInfos);
+        int lastCount;
+        /*if(loadCount-10<0)
+            lastCount=0;
+        else
+            lastCount=loadCount-10;*/
+//        installedAppAdapter.removeNotifyList(lastCount,KillNotification.this.pInfos);
+        installedAppAdapter.notifyList(loadCount,KillNotification.this.pInfos);
         pd.dismiss();
-        mAutoLoadMoreAdapter.finishLoading();
         if (isLoad) {
             isLoad=false;
             loadCount=0;
         }
         loadCount+=10;
+        isLoading=false;
+        pbScroll.setVisibility(View.GONE);
     }
 }
     class MostInstalledAppsAsyncTask extends AsyncTask<Void,Void,List<PInfo>>{
@@ -489,6 +509,7 @@ class InstalledAppsAsyncTask extends AsyncTask<Void,Void,List<PInfo>>{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
         }
 
         @Override
@@ -503,7 +524,7 @@ class InstalledAppsAsyncTask extends AsyncTask<Void,Void,List<PInfo>>{
                 swPriorApps.setVisibility(View.VISIBLE);
                 constMostUsed.setVisibility(View.VISIBLE);
                 mostPInfos=(ArrayList<PInfo>) pInfos;
-                mostInstalledAppAdapter.notifyList((ArrayList<PInfo>) pInfos);
+                mostInstalledAppAdapter.notifyList(0,(ArrayList<PInfo>) pInfos);
             }
 
         }

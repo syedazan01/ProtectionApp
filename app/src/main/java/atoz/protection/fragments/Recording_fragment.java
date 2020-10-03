@@ -86,7 +86,7 @@ public class Recording_fragment extends Fragment {
         /*if(PrefManager.getBoolean(ISBLUELIGHT))
             getActivity().setTheme(R.style.AppTheme_Base_Night);
         else*/
-            getActivity().setTheme(R.style.AppTheme_Base_Light);
+//            getActivity().setTheme(R.style.AppTheme_Base_Light);
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

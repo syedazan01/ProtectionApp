@@ -72,6 +72,6 @@ public class AppLockFragment extends Fragment {
         /*if(PrefManager.getBoolean(ISBLUELIGHT))
             getActivity().setTheme(R.style.AppTheme_Base_Night);
         else*/
-            getActivity().setTheme(R.style.AppTheme_Base_Light);
+//            getActivity().setTheme(R.style.AppTheme_Base_Light);
     }
 }

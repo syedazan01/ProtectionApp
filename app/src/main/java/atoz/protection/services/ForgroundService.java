@@ -73,7 +73,7 @@ public class ForgroundService extends Service {
        /* if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
         else*/
-            setTheme(R.style.AppTheme_Base_Light);
+            //setTheme(R.style.AppTheme_Base_Light);
 
         mFloatingWidget = LayoutInflater.from(this).inflate(R.layout.layout_floating_screenshot, null);
 

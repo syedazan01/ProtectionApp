@@ -161,8 +161,10 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
 
                     for (DataSnapshot postShot : dataSnapshot.getChildren()) {
                         Log.e("dvbsfbdf", postShot.getValue() + "");
+
                         if (fileShareBean.getDocument_type().equals(AppConstant.ADHAAR)) {
                             AdhaarBean adhaarBean = postShot.getValue(AdhaarBean.class);
+
                             if (adhaarBean.getId()==fileShareBean.getId() && adhaarBean.getMobileNo().equals(fileShareBean.getSentFrom())) {
                                 
                                 startActivity(new Intent(getActivity(), AdhaarFile.class).putExtra(AppConstant.ADHAAR, adhaarBean));

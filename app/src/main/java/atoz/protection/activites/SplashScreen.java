@@ -82,7 +82,7 @@ public class SplashScreen extends AppCompatActivity {
         prepareToShot();
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitalId));
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)).build());
        /* if (!isMyServiceRunning(ForgroundService.class)) {
             Intent forrgroundIntent = new Intent(this, ForgroundService.class);
             forrgroundIntent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);

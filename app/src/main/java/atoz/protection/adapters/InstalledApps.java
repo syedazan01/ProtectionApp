@@ -88,8 +88,13 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
         return pInfos.size();
     }
 
-    public void notifyList(ArrayList<PInfo> pInfos) {
+    public void notifyList(int loadCount,ArrayList<PInfo> pInfos) {
         this.pInfos = pInfos;
+        notifyItemRangeInserted(loadCount,pInfos.size()-1);
+    }
+    public void submitList(ArrayList<PInfo> pInfos)
+    {
+        this.pInfos=pInfos;
         notifyDataSetChanged();
     }
 
@@ -101,6 +106,11 @@ public class InstalledApps extends RecyclerView.Adapter<InstalledApps.InstalledH
         this.isAllCheck = isAllCheck;
         this.actionPerform = actionPerform;
         notifyDataSetChanged();
+    }
+
+    public void removeNotifyList(int lastCount, ArrayList<PInfo> pInfos) {
+        this.pInfos = pInfos;
+        notifyItemRangeRemoved(lastCount,pInfos.size()-1);
     }
 
 

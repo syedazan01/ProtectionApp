@@ -252,7 +252,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/tvInvite"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Invite anyone &amp; earn \u20B920 Cash"
+                        android:text="Invite &amp; earn \u20B920 Cash"
                         android:textColor="@color/grey_50"
                         android:textSize="12sp" />
 

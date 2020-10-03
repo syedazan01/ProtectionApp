@@ -71,7 +71,7 @@ public class CallRecorder extends AppCompatActivity implements onPlay {
         /*if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
         else*/
-            setTheme(R.style.AppTheme_Base_Light);
+//            //setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_call_recorder);
         initViews();
         initActions();

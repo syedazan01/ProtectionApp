@@ -13,7 +13,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
 <com.google.android.material.appbar.CollapsingToolbarLayout
     android:layout_width="match_parent"
@@ -26,12 +25,12 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
+
             android:id="@+id/toolbar_recorder"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
             app:layout_collapseMode="parallax"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:title="Voice Recorder"
             app:titleTextColor="@color/black" />
 

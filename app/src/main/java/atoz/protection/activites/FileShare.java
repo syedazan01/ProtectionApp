@@ -38,7 +38,7 @@ public class FileShare extends AppCompatActivity implements SendDailog.SendDialo
        /* if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
         else*/
-            setTheme(R.style.AppTheme_Base_Light);
+            //setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_file_share);
         addViews();
         initActions();

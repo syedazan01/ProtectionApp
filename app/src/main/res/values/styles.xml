@@ -15,6 +15,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="bottomNavColor">@color/colorPrimary</item>
+        <item name="homeAsUpIndicator">@drawable/ic_baseline_arrow_back_24</item>
         <!--        <item name="android:windowFullscreen">true</item>-->
         <!--        <item name="android:windowContentOverlay">@null</item>-->
     </style>

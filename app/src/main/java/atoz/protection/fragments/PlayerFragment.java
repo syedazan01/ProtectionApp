@@ -53,7 +53,7 @@ RecordingFileAdapter recordingFileAdapter;
         /*if(PrefManager.getBoolean(ISBLUELIGHT))
             getActivity().setTheme(R.style.AppTheme_Base_Night);
         else*/
-            getActivity().setTheme(R.style.AppTheme_Base_Light);
+//            getActivity().setTheme(R.style.AppTheme_Base_Light);
         Recording_fragment.onRecordFileSave=this;
         rltCallRecording.setOnClickListener(new View.OnClickListener() {
             @Override

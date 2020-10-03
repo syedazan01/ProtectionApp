@@ -184,6 +184,7 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
 
                                             @Override
                                             public void onFailure(Call<NotificationBean> call, Throwable t) {
+                                                Toast.makeText(SosActivity.this, "Message Sent", Toast.LENGTH_SHORT).show();
                                                 finish();
                                                 Log.e("vdfbdbedtbher", t.getMessage());
                                             }
@@ -305,7 +306,7 @@ public class SosActivity extends AppCompatActivity implements SosAdapter.Recycle
         View view = layoutInflater.inflate(R.layout.layout_save_number_dailog, null);
         EditText etName = view.findViewById(R.id.etName);
         builder.setView(view)
-                .setTitle("Assign a Password and Text message to secure file")
+                .setTitle("Save Contact")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

@@ -107,7 +107,7 @@ public class AccountFragment extends Fragment{
         /*if (PrefManager.getBoolean(ISBLUELIGHT))
             mActivity.setTheme(R.style.AppTheme_Base_Night);
         else*/
-            mActivity.setTheme(R.style.AppTheme_Base_Light);
+//            mActivity.setTheme(R.style.AppTheme_Base_Light);
         deepLink = generateContentLink().toString();
         tvMobile.setText(PrefManager.getString(AppConstant.USER_MOBILE));
         msgDialog = Utils.getMsgDialog(mActivity);

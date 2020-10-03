@@ -36,7 +36,7 @@ EditText et_phone_number;
         /*if (PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
         else*/
-//            setTheme(R.style.AppTheme_Base_Light);
+//            //setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.login_page);
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override

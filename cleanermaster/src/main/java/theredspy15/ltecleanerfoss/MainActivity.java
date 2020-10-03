@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -160,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             if (delete) {
                 statusText.setText(getString(R.string.freed) + " " + convertSize(kilobytesTotal));
+                Toast.makeText(this, "Clean cache successfully", Toast.LENGTH_SHORT).show();
+                finish();
             } else {
                 statusText.setText(getString(R.string.found) + " " + convertSize(kilobytesTotal));
             }

@@ -21,7 +21,7 @@ public class CacheCleaner extends AppCompatActivity {
         /*if(PrefManager.getBoolean(ISBLUELIGHT))
             setTheme(R.style.AppTheme_Base_Night);
         else*/
-            setTheme(R.style.AppTheme_Base_Light);
+            //setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_cache_cleaner);
         addViews();
         initActions();

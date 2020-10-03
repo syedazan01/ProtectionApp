@@ -232,7 +232,7 @@ public class SubscriptionPlan extends AppCompatActivity implements AdapterSubscr
         if (!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
             int planvalidity=plansBean.getPlan_duration();
             Date planDate= new Date();
-            if((planDate.getMonth()-1)+planvalidity>12)
+            if((planDate.getMonth())+planvalidity>12)
                 planDate.setYear(planDate.getYear()+1);
             planDate.setMonth((planDate.getMonth() - 1 + planvalidity) % 12 + 1);
             remainingDate=new SimpleDateFormat("dd/MMM/yyyy",Locale.getDefault()).format(planDate);

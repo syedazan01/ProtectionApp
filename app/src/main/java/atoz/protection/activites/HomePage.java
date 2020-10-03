@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -301,7 +302,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         }
 
         adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)).build();
         adView.loadAd(adRequest);
         fabCleaner = findViewById(R.id.fabCleaner);
 
@@ -396,7 +397,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         switch (item.getItemId()) {
             case R.id.theme_mode:
                 if (PrefManager.getBoolean(ISBLUELIGHT)) {
-//                    setTheme(R.style.AppTheme_Base_Light);
+//                    //setTheme(R.style.AppTheme_Base_Light);
                     PrefManager.putBoolean(ISBLUELIGHT, false);
                 } else {
                     PrefManager.putBoolean(ISBLUELIGHT, true);
