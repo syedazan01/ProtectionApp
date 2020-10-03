@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ReceivedFragment extends Fragment implements AdapterFileShare.FileShareClickListener, FileShare.RecievedClickListener, SendDailog.SendDialogListener {
+public class ReceivedFragment extends Fragment implements AdapterFileShare.FileShareClickListener, SendDailog.SendDialogListener {
     public static FileShare.RecievedClickListener recievedClickListener = null;
     public static SendDailog.SendDialogListener sendDialogListener = null;
     private RecyclerView rvRecievedList;
@@ -85,7 +85,6 @@ public class ReceivedFragment extends Fragment implements AdapterFileShare.FileS
         super.onViewCreated(view, savedInstanceState);
         sendDialogListener = this;
         rvRecievedList.setLayoutManager(new LinearLayoutManager(getContext()));
-        recievedClickListener = this;
     }
 
     @Override
@@ -102,7 +101,8 @@ public class ReceivedFragment extends Fragment implements AdapterFileShare.FileS
     }
 
     @Override
-    public void onRecieved() {
+    public void onResume() {
+        super.onResume();
         fileShareBeans.clear();
         ProgressDialog pd = Utils.getProgressDialog(getActivity());
         pd.show();

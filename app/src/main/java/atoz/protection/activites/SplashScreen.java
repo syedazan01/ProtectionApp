@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.Color;
 import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
@@ -45,6 +46,13 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.OnCompleteListener;
+import com.google.android.play.core.tasks.Task;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
@@ -55,6 +63,7 @@ import static java.util.concurrent.TimeUnit.HOURS;
 public class SplashScreen extends AppCompatActivity {
     private static final String STATE_RESULT_CODE = "RESULT_CODE";
     private static final String STATE_RESULT_DATA = "RESULT_DATA";
+    private static final int UPDATE_REQUEST_CODE = 1111;
     private Intent mResultData;
     private int mResultCode;
     private MediaProjectionManager mProjectionManager;
@@ -88,36 +97,7 @@ public class SplashScreen extends AppCompatActivity {
             forrgroundIntent.setAction(ForgroundService.ACTION_START_FOREGROUND_SERVICE);
             startService(forrgroundIntent);
         }*/
-        if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
-//            if(Utils.isMyFloatingServiceRunning(this))
-//                stopService(new Intent(this, FloatingWindowService.class));
-            startService(new Intent(this, FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
-        }
-
-        if (Build.VERSION.SDK_INT >= 19 && MIUIUtils.isMIUI() && !MIUIUtils.isFloatWindowOptionAllowed(this)) {
-            Log.i("TAG", "MIUI DEVICE: Screen Overlay Not allowed");
-            startActivityForResult(MIUIUtils.toFloatWindowPermission(this, getPackageName()), REQUEST_OVERLAY_PERMISSION);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName()));
-            startActivityForResult(intent, APP_PERMISSION_REQUEST);
-        } else {
-//            startService(new Intent(this, FloatingWindowService.class));
-
-            if (!AppLocker.getInstance().getAppLock().isPasscodeSet()) {
-                startHandler();
-            }
-            else {
-                if (PrefManager.getBoolean(AppConstant.ISLOGGEDIN)) {
-                    int type =Locker.UNLOCK_PASSWORD;
-                    Intent intent = new Intent(this, LockActivity.class);
-                    intent.putExtra(Locker.TYPE, type);
-                    startActivityForResult(intent, type);
-                }
-                else
-                    startHandler();
-            }
-        }
+      checkUpdate();
 //        animation = findViewById(R.id.animation);
         tvSplashTitle = findViewById(R.id.tvSplashTitle);
 
@@ -162,6 +142,12 @@ public class SplashScreen extends AppCompatActivity {
 //            FloatingWindowService.mProjection = mProjectionManager.getMediaProjection(resultCode, data);
             /*String jsonString=new Gson().toJson(mProjection);
             PrefManager.putString(AppConstant.MEDIAPROJECTION,jsonString);*/
+        }
+        if(requestCode==UPDATE_REQUEST_CODE)
+        {
+            if(resultCode == RESULT_OK)
+                otherTask();
+            return;
         }
         if (resultCode == Activity.RESULT_OK && (requestCode == REQUEST_OVERLAY_PERMISSION || requestCode == APP_PERMISSION_REQUEST)) {
 //            startService(new Intent(this, FloatingWindowService.class));
@@ -259,5 +245,75 @@ public class SplashScreen extends AppCompatActivity {
             outState.putParcelable(STATE_RESULT_DATA, mResultData);
         }
     }
+private void checkUpdate()
+{
+    // Creates instance of the manager.
+    AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(this);
 
+// Returns an intent object that you use to check for an update.
+    Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+// Checks that the platform will allow the specified type of update.
+    appUpdateInfoTask.addOnCompleteListener(new OnCompleteListener<AppUpdateInfo>() {
+        @Override
+        public void onComplete(Task<AppUpdateInfo> task) {
+       if(task.isSuccessful())
+       {
+           if (task.getResult().updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                   // For a flexible update, use AppUpdateType.FLEXIBLE
+                   && task.getResult().isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+           ) {
+               // Request the update.
+               try {
+                   appUpdateManager.startUpdateFlowForResult(task.getResult(),AppUpdateType.IMMEDIATE,SplashScreen.this,UPDATE_REQUEST_CODE);
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+           }
+           else
+           {
+            otherTask();
+           }
+       }
+       else
+       {
+           otherTask();
+       }
+        }
+    });
+
+}
+private void otherTask()
+{
+    if (PrefManager.getBoolean(AppConstant.OVERLAY)) {
+//            if(Utils.isMyFloatingServiceRunning(this))
+//                stopService(new Intent(this, FloatingWindowService.class));
+        startService(new Intent(this, FloatingWindowService.class).setAction(FloatingWindowService.LAUNCHER_WIDGET));
+    }
+
+    if (Build.VERSION.SDK_INT >= 19 && MIUIUtils.isMIUI() && !MIUIUtils.isFloatWindowOptionAllowed(this)) {
+        Log.i("TAG", "MIUI DEVICE: Screen Overlay Not allowed");
+        startActivityForResult(MIUIUtils.toFloatWindowPermission(this, getPackageName()), REQUEST_OVERLAY_PERMISSION);
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:" + getPackageName()));
+        startActivityForResult(intent, APP_PERMISSION_REQUEST);
+    } else {
+//            startService(new Intent(this, FloatingWindowService.class));
+
+        if (!AppLocker.getInstance().getAppLock().isPasscodeSet()) {
+            startHandler();
+        }
+        else {
+            if (PrefManager.getBoolean(AppConstant.ISLOGGEDIN)) {
+                int type =Locker.UNLOCK_PASSWORD;
+                Intent intent = new Intent(this, LockActivity.class);
+                intent.putExtra(Locker.TYPE, type);
+                startActivityForResult(intent, type);
+            }
+            else
+                startHandler();
+        }
+    }
+}
 }

@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import atoz.protection.R;
@@ -16,20 +17,19 @@ import atoz.protection.fragments.ReceivedFragment;
 import atoz.protection.fragments.SendFragment;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Objects;
+
 public class FileShare extends AppCompatActivity implements SendDailog.SendDialogListener {
     Toolbar toolbar;
     ImageView ivBack;
     TextView tvToolbarTitle;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ViewPageAdapter viewPageAdapter;
 
     @Override
     public void applyTexts(String message, String password) {
-        if (viewPager.getCurrentItem() == 0) {
-            SendFragment.sendDialogListener.applyTexts(message, password);
-        } else
-            ReceivedFragment.sendDialogListener.applyTexts(message, password);
-
+        (( SendDailog.SendDialogListener)((ViewPageAdapter) Objects.requireNonNull(viewPager.getAdapter())).getItem(viewPager.getCurrentItem())).applyTexts(message,password);
     }
 
     @Override
@@ -42,12 +42,16 @@ public class FileShare extends AppCompatActivity implements SendDailog.SendDialo
         setContentView(R.layout.activity_file_share);
         addViews();
         initActions();
-        setUpViewPager(viewPager);
+        viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewPageAdapter.addFragment(new SendFragment(),"SEND");
+        viewPageAdapter.addFragment(new ReceivedFragment(),"RECEIVED");
+//        viewPageAdapter.addFragment(new SettingFragment(),"Setting");
+        viewPager.setAdapter(viewPageAdapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (viewPager.getCurrentItem() == 0) {
+              /*  if (viewPager.getCurrentItem() == 0) {
                     if (SendFragment.sendClickListener != null) {
                         SendFragment.sendClickListener.onSent();
                     }
@@ -55,7 +59,7 @@ public class FileShare extends AppCompatActivity implements SendDailog.SendDialo
                     if (ReceivedFragment.recievedClickListener != null) {
                         ReceivedFragment.recievedClickListener.onRecieved();
                     }
-                }
+                }*/
             }
 
             @Override
@@ -95,12 +99,5 @@ public class FileShare extends AppCompatActivity implements SendDailog.SendDialo
         ivBack = findViewById(R.id.ivBack);
         tvToolbarTitle = findViewById(R.id.tvToolbarTitle);
         tvToolbarTitle.setText("File Sharer");
-    }
-    private void setUpViewPager(ViewPager viewPager){
-        ViewPageAdapter viewPageAdapter = new ViewPageAdapter(getSupportFragmentManager(),2);
-        viewPageAdapter.addFragment(new SendFragment(),"SEND");
-        viewPageAdapter.addFragment(new ReceivedFragment(),"RECEIVED");
-//        viewPageAdapter.addFragment(new SettingFragment(),"Setting");
-        viewPager.setAdapter(viewPageAdapter);
     }
 }

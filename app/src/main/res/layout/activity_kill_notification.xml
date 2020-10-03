@@ -25,7 +25,7 @@
         app:layout_constraintTop_toBottomOf="@id/toolbarLay"
         android:layout_width="match_parent"
         app:searchIcon="@drawable/ic_search" />
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:text="Notification Block"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_semibold"
@@ -35,11 +35,11 @@
         android:id="@+id/swAll"
         android:padding="10dp"
         android:textColor="?attr/primaryTitleColor"
-        android:buttonTint="@color/green"
-        android:thumbTint="@color/green"
+        app:buttonTint="@color/green"
+        app:thumbTint="@color/green"
         android:layout_width="match_parent"
         android:textSize="16dp" />
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:text="Priority App's Notification Block"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_semibold"
@@ -49,8 +49,8 @@
         android:id="@+id/swPriorApps"
         android:padding="10dp"
         android:textColor="?attr/primaryTitleColor"
-        android:buttonTint="@color/green"
-        android:thumbTint="@color/green"
+        app:buttonTint="@color/green"
+        app:thumbTint="@color/green"
         android:layout_width="match_parent"
         android:textSize="16dp" />
 

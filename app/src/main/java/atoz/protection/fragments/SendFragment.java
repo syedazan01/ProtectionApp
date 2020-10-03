@@ -52,9 +52,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SendFragment extends Fragment implements AdapterFileShare.FileShareClickListener, FileShare.SendClickListener, SendDailog.SendDialogListener {
-    public static FileShare.SendClickListener sendClickListener = null;
-    public static SendDailog.SendDialogListener sendDialogListener = null;
+public class SendFragment extends Fragment implements AdapterFileShare.FileShareClickListener, SendDailog.SendDialogListener {
+
+    public static FileShare sendDialogListener;
     private RecyclerView rvSentList;
     private AdapterFileShare adapterFileShare;
     private List<FileShareBean> fileShareBeans = new ArrayList<>();
@@ -77,15 +77,14 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_send, container, false);
         rvSentList = view.findViewById(R.id.rvSentList);
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sendDialogListener = this;
         rvSentList.setLayoutManager(new LinearLayoutManager(getContext()));
-        sendClickListener = this;
         ProgressDialog pd = Utils.getProgressDialog(getActivity());
         pd.show();
         Utils.getFileShareReference().addValueEventListener(new ValueEventListener() {
@@ -121,7 +120,8 @@ public class SendFragment extends Fragment implements AdapterFileShare.FileShare
     }
 
     @Override
-    public void onSent() {
+    public void onResume() {
+        super.onResume();
         fileShareBeans.clear();
         ProgressDialog pd = Utils.getProgressDialog(getActivity());
         pd.show();

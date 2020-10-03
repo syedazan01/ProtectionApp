@@ -54,12 +54,6 @@
             android:name=".activites.Wallet"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activites.App_Intro2"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activites.Rate_us"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activites.Privacy_poly"
             android:screenOrientation="portrait" />
         <activity
@@ -135,9 +129,6 @@
             android:name=".cameraDetector.CameraDectectorByRM"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activites.Payment_premiumUser"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activites.KillNotification"
             android:screenOrientation="portrait" />
         <activity
@@ -166,9 +157,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activites.FileShare"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activites.CacheCleaner"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activites.CallRecorder"

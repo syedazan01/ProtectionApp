@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +50,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     RecyclerView rvMostInstalledApps, rvRareInstalledApps;
     LinearLayoutManager linearLayoutManager;
     androidx.appcompat.widget.SearchView searchApp;
-    Switch swAll,swPriorApps;
+    SwitchCompat swAll,swPriorApps;
     SharedPreferences pref;
     ArrayList<PInfo> pInfos = new ArrayList<>();
     ArrayList<PInfo> mostPInfos = new ArrayList<>();
@@ -104,6 +105,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
             //setTheme(R.style.AppTheme_Base_Light);
         setContentView(R.layout.activity_kill_notification);
         iniiViews();
+        initActions();
     }
 
     private void getInstalledAppsList() {
@@ -213,11 +215,8 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
 
                 for (PInfo pInfo : mostPInfos) {
                     String label = pInfo.getAppname().toLowerCase();
-                Log.e("KILLNOTI>>>>",label+" "+query);
                     if (label.contains(query)) {
-                        Log.e("KILLNOTI>>>>",label+" "+query+" F");
                         mostFilteredPInfo.add(pInfo);
-                        Log.e("KILLNOTI>>>>",pInfo.getAppname()+" I");
                     }
                 }
                 for (PInfo pInfo : pInfos) {
@@ -226,7 +225,6 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
                         filteredPInfo.add(pInfo);
                     }
                 }
-                Log.e("KILLNOTI>>>>",mostFilteredPInfo.get(0).getAppname()+" L");
                 installedAppAdapter.submitList(filteredPInfo);
                 mostInstalledAppAdapter.submitList(mostFilteredPInfo);
 
@@ -405,7 +403,7 @@ public class KillNotification extends AppCompatActivity implements OnNotificatio
     protected void onResume() {
         super.onResume();
 
-        initActions();
+
         if (!hasAccessGranted()) {
             pref.edit().remove(AppConstant.NOTIFICATION_ENABLE).apply();
             Snackbar.make(findViewById(android.R.id.content), R.string.snackbar_not_allowed_title, Snackbar.LENGTH_INDEFINITE)
