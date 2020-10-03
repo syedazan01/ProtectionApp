@@ -69,6 +69,7 @@ import theredspy15.ltecleanerfoss.MainActivity;
 
 import static atoz.protection.utils.AppConstant.ISBLUELIGHT;
 import static atoz.protection.utils.AppConstant.SCREEN_SHOT;
+import static atoz.protection.utils.AppConstant.errorColor;
 import static java.util.concurrent.TimeUnit.HOURS;
 
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
@@ -234,6 +235,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
 
             @Override
             public void onAdFailedToLoad(LoadAdError adError) {
+                Log.e("LOADED", adError.getMessage());
                 // Code to be executed when an ad request fails.
             }
 
@@ -302,7 +304,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         }
 
         adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().addTestDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)).build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
         fabCleaner = findViewById(R.id.fabCleaner);
 
