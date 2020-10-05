@@ -44,8 +44,7 @@
             android:layout_height="140dp"
             android:layout_below="@id/mRecordingPrompt"
             android:src="@drawable/recroding_background"
-
-            android:visibility="gone"></androidx.appcompat.widget.AppCompatImageView>
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"

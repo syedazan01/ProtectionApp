@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_border"
+    android:layoutDirection="ltr"
+    android:padding="10dp"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="44dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bottom_line" />
+
+    <RelativeLayout
+        android:id="@+id/rltoInvite_only"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="15sp"
+            android:text="Invite and Share"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rltreferEarn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txtearn"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Invite and Earn \u20B920 Cash"/>
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:textSize="10sp"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/txtearn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*Premium Membership Required "/>
+    </RelativeLayout>
+
+</LinearLayout>

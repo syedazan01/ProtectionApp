@@ -213,7 +213,7 @@
                         android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
                 </RelativeLayout>
                 <RelativeLayout
-                    android:id="@+id/rltreferEarn"
+                    android:id="@+id/rtlShare_link"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
@@ -242,19 +242,19 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:fontFamily="@font/poppins_medium"
-                        android:text="Invite  and Earn"
+                        android:text="Invite And Share Link"
                         android:textColor="@color/black"
                         android:textSize="15sp" />
-                    <TextView
-                        android:layout_marginTop="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/tvInvite"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="Invite &amp; earn \u20B920 Cash"
-                        android:textColor="@color/grey_50"
-                        android:textSize="12sp" />
+<!--                    <TextView-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_centerHorizontal="true"-->
+<!--                        android:layout_below="@+id/tvInvite"-->
+<!--                        android:fontFamily="@font/poppins_medium"-->
+<!--                        android:text="Invite &amp; earn \u20B920 Cash"-->
+<!--                        android:textColor="@color/grey_50"-->
+<!--                        android:textSize="12sp" />-->
 
                     <ImageView
 

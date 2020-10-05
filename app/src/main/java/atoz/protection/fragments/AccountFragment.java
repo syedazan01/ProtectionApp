@@ -18,11 +18,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+
 import atoz.protection.BuildConfig;
 import atoz.protection.R;
 
@@ -30,30 +28,26 @@ import atoz.protection.activites.SettingActivity;
 import atoz.protection.activites.SosActivity;
 import atoz.protection.activites.SubscriptionPlan;
 import atoz.protection.activites.Wallet;
-import atoz.protection.adapters.AdapterUsers;
 import atoz.protection.model.FetchNotification;
-import atoz.protection.model.PlansBean;
 import atoz.protection.model.UserBean;
 import atoz.protection.utils.AppConstant;
 import atoz.protection.utils.PrefManager;
 import atoz.protection.utils.Utils;
+
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.storage.UploadTask;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,7 +58,7 @@ public class AccountFragment extends Fragment{
     private static final String DEEP_LINK_URL = "https://a2zprotection.page.link/Go1D";
     UploadTask mUploadTask;
     List<FetchNotification> fetchNotifications = new ArrayList<>();
-    private RelativeLayout rltSubscription, rltInvite, rltLogout, rltSos, rltWallet, rltSetting;
+    private RelativeLayout rltSubscription, rltInviteEarn, rtloInvite_only, rtlshare_link, rltLogout, rltSos, rltWallet, rltSetting;
     String deepLink = "";
     private TextView tvMobile;
     UserBean userBean;
@@ -74,6 +68,7 @@ public class AccountFragment extends Fragment{
     List<String> tokenList = new ArrayList<>();
     Dialog msgDialog;
     EditText etMsg;
+    BottomSheetDialog bottomSheetDialog;
 
     @Override
     public void onAttach(@NonNull Activity activity) {
@@ -116,7 +111,14 @@ public class AccountFragment extends Fragment{
     }
 
     private void initViews(View view) {
-        rltInvite = view.findViewById(R.id.rltreferEarn);
+        bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.AppBottomSheetDialogTheme);
+        bottomSheetDialog.setContentView(R.layout.custom_dailog_invite_earn);
+        rltInviteEarn = bottomSheetDialog.findViewById(R.id.rltreferEarn);
+        rtloInvite_only = bottomSheetDialog.findViewById(R.id.rltoInvite_only);
+
+
+
+        rtlshare_link = view.findViewById(R.id.rtlShare_link);
         rltLogout = view.findViewById(R.id.rltLogout);
         rltSos = view.findViewById(R.id.rltSos);
         tvMobile = view.findViewById(R.id.tvMobile);
@@ -129,6 +131,13 @@ public class AccountFragment extends Fragment{
     }
 
     private void initActions() {
+        rtlshare_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetDialog.show();
+            }
+        });
+
         rltSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -154,15 +163,37 @@ public class AccountFragment extends Fragment{
                 startActivity(intent);
             }
         });
-        rltInvite.setOnClickListener(new View.OnClickListener() {
+        rtloInvite_only.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //share app link without subscription
+                Intent shareintent = new Intent(Intent.ACTION_SEND);
+                shareintent.setType("text/plane");
+                String sharebody = "Download this application now: https://play.google.com/store/apps/details?id=atoz.protection&hl=en";
+                String sharesub = "CCC Utility App";
+
+                shareintent.putExtra(Intent.EXTRA_SUBJECT,sharesub);
+                shareintent.putExtra(Intent.EXTRA_TEXT,sharebody);
+
+                startActivity(Intent.createChooser(shareintent,"Share Using"));
+
+            }
+        });
+
+        rltInviteEarn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /*if(!PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
                     Utils.showNoSubsDialog(getContext());
                     return;
                 }*/
-                final Uri deepLink = buildDeepLink(Uri.parse(DEEP_LINK_URL + "/?" + AppConstant.INVITED_BY + "=" + PrefManager.getString(AppConstant.USER_MOBILE)), 0);
-                shareDeepLink(deepLink.toString());
+                if (PrefManager.getBoolean(AppConstant.IS_SUBSCRIBE)) {
+                    final Uri deepLink = buildDeepLink(Uri.parse(DEEP_LINK_URL + "/?" + AppConstant.INVITED_BY + "=" + PrefManager.getString(AppConstant.USER_MOBILE)), 0);
+                    shareDeepLink(deepLink.toString());
+                }
+                else
+                    Utils.showToast(mActivity,"Purchase Plan to use this feature",AppConstant.infoColor);
+
             }
         });
         rltLogout.setOnClickListener(new View.OnClickListener() {

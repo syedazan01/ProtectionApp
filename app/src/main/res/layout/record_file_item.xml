@@ -12,7 +12,7 @@
     android:layout_height="wrap_content"
     swipe:leftEdgeSwipeOffset="0dp"
     app:rightEdgeSwipeOffset="0dp"
-    >
+    swipe:ignore="MissingClass">
    <!-- <ImageView
         android:visibility="gone"
         android:id="@+id/ivPlay"

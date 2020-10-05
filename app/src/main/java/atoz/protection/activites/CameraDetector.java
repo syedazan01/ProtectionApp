@@ -44,7 +44,7 @@ public class CameraDetector extends AppCompatActivity {
         camDetect = findViewById(R.id.btnCameraByRM);
         tipsBt = findViewById(R.id.tips_camBT);
         ivBack = findViewById(R.id.ivBack);
-//        btnInfraredCamera = findViewById(R.id.btnInfraredCamera);
+//   fd     btnInfraredCamera = findViewById(R.id.btnInfraredCamera);
         bottomSheetDialog = new BottomSheetDialog(CameraDetector.this, R.style.AppBottomSheetDialogTheme);
         bottomSheetDialog.setContentView(R.layout.activity_cam_detector_tips);
         next_tipsBT=bottomSheetDialog.findViewById(R.id.next_tipsBT);
